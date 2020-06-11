@@ -26,6 +26,12 @@ export const styles = StyleSheet.create({
     resizeMode: 'cover',
     alignSelf: 'center',
   },
+  imgPhoto: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
+    borderRadius: 200,
+  },
   viewPhotoUpload: {
     width: 44,
     height: 44,

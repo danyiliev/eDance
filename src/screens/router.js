@@ -9,6 +9,7 @@ import {Splash} from './splash/Splash';
 import {Utils} from '../helpers/utils';
 import Login from './login/Login';
 import SignupBase from './signup/SignupBase';
+import SplashScreen from "react-native-splash-screen";
 
 const Stack = createStackNavigator();
 
@@ -23,6 +24,8 @@ class MainNavigator extends React.Component {
     this.setState({
       initializing: false,
     });
+
+    SplashScreen.hide();
   }
 
   render() {

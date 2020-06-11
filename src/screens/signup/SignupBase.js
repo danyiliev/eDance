@@ -8,11 +8,16 @@ import {Button, Input} from 'react-native-elements';
 import {colors as colorTheme} from '../../styles/theme.style';
 import {stylesApp} from '../../styles/app.styles';
 import ImageScale from 'react-native-scalable-image';
+import ImagePicker from "react-native-image-picker";
 
 export default class SignupBase extends React.Component {
   static NAV_NAME = 'signup-base';
 
   state = {
+    // data
+    photoImg: '',
+    photoFileName: '',
+
     firstName: '',
     lastName: '',
     email: '',
@@ -38,10 +43,18 @@ export default class SignupBase extends React.Component {
               onPress={() => this.onClickPhoto()}>
               <View style={styles.viewPhoto}>
                 <View style={[styles.viewPhotoMain, stylesApp.withShadow]}>
-                  <Image
-                    style={styles.imgPhotoCore}
-                    source={require('../../../assets/imgs/user_default.png')}
-                  />
+                  {
+                    this.state.photoImg ?
+                      <Image
+                        style={styles.imgPhoto}
+                        source={this.state.photoImg}
+                      />
+                      :
+                      <Image
+                        style={styles.imgPhotoCore}
+                        source={require('../../../assets/imgs/user_default.png')}
+                      />
+                  }
                 </View>
 
                 {/* upload mark */}
@@ -145,6 +158,31 @@ export default class SignupBase extends React.Component {
   }
 
   onClickPhoto() {
+    const options = {
+      title: 'Select Image',
+      mediaType: 'photo',
+      noData: true,
+      maxWidth: 640,
+      maxHeight: 640,
+      quality: 0.5,
+    };
+
+    ImagePicker.showImagePicker(options, (response) => {
+      if (response.didCancel){
+        console.log('User cancelled image picker')
+      } else if (response.error) {
+        console.log('ImagePicker Error: ', response.error)
+      } else if (response.customButton) {
+        console.log('User tapped custom button: ', response.customButton)
+      } else {
+        const source = {uri: response.uri};
+
+        this.setState({
+          photoImg: source,
+          photoFileName: response.fileName
+        });
+      }
+    });
   }
 
   onPasswordFocus() {
