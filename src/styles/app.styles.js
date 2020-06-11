@@ -30,6 +30,13 @@ export const stylesApp = StyleSheet.create({
   },
 
   //
+  // margins
+  //
+  mt4: {
+    marginTop: 4,
+  },
+
+  //
   // buttons
   //
   butPrimary: {

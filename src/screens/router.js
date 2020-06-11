@@ -8,6 +8,7 @@ import {connect} from 'react-redux';
 import {Splash} from './splash/Splash';
 import {Utils} from '../helpers/utils';
 import Login from './login/Login';
+import SignupBase from './signup/SignupBase';
 
 const Stack = createStackNavigator();
 
@@ -32,10 +33,9 @@ class MainNavigator extends React.Component {
             <Splash/>
             :
             <Stack.Navigator
-              initialRouteName={Login.NAV_NAME}
+              initialRouteName={SignupBase.NAV_NAME}
               screenOptions={{
                 headerBackTitleVisible: false,
-                headerTintColor: colorTheme.background,
               }}>
               <Stack.Screen
                 name={Landing.NAV_NAME}
@@ -46,6 +46,10 @@ class MainNavigator extends React.Component {
                 name={Login.NAV_NAME}
                 component={Login}
                 options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name={SignupBase.NAV_NAME}
+                component={SignupBase}
               />
             </Stack.Navigator>
         }
