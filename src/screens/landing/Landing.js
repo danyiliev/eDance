@@ -1,0 +1,72 @@
+import React from 'react';
+import SplashScreen from "react-native-splash-screen";
+import {styles} from './styles';
+import ContentWithBackground from '../../components/ContentWithBackground/ContentWithBackground';
+import ImageScale from 'react-native-scalable-image';
+import {View} from 'react-native';
+import {Button} from 'react-native-elements';
+import {stylesApp} from '../../styles/app.styles';
+
+export default class Landing extends React.Component {
+
+  static NAV_NAME = 'landing';
+
+  componentDidMount(): void {
+    SplashScreen.hide();
+  }
+
+  render() {
+    return (
+      <ContentWithBackground style={styles.viewContainer}>
+        {/* logo */}
+        <ImageScale
+          width={237}
+          style={styles.imgLogo}
+          source={require('../../../assets/imgs/logo.png')}
+        />
+
+        {/* buttons */}
+        <View style={styles.viewButtons}>
+          {/* teacher */}
+          <View style={stylesApp.withShadow}>
+            <Button
+              title="BECOME A TEACHER"
+              buttonStyle={stylesApp.butPrimary}
+              titleStyle={stylesApp.titleButPrimary}
+              onPress={() => this.onButNext()}
+            />
+          </View>
+
+          {/* student */}
+          <View style={{...stylesApp.withShadow, ...styles.viewButStudent}}>
+            <Button
+              title="BECOME A STUDENT"
+              buttonStyle={stylesApp.butLight}
+              titleStyle={stylesApp.titleButLight}
+              onPress={() => this.onButNext()}
+            />
+          </View>
+        </View>
+
+        {/* footer */}
+        <View style={{...stylesApp.flexRow, ...styles.viewFooter}}>
+          <Button
+            title="about us"
+            type="clear"
+            titleStyle={stylesApp.titleButClear}
+          />
+
+          <Button
+            title="customer support"
+            type="clear"
+            titleStyle={stylesApp.titleButClear}
+          />
+        </View>
+
+      </ContentWithBackground>
+    );
+  }
+
+  onButNext() {
+  }
+}
