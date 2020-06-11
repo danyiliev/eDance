@@ -7,6 +7,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import {connect} from 'react-redux';
 import {Splash} from './splash/Splash';
 import {Utils} from '../helpers/utils';
+import Login from './login/Login';
 
 const Stack = createStackNavigator();
 
@@ -31,7 +32,7 @@ class MainNavigator extends React.Component {
             <Splash/>
             :
             <Stack.Navigator
-              initialRouteName={Landing.NAV_NAME}
+              initialRouteName={Login.NAV_NAME}
               screenOptions={{
                 headerBackTitleVisible: false,
                 headerTintColor: colorTheme.background,
@@ -39,6 +40,11 @@ class MainNavigator extends React.Component {
               <Stack.Screen
                 name={Landing.NAV_NAME}
                 component={Landing}
+                options={{ headerShown: false }}
+              />
+              <Stack.Screen
+                name={Login.NAV_NAME}
+                component={Login}
                 options={{ headerShown: false }}
               />
             </Stack.Navigator>
