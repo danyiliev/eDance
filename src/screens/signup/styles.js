@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {stylesApp} from '../../styles/app.styles';
+import {stylesApp} from '../../styles/app.style';
 import {colors as colorTheme} from '../../styles/theme.style';
 
 export const styles = StyleSheet.create({
@@ -53,5 +53,48 @@ export const styles = StyleSheet.create({
   viewButNext: {
     marginVertical: 48,
     marginHorizontal: 30,
-  }
+  },
+
+  viewInputSelect: {
+    borderBottomWidth: 1,
+  },
+  viewInputSelectContainer: {
+    ...stylesApp.flexRowCenter,
+    justifyContent: 'space-between',
+    paddingVertical: 10,
+  },
+
+  viewTop: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    marginBottom: 14,
+  },
+  txtItemTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+
+  ctnSegmentGender: {
+    marginTop: 20,
+    borderRadius: 100,
+    borderColor: colorTheme.primary,
+  },
+  txtSegment: {
+    fontSize: 12,
+    fontWeight: 'normal',
+    color: colorTheme.primary,
+  },
+  borderSegment: {
+    color: colorTheme.primary,
+  },
+  butSegmentSelected: {
+    backgroundColor: colorTheme.primary,
+  },
+  SegmentSelected: {
+    color: colorTheme.light,
+  },
+
+  picker: {
+    paddingVertical: 0,
+  },
 });

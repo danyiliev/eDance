@@ -7,7 +7,7 @@ import {Text, View} from 'react-native';
 import {Button, Input} from 'react-native-elements';
 import {colors as colorTheme} from '../../styles/theme.style';
 import DismissKeyboard from '../../components/DismissKeyboard/DismissKeyboard';
-import {stylesApp} from '../../styles/app.styles';
+import {stylesApp} from '../../styles/app.style';
 
 export default class Login extends React.Component {
   static NAV_NAME = 'login';

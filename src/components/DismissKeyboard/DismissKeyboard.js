@@ -5,7 +5,7 @@ import {
   View,
 } from 'react-native';
 import React from "react";
-import {stylesApp} from '../../styles/app.styles';
+import {stylesApp} from '../../styles/app.style';
 
 export default class DismissKeyboard extends React.Component {
 
@@ -46,6 +46,7 @@ export default class DismissKeyboard extends React.Component {
       Animated.timing(this.state.keyboardHeight, {
         duration: 200,
         toValue: -offset,
+        useNativeDriver: true,
       }).start();
     }
   };

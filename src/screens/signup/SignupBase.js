@@ -6,7 +6,7 @@ import {styles as stylesLogin} from '../login/styles';
 import {Image, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native';
 import {Button, Input} from 'react-native-elements';
 import {colors as colorTheme} from '../../styles/theme.style';
-import {stylesApp} from '../../styles/app.styles';
+import {stylesApp} from '../../styles/app.style';
 import ImageScale from 'react-native-scalable-image';
 import ImagePicker from "react-native-image-picker";
 

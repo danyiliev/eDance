@@ -10,6 +10,7 @@ import {Utils} from '../helpers/utils';
 import Login from './login/Login';
 import SignupBase from './signup/SignupBase';
 import SplashScreen from "react-native-splash-screen";
+import SignupAdvanced from './signup/SignupAdvanced';
 
 const Stack = createStackNavigator();
 
@@ -36,7 +37,7 @@ class MainNavigator extends React.Component {
             <Splash/>
             :
             <Stack.Navigator
-              initialRouteName={SignupBase.NAV_NAME}
+              initialRouteName={SignupAdvanced.NAV_NAME}
               screenOptions={{
                 headerBackTitleVisible: false,
               }}>
@@ -53,6 +54,10 @@ class MainNavigator extends React.Component {
               <Stack.Screen
                 name={SignupBase.NAV_NAME}
                 component={SignupBase}
+              />
+              <Stack.Screen
+                name={SignupAdvanced.NAV_NAME}
+                component={SignupAdvanced}
               />
             </Stack.Navigator>
         }

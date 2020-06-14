@@ -5,7 +5,7 @@ import ContentWithBackground from '../../components/ContentWithBackground/Conten
 import ImageScale from 'react-native-scalable-image';
 import {View} from 'react-native';
 import {Button} from 'react-native-elements';
-import {stylesApp} from '../../styles/app.styles';
+import {stylesApp} from '../../styles/app.style';
 
 export default class Landing extends React.Component {
 
