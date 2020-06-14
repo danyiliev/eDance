@@ -45,5 +45,11 @@ export const styles = StyleSheet.create({
     marginHorizontal: 10,
     fontSize: 14,
     color: colorTheme.grey,
+  },
+
+  viewFooter: {
+    marginTop: 20,
+    marginHorizontal: 52,
+    justifyContent: 'space-between',
   }
 });

@@ -1,10 +1,10 @@
 import React from 'react';
 import DismissKeyboard from '../../components/DismissKeyboard/DismissKeyboard';
 import ContentWithBackground from '../../components/ContentWithBackground/ContentWithBackground';
-import {styles} from './styles';
+import {styles as stylesSignup, styles} from './styles';
 import {styles as stylesLogin} from '../login/styles';
 import {Image, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native';
-import {Button, Input} from 'react-native-elements';
+import {Button, Icon, Input} from 'react-native-elements';
 import {colors as colorTheme} from '../../styles/theme.style';
 import {stylesApp} from '../../styles/app.style';
 import ImageScale from 'react-native-scalable-image';
@@ -149,6 +149,16 @@ export default class SignupBase extends React.Component {
                 buttonStyle={stylesApp.butPrimary}
                 titleStyle={stylesApp.titleButPrimary}
                 onPress={() => this.onButSignin()}
+                icon={
+                  <Icon
+                    type="ionicon"
+                    name="md-arrow-forward"
+                    containerStyle={stylesSignup.ctnButIcon}
+                    size={22}
+                    color={colorTheme.light}
+                  />
+                }
+                iconRight={true}
               />
             </View>
           </View>

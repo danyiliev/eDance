@@ -1,0 +1,98 @@
+import React from 'react';
+import DismissKeyboard from '../../components/DismissKeyboard/DismissKeyboard';
+import ContentWithBackground from '../../components/ContentWithBackground/ContentWithBackground';
+import {Text, View} from 'react-native';
+import {styles} from './styles';
+import {styles as stylesSignup} from '../signup/styles';
+import {Button, Icon, Input} from 'react-native-elements';
+import {styles as stylesLogin} from '../login/styles';
+import {stylesApp} from '../../styles/app.style';
+import {colors as colorTheme} from '../../styles/theme.style';
+import ImageScale from 'react-native-scalable-image';
+
+export default class ForgetEmail extends React.Component {
+  static NAV_NAME = 'forget-email';
+
+  state = {
+    // data
+    email: '',
+  };
+
+  constructor(props) {
+    super(props);
+
+    props.navigation.setOptions({
+      title: 'Forgot password'
+    });
+  }
+
+  render() {
+    return (
+      <DismissKeyboard
+        ref={(view) => {
+          this.keyboardView = view;
+        }}>
+        <ContentWithBackground>
+          <View style={styles.viewContainer}>
+            <View style={styles.viewTop}>
+              {/* logo */}
+              <ImageScale
+                width={237}
+                style={styles.imgLogo}
+                source={require('../../../assets/imgs/logo.png')}
+              />
+
+              {/* title */}
+              <Text style={stylesSignup.txtItemTitle}>
+                Type your email
+              </Text>
+            </View>
+
+            {/* email */}
+            <Input
+              containerStyle={styles.ctnInput}
+              autoCapitalize={'none'}
+              keyboardType="email-address"
+              returnKeyType="next"
+              placeholder="Email Address"
+              placeholderTextColor={colorTheme.primary}
+              inputStyle={stylesLogin.input}
+              inputContainerStyle={stylesLogin.inputCtn}
+              value={this.state.email}
+              onChangeText={(email) => {this.setState({email})}}
+              onSubmitEditing={() => { this.inputPassword.focus(); }}
+              renderErrorMessage={false}
+              rightIcon={
+                <ImageScale
+                  width={14}
+                  source={require('../../../assets/imgs/ic_input_email.png')}
+                />
+              }
+            />
+
+            {/* next */}
+            <View style={[stylesApp.withShadow, styles.viewButNext]}>
+              <Button
+                title="NEXT"
+                buttonStyle={stylesApp.butPrimary}
+                titleStyle={stylesApp.titleButPrimary}
+                onPress={() => this.onButSignin()}
+                icon={
+                  <Icon
+                    type="ionicon"
+                    name="md-arrow-forward"
+                    containerStyle={stylesSignup.ctnButIcon}
+                    size={22}
+                    color={colorTheme.light}
+                  />
+                }
+                iconRight={true}
+              />
+            </View>
+
+          </View>
+        </ContentWithBackground>
+      </DismissKeyboard>
+    );
+  }
+}

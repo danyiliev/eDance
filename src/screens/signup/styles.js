@@ -97,4 +97,7 @@ export const styles = StyleSheet.create({
   picker: {
     paddingVertical: 0,
   },
+  ctnButIcon: {
+    marginLeft: 16,
+  },
 });

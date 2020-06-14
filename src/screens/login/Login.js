@@ -79,7 +79,7 @@ export default class Login extends React.Component {
             <View style={styles.viewOrBar}/>
           </View>
 
-          {/* login */}
+          {/* sign up */}
           <View style={stylesApp.withShadow}>
             <Button
               title="REGISTER"
@@ -88,7 +88,16 @@ export default class Login extends React.Component {
               onPress={() => this.onButSignup()}
             />
           </View>
+        </View>
 
+        {/* footer */}
+        <View style={{...stylesApp.flexRow, ...styles.viewFooter}}>
+          <View></View>
+          <Button
+            title="forget password?"
+            type="clear"
+            titleStyle={stylesApp.titleButClear}
+          />
         </View>
       </ContentWithBackground>
       </DismissKeyboard>
