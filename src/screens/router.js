@@ -14,6 +14,9 @@ import SignupAdvanced from './signup/SignupAdvanced';
 import ForgetEmail from './forget/ForgetEmail';
 import ForgetCode from './forget/ForgetCode';
 import ForgetReset from './forget/ForgetReset';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import Radio from './tabs/radio/Radio';
+import TabMain from './tabs/tabs';
 
 const Stack = createStackNavigator();
 
@@ -39,42 +42,53 @@ class MainNavigator extends React.Component {
           this.state.initializing ?
             <Splash/>
             :
-            <Stack.Navigator
-              initialRouteName={ForgetReset.NAV_NAME}
-              screenOptions={{
-                headerBackTitleVisible: false,
-              }}>
-              <Stack.Screen
-                name={Landing.NAV_NAME}
-                component={Landing}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name={Login.NAV_NAME}
-                component={Login}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name={SignupBase.NAV_NAME}
-                component={SignupBase}
-              />
-              <Stack.Screen
-                name={SignupAdvanced.NAV_NAME}
-                component={SignupAdvanced}
-              />
-              <Stack.Screen
-                name={ForgetEmail.NAV_NAME}
-                component={ForgetEmail}
-              />
-              <Stack.Screen
-                name={ForgetCode.NAV_NAME}
-                component={ForgetCode}
-              />
-              <Stack.Screen
-                name={ForgetReset.NAV_NAME}
-                component={ForgetReset}
-              />
-            </Stack.Navigator>
+            // this.props.UserReducer.user ?
+            1 ?
+              <Stack.Navigator>
+                <Stack.Screen
+                  name={TabMain.NAV_NAME}
+                  component={TabMain}
+                />
+
+              </Stack.Navigator>
+              :
+              // not signed in
+              <Stack.Navigator
+                initialRouteName={ForgetReset.NAV_NAME}
+                screenOptions={{
+                  headerBackTitleVisible: false,
+                }}>
+                <Stack.Screen
+                  name={Landing.NAV_NAME}
+                  component={Landing}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name={Login.NAV_NAME}
+                  component={Login}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name={SignupBase.NAV_NAME}
+                  component={SignupBase}
+                />
+                <Stack.Screen
+                  name={SignupAdvanced.NAV_NAME}
+                  component={SignupAdvanced}
+                />
+                <Stack.Screen
+                  name={ForgetEmail.NAV_NAME}
+                  component={ForgetEmail}
+                />
+                <Stack.Screen
+                  name={ForgetCode.NAV_NAME}
+                  component={ForgetCode}
+                />
+                <Stack.Screen
+                  name={ForgetReset.NAV_NAME}
+                  component={ForgetReset}
+                />
+              </Stack.Navigator>
         }
       </NavigationContainer>
     );
