@@ -3,19 +3,19 @@ import DismissKeyboard from '../../components/DismissKeyboard/DismissKeyboard';
 import ContentWithBackground from '../../components/ContentWithBackground/ContentWithBackground';
 import {Text, View} from 'react-native';
 import {styles} from './styles';
+import ImageScale from 'react-native-scalable-image';
 import {styles as stylesSignup} from '../signup/styles';
 import {Button, Icon, Input} from 'react-native-elements';
+import {colors as colorTheme} from '../../styles/theme.style';
 import {styles as stylesLogin} from '../login/styles';
 import {stylesApp} from '../../styles/app.style';
-import {colors as colorTheme} from '../../styles/theme.style';
-import ImageScale from 'react-native-scalable-image';
 
-export default class ForgetEmail extends React.Component {
-  static NAV_NAME = 'forget-email';
+export default class ForgetCode extends React.Component {
+  static NAV_NAME = 'forget-code';
 
   state = {
     // data
-    email: '',
+    code: '',
   };
 
   constructor(props) {
@@ -44,29 +44,23 @@ export default class ForgetEmail extends React.Component {
 
               {/* title */}
               <Text style={stylesSignup.txtItemTitle}>
-                Type your email
+                Type verification code from your email
               </Text>
             </View>
 
-            {/* email */}
+            {/* code */}
             <Input
               containerStyle={styles.ctnInput}
               autoCapitalize={'none'}
-              keyboardType="email-address"
+              keyboardType="number-pad"
               returnKeyType="next"
-              placeholder="Email Address"
+              placeholder="Verification code"
               placeholderTextColor={colorTheme.primary}
               inputStyle={stylesLogin.input}
               inputContainerStyle={stylesLogin.inputCtn}
-              value={this.state.email}
-              onChangeText={(email) => {this.setState({email})}}
+              value={this.state.code}
+              onChangeText={(code) => {this.setState({code})}}
               renderErrorMessage={false}
-              rightIcon={
-                <ImageScale
-                  width={14}
-                  source={require('../../../assets/imgs/ic_input_email.png')}
-                />
-              }
             />
 
             {/* next */}
