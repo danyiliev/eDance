@@ -54,6 +54,7 @@ export default class TabMain extends React.Component {
   render() {
     return (
       <Tab.Navigator
+        initialRouteName={Tv.NAV_NAME}
         tabBarOptions={{
           activeTintColor: colorTheme.primary,
         }}

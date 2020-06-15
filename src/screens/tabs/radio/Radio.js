@@ -30,9 +30,10 @@ export default class Radio extends React.Component {
   render() {
     return (
       <View style={styles.viewContainer}>
+        {this.renderHeader()}
+
         <FlatList
           contentContainerStyle={styles.listCtnContainer}
-          ListHeaderComponent={() => this.renderHeader()}
           keyExtractor={(item, index) => index.toString()}
           onRefresh={() => this.onRefresh()}
           refreshing={this.state.showLoading}
