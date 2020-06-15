@@ -19,7 +19,7 @@ export const styles = StyleSheet.create({
     ...styleUtil.withShadow(12, 0.5),
     borderRadius: 12,
     backgroundColor: colorTheme.light,
-    height: (SCREEN_WDITH - paddingItem*3) / 2,
+    height: (SCREEN_WDITH - paddingItem*6) / 2,
     flex: 1,
     margin: paddingItem,
   },
