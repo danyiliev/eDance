@@ -3,24 +3,48 @@ import Radio from './radio/Radio';
 import {createBottomTabNavigator, BottomTabBar} from '@react-navigation/bottom-tabs';
 import {Image, View} from 'react-native';
 import ImageScale from 'react-native-scalable-image';
-import {styles} from './styles';
+import {styles as stylesTab, styles} from './styles';
 import {colors as colorTheme} from '../../styles/theme.style';
 import Tv from './tv/Tv';
 import Pro from './pro/Pro';
 import Student from './student/Student';
 import Store from './store/Store';
 import Likes from './likes/Likes';
+import {Button, Icon} from 'react-native-elements';
+import MenuModal from '../../components/MenuModal/MenuModal';
+import {stylesApp} from '../../styles/app.style';
 
 const Tab = createBottomTabNavigator();
 
+export function renderMenuButton(onPress) {
+  return (
+    <Button
+      type='clear'
+      buttonStyle={stylesTab.butHeaderLeft}
+      icon={
+        <ImageScale
+          width={18}
+          source={require('../../../assets/imgs/ic_but_menu.png')}
+        />
+      }
+      onPress={onPress}
+    />
+  );
+}
+
 export default class TabMain extends React.Component {
   static NAV_NAME = 'tabs';
+
+  state = {
+    showMenu: false,
+  };
 
   constructor(props) {
     super(props);
 
     props.navigation.setOptions({
       title: this.getHeaderTitle(),
+      headerLeft: () => renderMenuButton(this.onClickMenu.bind(this)),
     });
   }
 
@@ -53,107 +77,124 @@ export default class TabMain extends React.Component {
 
   render() {
     return (
-      <Tab.Navigator
-        initialRouteName={Tv.NAV_NAME}
-        tabBarOptions={{
-          activeTintColor: colorTheme.primary,
-        }}
-        tabBar={props => (
-          <BottomTabBar
-            style={styles.tabbar}
-            {...props} />
-        )}>
-        <Tab.Screen
-          name={Radio.NAV_NAME}
-          component={Radio}
-          options={{
-            tabBarLabel: 'Radio',
-            tabBarIcon: ({ focused, color, size }) => (
-              <ImageScale
-                width={21}
-                style={{
-                  opacity: focused ? 1 : 0.3,
-                }}
-                source={require('../../../assets/imgs/tab_radio.png')} />
-            ),
+      <View style={stylesApp.viewContainer}>
+        <Tab.Navigator
+          initialRouteName={Tv.NAV_NAME}
+          tabBarOptions={{
+            activeTintColor: colorTheme.primary,
           }}
+          tabBar={props => (
+            <BottomTabBar
+              style={styles.tabbar}
+              {...props} />
+          )}>
+          <Tab.Screen
+            name={Radio.NAV_NAME}
+            component={Radio}
+            options={{
+              tabBarLabel: 'Radio',
+              tabBarIcon: ({ focused, color, size }) => (
+                <ImageScale
+                  width={21}
+                  style={{
+                    opacity: focused ? 1 : 0.3,
+                  }}
+                  source={require('../../../assets/imgs/tab_radio.png')} />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name={Tv.NAV_NAME}
+            component={Tv}
+            options={{
+              tabBarLabel: 'TV',
+              tabBarIcon: ({ focused, color, size }) => (
+                <ImageScale
+                  width={24}
+                  style={{
+                    opacity: focused ? 1 : 0.3,
+                  }}
+                  source={require('../../../assets/imgs/tab_tv.png')} />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name={Pro.NAV_NAME}
+            component={Pro}
+            options={{
+              tabBarLabel: 'Pro',
+              tabBarIcon: ({ focused, color, size }) => (
+                <ImageScale
+                  width={16}
+                  style={{
+                    opacity: focused ? 1 : 0.3,
+                  }}
+                  source={require('../../../assets/imgs/tab_pro.png')} />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name={Student.NAV_NAME}
+            component={Student}
+            options={{
+              tabBarLabel: 'Student',
+              tabBarIcon: ({ focused, color, size }) => (
+                <ImageScale
+                  width={22}
+                  style={{
+                    opacity: focused ? 1 : 0.3,
+                  }}
+                  source={require('../../../assets/imgs/tab_student.png')} />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name={Store.NAV_NAME}
+            component={Store}
+            options={{
+              tabBarLabel: 'Store',
+              tabBarIcon: ({ focused, color, size }) => (
+                <ImageScale
+                  width={22}
+                  style={{
+                    opacity: focused ? 1 : 0.3,
+                  }}
+                  source={require('../../../assets/imgs/tab_store.png')} />
+              ),
+            }}
+          />
+          <Tab.Screen
+            name={Likes.NAV_NAME}
+            component={Likes}
+            options={{
+              tabBarLabel: 'Likes',
+              tabBarIcon: ({ focused, color, size }) => (
+                <ImageScale
+                  width={22}
+                  style={{
+                    opacity: focused ? 1 : 0.3,
+                  }}
+                  source={require('../../../assets/imgs/tab_like.png')} />
+              ),
+            }}
+          />
+        </Tab.Navigator>
+
+        <MenuModal
+          visible={this.state.showMenu}
+          onDismiss={() => this.showMenuModal(false)}
         />
-        <Tab.Screen
-          name={Tv.NAV_NAME}
-          component={Tv}
-          options={{
-            tabBarLabel: 'TV',
-            tabBarIcon: ({ focused, color, size }) => (
-              <ImageScale
-                width={24}
-                style={{
-                  opacity: focused ? 1 : 0.3,
-                }}
-                source={require('../../../assets/imgs/tab_tv.png')} />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name={Pro.NAV_NAME}
-          component={Pro}
-          options={{
-            tabBarLabel: 'Pro',
-            tabBarIcon: ({ focused, color, size }) => (
-              <ImageScale
-                width={16}
-                style={{
-                  opacity: focused ? 1 : 0.3,
-                }}
-                source={require('../../../assets/imgs/tab_pro.png')} />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name={Student.NAV_NAME}
-          component={Student}
-          options={{
-            tabBarLabel: 'Student',
-            tabBarIcon: ({ focused, color, size }) => (
-              <ImageScale
-                width={22}
-                style={{
-                  opacity: focused ? 1 : 0.3,
-                }}
-                source={require('../../../assets/imgs/tab_student.png')} />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name={Store.NAV_NAME}
-          component={Store}
-          options={{
-            tabBarLabel: 'Store',
-            tabBarIcon: ({ focused, color, size }) => (
-              <ImageScale
-                width={22}
-                style={{
-                  opacity: focused ? 1 : 0.3,
-                }}
-                source={require('../../../assets/imgs/tab_store.png')} />
-            ),
-          }}
-        />
-        <Tab.Screen
-          name={Likes.NAV_NAME}
-          component={Likes}
-          options={{
-            tabBarLabel: 'Likes',
-            tabBarIcon: ({ focused, color, size }) => (
-              <ImageScale
-                width={22}
-                style={{
-                  opacity: focused ? 1 : 0.3,
-                }}
-                source={require('../../../assets/imgs/tab_like.png')} />
-            ),
-          }}
-        />
-      </Tab.Navigator>
+      </View>
     );
+  }
+
+  onClickMenu() {
+    this.showMenuModal(true);
+  }
+
+  showMenuModal(show) {
+    this.setState({
+      showMenu: show,
+    });
   }
 }

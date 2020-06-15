@@ -17,6 +17,9 @@ import ForgetReset from './forget/ForgetReset';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Radio from './tabs/radio/Radio';
 import TabMain from './tabs/tabs';
+import {styles as stylesTab} from './tabs/styles';
+import ImageScale from 'react-native-scalable-image';
+import {Button} from 'react-native-elements';
 
 const Stack = createStackNavigator();
 
