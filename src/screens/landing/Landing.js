@@ -6,6 +6,7 @@ import ImageScale from 'react-native-scalable-image';
 import {View} from 'react-native';
 import {Button} from 'react-native-elements';
 import {stylesApp, styleUtil} from '../../styles/app.style';
+import Login from '../login/Login';
 
 export default class Landing extends React.Component {
 
@@ -68,5 +69,7 @@ export default class Landing extends React.Component {
   }
 
   onButNext() {
+    // go to login page
+    this.props.navigation.push(Login.NAV_NAME);
   }
 }

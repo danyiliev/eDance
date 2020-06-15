@@ -9,6 +9,7 @@ import {styles as stylesLogin} from '../login/styles';
 import {stylesApp, styleUtil} from '../../styles/app.style';
 import {colors as colorTheme} from '../../styles/theme.style';
 import ImageScale from 'react-native-scalable-image';
+import ForgetCode from './ForgetCode';
 
 export default class ForgetEmail extends React.Component {
   static NAV_NAME = 'forget-email';
@@ -96,5 +97,7 @@ export default class ForgetEmail extends React.Component {
   }
 
   onButNext() {
+    // go to forget page
+    this.props.navigation.push(ForgetCode.NAV_NAME);
   }
 }

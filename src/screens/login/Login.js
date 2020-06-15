@@ -8,8 +8,13 @@ import {Button, Input} from 'react-native-elements';
 import {colors as colorTheme} from '../../styles/theme.style';
 import DismissKeyboard from '../../components/DismissKeyboard/DismissKeyboard';
 import {stylesApp, styleUtil} from '../../styles/app.style';
+import SignupBase from '../signup/SignupBase';
+import ForgetEmail from '../forget/ForgetEmail';
+import {setUserInfo} from '../../actions/user';
+import {connect} from 'react-redux';
+import {User} from '../../models/user.model';
 
-export default class Login extends React.Component {
+class Login extends React.Component {
   static NAV_NAME = 'login';
 
   state = {
@@ -97,6 +102,7 @@ export default class Login extends React.Component {
             title="forget password?"
             type="clear"
             titleStyle={stylesApp.titleButClear}
+            onPress={() => this.onButForget()}
           />
         </View>
       </ContentWithBackground>
@@ -105,8 +111,24 @@ export default class Login extends React.Component {
   }
 
   onButSignin() {
+    this.props.setUserInfo(new User());
   }
 
   onButSignup() {
+    // go to signup page
+    this.props.navigation.push(SignupBase.NAV_NAME);
+  }
+
+  onButForget() {
+    // go to forget page
+    this.props.navigation.push(ForgetEmail.NAV_NAME);
   }
 }
+
+const mapStateToProps = state => state;
+
+const mapDispatchToProps = {
+  setUserInfo,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

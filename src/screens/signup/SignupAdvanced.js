@@ -11,8 +11,11 @@ import ImageScale from 'react-native-scalable-image';
 import SelectPicker from '../../components/SelectPicker/SelectPicker';
 import { Picker } from '@react-native-community/picker';
 import {STATES} from '../../constants/constant-data';
+import {setUserInfo} from '../../actions/user';
+import {connect} from 'react-redux';
+import {User} from '../../models/user.model';
 
-export default class SignupBase extends React.Component {
+class SignupAdvanced extends React.Component {
   static NAV_NAME = 'signup-advanced';
 
   state = {
@@ -191,7 +194,9 @@ export default class SignupBase extends React.Component {
     );
   }
 
-  onButSignup() {}
+  onButSignup() {
+    this.props.setUserInfo(new User());
+  }
 
   onFocusZip() {
     this.keyboardView.moveMainView(30);
@@ -226,3 +231,11 @@ export default class SignupBase extends React.Component {
     }
   }
 }
+
+const mapStateToProps = state => state;
+
+const mapDispatchToProps = {
+  setUserInfo,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignupAdvanced);

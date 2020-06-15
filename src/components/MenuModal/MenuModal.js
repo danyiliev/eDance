@@ -6,8 +6,10 @@ import { colors as colorTheme } from '../../styles/theme.style';
 import ImageScale from 'react-native-scalable-image';
 import {Button, Divider, Icon} from 'react-native-elements';
 import PropTypes from 'prop-types';
+import {setUserInfo} from '../../actions/user';
+import {connect} from 'react-redux';
 
-export default class MenuModal extends React.Component {
+class MenuModal extends React.Component {
   static propTypes = {
     visible: PropTypes.bool,
   };
@@ -157,8 +159,8 @@ export default class MenuModal extends React.Component {
             </TouchableOpacity>
             <Divider style={styles.viewDivider} />
 
-            {/* near by */}
-            <TouchableOpacity>
+            {/* logout */}
+            <TouchableOpacity onPress={() => this.onLogout()}>
               <View style={styles.viewMenuItem}>
                 {/* icon */}
                 <View style={styles.viewMenuIcon}>
@@ -175,16 +177,21 @@ export default class MenuModal extends React.Component {
             </TouchableOpacity>
 
           </View>
-
-
         </View>
       </Modal>
     );
   }
 
-  dismissModal() {
-    this.setState({
-      visible: false,
-    });
+  onLogout() {
+    this.props.setUserInfo(null);
+    this.props.onDismiss();
   }
 }
+
+const mapStateToProps = state => state;
+
+const mapDispatchToProps = {
+  setUserInfo,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(MenuModal);

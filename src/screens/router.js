@@ -35,7 +35,7 @@ class MainNavigator extends React.Component {
       initializing: false,
     });
 
-    SplashScreen.hide();
+    // SplashScreen.hide();
   }
 
   render() {
@@ -45,9 +45,11 @@ class MainNavigator extends React.Component {
           this.state.initializing ?
             <Splash/>
             :
-            // this.props.UserReducer.user ?
-            1 ?
-              <Stack.Navigator>
+            this.props.UserReducer.user ?
+              <Stack.Navigator
+                screenOptions={{
+                  headerTintColor: colorTheme.primary,
+                }}>
                 <Stack.Screen
                   name={TabMain.NAV_NAME}
                   component={TabMain}
@@ -56,9 +58,10 @@ class MainNavigator extends React.Component {
               :
               // not signed in
               <Stack.Navigator
-                initialRouteName={Login.NAV_NAME}
+                initialRouteName={Landing.NAV_NAME}
                 screenOptions={{
                   headerBackTitleVisible: false,
+                  headerTintColor: colorTheme.primary,
                 }}>
                 <Stack.Screen
                   name={Landing.NAV_NAME}

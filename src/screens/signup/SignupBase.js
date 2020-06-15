@@ -9,6 +9,7 @@ import {colors as colorTheme} from '../../styles/theme.style';
 import {stylesApp, styleUtil} from '../../styles/app.style';
 import ImageScale from 'react-native-scalable-image';
 import ImagePicker from "react-native-image-picker";
+import SignupAdvanced from './SignupAdvanced';
 
 export default class SignupBase extends React.Component {
   static NAV_NAME = 'signup-base';
@@ -148,7 +149,7 @@ export default class SignupBase extends React.Component {
                 title="NEXT"
                 buttonStyle={stylesApp.butPrimary}
                 titleStyle={stylesApp.titleButPrimary}
-                onPress={() => this.onButSignin()}
+                onPress={() => this.onButNext()}
                 icon={
                   <Icon
                     type="ionicon"
@@ -197,5 +198,10 @@ export default class SignupBase extends React.Component {
 
   onPasswordFocus() {
     this.keyboardView.moveMainView(30);
+  }
+
+  onButNext() {
+    // go to signup advanced page
+    this.props.navigation.push(SignupAdvanced.NAV_NAME);
   }
 }

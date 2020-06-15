@@ -9,6 +9,7 @@ import {Button, Icon, Input} from 'react-native-elements';
 import {colors as colorTheme} from '../../styles/theme.style';
 import {styles as stylesLogin} from '../login/styles';
 import {stylesApp, styleUtil} from '../../styles/app.style';
+import ForgetReset from './ForgetReset';
 
 export default class ForgetCode extends React.Component {
   static NAV_NAME = 'forget-code';
@@ -90,5 +91,7 @@ export default class ForgetCode extends React.Component {
   }
 
   onButNext() {
+    // go to forget page
+    this.props.navigation.push(ForgetReset.NAV_NAME);
   }
 }
