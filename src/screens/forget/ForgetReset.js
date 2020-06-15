@@ -8,7 +8,7 @@ import {styles as stylesSignup} from '../signup/styles';
 import {Button, Icon, Input} from 'react-native-elements';
 import {colors as colorTheme} from '../../styles/theme.style';
 import {styles as stylesLogin} from '../login/styles';
-import {stylesApp} from '../../styles/app.style';
+import {stylesApp, styleUtil} from '../../styles/app.style';
 
 export default class ForgetReset extends React.Component {
   static NAV_NAME = 'forget-reset';
@@ -81,7 +81,7 @@ export default class ForgetReset extends React.Component {
             </View>
 
             {/* next */}
-            <View style={[stylesApp.withShadow, styles.viewButNext]}>
+            <View style={[styleUtil.withShadow(), styles.viewButNext]}>
               <Button
                 title="Done"
                 buttonStyle={stylesApp.butPrimary}

@@ -1,6 +1,19 @@
 import { StyleSheet } from 'react-native';
 import {colors as colorTheme} from './theme.style';
 
+export const styleUtil = {
+  withShadow(radius = 22, opacity = 1) {
+    return {
+      shadowColor: colorTheme.shadow,
+      shadowRadius: radius,
+      shadowOffset: {
+        width: 0, height: 0,
+      },
+      shadowOpacity: opacity,
+    }
+  }
+};
+
 export const stylesApp = StyleSheet.create({
   viewContainer: {
     flex: 1,
@@ -66,14 +79,4 @@ export const stylesApp = StyleSheet.create({
     fontSize: 12,
     color: colorTheme.grey,
   },
-
-  withShadow: {
-    // shadow
-    shadowColor: colorTheme.shadow,
-    shadowRadius: 22,
-    shadowOffset: {
-      width: 0, height: 0,
-    },
-    shadowOpacity: 1,
-  }
 });

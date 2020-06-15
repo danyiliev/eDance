@@ -49,12 +49,11 @@ class MainNavigator extends React.Component {
                   name={TabMain.NAV_NAME}
                   component={TabMain}
                 />
-
               </Stack.Navigator>
               :
               // not signed in
               <Stack.Navigator
-                initialRouteName={ForgetReset.NAV_NAME}
+                initialRouteName={Login.NAV_NAME}
                 screenOptions={{
                   headerBackTitleVisible: false,
                 }}>

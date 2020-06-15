@@ -6,7 +6,7 @@ import {styles} from './styles';
 import {Button, ButtonGroup, Input} from 'react-native-elements';
 import {styles as stylesLogin} from '../login/styles';
 import {colors as colorTheme} from '../../styles/theme.style';
-import {stylesApp} from '../../styles/app.style';
+import {stylesApp, styleUtil} from '../../styles/app.style';
 import ImageScale from 'react-native-scalable-image';
 import SelectPicker from '../../components/SelectPicker/SelectPicker';
 import { Picker } from '@react-native-community/picker';
@@ -142,7 +142,7 @@ export default class SignupBase extends React.Component {
             </View>
 
             {/* next */}
-            <View style={[stylesApp.withShadow, styles.viewButNext]}>
+            <View style={[styleUtil.withShadow(), styles.viewButNext]}>
               <Button
                 title="REGISTER"
                 buttonStyle={stylesApp.butPrimary}

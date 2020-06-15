@@ -6,7 +6,7 @@ import {styles as stylesLogin} from '../login/styles';
 import {Image, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native';
 import {Button, Icon, Input} from 'react-native-elements';
 import {colors as colorTheme} from '../../styles/theme.style';
-import {stylesApp} from '../../styles/app.style';
+import {stylesApp, styleUtil} from '../../styles/app.style';
 import ImageScale from 'react-native-scalable-image';
 import ImagePicker from "react-native-image-picker";
 
@@ -42,7 +42,7 @@ export default class SignupBase extends React.Component {
             <TouchableWithoutFeedback
               onPress={() => this.onClickPhoto()}>
               <View style={styles.viewPhoto}>
-                <View style={[styles.viewPhotoMain, stylesApp.withShadow]}>
+                <View style={[styles.viewPhotoMain, styleUtil.withShadow()]}>
                   {
                     this.state.photoImg ?
                       <Image
@@ -143,7 +143,7 @@ export default class SignupBase extends React.Component {
             </View>
 
             {/* next */}
-            <View style={[stylesApp.withShadow, styles.viewButNext]}>
+            <View style={[styleUtil.withShadow(), styles.viewButNext]}>
               <Button
                 title="NEXT"
                 buttonStyle={stylesApp.butPrimary}

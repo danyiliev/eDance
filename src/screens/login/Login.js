@@ -7,7 +7,7 @@ import {Text, View} from 'react-native';
 import {Button, Input} from 'react-native-elements';
 import {colors as colorTheme} from '../../styles/theme.style';
 import DismissKeyboard from '../../components/DismissKeyboard/DismissKeyboard';
-import {stylesApp} from '../../styles/app.style';
+import {stylesApp, styleUtil} from '../../styles/app.style';
 
 export default class Login extends React.Component {
   static NAV_NAME = 'login';
@@ -64,7 +64,7 @@ export default class Login extends React.Component {
           />
 
           {/* login */}
-          <View style={[stylesApp.withShadow, styles.viewButLogin]}>
+          <View style={[styleUtil.withShadow(), styles.viewButLogin]}>
             <Button
               title="LOGIN"
               buttonStyle={stylesApp.butPrimary}
@@ -80,7 +80,7 @@ export default class Login extends React.Component {
           </View>
 
           {/* sign up */}
-          <View style={stylesApp.withShadow}>
+          <View style={styleUtil.withShadow()}>
             <Button
               title="REGISTER"
               buttonStyle={stylesApp.butLight}

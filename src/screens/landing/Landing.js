@@ -5,7 +5,7 @@ import ContentWithBackground from '../../components/ContentWithBackground/Conten
 import ImageScale from 'react-native-scalable-image';
 import {View} from 'react-native';
 import {Button} from 'react-native-elements';
-import {stylesApp} from '../../styles/app.style';
+import {stylesApp, styleUtil} from '../../styles/app.style';
 
 export default class Landing extends React.Component {
 
@@ -28,7 +28,7 @@ export default class Landing extends React.Component {
         {/* buttons */}
         <View style={styles.viewButtons}>
           {/* teacher */}
-          <View style={stylesApp.withShadow}>
+          <View style={styleUtil.withShadow()}>
             <Button
               title="BECOME A TEACHER"
               buttonStyle={stylesApp.butPrimary}
@@ -38,7 +38,7 @@ export default class Landing extends React.Component {
           </View>
 
           {/* student */}
-          <View style={{...stylesApp.withShadow, ...styles.viewButStudent}}>
+          <View style={{...styleUtil.withShadow(), ...styles.viewButStudent}}>
             <Button
               title="BECOME A STUDENT"
               buttonStyle={stylesApp.butLight}
