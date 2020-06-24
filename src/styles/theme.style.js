@@ -8,6 +8,7 @@ export const colors = {
   lightTrans: 'rgba(255,255,255, 0.4)',
   green: '#b1d78c',
   darkGreen: '#82be4a',
+  lightGrey: '#E4E9F2',
   darkGrey: '#666',
   grey: '#8F9BB3',
   highlight: '#eee',

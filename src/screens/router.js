@@ -16,16 +16,21 @@ import ForgetCode from './forget/ForgetCode';
 import ForgetReset from './forget/ForgetReset';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Radio from './tabs/radio/Radio';
-import TabMain from './tabs/tabs';
+import TabMain, {renderMenuButton} from './tabs/tabs';
 import {styles as stylesTab} from './tabs/styles';
 import ImageScale from 'react-native-scalable-image';
 import {Button} from 'react-native-elements';
+import Intro from './intro/Intro';
+import MenuModal from '../components/MenuModal/MenuModal';
+import {View} from 'react-native';
+import {stylesApp} from '../styles/app.style';
 
 const Stack = createStackNavigator();
 
 class MainNavigator extends React.Component {
   state = {
     initializing: true,
+    showMenu: false,
   };
 
   async componentDidMount(): void {
@@ -35,7 +40,7 @@ class MainNavigator extends React.Component {
       initializing: false,
     });
 
-    // SplashScreen.hide();
+    SplashScreen.hide();
   }
 
   render() {
@@ -45,16 +50,29 @@ class MainNavigator extends React.Component {
           this.state.initializing ?
             <Splash/>
             :
-            this.props.UserReducer.user ?
-              <Stack.Navigator
-                screenOptions={{
-                  headerTintColor: colorTheme.primary,
-                }}>
-                <Stack.Screen
-                  name={TabMain.NAV_NAME}
-                  component={TabMain}
+            1 === 1 ?
+              <View style={stylesApp.viewContainer}>
+                <Stack.Navigator
+                  initialRouteName={Intro.NAV_NAME}
+                  screenOptions={{
+                    headerTintColor: colorTheme.primary,
+                    headerLeft: () => renderMenuButton(this.onClickMenu.bind(this)),
+                  }}>
+                  <Stack.Screen
+                    name={TabMain.NAV_NAME}
+                    component={TabMain}
+                  />
+                  <Stack.Screen
+                    name={Intro.NAV_NAME}
+                    component={Intro}
+                  />
+                </Stack.Navigator>
+
+                <MenuModal
+                  visible={this.state.showMenu}
+                  onDismiss={() => this.showMenuModal(false)}
                 />
-              </Stack.Navigator>
+              </View>
               :
               // not signed in
               <Stack.Navigator
@@ -97,6 +115,16 @@ class MainNavigator extends React.Component {
         }
       </NavigationContainer>
     );
+  }
+
+  onClickMenu() {
+    this.showMenuModal(true);
+  }
+
+  showMenuModal(show) {
+    this.setState({
+      showMenu: show,
+    });
   }
 }
 

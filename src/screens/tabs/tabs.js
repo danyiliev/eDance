@@ -35,16 +35,11 @@ export function renderMenuButton(onPress) {
 export default class TabMain extends React.Component {
   static NAV_NAME = 'tabs';
 
-  state = {
-    showMenu: false,
-  };
-
   constructor(props) {
     super(props);
 
     props.navigation.setOptions({
       title: this.getHeaderTitle(),
-      headerLeft: () => renderMenuButton(this.onClickMenu.bind(this)),
     });
   }
 
@@ -179,22 +174,7 @@ export default class TabMain extends React.Component {
             }}
           />
         </Tab.Navigator>
-
-        <MenuModal
-          visible={this.state.showMenu}
-          onDismiss={() => this.showMenuModal(false)}
-        />
       </View>
     );
-  }
-
-  onClickMenu() {
-    this.showMenuModal(true);
-  }
-
-  showMenuModal(show) {
-    this.setState({
-      showMenu: show,
-    });
   }
 }
