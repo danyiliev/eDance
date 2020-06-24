@@ -56,4 +56,12 @@ buck-out/
 *.jsbundle
 
 # CocoaPods
-/ios/Pods/
+ios/Pods/
+ios/assets
+ios/main.jsbundle
+
+# Android
+android/app/debug/
+android/app/release/
+android/app/src/main/assets/index.android.bundle
+
