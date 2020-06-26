@@ -31,7 +31,6 @@ export default class Likes extends React.Component {
     return (
       <View style={stylesMain.viewContainer}>
         <FlatList
-          contentContainerStyle={styles.listCtnContainer}
           keyExtractor={(item, index) => index.toString()}
           onRefresh={() => this.onRefresh()}
           refreshing={this.state.showLoading}

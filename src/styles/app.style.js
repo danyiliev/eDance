@@ -48,6 +48,12 @@ export const stylesApp = StyleSheet.create({
   mt4: {
     marginTop: 4,
   },
+  mr10: {
+    marginRight: 10,
+  },
+  ml10: {
+    marginLeft: 10,
+  },
 
   //
   // buttons

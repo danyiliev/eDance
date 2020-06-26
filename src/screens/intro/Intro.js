@@ -16,7 +16,7 @@ export default class Intro extends React.Component {
 
     props.navigation.setOptions({
       title: 'Home',
-      // headerLeft: null,
+      headerLeft: null,
     });
   }
 

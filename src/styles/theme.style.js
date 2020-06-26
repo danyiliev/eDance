@@ -3,6 +3,7 @@ export const colors = {
   backgroundGrey: '#F7F8FA',
   primary: '#222B45',
   shadow: 'rgba(34, 43, 69, 0.35)',
+  primaryLight: '#4E5873',
   primaryDark: '#45849e',
   light: 'white',
   lightTrans: 'rgba(255,255,255, 0.4)',
