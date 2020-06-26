@@ -30,15 +30,12 @@ export default class Home extends React.Component {
     return (
       <View style={styles.viewContainer}>
         <FlatList
-          contentContainerStyle={styles.listCtnContainer}
           keyExtractor={(item, index) => index.toString()}
           data={Utils.makeEmptyArray(1 + 10)}
           renderItem={({item, index}) => this.renderItem(item, index)}
           ListHeaderComponent={() => this.renderHeader()}
         />
-
       </View>
-
     );
   }
 
