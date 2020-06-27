@@ -26,6 +26,7 @@ import {View} from 'react-native';
 import {stylesApp} from '../styles/app.style';
 import Home from './home/Home';
 import Reviews from './reviews/Reviews';
+import ScheduleSelect from './schedule/ScheduleSelect';
 
 const Stack = createStackNavigator();
 
@@ -55,7 +56,7 @@ class MainNavigator extends React.Component {
             1 === 1 ?
               <View style={stylesApp.viewContainer}>
                 <Stack.Navigator
-                  initialRouteName={Reviews.NAV_NAME}
+                  initialRouteName={ScheduleSelect.NAV_NAME}
                   screenOptions={{
                     headerTintColor: colorTheme.primary,
                     headerLeft: () => renderMenuButton(this.onClickMenu.bind(this)),
@@ -75,6 +76,10 @@ class MainNavigator extends React.Component {
                   <Stack.Screen
                     name={Reviews.NAV_NAME}
                     component={Reviews}
+                  />
+                  <Stack.Screen
+                    name={ScheduleSelect.NAV_NAME}
+                    component={ScheduleSelect}
                   />
                 </Stack.Navigator>
 

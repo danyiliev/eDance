@@ -144,7 +144,7 @@ export default class SignupBase extends React.Component {
             </View>
 
             {/* next */}
-            <View style={[styleUtil.withShadow(), styles.viewButNext]}>
+            <View style={styles.viewButNext}>
               <Button
                 title="NEXT"
                 buttonStyle={stylesApp.butPrimary}
