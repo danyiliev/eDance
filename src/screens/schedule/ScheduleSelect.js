@@ -13,21 +13,7 @@ import {colors as colorTheme} from '../../styles/theme.style';
 export default class ScheduleSelect extends React.Component {
   static NAV_NAME = 'schedule-select';
 
-  static SELECT_TYPE = 'type';
-  static SELECT_STYLE = 'style';
-  static SELECT_LEVEL = 'level';
-  static SELECT_OCCASION = 'occasion';
-
   state = {
-    showTypePicker: false,
-    showStylePicker: false,
-    showLevelPicker: false,
-    showOccasionPicker: false,
-    typeSelected: '',
-    styleSelected: '',
-    levelSelected: '',
-    occasionSelected: '',
-
     // data
     type: '',
     style: '',
@@ -103,7 +89,7 @@ export default class ScheduleSelect extends React.Component {
         </View>
 
         {/* next */}
-        <View style={[styleUtil.withShadow(), styles.viewButNext]}>
+        <View style={styles.viewButNext}>
           <Button
             title="NEXT"
             buttonStyle={stylesApp.butPrimary}
@@ -123,39 +109,5 @@ export default class ScheduleSelect extends React.Component {
         </View>
       </View>
     );
-  }
-
-  renderTypePicker() {
-    return (
-      <SelectPicker
-        isVisible={this.state.showTypePicker}
-        contentStyle={styles.picker}
-        onDismiss={done => this.dismissType(done)}>
-
-      </SelectPicker>
-    );
-  }
-
-  dismissType(done) {
-    this.setState({
-      showTypePicker: false,
-    });
-
-    let { typeSelected } = this.state;
-    if (!typeSelected) {
-      // default is the first one
-      typeSelected = LESSON_TYPES[0].value;
-    }
-
-    // update date value based on done/canceled
-    if (done) {
-      this.setState({
-        type: typeSelected,
-      });
-    } else {
-      this.setState({
-        typeSelected: this.state.state,
-      });
-    }
   }
 }
