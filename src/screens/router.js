@@ -28,6 +28,7 @@ import Home from './home/Home';
 import Reviews from './reviews/Reviews';
 import ScheduleSelect from './schedule/ScheduleSelect';
 import ScheduleCheckout from './schedule/schedule-checkout/ScheduleCheckout';
+import BookingMenu from './booking/booking-menu/BookingMenu';
 
 const Stack = createStackNavigator();
 
@@ -57,7 +58,7 @@ class MainNavigator extends React.Component {
             1 === 1 ?
               <View style={stylesApp.viewContainer}>
                 <Stack.Navigator
-                  initialRouteName={ScheduleCheckout.NAV_NAME}
+                  initialRouteName={BookingMenu.NAV_NAME}
                   screenOptions={{
                     headerTintColor: colorTheme.primary,
                     headerLeft: () => renderMenuButton(this.onClickMenu.bind(this)),
@@ -85,6 +86,10 @@ class MainNavigator extends React.Component {
                   <Stack.Screen
                     name={ScheduleCheckout.NAV_NAME}
                     component={ScheduleCheckout}
+                  />
+                  <Stack.Screen
+                    name={BookingMenu.NAV_NAME}
+                    component={BookingMenu}
                   />
                 </Stack.Navigator>
 
