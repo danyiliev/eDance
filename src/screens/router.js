@@ -33,6 +33,7 @@ import BookingDate from './booking/booking-date/BookingDate';
 import Messaging from './messaging/Messaging';
 import Chat from './chat/Chat';
 import SettingProfile from './settings/setting-profile/SettingProfile';
+import Championships from './championships/Championships';
 
 const Stack = createStackNavigator();
 
@@ -62,7 +63,7 @@ class MainNavigator extends React.Component {
             1 === 1 ?
               <View style={stylesApp.viewContainer}>
                 <Stack.Navigator
-                  initialRouteName={SettingProfile.NAV_NAME}
+                  initialRouteName={Championships.NAV_NAME}
                   screenOptions={{
                     headerTintColor: colorTheme.primary,
                     headerLeft: () => renderMenuButton(this.onClickMenu.bind(this)),
@@ -110,6 +111,10 @@ class MainNavigator extends React.Component {
                   <Stack.Screen
                     name={SettingProfile.NAV_NAME}
                     component={SettingProfile}
+                  />
+                  <Stack.Screen
+                    name={Championships.NAV_NAME}
+                    component={Championships}
                   />
                 </Stack.Navigator>
 
