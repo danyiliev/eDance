@@ -32,6 +32,7 @@ import BookingMenu from './booking/booking-menu/BookingMenu';
 import BookingDate from './booking/booking-date/BookingDate';
 import Messaging from './messaging/Messaging';
 import Chat from './chat/Chat';
+import SettingProfile from './settings/setting-profile/SettingProfile';
 
 const Stack = createStackNavigator();
 
@@ -61,7 +62,7 @@ class MainNavigator extends React.Component {
             1 === 1 ?
               <View style={stylesApp.viewContainer}>
                 <Stack.Navigator
-                  initialRouteName={Chat.NAV_NAME}
+                  initialRouteName={SettingProfile.NAV_NAME}
                   screenOptions={{
                     headerTintColor: colorTheme.primary,
                     headerLeft: () => renderMenuButton(this.onClickMenu.bind(this)),
@@ -105,6 +106,10 @@ class MainNavigator extends React.Component {
                   <Stack.Screen
                     name={Chat.NAV_NAME}
                     component={Chat}
+                  />
+                  <Stack.Screen
+                    name={SettingProfile.NAV_NAME}
+                    component={SettingProfile}
                   />
                 </Stack.Navigator>
 

@@ -17,6 +17,7 @@ export const styleUtil = {
 export const stylesApp = StyleSheet.create({
   viewContainer: {
     flex: 1,
+    backgroundColor: colorTheme.background,
   },
 
   flexColCenter: {
@@ -47,6 +48,21 @@ export const stylesApp = StyleSheet.create({
   //
   mt4: {
     marginTop: 4,
+  },
+  mt6: {
+    marginTop: 4,
+  },
+  mt12: {
+    marginTop: 12,
+  },
+  mt14: {
+    marginTop: 14,
+  },
+  mt20: {
+    marginTop: 20,
+  },
+  mt24: {
+    marginTop: 24,
   },
   mr10: {
     marginRight: 10,
