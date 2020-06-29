@@ -65,6 +65,8 @@ export default class TabMain extends React.Component {
         return 'Dance Radio';
       case Tv.NAV_NAME:
         return 'Dance TV';
+      case Student.NAV_NAME:
+        return 'Dance Student';
       case Likes.NAV_NAME:
         return 'Likes';
     }

@@ -9,6 +9,7 @@ import FastImage from 'react-native-fast-image';
 import {Button} from 'react-native-elements';
 import StarRating from 'react-native-star-rating';
 import {colors as colorTheme} from '../../styles/theme.style';
+import ScheduleSelect from '../schedule/ScheduleSelect';
 
 export default class Reviews extends React.Component {
   static NAV_NAME = 'reviews';
@@ -51,6 +52,7 @@ export default class Reviews extends React.Component {
           containerStyle={styles.ctnButSchedule}
           buttonStyle={stylesCard.butLightOutline}
           titleStyle={stylesCard.titleButton}
+          onPress={() => this.onSchedule()}
         />
       </View>
     );
@@ -105,5 +107,10 @@ export default class Reviews extends React.Component {
         </View>
       </View>
     );
+  }
+
+  onSchedule() {
+    // go to schedule page
+    this.props.navigation.push(ScheduleSelect.NAV_NAME);
   }
 }

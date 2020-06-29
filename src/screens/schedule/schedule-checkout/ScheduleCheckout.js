@@ -4,6 +4,8 @@ import {styles as stylesMain} from '../styles';
 import {styles} from './styles';
 import {stylesApp, styleUtil} from '../../../styles/app.style';
 import {Button} from 'react-native-elements';
+import ScheduleSelect from '../ScheduleSelect';
+import BookingMenu from '../../booking/booking-menu/BookingMenu';
 
 export default class ScheduleCheckout extends React.Component {
   static NAV_NAME = 'schedule-checkout';
@@ -89,5 +91,7 @@ export default class ScheduleCheckout extends React.Component {
   }
 
   onButCheckout() {
+    // go to booking page
+    this.props.navigation.push(BookingMenu.NAV_NAME);
   }
 }

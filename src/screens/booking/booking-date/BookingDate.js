@@ -56,7 +56,7 @@ export default class BookingDate extends React.Component {
 
         <View style={styles.viewButNext}>
           <Button
-            title="CHECKOUT"
+            title="NEXT"
             buttonStyle={stylesApp.butPrimary}
             titleStyle={stylesApp.titleButPrimary}
             onPress={() => this.onButNext()}

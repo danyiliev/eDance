@@ -9,6 +9,7 @@ import {DANCE_LEVELS, DANCE_STYLES, LESSON_TYPES, OCCASIONS} from '../../constan
 import {Button, Icon} from 'react-native-elements';
 import {styles as stylesSignup} from '../signup/styles';
 import {colors as colorTheme} from '../../styles/theme.style';
+import ScheduleCheckout from './schedule-checkout/ScheduleCheckout';
 
 export default class ScheduleSelect extends React.Component {
   static NAV_NAME = 'schedule-select';
@@ -109,5 +110,10 @@ export default class ScheduleSelect extends React.Component {
         </View>
       </View>
     );
+  }
+
+  onButNext() {
+    // go to checkout page
+    this.props.navigation.push(ScheduleCheckout.NAV_NAME);
   }
 }

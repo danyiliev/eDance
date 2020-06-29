@@ -7,6 +7,8 @@ import TeacherCard from '../../components/TeacherCard/TeacherCard';
 import {stylesApp, styleUtil} from '../../styles/app.style';
 import {Utils} from '../../helpers/utils';
 import ImageScale from 'react-native-scalable-image';
+import Reviews from '../reviews/Reviews';
+import ScheduleSelect from '../schedule/ScheduleSelect';
 
 export default class Home extends React.Component {
   static NAV_NAME = 'home';
@@ -47,7 +49,13 @@ export default class Home extends React.Component {
           verticalSwipe={false}
           containerStyle={styles.ctnSwiper}
           cards={this.teachers}
-          renderCard={user => <TeacherCard user={user} />}
+          renderCard={user =>
+            <TeacherCard
+              user={user}
+              onReview={() => this.onUserReviews()}
+              onSchedule={() => this.onUserSchedule()}
+            />
+          }
           cardIndex={0}
           stackSize={2}
           showSecondCard
@@ -93,5 +101,15 @@ export default class Home extends React.Component {
         </View>
       </View>
     )
+  }
+
+  onUserReviews() {
+    // go to reviews page
+    this.props.navigation.push(Reviews.NAV_NAME);
+  }
+
+  onUserSchedule() {
+    // go to reviews page
+    this.props.navigation.push(ScheduleSelect.NAV_NAME);
   }
 }

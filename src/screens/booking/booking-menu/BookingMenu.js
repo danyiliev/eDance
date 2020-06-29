@@ -4,6 +4,7 @@ import {styles} from './styles';
 import ContentWithBackground from '../../../components/ContentWithBackground/ContentWithBackground';
 import {stylesApp, styleUtil} from '../../../styles/app.style';
 import ImageScale from 'react-native-scalable-image';
+import BookingDate from '../booking-date/BookingDate';
 
 export default class BookingMenu extends React.Component {
   static NAV_NAME = 'booking-menu';
@@ -28,7 +29,8 @@ export default class BookingMenu extends React.Component {
           {/* buttons */}
 
           {/* private live */}
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => this.onBookType()}>
             <View style={styles.viewButton}>
               <ImageScale
                 width={24}
@@ -42,7 +44,8 @@ export default class BookingMenu extends React.Component {
           </TouchableOpacity>
 
           {/* private group */}
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => this.onBookType()}>
             <View style={styles.viewButton}>
               <ImageScale
                 width={24}
@@ -56,7 +59,8 @@ export default class BookingMenu extends React.Component {
           </TouchableOpacity>
 
           {/* lesson */}
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => this.onBookType()}>
             <View style={styles.viewButton}>
               <ImageScale
                 width={24}
@@ -70,7 +74,8 @@ export default class BookingMenu extends React.Component {
           </TouchableOpacity>
 
           {/* credit */}
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => this.onBookType()}>
             <View style={styles.viewButton}>
               <ImageScale
                 width={24}
@@ -85,5 +90,10 @@ export default class BookingMenu extends React.Component {
         </View>
       </ContentWithBackground>
     );
+  }
+
+  onBookType() {
+    // go to date page
+    this.props.navigation.push(BookingDate.NAV_NAME);
   }
 }

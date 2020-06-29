@@ -38,6 +38,8 @@ import Championships from './championships/Championships';
 const Stack = createStackNavigator();
 
 class MainNavigator extends React.Component {
+  navigationRef = React.createRef();
+
   state = {
     initializing: true,
     showMenu: false,
@@ -50,27 +52,30 @@ class MainNavigator extends React.Component {
       initializing: false,
     });
 
-    SplashScreen.hide();
+    // SplashScreen.hide();
   }
 
   render() {
     return (
-      <NavigationContainer>
+      <NavigationContainer
+        ref={this.navigationRef}>
         {
           this.state.initializing ?
             <Splash/>
             :
-            1 === 1 ?
+            this.props.UserReducer.user ?
               <View style={stylesApp.viewContainer}>
                 <Stack.Navigator
-                  initialRouteName={Championships.NAV_NAME}
+                  initialRouteName={TabMain.NAV_NAME}
                   screenOptions={{
                     headerTintColor: colorTheme.primary,
-                    headerLeft: () => renderMenuButton(this.onClickMenu.bind(this)),
                   }}>
                   <Stack.Screen
                     name={TabMain.NAV_NAME}
                     component={TabMain}
+                    options={{
+                      headerLeft: () => renderMenuButton(this.onClickMenu.bind(this)),
+                    }}
                   />
                   <Stack.Screen
                     name={Intro.NAV_NAME}
@@ -120,6 +125,7 @@ class MainNavigator extends React.Component {
 
                 <MenuModal
                   visible={this.state.showMenu}
+                  onMenuItem={(nav) => this.onMenuItem(nav)}
                   onDismiss={() => this.showMenuModal(false)}
                 />
               </View>
@@ -175,6 +181,13 @@ class MainNavigator extends React.Component {
     this.setState({
       showMenu: show,
     });
+  }
+
+  onMenuItem(nav) {
+    this.showMenuModal(false);
+
+    // go to page
+    this.navigationRef?.current.navigate(nav);
   }
 }
 

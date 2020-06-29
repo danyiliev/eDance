@@ -8,10 +8,16 @@ import {Button, Divider, Icon} from 'react-native-elements';
 import PropTypes from 'prop-types';
 import {setUserInfo} from '../../actions/user';
 import {connect} from 'react-redux';
+import Home from '../../screens/home/Home';
+import ScheduleSelect from '../../screens/schedule/ScheduleSelect';
+import Messaging from '../../screens/messaging/Messaging';
+import SettingProfile from '../../screens/settings/setting-profile/SettingProfile';
+import Championships from '../../screens/championships/Championships';
 
 class MenuModal extends React.Component {
   static propTypes = {
     visible: PropTypes.bool,
+    onMenuItem: PropTypes.func,
   };
 
   render() {
@@ -52,7 +58,8 @@ class MenuModal extends React.Component {
           {/* menu */}
           <View style={styles.viewMenu}>
             {/* home */}
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => this.props.onMenuItem(Home.NAV_NAME)}>
               <View style={styles.viewMenuItem}>
                 {/* icon */}
                 <View style={styles.viewMenuIcon}>
@@ -70,7 +77,8 @@ class MenuModal extends React.Component {
             <Divider style={styles.viewDivider} />
 
             {/* schedule */}
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => this.props.onMenuItem(ScheduleSelect.NAV_NAME)}>
               <View style={styles.viewMenuItem}>
                 {/* icon */}
                 <View style={styles.viewMenuIcon}>
@@ -88,7 +96,8 @@ class MenuModal extends React.Component {
             <Divider style={styles.viewDivider} />
 
             {/* Messaging */}
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => this.props.onMenuItem(Messaging.NAV_NAME)}>
               <View style={styles.viewMenuItem}>
                 {/* icon */}
                 <View style={styles.viewMenuIcon}>
@@ -106,7 +115,8 @@ class MenuModal extends React.Component {
             <Divider style={styles.viewDivider} />
 
             {/* setting */}
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => this.props.onMenuItem(SettingProfile.NAV_NAME)}>
               <View style={styles.viewMenuItem}>
                 {/* icon */}
                 <View style={styles.viewMenuIcon}>
@@ -124,7 +134,8 @@ class MenuModal extends React.Component {
             <Divider style={styles.viewDivider} />
 
             {/* championship */}
-            <TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => this.props.onMenuItem(Championships.NAV_NAME)}>
               <View style={styles.viewMenuItem}>
                 {/* icon */}
                 <View style={styles.viewMenuIcon}>

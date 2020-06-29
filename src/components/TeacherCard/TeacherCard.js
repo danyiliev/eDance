@@ -5,8 +5,14 @@ import {Button, Rating} from 'react-native-elements';
 import {stylesApp, styleUtil} from '../../styles/app.style';
 import FastImage from 'react-native-fast-image';
 import {colors as colorTheme} from '../../styles/theme.style';
+import PropTypes from 'prop-types';
 
 export default class TeacherCard extends React.Component {
+  static propTypes = {
+    onReview: PropTypes.func,
+    onSchedule: PropTypes.func,
+  };
+
   render() {
     return (
       <View style={[styleUtil.withShadow(14, 0.6), styles.viewContainer]}>
@@ -39,6 +45,7 @@ export default class TeacherCard extends React.Component {
             containerStyle={[stylesApp.flex1, stylesApp.mr10]}
             buttonStyle={styles.butLightOutline}
             titleStyle={styles.titleButton}
+            onPress={this.props.onReview}
           />
 
           {/* schedule */}
@@ -47,6 +54,7 @@ export default class TeacherCard extends React.Component {
             containerStyle={[stylesApp.flex1, stylesApp.ml10]}
             buttonStyle={styles.butLightOutline}
             titleStyle={styles.titleButton}
+            onPress={this.props.onSchedule}
           />
         </View>
 

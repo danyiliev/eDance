@@ -6,6 +6,7 @@ import {Utils} from '../../helpers/utils';
 import FastImage from 'react-native-fast-image';
 import {colors as colorTheme} from '../../styles/theme.style';
 import {Icon} from 'react-native-elements';
+import Chat from '../chat/Chat';
 
 export default class Messaging extends React.Component {
   static NAV_NAME = 'messaging';
@@ -88,5 +89,6 @@ export default class Messaging extends React.Component {
 
   onItem(index) {
     // go to chat page
+    this.props.navigation.push(Chat.NAV_NAME);
   }
 }
