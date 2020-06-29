@@ -22,5 +22,5 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 16,
     lineHeight: 25,
-  }
+  },
 });

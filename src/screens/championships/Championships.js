@@ -14,8 +14,8 @@ export default class Championships extends React.Component {
     'Hotel & Package Prices',
     'Entry Fees',
     'Concellation & Refund Policy',
-    'Closed Restricted Syllabus Competion & Schedules',
-    'Open Unrestricted Syllabus Championships & Schedules',
+    'Closed Restricted Syllabus Competition & Schedules',
+    'Open Unrestricted Syllabus Championships & Schedules',
   ];
 
   constructor(props) {
@@ -30,35 +30,29 @@ export default class Championships extends React.Component {
     return (
       <View style={stylesApp.viewContainer}>
         <View style={styles.viewContainer}>
-          {
-            this.menus.map((s, i) => {
-              return (
-                <TouchableOpacity
-                  key={i.toString()}
-                  onPress={() => this.onMenuItem(i)}>
-                  <View style={styles.viewListItem}>
-                    <Text style={styles.txtItem}>
-                      {s}
-                    </Text>
+          {this.menus.map((s, i) => {
+            return (
+              <TouchableOpacity
+                key={i.toString()}
+                onPress={() => this.onMenuItem(i)}>
+                <View style={styles.viewListItem}>
+                  <Text style={styles.txtItem}>{s}</Text>
 
-                    {/* chevron */}
-                    <Icon
-                      type="ionicon"
-                      name="ios-arrow-forward"
-                      containerStyle={styles.iconRight}
-                      size={24}
-                      color={colorTheme.primary}
-                    />
-                  </View>
-                </TouchableOpacity>
-              );
-            })
-          }
+                  {/* chevron */}
+                  <Icon
+                    type="ionicon"
+                    name="ios-arrow-forward"
+                    size={24}
+                    color={colorTheme.primary}
+                  />
+                </View>
+              </TouchableOpacity>
+            );
+          })}
         </View>
       </View>
     );
   }
 
-  onMenuItem(index) {
-  }
+  onMenuItem(index) {}
 }
