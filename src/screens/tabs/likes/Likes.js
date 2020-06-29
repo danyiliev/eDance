@@ -1,6 +1,6 @@
 import React from 'react';
 import {styles as stylesMain} from '../radio/styles';
-import {styles} from './styles';
+import {styles as stylesLike, styles} from './styles';
 import {FlatList, Image, Text, View} from 'react-native';
 import {Utils} from '../../../helpers/utils';
 import {stylesApp} from '../../../styles/app.style';
@@ -31,6 +31,7 @@ export default class Likes extends React.Component {
     return (
       <View style={stylesMain.viewContainer}>
         <FlatList
+          contentContainerStyle={styles.listCtnContainer}
           keyExtractor={(item, index) => index.toString()}
           onRefresh={() => this.onRefresh()}
           refreshing={this.state.showLoading}
@@ -63,7 +64,7 @@ export default class Likes extends React.Component {
         <View style={styles.viewItemContent}>
           <View style={styles.viewItemHeader}>
             <Text style={styles.txtLesson}>
-              Lesson 1
+              Lesson {index+1}
             </Text>
             <Text style={styles.txtStatus}>
               Purchased
