@@ -30,6 +30,7 @@ import ScheduleSelect from './schedule/ScheduleSelect';
 import ScheduleCheckout from './schedule/schedule-checkout/ScheduleCheckout';
 import BookingMenu from './booking/booking-menu/BookingMenu';
 import BookingDate from './booking/booking-date/BookingDate';
+import Messaging from './messaging/Messaging';
 
 const Stack = createStackNavigator();
 
@@ -59,7 +60,7 @@ class MainNavigator extends React.Component {
             1 === 1 ?
               <View style={stylesApp.viewContainer}>
                 <Stack.Navigator
-                  initialRouteName={TabMain.NAV_NAME}
+                  initialRouteName={Messaging.NAV_NAME}
                   screenOptions={{
                     headerTintColor: colorTheme.primary,
                     headerLeft: () => renderMenuButton(this.onClickMenu.bind(this)),
@@ -95,6 +96,10 @@ class MainNavigator extends React.Component {
                   <Stack.Screen
                     name={BookingDate.NAV_NAME}
                     component={BookingDate}
+                  />
+                  <Stack.Screen
+                    name={Messaging.NAV_NAME}
+                    component={Messaging}
                   />
                 </Stack.Navigator>
 
