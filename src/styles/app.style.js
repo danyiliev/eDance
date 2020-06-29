@@ -85,4 +85,25 @@ export const stylesApp = StyleSheet.create({
     fontSize: 12,
     color: colorTheme.grey,
   },
+
+  //
+  // loading
+  //
+  viewLoading: {
+    height: 130,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  textEmptyItem: {
+    color: '#bbb',
+  },
+
+  // input
+  txtInput: {
+    // for android
+    paddingVertical: 0,
+  },
+  input: {
+    borderBottomWidth: 0,
+  },
 });
