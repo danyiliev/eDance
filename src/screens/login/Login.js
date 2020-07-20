@@ -3,7 +3,7 @@ import ContentWithBackground from '../../components/ContentWithBackground/Conten
 import ImageScale from 'react-native-scalable-image';
 import {styles as stylesLanding} from '../landing/styles';
 import {styles} from './styles';
-import {Text, View} from 'react-native';
+import {Text, View, Alert} from 'react-native';
 import {Button, Input} from 'react-native-elements';
 import {colors as colorTheme} from '../../styles/theme.style';
 import DismissKeyboard from '../../components/DismissKeyboard/DismissKeyboard';
@@ -13,14 +13,23 @@ import ForgetEmail from '../forget/ForgetEmail';
 import {setUserInfo} from '../../actions/user';
 import {connect} from 'react-redux';
 import {User} from '../../models/user.model';
+import {LoadingHUD} from 'react-native-hud-hybrid';
+import {AuthService} from '../../services';
+import {BaseAuth} from '../base-auth';
 
-class Login extends React.Component {
+class Login extends BaseAuth {
   static NAV_NAME = 'login';
 
   state = {
     username: '',
     password: '',
   };
+
+  constructor(props) {
+    super(props);
+
+    this.loadingHUD = new LoadingHUD();
+  }
 
   render() {
     return (
@@ -74,6 +83,9 @@ class Login extends React.Component {
                 this.setState({password});
               }}
               renderErrorMessage={false}
+              onSubmitEditing={() => {
+                this.onButSignin();
+              }}
             />
 
             {/* login */}
@@ -118,8 +130,36 @@ class Login extends React.Component {
     );
   }
 
-  onButSignin() {
-    this.props.setUserInfo(new User());
+  async onButSignin() {
+    // check validity
+    if (!this.state.username) {
+      Alert.alert('Invalid Username', 'Username cannot be empty');
+      return;
+    }
+
+    if (!this.state.password) {
+      Alert.alert('Invalid Password', 'Password cannot be empty');
+      return;
+    }
+
+    // show loading
+    this.loadingHUD.show('Signing in ...');
+
+    try {
+      let user = await AuthService.signIn(
+        this.state.username,
+        this.state.password,
+      );
+
+      await this.setUser(user);
+    } catch (e) {
+      console.log(e);
+
+      Alert.alert('Login Failed', e.message);
+    }
+
+    // hide loading
+    this.loadingHUD.hideAll();
   }
 
   onButSignup() {
