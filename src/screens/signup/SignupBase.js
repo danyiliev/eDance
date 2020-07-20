@@ -3,12 +3,17 @@ import DismissKeyboard from '../../components/DismissKeyboard/DismissKeyboard';
 import ContentWithBackground from '../../components/ContentWithBackground/ContentWithBackground';
 import {styles as stylesSignup, styles} from './styles';
 import {styles as stylesLogin} from '../login/styles';
-import {Image, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native';
+import {
+  Image,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import {Button, Icon, Input} from 'react-native-elements';
 import {colors as colorTheme} from '../../styles/theme.style';
 import {stylesApp, styleUtil} from '../../styles/app.style';
 import ImageScale from 'react-native-scalable-image';
-import ImagePicker from "react-native-image-picker";
+import ImagePicker from 'react-native-image-picker';
 import SignupAdvanced from './SignupAdvanced';
 
 export default class SignupBase extends React.Component {
@@ -29,33 +34,33 @@ export default class SignupBase extends React.Component {
     super(props);
 
     props.navigation.setOptions({
-      title: 'Registration'
+      title: 'Registration',
     });
   }
 
   render() {
     return (
       <DismissKeyboard
-        ref={(view) => { this.keyboardView = view; }}>
+        ref={(view) => {
+          this.keyboardView = view;
+        }}>
         <ContentWithBackground>
           <View style={styles.viewContainer}>
             {/* photo */}
-            <TouchableWithoutFeedback
-              onPress={() => this.onClickPhoto()}>
+            <TouchableWithoutFeedback onPress={() => this.onClickPhoto()}>
               <View style={styles.viewPhoto}>
                 <View style={[styles.viewPhotoMain, styleUtil.withShadow()]}>
-                  {
-                    this.state.photoImg ?
-                      <Image
-                        style={styles.imgPhoto}
-                        source={this.state.photoImg}
-                      />
-                      :
-                      <Image
-                        style={styles.imgPhotoCore}
-                        source={require('../../../assets/imgs/user_default.png')}
-                      />
-                  }
+                  {this.state.photoImg ? (
+                    <Image
+                      style={styles.imgPhoto}
+                      source={this.state.photoImg}
+                    />
+                  ) : (
+                    <Image
+                      style={styles.imgPhotoCore}
+                      source={require('../../../assets/imgs/user_default.png')}
+                    />
+                  )}
                 </View>
 
                 {/* upload mark */}
@@ -80,14 +85,20 @@ export default class SignupBase extends React.Component {
                 inputContainerStyle={stylesLogin.inputCtn}
                 blurOnSubmit={false}
                 value={this.state.firstName}
-                onChangeText={(firstName) => {this.setState({firstName})}}
-                onSubmitEditing={() => { this.inputLastName.focus(); }}
+                onChangeText={(firstName) => {
+                  this.setState({firstName});
+                }}
+                onSubmitEditing={() => {
+                  this.inputLastName.focus();
+                }}
                 renderErrorMessage={false}
               />
 
               {/* last name */}
               <Input
-                ref={(input) => { this.inputLastName = input; }}
+                ref={(input) => {
+                  this.inputLastName = input;
+                }}
                 containerStyle={[stylesLogin.ctnInput, stylesApp.mt4]}
                 returnKeyType="next"
                 placeholder="Last Name"
@@ -96,14 +107,20 @@ export default class SignupBase extends React.Component {
                 inputContainerStyle={stylesLogin.inputCtn}
                 blurOnSubmit={false}
                 value={this.state.lastName}
-                onChangeText={(lastName) => {this.setState({lastName})}}
-                onSubmitEditing={() => { this.inputEmail.focus(); }}
+                onChangeText={(lastName) => {
+                  this.setState({lastName});
+                }}
+                onSubmitEditing={() => {
+                  this.inputEmail.focus();
+                }}
                 renderErrorMessage={false}
               />
 
               {/* email address */}
               <Input
-                ref={(input) => { this.inputEmail = input; }}
+                ref={(input) => {
+                  this.inputEmail = input;
+                }}
                 containerStyle={[stylesLogin.ctnInput, stylesApp.mt4]}
                 autoCapitalize={'none'}
                 keyboardType="email-address"
@@ -114,8 +131,12 @@ export default class SignupBase extends React.Component {
                 inputContainerStyle={stylesLogin.inputCtn}
                 blurOnSubmit={false}
                 value={this.state.email}
-                onChangeText={(email) => {this.setState({email})}}
-                onSubmitEditing={() => { this.inputPassword.focus(); }}
+                onChangeText={(email) => {
+                  this.setState({email});
+                }}
+                onSubmitEditing={() => {
+                  this.inputPassword.focus();
+                }}
                 renderErrorMessage={false}
                 rightIcon={
                   <ImageScale
@@ -127,7 +148,9 @@ export default class SignupBase extends React.Component {
 
               {/* password */}
               <Input
-                ref={(input) => { this.inputPassword = input; }}
+                ref={(input) => {
+                  this.inputPassword = input;
+                }}
                 containerStyle={[stylesLogin.ctnInput, stylesApp.mt4]}
                 autoCapitalize={'none'}
                 secureTextEntry={true}
@@ -137,7 +160,9 @@ export default class SignupBase extends React.Component {
                 inputStyle={stylesLogin.input}
                 inputContainerStyle={stylesLogin.inputCtn}
                 value={this.state.password}
-                onChangeText={(password) => {this.setState({password})}}
+                onChangeText={(password) => {
+                  this.setState({password});
+                }}
                 renderErrorMessage={false}
                 onFocus={() => this.onPasswordFocus()}
               />
@@ -179,18 +204,18 @@ export default class SignupBase extends React.Component {
     };
 
     ImagePicker.showImagePicker(options, (response) => {
-      if (response.didCancel){
-        console.log('User cancelled image picker')
+      if (response.didCancel) {
+        console.log('User cancelled image picker');
       } else if (response.error) {
-        console.log('ImagePicker Error: ', response.error)
+        console.log('ImagePicker Error: ', response.error);
       } else if (response.customButton) {
-        console.log('User tapped custom button: ', response.customButton)
+        console.log('User tapped custom button: ', response.customButton);
       } else {
         const source = {uri: response.uri};
 
         this.setState({
           photoImg: source,
-          photoFileName: response.fileName
+          photoFileName: response.fileName,
         });
       }
     });

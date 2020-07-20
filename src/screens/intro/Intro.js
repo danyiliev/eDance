@@ -24,9 +24,7 @@ export default class Intro extends React.Component {
     return (
       <View style={styles.viewContainer}>
         <View style={styles.viewContent}>
-          <Text style={styles.txtTitle}>
-            Welcome to
-          </Text>
+          <Text style={styles.txtTitle}>Welcome to</Text>
 
           {/* logo */}
           <ImageScale
@@ -36,9 +34,12 @@ export default class Intro extends React.Component {
           />
 
           <Text style={styles.txtBody}>
-            Please go ahead and schedule a video dance between with your favorite dance teacher{'\n\n'}
-            An intro lesson will give you a review on your teacher or professional coach{'\n\n'}
-            No matter if you are a beginner or a professional, try out our service, enjoy!
+            Please go ahead and schedule a video dance between with your
+            favorite dance teacher{'\n\n'}
+            An intro lesson will give you a review on your teacher or
+            professional coach{'\n\n'}
+            No matter if you are a beginner or a professional, try out our
+            service, enjoy!
           </Text>
         </View>
 

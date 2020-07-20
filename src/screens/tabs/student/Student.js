@@ -49,39 +49,27 @@ export default class Student extends React.Component {
 
           {/* length */}
           <View style={stylesLike.viewTxtLength}>
-            <Text style={stylesLike.txtLength}>
-              01:32
-            </Text>
+            <Text style={stylesLike.txtLength}>01:32</Text>
           </View>
         </View>
 
         {/* content */}
         <View style={stylesLike.viewItemContent}>
           <View style={stylesLike.viewItemHeader}>
-            <Text style={stylesLike.txtLesson}>
-              Lesson {index + 1}
-            </Text>
-            <Text style={styles.txtPrice}>
-              $35
-            </Text>
+            <Text style={stylesLike.txtLesson}>Lesson {index + 1}</Text>
+            <Text style={styles.txtPrice}>$35</Text>
           </View>
 
           <View style={styles.viewItemContentBody}>
             <View style={stylesApp.flex1}>
               {/* name */}
-              <Text style={stylesLike.txtName}>
-                Kene Julie
-              </Text>
+              <Text style={stylesLike.txtName}>Kene Julie</Text>
 
               {/* category */}
-              <Text style={styles.txtCategory}>
-                Rumba
-              </Text>
+              <Text style={styles.txtCategory}>Rumba</Text>
 
               {/* level */}
-              <Text style={styles.txtLevel}>
-                Begineer Level
-              </Text>
+              <Text style={styles.txtLevel}>Begineer Level</Text>
             </View>
 
             <View style={styles.viewAction}>

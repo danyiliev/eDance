@@ -71,5 +71,5 @@ export const styles = StyleSheet.create({
   viewButNext: {
     ...stylesMain.viewButNext,
     marginBottom: 70,
-  }
+  },
 });

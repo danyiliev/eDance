@@ -24,9 +24,7 @@ export default class TeacherCard extends React.Component {
         />
 
         {/* name */}
-        <Text style={styles.txtName}>
-          John Dancer
-        </Text>
+        <Text style={styles.txtName}>John Dancer</Text>
 
         {/* star rating */}
         <Rating
@@ -57,8 +55,7 @@ export default class TeacherCard extends React.Component {
             onPress={this.props.onSchedule}
           />
         </View>
-
       </View>
-    )
+    );
   }
 }

@@ -1,4 +1,4 @@
-import {Text, TouchableOpacity, View} from 'react-native';
+import {Text, TouchableOpacity, View, Platform} from 'react-native';
 import React from 'react';
 import {styles} from './styles';
 import PropTypes from 'prop-types';
@@ -25,17 +25,16 @@ export default class ComboSchedule extends React.Component {
   render() {
     return (
       <View>
-        <TouchableOpacity
-          onPress={() => this.setState({showPicker: true})}
-        >
+        <TouchableOpacity onPress={() => this.setState({showPicker: true})}>
           <View style={{...styles.viewSelectItem, ...this.props.style}}>
-            <Text style={{
-              ...styles.txtItem,
-              ...this.state.value ? {} : {color: colorTheme.grey}
-            }}>
-              {
-                this.state.value ? this.getItemText(this.state.value) : this.props.placeholder
-              }
+            <Text
+              style={{
+                ...styles.txtItem,
+                ...(this.state.value ? {} : {color: colorTheme.grey}),
+              }}>
+              {this.state.value
+                ? this.getItemText(this.state.value)
+                : this.props.placeholder}
             </Text>
 
             {/* right arrow */}
@@ -58,13 +57,10 @@ export default class ComboSchedule extends React.Component {
     return (
       <SelectPicker
         isVisible={this.state.showPicker}
-        onDismiss={done => this.dismissPicker(done)}>
-
+        onDismiss={(done) => this.dismissPicker(done)}>
         <Picker
           selectedValue={
-            Platform.OS === 'ios'
-              ? this.state.valueSelected
-              : this.state.value
+            Platform.OS === 'ios' ? this.state.valueSelected : this.state.value
           }
           onValueChange={(itemValue, itemIndex) => {
             if (Platform.OS === 'ios') {
@@ -76,13 +72,12 @@ export default class ComboSchedule extends React.Component {
                 value: itemValue,
               });
             }
-          }}
-        >
-          {
-            this.props.items?.map((s, i) => {
-              return <Picker.Item key={i.toString()} label={s.name} value={s.value} />;
-            })
-          }
+          }}>
+          {this.props.items?.map((s, i) => {
+            return (
+              <Picker.Item key={i.toString()} label={s.name} value={s.value} />
+            );
+          })}
         </Picker>
       </SelectPicker>
     );
@@ -93,7 +88,7 @@ export default class ComboSchedule extends React.Component {
       showPicker: false,
     });
 
-    let { valueSelected } = this.state;
+    let {valueSelected} = this.state;
     if (!valueSelected) {
       // default is the first one
       valueSelected = this.props.items[0].value;
@@ -112,9 +107,7 @@ export default class ComboSchedule extends React.Component {
   }
 
   getItemText(val) {
-    const item = this.props.items?.find(i => i.value === val);
+    const item = this.props.items?.find((i) => i.value === val);
     return item ? item.name : '';
   }
 }
-
-

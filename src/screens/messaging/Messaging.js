@@ -23,7 +23,7 @@ export default class Messaging extends React.Component {
     super(props);
 
     props.navigation.setOptions({
-      title: 'Messages'
+      title: 'Messages',
     });
 
     // load data
@@ -47,8 +47,7 @@ export default class Messaging extends React.Component {
 
   renderItem(item, index) {
     return (
-      <TouchableOpacity
-        onPress={() => this.onItem(index)}>
+      <TouchableOpacity onPress={() => this.onItem(index)}>
         <View style={styles.viewItem}>
           {/* photo */}
           <FastImage
@@ -59,19 +58,13 @@ export default class Messaging extends React.Component {
 
           <View style={styles.viewItemBody}>
             {/* name */}
-            <Text style={styles.txtName}>
-              Ricardo Edwards
-            </Text>
+            <Text style={styles.txtName}>Ricardo Edwards</Text>
 
             {/* text */}
-            <Text style={styles.txtMessage}>
-              Samba teacher
-            </Text>
+            <Text style={styles.txtMessage}>Samba teacher</Text>
 
             {/* date */}
-            <Text style={styles.txtDate}>
-              Mar 13, 2018 10:14 AM
-            </Text>
+            <Text style={styles.txtDate}>Mar 13, 2018 10:14 AM</Text>
           </View>
 
           {/* chevron */}

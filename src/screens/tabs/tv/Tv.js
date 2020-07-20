@@ -23,7 +23,7 @@ export default class Tv extends React.Component {
     super(props);
 
     // load data
-    for (let i =0; i < 20; i++) {
+    for (let i = 0; i < 20; i++) {
       this.channels.push({});
     }
   }
@@ -52,10 +52,11 @@ export default class Tv extends React.Component {
         <TouchableOpacity style={stylesRadio.viewItemContent}>
           <Image
             style={stylesRadio.imgItem}
-            source={require('../../../../assets/imgs/tv_default.png')} />
+            source={require('../../../../assets/imgs/tv_default.png')}
+          />
         </TouchableOpacity>
       </View>
-    )
+    );
   }
 
   renderHeader() {
@@ -88,6 +89,5 @@ export default class Tv extends React.Component {
     );
   }
 
-  onRefresh() {
-  }
+  onRefresh() {}
 }

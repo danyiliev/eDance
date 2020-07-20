@@ -41,5 +41,5 @@ export const styles = StyleSheet.create({
     ...styleUtil.withShadow(),
     marginBottom: 70,
     marginHorizontal: 30,
-  }
+  },
 });

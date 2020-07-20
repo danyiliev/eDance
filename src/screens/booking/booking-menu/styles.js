@@ -32,5 +32,5 @@ export const styles = StyleSheet.create({
     lineHeight: 25,
     fontWeight: 'bold',
     color: colorTheme.primary,
-  }
+  },
 });

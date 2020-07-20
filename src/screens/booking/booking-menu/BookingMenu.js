@@ -13,7 +13,7 @@ export default class BookingMenu extends React.Component {
     super(props);
 
     props.navigation.setOptions({
-      title: 'Schedule'
+      title: 'Schedule',
     });
   }
 
@@ -22,60 +22,48 @@ export default class BookingMenu extends React.Component {
       <ContentWithBackground>
         <View style={stylesApp.viewContainer}>
           {/* title */}
-          <Text style={styles.txtTitle}>
-            Successfully Purchased!
-          </Text>
+          <Text style={styles.txtTitle}>Successfully Purchased!</Text>
 
           {/* buttons */}
 
           {/* private live */}
-          <TouchableOpacity
-            onPress={() => this.onBookType()}>
+          <TouchableOpacity onPress={() => this.onBookType()}>
             <View style={styles.viewButton}>
               <ImageScale
                 width={24}
                 style={styles.imgButIcon}
                 source={require('../../../../assets/imgs/ic_live_private.png')}
               />
-              <Text style={styles.txtButton}>
-                Book Your Private “Live”
-              </Text>
+              <Text style={styles.txtButton}>Book Your Private “Live”</Text>
             </View>
           </TouchableOpacity>
 
           {/* private group */}
-          <TouchableOpacity
-            onPress={() => this.onBookType()}>
+          <TouchableOpacity onPress={() => this.onBookType()}>
             <View style={styles.viewButton}>
               <ImageScale
                 width={24}
                 style={styles.imgButIcon}
                 source={require('../../../../assets/imgs/ic_live_group.png')}
               />
-              <Text style={styles.txtButton}>
-                Book Your Private or Group
-              </Text>
+              <Text style={styles.txtButton}>Book Your Private or Group</Text>
             </View>
           </TouchableOpacity>
 
           {/* lesson */}
-          <TouchableOpacity
-            onPress={() => this.onBookType()}>
+          <TouchableOpacity onPress={() => this.onBookType()}>
             <View style={styles.viewButton}>
               <ImageScale
                 width={24}
                 style={styles.imgButIcon}
                 source={require('../../../../assets/imgs/ic_book_lesson.png')}
               />
-              <Text style={styles.txtButton}>
-                Book Your Dance Lesson
-              </Text>
+              <Text style={styles.txtButton}>Book Your Dance Lesson</Text>
             </View>
           </TouchableOpacity>
 
           {/* credit */}
-          <TouchableOpacity
-            onPress={() => this.onBookType()}>
+          <TouchableOpacity onPress={() => this.onBookType()}>
             <View style={styles.viewButton}>
               <ImageScale
                 width={24}

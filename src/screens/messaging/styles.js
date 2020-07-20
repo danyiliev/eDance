@@ -47,5 +47,5 @@ export const styles = StyleSheet.create({
     fontSize: 12,
     color: colorTheme.primary,
     marginTop: 7,
-  }
+  },
 });

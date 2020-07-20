@@ -23,7 +23,7 @@ export default class ForgetReset extends React.Component {
     super(props);
 
     props.navigation.setOptions({
-      title: 'Forgot password'
+      title: 'Forgot password',
     });
   }
 
@@ -60,7 +60,9 @@ export default class ForgetReset extends React.Component {
                 inputStyle={stylesLogin.input}
                 inputContainerStyle={stylesLogin.inputCtn}
                 value={this.state.password}
-                onChangeText={(password) => {this.setState({password})}}
+                onChangeText={(password) => {
+                  this.setState({password});
+                }}
                 renderErrorMessage={false}
               />
 
@@ -75,7 +77,9 @@ export default class ForgetReset extends React.Component {
                 inputStyle={stylesLogin.input}
                 inputContainerStyle={stylesLogin.inputCtn}
                 value={this.state.passwordConfirm}
-                onChangeText={(passwordConfirm) => {this.setState({passwordConfirm})}}
+                onChangeText={(passwordConfirm) => {
+                  this.setState({passwordConfirm});
+                }}
                 renderErrorMessage={false}
               />
             </View>
@@ -89,14 +93,11 @@ export default class ForgetReset extends React.Component {
                 onPress={() => this.onButDone()}
               />
             </View>
-
           </View>
         </ContentWithBackground>
       </DismissKeyboard>
     );
   }
 
-  onButDone() {
-
-  }
+  onButDone() {}
 }

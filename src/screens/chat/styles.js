@@ -40,5 +40,5 @@ export const styles = StyleSheet.create({
   titleButSend: {
     fontSize: 16,
     color: colorTheme.primary,
-  }
+  },
 });

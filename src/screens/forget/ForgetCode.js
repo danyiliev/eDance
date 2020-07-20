@@ -23,7 +23,7 @@ export default class ForgetCode extends React.Component {
     super(props);
 
     props.navigation.setOptions({
-      title: 'Forgot password'
+      title: 'Forgot password',
     });
   }
 
@@ -60,7 +60,9 @@ export default class ForgetCode extends React.Component {
               inputStyle={stylesLogin.input}
               inputContainerStyle={stylesLogin.inputCtn}
               value={this.state.code}
-              onChangeText={(code) => {this.setState({code})}}
+              onChangeText={(code) => {
+                this.setState({code});
+              }}
               renderErrorMessage={false}
             />
 
@@ -83,7 +85,6 @@ export default class ForgetCode extends React.Component {
                 iconRight={true}
               />
             </View>
-
           </View>
         </ContentWithBackground>
       </DismissKeyboard>

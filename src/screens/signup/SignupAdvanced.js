@@ -1,7 +1,7 @@
 import React from 'react';
 import DismissKeyboard from '../../components/DismissKeyboard/DismissKeyboard';
 import ContentWithBackground from '../../components/ContentWithBackground/ContentWithBackground';
-import {View, TouchableOpacity, Text} from 'react-native';
+import {View, TouchableOpacity, Text, Platform} from 'react-native';
 import {styles} from './styles';
 import {Button, ButtonGroup, Input} from 'react-native-elements';
 import {styles as stylesLogin} from '../login/styles';
@@ -9,7 +9,7 @@ import {colors as colorTheme} from '../../styles/theme.style';
 import {stylesApp, styleUtil} from '../../styles/app.style';
 import ImageScale from 'react-native-scalable-image';
 import SelectPicker from '../../components/SelectPicker/SelectPicker';
-import { Picker } from '@react-native-community/picker';
+import {Picker} from '@react-native-community/picker';
 import {STATES} from '../../constants/constant-data';
 import {setUserInfo} from '../../actions/user';
 import {connect} from 'react-redux';
@@ -52,9 +52,7 @@ class SignupAdvanced extends React.Component {
             <View style={styles.viewTop}>
               {/* gender */}
               <View style={styles.viewForm}>
-                <Text style={styles.txtItemTitle}>
-                  Gender
-                </Text>
+                <Text style={styles.txtItemTitle}>Gender</Text>
 
                 <ButtonGroup
                   containerStyle={styles.ctnSegmentGender}
@@ -64,8 +62,8 @@ class SignupAdvanced extends React.Component {
                   selectedButtonStyle={styles.butSegmentSelected}
                   selectedTextStyle={styles.SegmentSelected}
                   selectedIndex={this.state.genderIndex}
-                  onPress={(index) => this.setState({genderIndex: index})}>
-                </ButtonGroup>
+                  onPress={(index) => this.setState({genderIndex: index})}
+                />
               </View>
             </View>
 
@@ -166,13 +164,10 @@ class SignupAdvanced extends React.Component {
       <SelectPicker
         isVisible={this.state.showStatePicker}
         contentStyle={styles.picker}
-        onDismiss={done => this.dismissState(done)}
-      >
+        onDismiss={(done) => this.dismissState(done)}>
         <Picker
           selectedValue={
-            Platform.OS === 'ios'
-              ? this.state.stateSelected
-              : this.state.state
+            Platform.OS === 'ios' ? this.state.stateSelected : this.state.state
           }
           onValueChange={(itemValue, itemIndex) => {
             if (Platform.OS === 'ios') {
@@ -184,10 +179,11 @@ class SignupAdvanced extends React.Component {
                 state: itemValue,
               });
             }
-          }}
-        >
+          }}>
           {STATES.map((s, i) => {
-            return <Picker.Item key={i.toString()} label={s.Name} value={s.value} />;
+            return (
+              <Picker.Item key={i.toString()} label={s.Name} value={s.value} />
+            );
           })}
         </Picker>
       </SelectPicker>
@@ -213,7 +209,7 @@ class SignupAdvanced extends React.Component {
       showStatePicker: false,
     });
 
-    let { stateSelected } = this.state;
+    let {stateSelected} = this.state;
     if (!stateSelected) {
       // default is the first one
       stateSelected = STATES[0].value;
@@ -232,7 +228,7 @@ class SignupAdvanced extends React.Component {
   }
 }
 
-const mapStateToProps = state => state;
+const mapStateToProps = (state) => state;
 
 const mapDispatchToProps = {
   setUserInfo,

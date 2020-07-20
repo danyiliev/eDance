@@ -1,7 +1,7 @@
 import React from 'react';
-import { styles } from './styles';
-import { Modal, TouchableWithoutFeedback, View } from 'react-native';
-import { Button } from 'react-native-elements';
+import {styles} from './styles';
+import {Modal, TouchableWithoutFeedback, View} from 'react-native';
+import {Button} from 'react-native-elements';
 
 export default class SelectPicker extends React.Component {
   state = {
@@ -22,8 +22,7 @@ export default class SelectPicker extends React.Component {
             <View style={styles.viewOverlay}>
               {/* parent onpress should be prevented on main view */}
               <TouchableWithoutFeedback>
-                <View
-                  style={styles.viewModal}>
+                <View style={styles.viewModal}>
                   {/* header */}
                   <View style={styles.viewHeader}>
                     <View />

@@ -23,7 +23,7 @@ export const styles = StyleSheet.create({
   },
 
   containerList: {
-    paddingBottom:  marginItem,
+    paddingBottom: marginItem,
   },
 
   ctnButSchedule: {
@@ -71,5 +71,5 @@ export const styles = StyleSheet.create({
     fontSize: 12,
     lineHeight: 16,
     marginTop: 8,
-  }
+  },
 });

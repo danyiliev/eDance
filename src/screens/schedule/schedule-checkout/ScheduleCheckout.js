@@ -14,7 +14,7 @@ export default class ScheduleCheckout extends React.Component {
     super(props);
 
     props.navigation.setOptions({
-      title: 'Summary'
+      title: 'Summary',
     });
   }
 
@@ -24,56 +24,34 @@ export default class ScheduleCheckout extends React.Component {
         <View style={styles.viewContent}>
           <View style={styles.viewInfo}>
             <View style={styles.viewItem}>
-              <Text style={styles.txtItemName}>
-                Dance style:
-              </Text>
-              <Text style={styles.txtItemValue}>
-                Smooth
-              </Text>
+              <Text style={styles.txtItemName}>Dance style:</Text>
+              <Text style={styles.txtItemValue}>Smooth</Text>
             </View>
 
             <View style={styles.viewItem}>
-              <Text style={styles.txtItemName}>
-                Dance Name:
-              </Text>
-              <Text style={styles.txtItemValue}>
-                Waltz
-              </Text>
+              <Text style={styles.txtItemName}>Dance Name:</Text>
+              <Text style={styles.txtItemValue}>Waltz</Text>
             </View>
 
             <View style={styles.viewItem}>
-              <Text style={styles.txtItemName}>
-                Dance Level:
-              </Text>
-              <Text style={styles.txtItemValue}>
-                Beginer
-              </Text>
+              <Text style={styles.txtItemName}>Dance Level:</Text>
+              <Text style={styles.txtItemValue}>Beginer</Text>
             </View>
 
             <View style={styles.viewItem}>
-              <Text style={styles.txtItemName}>
-                Special Ocassion:
-              </Text>
-              <Text style={styles.txtItemValue}>
-                Wedding Preparation
-              </Text>
+              <Text style={styles.txtItemName}>Special Ocassion:</Text>
+              <Text style={styles.txtItemValue}>Wedding Preparation</Text>
             </View>
           </View>
 
           <View style={styles.viewContentFooter}>
-            <Text style={styles.txtFee}>
-              Fee for Purchase:   $5
-            </Text>
+            <Text style={styles.txtFee}>Fee for Purchase: $5</Text>
 
             <View style={styles.viewFeeDivider} />
 
             <View style={styles.viewTextTotal}>
-              <Text style={styles.txtTotal}>
-                Total  :
-              </Text>
-              <Text style={styles.txtTotal}>
-                $25
-              </Text>
+              <Text style={styles.txtTotal}>Total :</Text>
+              <Text style={styles.txtTotal}>$25</Text>
             </View>
           </View>
         </View>

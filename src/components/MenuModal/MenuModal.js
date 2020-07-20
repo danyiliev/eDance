@@ -1,8 +1,8 @@
 import React from 'react';
 import Modal from 'react-native-modal';
-import { styles } from './styles';
+import {styles} from './styles';
 import {Image, Text, TouchableOpacity, View} from 'react-native';
-import { colors as colorTheme } from '../../styles/theme.style';
+import {colors as colorTheme} from '../../styles/theme.style';
 import ImageScale from 'react-native-scalable-image';
 import {Button, Divider, Icon} from 'react-native-elements';
 import PropTypes from 'prop-types';
@@ -45,14 +45,13 @@ class MenuModal extends React.Component {
           <View style={styles.viewPhoto}>
             <Image
               style={styles.imgPhoto}
-              source={require('../../../assets/imgs/user_default.png')} />
+              source={require('../../../assets/imgs/user_default.png')}
+            />
           </View>
 
           {/* name */}
           <View style={styles.viewName}>
-            <Text style={styles.txtName}>
-              John Dancer
-            </Text>
+            <Text style={styles.txtName}>John Dancer</Text>
           </View>
 
           {/* menu */}
@@ -69,9 +68,7 @@ class MenuModal extends React.Component {
                   />
                 </View>
 
-                <Text style={styles.txtMenuItem}>
-                  Home
-                </Text>
+                <Text style={styles.txtMenuItem}>Home</Text>
               </View>
             </TouchableOpacity>
             <Divider style={styles.viewDivider} />
@@ -88,9 +85,7 @@ class MenuModal extends React.Component {
                   />
                 </View>
 
-                <Text style={styles.txtMenuItem}>
-                  Shedule
-                </Text>
+                <Text style={styles.txtMenuItem}>Shedule</Text>
               </View>
             </TouchableOpacity>
             <Divider style={styles.viewDivider} />
@@ -107,9 +102,7 @@ class MenuModal extends React.Component {
                   />
                 </View>
 
-                <Text style={styles.txtMenuItem}>
-                  Messaging
-                </Text>
+                <Text style={styles.txtMenuItem}>Messaging</Text>
               </View>
             </TouchableOpacity>
             <Divider style={styles.viewDivider} />
@@ -126,9 +119,7 @@ class MenuModal extends React.Component {
                   />
                 </View>
 
-                <Text style={styles.txtMenuItem}>
-                  Settings
-                </Text>
+                <Text style={styles.txtMenuItem}>Settings</Text>
               </View>
             </TouchableOpacity>
             <Divider style={styles.viewDivider} />
@@ -145,9 +136,7 @@ class MenuModal extends React.Component {
                   />
                 </View>
 
-                <Text style={styles.txtMenuItem}>
-                  World ChampionShips
-                </Text>
+                <Text style={styles.txtMenuItem}>World ChampionShips</Text>
               </View>
             </TouchableOpacity>
             <Divider style={styles.viewDivider} />
@@ -163,9 +152,7 @@ class MenuModal extends React.Component {
                   />
                 </View>
 
-                <Text style={styles.txtMenuItem}>
-                  Who is close by
-                </Text>
+                <Text style={styles.txtMenuItem}>Who is close by</Text>
               </View>
             </TouchableOpacity>
             <Divider style={styles.viewDivider} />
@@ -181,12 +168,9 @@ class MenuModal extends React.Component {
                   />
                 </View>
 
-                <Text style={styles.txtMenuItem}>
-                  Logout
-                </Text>
+                <Text style={styles.txtMenuItem}>Logout</Text>
               </View>
             </TouchableOpacity>
-
           </View>
         </View>
       </Modal>
@@ -199,7 +183,7 @@ class MenuModal extends React.Component {
   }
 }
 
-const mapStateToProps = state => state;
+const mapStateToProps = (state) => state;
 
 const mapDispatchToProps = {
   setUserInfo,

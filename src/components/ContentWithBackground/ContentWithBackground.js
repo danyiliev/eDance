@@ -2,7 +2,7 @@ import React from 'react';
 import {View, Dimensions} from 'react-native';
 import {styles} from './styles';
 import ImageScale from 'react-native-scalable-image';
-const { width: WindowWidth } = Dimensions.get('window');
+const {width: WindowWidth} = Dimensions.get('window');
 
 export default class ContentWithBackground extends React.Component {
   render() {

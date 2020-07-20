@@ -9,12 +9,12 @@ import {Splash} from './splash/Splash';
 import {Utils} from '../helpers/utils';
 import Login from './login/Login';
 import SignupBase from './signup/SignupBase';
-import SplashScreen from "react-native-splash-screen";
+import SplashScreen from 'react-native-splash-screen';
 import SignupAdvanced from './signup/SignupAdvanced';
 import ForgetEmail from './forget/ForgetEmail';
 import ForgetCode from './forget/ForgetCode';
 import ForgetReset from './forget/ForgetReset';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Radio from './tabs/radio/Radio';
 import TabMain, {renderMenuButton} from './tabs/tabs';
 import {styles as stylesTab} from './tabs/styles';
@@ -57,118 +57,89 @@ class MainNavigator extends React.Component {
 
   render() {
     return (
-      <NavigationContainer
-        ref={this.navigationRef}>
-        {
-          this.state.initializing ?
-            <Splash/>
-            :
-            this.props.UserReducer.user ?
-              <View style={stylesApp.viewContainer}>
-                <Stack.Navigator
-                  initialRouteName={TabMain.NAV_NAME}
-                  screenOptions={{
-                    headerTintColor: colorTheme.primary,
-                  }}>
-                  <Stack.Screen
-                    name={TabMain.NAV_NAME}
-                    component={TabMain}
-                    options={{
-                      headerLeft: () => renderMenuButton(this.onClickMenu.bind(this)),
-                    }}
-                  />
-                  <Stack.Screen
-                    name={Intro.NAV_NAME}
-                    component={Intro}
-                  />
-                  <Stack.Screen
-                    name={Home.NAV_NAME}
-                    component={Home}
-                  />
-                  <Stack.Screen
-                    name={Reviews.NAV_NAME}
-                    component={Reviews}
-                  />
-                  <Stack.Screen
-                    name={ScheduleSelect.NAV_NAME}
-                    component={ScheduleSelect}
-                  />
-                  <Stack.Screen
-                    name={ScheduleCheckout.NAV_NAME}
-                    component={ScheduleCheckout}
-                  />
-                  <Stack.Screen
-                    name={BookingMenu.NAV_NAME}
-                    component={BookingMenu}
-                  />
-                  <Stack.Screen
-                    name={BookingDate.NAV_NAME}
-                    component={BookingDate}
-                  />
-                  <Stack.Screen
-                    name={Messaging.NAV_NAME}
-                    component={Messaging}
-                  />
-                  <Stack.Screen
-                    name={Chat.NAV_NAME}
-                    component={Chat}
-                  />
-                  <Stack.Screen
-                    name={SettingProfile.NAV_NAME}
-                    component={SettingProfile}
-                  />
-                  <Stack.Screen
-                    name={Championships.NAV_NAME}
-                    component={Championships}
-                  />
-                </Stack.Navigator>
+      <NavigationContainer ref={this.navigationRef}>
+        {this.state.initializing ? (
+          <Splash />
+        ) : this.props.UserReducer.user ? (
+          <View style={stylesApp.viewContainer}>
+            <Stack.Navigator
+              initialRouteName={TabMain.NAV_NAME}
+              screenOptions={{
+                headerTintColor: colorTheme.primary,
+              }}>
+              <Stack.Screen
+                name={TabMain.NAV_NAME}
+                component={TabMain}
+                options={{
+                  headerLeft: () =>
+                    renderMenuButton(this.onClickMenu.bind(this)),
+                }}
+              />
+              <Stack.Screen name={Intro.NAV_NAME} component={Intro} />
+              <Stack.Screen name={Home.NAV_NAME} component={Home} />
+              <Stack.Screen name={Reviews.NAV_NAME} component={Reviews} />
+              <Stack.Screen
+                name={ScheduleSelect.NAV_NAME}
+                component={ScheduleSelect}
+              />
+              <Stack.Screen
+                name={ScheduleCheckout.NAV_NAME}
+                component={ScheduleCheckout}
+              />
+              <Stack.Screen
+                name={BookingMenu.NAV_NAME}
+                component={BookingMenu}
+              />
+              <Stack.Screen
+                name={BookingDate.NAV_NAME}
+                component={BookingDate}
+              />
+              <Stack.Screen name={Messaging.NAV_NAME} component={Messaging} />
+              <Stack.Screen name={Chat.NAV_NAME} component={Chat} />
+              <Stack.Screen
+                name={SettingProfile.NAV_NAME}
+                component={SettingProfile}
+              />
+              <Stack.Screen
+                name={Championships.NAV_NAME}
+                component={Championships}
+              />
+            </Stack.Navigator>
 
-                <MenuModal
-                  visible={this.state.showMenu}
-                  onMenuItem={(nav) => this.onMenuItem(nav)}
-                  onDismiss={() => this.showMenuModal(false)}
-                />
-              </View>
-              :
-              // not signed in
-              <Stack.Navigator
-                initialRouteName={Landing.NAV_NAME}
-                screenOptions={{
-                  headerBackTitleVisible: false,
-                  headerTintColor: colorTheme.primary,
-                }}>
-                <Stack.Screen
-                  name={Landing.NAV_NAME}
-                  component={Landing}
-                  options={{ headerShown: false }}
-                />
-                <Stack.Screen
-                  name={Login.NAV_NAME}
-                  component={Login}
-                  options={{ headerShown: false }}
-                />
-                <Stack.Screen
-                  name={SignupBase.NAV_NAME}
-                  component={SignupBase}
-                />
-                <Stack.Screen
-                  name={SignupAdvanced.NAV_NAME}
-                  component={SignupAdvanced}
-                />
-                <Stack.Screen
-                  name={ForgetEmail.NAV_NAME}
-                  component={ForgetEmail}
-                />
-                <Stack.Screen
-                  name={ForgetCode.NAV_NAME}
-                  component={ForgetCode}
-                />
-                <Stack.Screen
-                  name={ForgetReset.NAV_NAME}
-                  component={ForgetReset}
-                />
-              </Stack.Navigator>
-        }
+            <MenuModal
+              visible={this.state.showMenu}
+              onMenuItem={(nav) => this.onMenuItem(nav)}
+              onDismiss={() => this.showMenuModal(false)}
+            />
+          </View>
+        ) : (
+          // not signed in
+          <Stack.Navigator
+            initialRouteName={Landing.NAV_NAME}
+            screenOptions={{
+              headerBackTitleVisible: false,
+              headerTintColor: colorTheme.primary,
+            }}>
+            <Stack.Screen
+              name={Landing.NAV_NAME}
+              component={Landing}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name={Login.NAV_NAME}
+              component={Login}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen name={SignupBase.NAV_NAME} component={SignupBase} />
+            <Stack.Screen
+              name={SignupAdvanced.NAV_NAME}
+              component={SignupAdvanced}
+            />
+            <Stack.Screen name={ForgetEmail.NAV_NAME} component={ForgetEmail} />
+            <Stack.Screen name={ForgetCode.NAV_NAME} component={ForgetCode} />
+            <Stack.Screen name={ForgetReset.NAV_NAME} component={ForgetReset} />
+          </Stack.Navigator>
+        )}
       </NavigationContainer>
     );
   }
@@ -191,7 +162,7 @@ class MainNavigator extends React.Component {
   }
 }
 
-const mapStateToProps = state => state;
+const mapStateToProps = (state) => state;
 
 const mapDispatchToProps = {
   setUserInfo,

@@ -18,5 +18,5 @@ export const styles = StyleSheet.create({
   },
   icnCheck: {
     fontWeight: 'bold',
-  }
+  },
 });

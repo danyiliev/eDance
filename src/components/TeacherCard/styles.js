@@ -27,8 +27,7 @@ export const styles = StyleSheet.create({
     marginBottom: 20,
   },
 
-  rating: {
-  },
+  rating: {},
   starRating: {
     marginHorizontal: 3,
   },

@@ -25,28 +25,23 @@ export default class MessageItem extends React.Component {
       // message from right
       if (msg.senderId) {
         return (
-          <View style={{ ...styles.viewItem, flexDirection: 'row-reverse' }}>
+          <View style={{...styles.viewItem, flexDirection: 'row-reverse'}}>
             {this.renderUser()}
 
             <View style={[styles.viewMessage, styles.ctnMsgLeft]}>
               {itemView}
-              <Text style={styles.txtMessageTime}>
-                {msg.timeFormatted()}
-              </Text>
+              <Text style={styles.txtMessageTime}>{msg.timeFormatted()}</Text>
             </View>
           </View>
         );
-      }
-      else {
+      } else {
         return (
-          <View style={{ ...styles.viewItem, flexDirection: 'row' }}>
+          <View style={{...styles.viewItem, flexDirection: 'row'}}>
             {this.renderUser()}
 
             <View style={[styles.viewMessage, styles.ctnMsgRight]}>
               {itemView}
-              <Text style={styles.txtMessageTime}>
-                {msg.timeFormatted()}
-              </Text>
+              <Text style={styles.txtMessageTime}>{msg.timeFormatted()}</Text>
             </View>
           </View>
         );

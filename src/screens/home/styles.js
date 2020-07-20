@@ -13,8 +13,7 @@ export const styles = StyleSheet.create({
     height: cardHeight + 15 * 2,
   },
 
-  ctnSwiper: {
-  },
+  ctnSwiper: {},
 
   viewBadgeItem: {
     ...stylesApp.flexRow,

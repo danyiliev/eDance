@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import { colors as colorTheme } from '../../styles/theme.style';
+import {colors as colorTheme} from '../../styles/theme.style';
 import {stylesApp} from '../../styles/app.style';
 
 export const styles = StyleSheet.create({
@@ -57,5 +57,5 @@ export const styles = StyleSheet.create({
 
   viewDivider: {
     backgroundColor: '#E4E9F2',
-  }
+  },
 });

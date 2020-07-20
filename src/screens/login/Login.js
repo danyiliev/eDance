@@ -25,87 +25,95 @@ class Login extends React.Component {
   render() {
     return (
       <DismissKeyboard>
-      <ContentWithBackground>
-        {/* logo */}
-        <ImageScale
-          width={237}
-          style={styles.imgLogo}
-          source={require('../../../assets/imgs/logo.png')}
-        />
-
-        <View style={styles.viewContent}>
-          {/* username */}
-          <Input
-            containerStyle={styles.ctnInput}
-            autoCapitalize={'none'}
-            keyboardType="email-address"
-            returnKeyType="next"
-            placeholder="Username"
-            placeholderTextColor={colorTheme.primary}
-            inputStyle={styles.input}
-            inputContainerStyle={styles.inputCtn}
-            autoCorrect={false}
-            blurOnSubmit={false}
-            value={this.state.username}
-            onChangeText={(username) => {this.setState({username})}}
-            onSubmitEditing={() => { this.inputPassword.focus(); }}
-            renderErrorMessage={false}
+        <ContentWithBackground>
+          {/* logo */}
+          <ImageScale
+            width={237}
+            style={styles.imgLogo}
+            source={require('../../../assets/imgs/logo.png')}
           />
 
-          {/* password */}
-          <Input
-            containerStyle={[styles.ctnInput, styles.inputCtnPassword]}
-            ref={(input) => { this.inputPassword = input; }}
-            autoCapitalize={'none'}
-            secureTextEntry={true}
-            returnKeyType="go"
-            placeholder="Password"
-            placeholderTextColor={colorTheme.primary}
-            inputStyle={styles.input}
-            inputContainerStyle={styles.inputCtn}
-            value={this.state.password}
-            onChangeText={(password) => {this.setState({password})}}
-            renderErrorMessage={false}
-          />
+          <View style={styles.viewContent}>
+            {/* username */}
+            <Input
+              containerStyle={styles.ctnInput}
+              autoCapitalize={'none'}
+              keyboardType="email-address"
+              returnKeyType="next"
+              placeholder="Username"
+              placeholderTextColor={colorTheme.primary}
+              inputStyle={styles.input}
+              inputContainerStyle={styles.inputCtn}
+              autoCorrect={false}
+              blurOnSubmit={false}
+              value={this.state.username}
+              onChangeText={(username) => {
+                this.setState({username});
+              }}
+              onSubmitEditing={() => {
+                this.inputPassword.focus();
+              }}
+              renderErrorMessage={false}
+            />
 
-          {/* login */}
-          <View style={[styleUtil.withShadow(), styles.viewButLogin]}>
+            {/* password */}
+            <Input
+              containerStyle={[styles.ctnInput, styles.inputCtnPassword]}
+              ref={(input) => {
+                this.inputPassword = input;
+              }}
+              autoCapitalize={'none'}
+              secureTextEntry={true}
+              returnKeyType="go"
+              placeholder="Password"
+              placeholderTextColor={colorTheme.primary}
+              inputStyle={styles.input}
+              inputContainerStyle={styles.inputCtn}
+              value={this.state.password}
+              onChangeText={(password) => {
+                this.setState({password});
+              }}
+              renderErrorMessage={false}
+            />
+
+            {/* login */}
+            <View style={[styleUtil.withShadow(), styles.viewButLogin]}>
+              <Button
+                title="LOGIN"
+                buttonStyle={stylesApp.butPrimary}
+                titleStyle={stylesApp.titleButPrimary}
+                onPress={() => this.onButSignin()}
+              />
+            </View>
+
+            <View style={styles.viewOr}>
+              <View style={styles.viewOrBar} />
+              <Text style={styles.txtOr}>or</Text>
+              <View style={styles.viewOrBar} />
+            </View>
+
+            {/* sign up */}
+            <View style={styleUtil.withShadow()}>
+              <Button
+                title="REGISTER"
+                buttonStyle={stylesApp.butLight}
+                titleStyle={stylesApp.titleButLight}
+                onPress={() => this.onButSignup()}
+              />
+            </View>
+          </View>
+
+          {/* footer */}
+          <View style={{...stylesApp.flexRow, ...styles.viewFooter}}>
+            <View />
             <Button
-              title="LOGIN"
-              buttonStyle={stylesApp.butPrimary}
-              titleStyle={stylesApp.titleButPrimary}
-              onPress={() => this.onButSignin()}
+              title="forget password?"
+              type="clear"
+              titleStyle={stylesApp.titleButClear}
+              onPress={() => this.onButForget()}
             />
           </View>
-
-          <View style={styles.viewOr}>
-            <View style={styles.viewOrBar}/>
-            <Text style={styles.txtOr}>or</Text>
-            <View style={styles.viewOrBar}/>
-          </View>
-
-          {/* sign up */}
-          <View style={styleUtil.withShadow()}>
-            <Button
-              title="REGISTER"
-              buttonStyle={stylesApp.butLight}
-              titleStyle={stylesApp.titleButLight}
-              onPress={() => this.onButSignup()}
-            />
-          </View>
-        </View>
-
-        {/* footer */}
-        <View style={{...stylesApp.flexRow, ...styles.viewFooter}}>
-          <View></View>
-          <Button
-            title="forget password?"
-            type="clear"
-            titleStyle={stylesApp.titleButClear}
-            onPress={() => this.onButForget()}
-          />
-        </View>
-      </ContentWithBackground>
+        </ContentWithBackground>
       </DismissKeyboard>
     );
   }
@@ -125,7 +133,7 @@ class Login extends React.Component {
   }
 }
 
-const mapStateToProps = state => state;
+const mapStateToProps = (state) => state;
 
 const mapDispatchToProps = {
   setUserInfo,

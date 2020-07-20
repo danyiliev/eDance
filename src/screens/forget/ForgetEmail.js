@@ -23,7 +23,7 @@ export default class ForgetEmail extends React.Component {
     super(props);
 
     props.navigation.setOptions({
-      title: 'Forgot password'
+      title: 'Forgot password',
     });
   }
 
@@ -44,9 +44,7 @@ export default class ForgetEmail extends React.Component {
               />
 
               {/* title */}
-              <Text style={stylesSignup.txtItemTitle}>
-                Type your email
-              </Text>
+              <Text style={stylesSignup.txtItemTitle}>Type your email</Text>
             </View>
 
             {/* email */}
@@ -60,7 +58,9 @@ export default class ForgetEmail extends React.Component {
               inputStyle={stylesLogin.input}
               inputContainerStyle={stylesLogin.inputCtn}
               value={this.state.email}
-              onChangeText={(email) => {this.setState({email})}}
+              onChangeText={(email) => {
+                this.setState({email});
+              }}
               renderErrorMessage={false}
               rightIcon={
                 <ImageScale
@@ -89,7 +89,6 @@ export default class ForgetEmail extends React.Component {
                 iconRight={true}
               />
             </View>
-
           </View>
         </ContentWithBackground>
       </DismissKeyboard>

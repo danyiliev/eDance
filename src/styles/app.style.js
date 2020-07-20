@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import {StyleSheet} from 'react-native';
 import {colors as colorTheme} from './theme.style';
 
 export const styleUtil = {
@@ -7,11 +7,12 @@ export const styleUtil = {
       shadowColor: colorTheme.shadow,
       shadowRadius: radius,
       shadowOffset: {
-        width: 0, height: 0,
+        width: 0,
+        height: 0,
       },
       shadowOpacity: opacity,
-    }
-  }
+    };
+  },
 };
 
 export const stylesApp = StyleSheet.create({

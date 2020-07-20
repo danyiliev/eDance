@@ -2,7 +2,14 @@ import React from 'react';
 import DismissKeyboard from '../../../components/DismissKeyboard/DismissKeyboard';
 import {styles} from './styles';
 import {styles as stylesSignup} from '../../signup/styles';
-import {Dimensions, ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Dimensions,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View,
+  Platform,
+} from 'react-native';
 import {stylesApp, styleUtil} from '../../../styles/app.style';
 import {Button, ButtonGroup, Icon, Input} from 'react-native-elements';
 import {styles as stylesLogin} from '../../login/styles';
@@ -14,7 +21,7 @@ import SelectPicker from '../../../components/SelectPicker/SelectPicker';
 import {Picker} from '@react-native-community/picker';
 import {STATES} from '../../../constants/constant-data';
 
-const { width: SCREEN_WDITH } = Dimensions.get('window');
+const {width: SCREEN_WDITH} = Dimensions.get('window');
 
 export default class SettingProfile extends React.Component {
   static NAV_NAME = 'setting-profile';
@@ -42,17 +49,25 @@ export default class SettingProfile extends React.Component {
   types = ['Student', 'Professional', 'Cyber Championship Aujudicator'];
   singles = ['Single', 'Couple'];
   levels = [
-    'Beginner', 'Silver', 'Gold',
-    'Bronze', 'Silver 1', 'Gold 1',
-    'Bronze 1', 'Silver 2', 'Gold 2',
-    'Bronze 2', 'Silver 3', 'Gold 3',
+    'Beginner',
+    'Silver',
+    'Gold',
+    'Bronze',
+    'Silver 1',
+    'Gold 1',
+    'Bronze 1',
+    'Silver 2',
+    'Gold 2',
+    'Bronze 2',
+    'Silver 3',
+    'Gold 3',
   ];
 
   constructor(props) {
     super(props);
 
     props.navigation.setOptions({
-      title: 'Settings'
+      title: 'Settings',
     });
   }
 
@@ -75,8 +90,8 @@ export default class SettingProfile extends React.Component {
               selectedButtonStyle={stylesSignup.butSegmentSelected}
               selectedTextStyle={stylesSignup.SegmentSelected}
               selectedIndex={this.state.genderIndex}
-              onPress={(index) => this.setState({genderIndex: index})}>
-            </ButtonGroup>
+              onPress={(index) => this.setState({genderIndex: index})}
+            />
 
             {/* first name */}
             <Input
@@ -99,7 +114,9 @@ export default class SettingProfile extends React.Component {
 
             {/* last name */}
             <Input
-              ref={(input) => { this.inputLastName = input; }}
+              ref={(input) => {
+                this.inputLastName = input;
+              }}
               containerStyle={[stylesLogin.ctnInput, stylesApp.mt12]}
               returnKeyType="done"
               placeholder="Last Name"
@@ -116,15 +133,18 @@ export default class SettingProfile extends React.Component {
             {this.renderTypes()}
 
             <ButtonGroup
-              containerStyle={[stylesSignup.ctnSegmentGender, styles.segmentSingle]}
+              containerStyle={[
+                stylesSignup.ctnSegmentGender,
+                styles.segmentSingle,
+              ]}
               buttons={this.singles}
               textStyle={stylesSignup.txtSegment}
               innerBorderStyle={stylesSignup.borderSegment}
               selectedButtonStyle={stylesSignup.butSegmentSelected}
               selectedTextStyle={stylesSignup.SegmentSelected}
               selectedIndex={this.state.singleIndex}
-              onPress={(index) => this.setState({singleIndex: index})}>
-            </ButtonGroup>
+              onPress={(index) => this.setState({singleIndex: index})}
+            />
           </View>
 
           {/* contact */}
@@ -145,7 +165,9 @@ export default class SettingProfile extends React.Component {
                 placeholderTextColor={colorTheme.primary}
                 inputStyle={styles.input}
                 inputContainerStyle={stylesApp.input}
-                onChangeText={(email) => {this.setState({email})}}
+                onChangeText={(email) => {
+                  this.setState({email});
+                }}
                 value={this.state.email}
                 renderErrorMessage={false}
               />
@@ -167,7 +189,9 @@ export default class SettingProfile extends React.Component {
                 placeholderTextColor={colorTheme.primary}
                 inputStyle={styles.input}
                 inputContainerStyle={stylesApp.input}
-                onChangeText={(phone) => {this.setState({phone})}}
+                onChangeText={(phone) => {
+                  this.setState({phone});
+                }}
                 value={this.state.phone}
                 renderErrorMessage={false}
               />
@@ -205,7 +229,9 @@ export default class SettingProfile extends React.Component {
                 placeholderTextColor={colorTheme.primary}
                 inputStyle={styles.input}
                 inputContainerStyle={stylesApp.input}
-                onChangeText={(address) => {this.setState({address})}}
+                onChangeText={(address) => {
+                  this.setState({address});
+                }}
                 value={this.state.address}
                 renderErrorMessage={false}
               />
@@ -225,7 +251,6 @@ export default class SettingProfile extends React.Component {
             </Text>
 
             {this.renderLevels()}
-
           </View>
 
           {/* next */}
@@ -247,11 +272,9 @@ export default class SettingProfile extends React.Component {
               iconRight={true}
             />
           </View>
-
         </View>
 
         {this.renderSelectStatePicker()}
-
       </KeyboardAwareScrollView>
     );
   }
@@ -259,26 +282,21 @@ export default class SettingProfile extends React.Component {
   renderTypes() {
     return (
       <View style={stylesApp.mt24}>
-        {
-          this.types.map((s, i) => {
-            return (
-              <View key={i.toString()}>
-                <CheckboxRound
-                  label={s}
-                  checked={this.state.typeIndex === i}
-                  onPress={() => this.onSelectType(i)}
-                />
-                {/* divider */}
-                {
-                  (i < this.types.length) ?
-                    <View style={styles.viewDivider} />
-                    :
-                    null
-                }
-              </View>
-            );
-          })
-        }
+        {this.types.map((s, i) => {
+          return (
+            <View key={i.toString()}>
+              <CheckboxRound
+                label={s}
+                checked={this.state.typeIndex === i}
+                onPress={() => this.onSelectType(i)}
+              />
+              {/* divider */}
+              {i < this.types.length ? (
+                <View style={styles.viewDivider} />
+              ) : null}
+            </View>
+          );
+        })}
       </View>
     );
   }
@@ -288,13 +306,10 @@ export default class SettingProfile extends React.Component {
       <SelectPicker
         isVisible={this.state.showStatePicker}
         contentStyle={stylesSignup.picker}
-        onDismiss={done => this.dismissState(done)}
-      >
+        onDismiss={(done) => this.dismissState(done)}>
         <Picker
           selectedValue={
-            Platform.OS === 'ios'
-              ? this.state.stateSelected
-              : this.state.state
+            Platform.OS === 'ios' ? this.state.stateSelected : this.state.state
           }
           onValueChange={(itemValue, itemIndex) => {
             if (Platform.OS === 'ios') {
@@ -306,10 +321,11 @@ export default class SettingProfile extends React.Component {
                 state: itemValue,
               });
             }
-          }}
-        >
+          }}>
           {STATES.map((s, i) => {
-            return <Picker.Item key={i.toString()} label={s.Name} value={s.value} />;
+            return (
+              <Picker.Item key={i.toString()} label={s.Name} value={s.value} />
+            );
           })}
         </Picker>
       </SelectPicker>
@@ -324,7 +340,7 @@ export default class SettingProfile extends React.Component {
       showStatePicker: false,
     });
 
-    let { stateSelected } = this.state;
+    let {stateSelected} = this.state;
     if (!stateSelected) {
       // default is the first one
       stateSelected = STATES[0].value;
@@ -347,22 +363,20 @@ export default class SettingProfile extends React.Component {
 
     return (
       <View style={styles.viewLevels}>
-        {
-          this.levels.map((s, i) => {
-            return (
-              <CheckboxRound
-                containerStyle={{
-                  width: itemWidth,
-                  paddingLeft: i % 3 !== 0 ? 14 : 0,
-                  paddingRight: i % 3 !== 2 ? 14 : 0,
-                }}
-                label={s}
-                checked={this.state.levelIndex === i}
-                onPress={() => this.onSelectLevel(i)}
-              />
-            );
-          })
-        }
+        {this.levels.map((s, i) => {
+          return (
+            <CheckboxRound
+              containerStyle={{
+                width: itemWidth,
+                paddingLeft: i % 3 !== 0 ? 14 : 0,
+                paddingRight: i % 3 !== 2 ? 14 : 0,
+              }}
+              label={s}
+              checked={this.state.levelIndex === i}
+              onPress={() => this.onSelectLevel(i)}
+            />
+          );
+        })}
       </View>
     );
   }
@@ -378,8 +392,5 @@ export default class SettingProfile extends React.Component {
     });
   }
 
-  onButNext() {
-
-  }
-
+  onButNext() {}
 }

@@ -70,9 +70,7 @@ export default class Reviews extends React.Component {
 
           {/* length */}
           <View style={stylesLikes.viewTxtLength}>
-            <Text style={stylesLikes.txtLength}>
-              01:32
-            </Text>
+            <Text style={stylesLikes.txtLength}>01:32</Text>
           </View>
         </View>
 
@@ -90,15 +88,11 @@ export default class Reviews extends React.Component {
             />
 
             {/* date */}
-            <Text style={styles.txtDate}>
-              May 29, 2017
-            </Text>
+            <Text style={styles.txtDate}>May 29, 2017</Text>
           </View>
 
           {/* title */}
-          <Text style={styles.txtTitle}>
-            Wendy Watson
-          </Text>
+          <Text style={styles.txtTitle}>Wendy Watson</Text>
 
           {/* body */}
           <Text style={styles.txtBody}>

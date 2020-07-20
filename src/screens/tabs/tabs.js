@@ -1,6 +1,9 @@
 import React from 'react';
 import Radio from './radio/Radio';
-import {createBottomTabNavigator, BottomTabBar} from '@react-navigation/bottom-tabs';
+import {
+  createBottomTabNavigator,
+  BottomTabBar,
+} from '@react-navigation/bottom-tabs';
 import {Image, View} from 'react-native';
 import ImageScale from 'react-native-scalable-image';
 import {styles as stylesTab, styles} from './styles';
@@ -19,7 +22,7 @@ const Tab = createBottomTabNavigator();
 export function renderMenuButton(onPress) {
   return (
     <Button
-      type='clear'
+      type="clear"
       buttonStyle={stylesTab.butHeaderLeft}
       icon={
         <ImageScale
@@ -43,7 +46,11 @@ export default class TabMain extends React.Component {
     });
   }
 
-  componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS): void {
+  componentDidUpdate(
+    prevProps: Readonly<P>,
+    prevState: Readonly<S>,
+    snapshot: SS,
+  ): void {
     // update title
     this.props.navigation.setOptions({
       title: this.getHeaderTitle(),
@@ -55,10 +62,10 @@ export default class TabMain extends React.Component {
     // Access the tab navigator's state using `route.state`
     const routeName = route.state
       ? // Get the currently active route name in the tab navigator
-      route.state.routes[route.state.index].name
+        route.state.routes[route.state.index].name
       : // If state doesn't exist, we need to default to `screen` param if available, or the initial screen
         // In our case, it's "Feed" as that's the first screen inside the navigator
-      route.params?.screen || Radio.NAV_NAME;
+        route.params?.screen || Radio.NAV_NAME;
 
     switch (routeName) {
       case Radio.NAV_NAME:
@@ -80,23 +87,20 @@ export default class TabMain extends React.Component {
           tabBarOptions={{
             activeTintColor: colorTheme.primary,
           }}
-          tabBar={props => (
-            <BottomTabBar
-              style={styles.tabbar}
-              {...props} />
-          )}>
+          tabBar={(props) => <BottomTabBar style={styles.tabbar} {...props} />}>
           <Tab.Screen
             name={Radio.NAV_NAME}
             component={Radio}
             options={{
               tabBarLabel: 'Radio',
-              tabBarIcon: ({ focused, color, size }) => (
+              tabBarIcon: ({focused, color, size}) => (
                 <ImageScale
                   width={21}
                   style={{
                     opacity: focused ? 1 : 0.3,
                   }}
-                  source={require('../../../assets/imgs/tab_radio.png')} />
+                  source={require('../../../assets/imgs/tab_radio.png')}
+                />
               ),
             }}
           />
@@ -105,13 +109,14 @@ export default class TabMain extends React.Component {
             component={Tv}
             options={{
               tabBarLabel: 'TV',
-              tabBarIcon: ({ focused, color, size }) => (
+              tabBarIcon: ({focused, color, size}) => (
                 <ImageScale
                   width={24}
                   style={{
                     opacity: focused ? 1 : 0.3,
                   }}
-                  source={require('../../../assets/imgs/tab_tv.png')} />
+                  source={require('../../../assets/imgs/tab_tv.png')}
+                />
               ),
             }}
           />
@@ -120,13 +125,14 @@ export default class TabMain extends React.Component {
             component={Pro}
             options={{
               tabBarLabel: 'Pro',
-              tabBarIcon: ({ focused, color, size }) => (
+              tabBarIcon: ({focused, color, size}) => (
                 <ImageScale
                   width={16}
                   style={{
                     opacity: focused ? 1 : 0.3,
                   }}
-                  source={require('../../../assets/imgs/tab_pro.png')} />
+                  source={require('../../../assets/imgs/tab_pro.png')}
+                />
               ),
             }}
           />
@@ -135,13 +141,14 @@ export default class TabMain extends React.Component {
             component={Student}
             options={{
               tabBarLabel: 'Student',
-              tabBarIcon: ({ focused, color, size }) => (
+              tabBarIcon: ({focused, color, size}) => (
                 <ImageScale
                   width={22}
                   style={{
                     opacity: focused ? 1 : 0.3,
                   }}
-                  source={require('../../../assets/imgs/tab_student.png')} />
+                  source={require('../../../assets/imgs/tab_student.png')}
+                />
               ),
             }}
           />
@@ -150,13 +157,14 @@ export default class TabMain extends React.Component {
             component={Store}
             options={{
               tabBarLabel: 'Store',
-              tabBarIcon: ({ focused, color, size }) => (
+              tabBarIcon: ({focused, color, size}) => (
                 <ImageScale
                   width={22}
                   style={{
                     opacity: focused ? 1 : 0.3,
                   }}
-                  source={require('../../../assets/imgs/tab_store.png')} />
+                  source={require('../../../assets/imgs/tab_store.png')}
+                />
               ),
             }}
           />
@@ -165,13 +173,14 @@ export default class TabMain extends React.Component {
             component={Likes}
             options={{
               tabBarLabel: 'Likes',
-              tabBarIcon: ({ focused, color, size }) => (
+              tabBarIcon: ({focused, color, size}) => (
                 <ImageScale
                   width={22}
                   style={{
                     opacity: focused ? 1 : 0.3,
                   }}
-                  source={require('../../../assets/imgs/tab_like.png')} />
+                  source={require('../../../assets/imgs/tab_like.png')}
+                />
               ),
             }}
           />

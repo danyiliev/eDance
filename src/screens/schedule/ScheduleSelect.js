@@ -5,7 +5,12 @@ import {styles} from './styles';
 import ComboSchedule from '../../components/ComboSchedule/ComboSchedule';
 import SelectPicker from '../../components/SelectPicker/SelectPicker';
 import {STATES} from '../../constants/constant-data';
-import {DANCE_LEVELS, DANCE_STYLES, LESSON_TYPES, OCCASIONS} from '../../constants/dance-data';
+import {
+  DANCE_LEVELS,
+  DANCE_STYLES,
+  LESSON_TYPES,
+  OCCASIONS,
+} from '../../constants/dance-data';
 import {Button, Icon} from 'react-native-elements';
 import {styles as stylesSignup} from '../signup/styles';
 import {colors as colorTheme} from '../../styles/theme.style';
@@ -26,7 +31,7 @@ export default class ScheduleSelect extends React.Component {
     super(props);
 
     props.navigation.setOptions({
-      title: 'Schedule'
+      title: 'Schedule',
     });
   }
 
@@ -36,9 +41,7 @@ export default class ScheduleSelect extends React.Component {
         {/* lesson type */}
         <View style={styles.viewSelect}>
           {/* title */}
-          <Text style={styles.txtTitle}>
-            Lesson Type
-          </Text>
+          <Text style={styles.txtTitle}>Lesson Type</Text>
 
           <ComboSchedule
             style={styles.styleCombo}
@@ -50,9 +53,7 @@ export default class ScheduleSelect extends React.Component {
         {/* dance style */}
         <View style={styles.viewSelect}>
           {/* title */}
-          <Text style={styles.txtTitle}>
-            Dance Styles
-          </Text>
+          <Text style={styles.txtTitle}>Dance Styles</Text>
 
           <ComboSchedule
             style={styles.styleCombo}
@@ -64,9 +65,7 @@ export default class ScheduleSelect extends React.Component {
         {/* dance level */}
         <View style={styles.viewSelect}>
           {/* title */}
-          <Text style={styles.txtTitle}>
-            Dance Level
-          </Text>
+          <Text style={styles.txtTitle}>Dance Level</Text>
 
           <ComboSchedule
             style={styles.styleCombo}
@@ -78,9 +77,7 @@ export default class ScheduleSelect extends React.Component {
         {/* occasion */}
         <View style={styles.viewSelect}>
           {/* title */}
-          <Text style={styles.txtTitle}>
-            Special Occasion
-          </Text>
+          <Text style={styles.txtTitle}>Special Occasion</Text>
 
           <ComboSchedule
             style={styles.styleCombo}

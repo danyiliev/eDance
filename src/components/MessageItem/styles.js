@@ -44,5 +44,5 @@ export const styles = StyleSheet.create({
     fontSize: 12,
     textAlign: 'right',
     marginTop: 6,
-  }
+  },
 });

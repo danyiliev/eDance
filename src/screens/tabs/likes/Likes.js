@@ -22,7 +22,7 @@ export default class Likes extends React.Component {
     super(props);
 
     // load data
-    for (let i =0; i < 20; i++) {
+    for (let i = 0; i < 20; i++) {
       this.lessons.push({});
     }
   }
@@ -54,34 +54,24 @@ export default class Likes extends React.Component {
 
           {/* length */}
           <View style={styles.viewTxtLength}>
-            <Text style={styles.txtLength}>
-              01:32
-            </Text>
+            <Text style={styles.txtLength}>01:32</Text>
           </View>
         </View>
 
         {/* content */}
         <View style={styles.viewItemContent}>
           <View style={styles.viewItemHeader}>
-            <Text style={styles.txtLesson}>
-              Lesson {index+1}
-            </Text>
-            <Text style={styles.txtStatus}>
-              Purchased
-            </Text>
+            <Text style={styles.txtLesson}>Lesson {index + 1}</Text>
+            <Text style={styles.txtStatus}>Purchased</Text>
           </View>
 
           <View style={styles.viewItemContentBody}>
             <View style={stylesApp.flex1}>
               {/* name */}
-              <Text style={styles.txtName}>
-                John Smith
-              </Text>
+              <Text style={styles.txtName}>John Smith</Text>
 
               {/* category */}
-              <Text style={styles.txtCategory}>
-                Samba/Waltz
-              </Text>
+              <Text style={styles.txtCategory}>Samba/Waltz</Text>
             </View>
 
             <View style={styles.viewLike}>
@@ -96,6 +86,5 @@ export default class Likes extends React.Component {
     );
   }
 
-  onRefresh() {
-  }
+  onRefresh() {}
 }

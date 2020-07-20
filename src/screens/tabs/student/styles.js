@@ -29,12 +29,11 @@ export const styles = StyleSheet.create({
   viewAction: {
     alignSelf: 'flex-end',
   },
-  ctnButAction: {
-  },
+  ctnButAction: {},
   butAction: {
     backgroundColor: colorTheme.primary,
     borderRadius: 50,
     width: 50,
     height: 50,
-  }
+  },
 });

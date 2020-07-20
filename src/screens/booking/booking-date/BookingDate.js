@@ -17,7 +17,7 @@ export default class BookingDate extends React.Component {
     super(props);
 
     props.navigation.setOptions({
-      title: 'Book lesson'
+      title: 'Book lesson',
     });
   }
 
@@ -44,14 +44,15 @@ export default class BookingDate extends React.Component {
               'stylesheet.calendar.main': {
                 container: styles.calMain,
                 monthView: styles.calMonthView,
-              }
+              },
             }}
             onDayPress={this.onDayPress}
             markedDates={{
               [this.state.selectedDate]: {
                 selected: true,
-              }
-            }}/>
+              },
+            }}
+          />
         </View>
 
         <View style={styles.viewButNext}>
@@ -62,7 +63,6 @@ export default class BookingDate extends React.Component {
             onPress={() => this.onButNext()}
           />
         </View>
-
       </View>
     );
   }
@@ -73,7 +73,5 @@ export default class BookingDate extends React.Component {
     });
   };
 
-  onButNext() {
-
-  }
+  onButNext() {}
 }

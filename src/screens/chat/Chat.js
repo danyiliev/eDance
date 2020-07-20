@@ -7,18 +7,19 @@ import {
   Text,
   View,
   NativeModules,
+  Platform,
 } from 'react-native';
 import {stylesApp} from '../../styles/app.style';
 import {styles} from './styles';
 import ContentWithBackground from '../../components/ContentWithBackground/ContentWithBackground';
 import {User} from '../../models/user.model';
 import {Message} from '../../models/message.model';
-import { config } from '../../helpers/config';
+import {config} from '../../helpers/config';
 import MessageItem from '../../components/MessageItem/MessageItem';
 import {Input, Button} from 'react-native-elements';
 import {colors as colorTheme} from '../../styles/theme.style';
 
-const { StatusBarManager } = NativeModules;
+const {StatusBarManager} = NativeModules;
 
 export default class Chat extends React.Component {
   static NAV_NAME = 'chat';
@@ -36,7 +37,7 @@ export default class Chat extends React.Component {
     super(props);
 
     props.navigation.setOptions({
-      title: 'Anna'
+      title: 'Anna',
     });
 
     // init messages
@@ -57,14 +58,14 @@ export default class Chat extends React.Component {
 
   componentDidMount(): void {
     if (Platform.OS === 'ios') {
-      StatusBarManager.getHeight(statusBarFrameData => {
-        this.setState({ statusBarHeight: statusBarFrameData.height });
+      StatusBarManager.getHeight((statusBarFrameData) => {
+        this.setState({statusBarHeight: statusBarFrameData.height});
       });
       this.statusBarListener = StatusBarIOS.addListener(
         'statusBarFrameWillChange',
-        statusBarData => {
-          this.setState({ statusBarHeight: statusBarData.frame.height });
-        }
+        (statusBarData) => {
+          this.setState({statusBarHeight: statusBarData.frame.height});
+        },
       );
     }
   }
@@ -78,8 +79,7 @@ export default class Chat extends React.Component {
             keyboardVerticalOffset={
               Platform.OS === 'ios' ? 44 + this.state.statusBarHeight : 0
             }
-            behavior={Platform.OS === 'ios' ? 'padding' : null}
-          >
+            behavior={Platform.OS === 'ios' ? 'padding' : null}>
             {/* chat */}
             <View style={styles.viewChat}>
               <View>
@@ -87,8 +87,8 @@ export default class Chat extends React.Component {
                   inverted
                   contentContainerStyle={styles.listCtnContainer}
                   data={this.state.messages}
-                  renderItem={({ item, index }) => this.renderItem(item, index)}
-                  ref={ref => (this.flatList = ref)}
+                  renderItem={({item, index}) => this.renderItem(item, index)}
+                  ref={(ref) => (this.flatList = ref)}
                   bounces={this.state.messages.length > config.chatPageSize}
                   onEndReached={() => {
                     console.log('onEndReached');
@@ -117,8 +117,8 @@ export default class Chat extends React.Component {
                 placeholderTextColor={colorTheme.primary}
                 multiline
                 value={this.state.text}
-                onChangeText={text => {
-                  this.setState({ text });
+                onChangeText={(text) => {
+                  this.setState({text});
                 }}
                 renderErrorMessage={false}
               />

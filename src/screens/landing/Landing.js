@@ -1,5 +1,5 @@
 import React from 'react';
-import SplashScreen from "react-native-splash-screen";
+import SplashScreen from 'react-native-splash-screen';
 import {styles} from './styles';
 import ContentWithBackground from '../../components/ContentWithBackground/ContentWithBackground';
 import ImageScale from 'react-native-scalable-image';
@@ -9,7 +9,6 @@ import {stylesApp, styleUtil} from '../../styles/app.style';
 import Login from '../login/Login';
 
 export default class Landing extends React.Component {
-
   static NAV_NAME = 'landing';
 
   componentDidMount(): void {
@@ -63,7 +62,6 @@ export default class Landing extends React.Component {
             titleStyle={stylesApp.titleButClear}
           />
         </View>
-
       </ContentWithBackground>
     );
   }

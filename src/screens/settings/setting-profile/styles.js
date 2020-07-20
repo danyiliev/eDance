@@ -48,5 +48,5 @@ export const styles = StyleSheet.create({
     ...styleUtil.withShadow(),
     marginHorizontal: 30,
     marginVertical: 48,
-  }
+  },
 });

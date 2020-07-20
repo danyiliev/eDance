@@ -1,20 +1,23 @@
 import {
   Animated,
-  Keyboard, Platform,
+  Keyboard,
+  Platform,
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import React from "react";
+import React from 'react';
 import {stylesApp} from '../../styles/app.style';
 
 export default class DismissKeyboard extends React.Component {
-
   state = {
     keyboardHeight: new Animated.Value(0),
   };
 
   componentDidMount() {
-    this.keyboardWillHideSub = Keyboard.addListener('keyboardWillHide', this.keyboardWillHide);
+    this.keyboardWillHideSub = Keyboard.addListener(
+      'keyboardWillHide',
+      this.keyboardWillHide,
+    );
   }
 
   componentWillUnmount() {
@@ -22,7 +25,7 @@ export default class DismissKeyboard extends React.Component {
   }
 
   render() {
-    const { keyboardHeight } = this.state;
+    const {keyboardHeight} = this.state;
 
     return (
       <TouchableWithoutFeedback
@@ -31,9 +34,11 @@ export default class DismissKeyboard extends React.Component {
         <Animated.View
           style={{
             ...stylesApp.viewContainer,
-            transform: [{
-              translateY: keyboardHeight
-            }]
+            transform: [
+              {
+                translateY: keyboardHeight,
+              },
+            ],
           }}>
           {this.props.children}
         </Animated.View>
@@ -49,7 +54,7 @@ export default class DismissKeyboard extends React.Component {
         useNativeDriver: true,
       }).start();
     }
-  };
+  }
 
   keyboardWillHide = (event) => {
     this.moveMainView(0);

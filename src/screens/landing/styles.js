@@ -1,8 +1,7 @@
-import { StyleSheet } from 'react-native';
+import {StyleSheet} from 'react-native';
 
 export const styles = StyleSheet.create({
-  viewContainer: {
-  },
+  viewContainer: {},
 
   imgLogo: {
     marginTop: 160,
@@ -21,5 +20,5 @@ export const styles = StyleSheet.create({
     marginTop: 80,
     marginHorizontal: 52,
     justifyContent: 'space-between',
-  }
+  },
 });

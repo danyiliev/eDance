@@ -1,7 +1,13 @@
 import React from 'react';
 import DismissKeyboard from '../../../components/DismissKeyboard/DismissKeyboard';
 import {styles} from './styles';
-import {Dimensions, FlatList, Image, TouchableOpacity, View} from 'react-native';
+import {
+  Dimensions,
+  FlatList,
+  Image,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {Utils} from '../../../helpers/utils';
 import {Button, Icon, SearchBar} from 'react-native-elements';
 import {colors as colorTheme} from '../../../styles/theme.style';
@@ -23,7 +29,7 @@ export default class Radio extends React.Component {
     super(props);
 
     // load data
-    for (let i =0; i < 20; i++) {
+    for (let i = 0; i < 20; i++) {
       this.channels.push({});
     }
   }
@@ -52,10 +58,11 @@ export default class Radio extends React.Component {
         <TouchableOpacity style={styles.viewItemContent}>
           <Image
             style={styles.imgItem}
-            source={require('../../../../assets/imgs/radio_default.png')} />
+            source={require('../../../../assets/imgs/radio_default.png')}
+          />
         </TouchableOpacity>
       </View>
-    )
+    );
   }
 
   renderHeader() {
@@ -88,6 +95,5 @@ export default class Radio extends React.Component {
     );
   }
 
-  onRefresh() {
-  }
+  onRefresh() {}
 }

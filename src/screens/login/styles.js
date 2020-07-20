@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native';
+import {StyleSheet} from 'react-native';
 import {colors as colorTheme} from '../../styles/theme.style';
 import {stylesApp} from '../../styles/app.style';
 
@@ -51,5 +51,5 @@ export const styles = StyleSheet.create({
     marginTop: 20,
     marginHorizontal: 52,
     justifyContent: 'space-between',
-  }
+  },
 });

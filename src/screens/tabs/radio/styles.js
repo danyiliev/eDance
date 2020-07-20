@@ -2,7 +2,7 @@ import {Dimensions, StyleSheet} from 'react-native';
 import {stylesApp, styleUtil} from '../../../styles/app.style';
 import {colors as colorTheme} from '../../../styles/theme.style';
 
-const { width: SCREEN_WDITH } = Dimensions.get('window');
+const {width: SCREEN_WDITH} = Dimensions.get('window');
 const paddingItem = 7;
 
 export const styles = StyleSheet.create({
@@ -19,7 +19,7 @@ export const styles = StyleSheet.create({
     ...styleUtil.withShadow(12, 0.5),
     borderRadius: 12,
     backgroundColor: colorTheme.light,
-    height: (SCREEN_WDITH - paddingItem*6) / 2,
+    height: (SCREEN_WDITH - paddingItem * 6) / 2,
     flex: 1,
     margin: paddingItem,
   },
@@ -66,5 +66,5 @@ export const styles = StyleSheet.create({
     borderRadius: 100,
     height: 40,
     width: 40,
-  }
+  },
 });

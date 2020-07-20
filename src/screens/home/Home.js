@@ -49,13 +49,13 @@ export default class Home extends React.Component {
           verticalSwipe={false}
           containerStyle={styles.ctnSwiper}
           cards={this.teachers}
-          renderCard={user =>
+          renderCard={(user) => (
             <TeacherCard
               user={user}
               onReview={() => this.onUserReviews()}
               onSchedule={() => this.onUserSchedule()}
             />
-          }
+          )}
           cardIndex={0}
           stackSize={2}
           showSecondCard
@@ -68,7 +68,7 @@ export default class Home extends React.Component {
           cardStyle={styles.cardSwiper}
         />
       </View>
-    )
+    );
   }
 
   renderItem(item, index) {
@@ -81,26 +81,20 @@ export default class Home extends React.Component {
         />
 
         <View style={styles.viewItemContent}>
-          <Text style={styles.txtBadge}>
-            US Pro-Dancer Championships
-          </Text>
+          <Text style={styles.txtBadge}>US Pro-Dancer Championships</Text>
 
           <View style={styles.viewItemBottom}>
             {/* date */}
-            <Text style={styles.txtBadgeDate}>
-              10 Oct 2020
-            </Text>
+            <Text style={styles.txtBadgeDate}>10 Oct 2020</Text>
 
             {/* category */}
             <View style={styles.viewBadgeCategory}>
-            <Text style={styles.txtBadgeCategory}>
-              Challenge
-            </Text>
+              <Text style={styles.txtBadgeCategory}>Challenge</Text>
             </View>
           </View>
         </View>
       </View>
-    )
+    );
   }
 
   onUserReviews() {

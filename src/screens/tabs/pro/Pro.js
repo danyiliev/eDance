@@ -6,9 +6,6 @@ export default class Pro extends React.Component {
   static NAV_NAME = 'pro';
 
   render() {
-    return (
-      <View style={stylesMain.viewContainer}>
-      </View>
-    );
+    return <View style={stylesMain.viewContainer} />;
   }
 }
