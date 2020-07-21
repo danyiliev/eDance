@@ -15,12 +15,12 @@ export class User extends BaseModel {
   email = '';
   address = '';
 
+  password = '';
+
   type = User.TYPE_TEACHER;
 
   initFromObject(data) {
     super.initFromObject(data);
-
-    this.username = data.username;
 
     if (data.email) {
       this.email = data.email;

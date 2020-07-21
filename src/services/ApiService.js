@@ -33,12 +33,75 @@ class ApiService {
     } catch (e) {
       console.log(e);
 
-      return Promise.reject(e.response.data);
+      return Promise.reject(e.response ? e.response.data : e);
     }
   }
 
   setHeaderToken(token) {
     this.token = token;
+  }
+
+  async checkEmailExisting(email) {
+    const params = {
+      email: email,
+    };
+
+    try {
+      const {data} = await Axios.post(
+        `${this.baseUrl}/users/checkEmailExisting`,
+        params,
+        {},
+      );
+
+      return Promise.resolve(data.result);
+    } catch (e) {
+      console.log(e);
+
+      return Promise.reject(e.response ? e.response.data : e);
+    }
+  }
+
+  async signUp(
+    firstName,
+    lastName,
+    email,
+    password,
+    type,
+    gender,
+    state,
+    city,
+    zipCode,
+    photo,
+  ) {
+    const formData = new FormData();
+    formData.append('firstName', firstName);
+    formData.append('lastName', lastName);
+    formData.append('email', email);
+    formData.append('password', password);
+    formData.append('userType', type);
+    formData.append('gender', gender);
+    formData.append('state', state);
+    formData.append('city', city);
+    formData.append('zipCode', zipCode);
+
+    if (photo) {
+      formData.append('photo', photo);
+    }
+
+    try {
+      const {data} = await Axios.post(`${this.baseUrl}/signup`, formData);
+      console.log(data);
+
+      const user = new User().initFromObject(data.user);
+      user.apiToken = data.token;
+      this.setHeaderToken(data.token);
+
+      return Promise.resolve(user);
+    } catch (e) {
+      console.log(e);
+
+      return Promise.reject(e.response.data);
+    }
   }
 }
 

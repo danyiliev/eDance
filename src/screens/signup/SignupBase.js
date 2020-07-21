@@ -4,6 +4,7 @@ import ContentWithBackground from '../../components/ContentWithBackground/Conten
 import {styles as stylesSignup, styles} from './styles';
 import {styles as stylesLogin} from '../login/styles';
 import {
+  Alert,
   Image,
   TouchableOpacity,
   TouchableWithoutFeedback,
@@ -15,8 +16,13 @@ import {stylesApp, styleUtil} from '../../styles/app.style';
 import ImageScale from 'react-native-scalable-image';
 import ImagePicker from 'react-native-image-picker';
 import SignupAdvanced from './SignupAdvanced';
+import {connect} from 'react-redux';
+import {User} from '../../models/user.model';
+import {BaseSignup} from './base-signup';
+import {Utils} from '../../helpers/utils';
+import {ApiService} from '../../services';
 
-export default class SignupBase extends React.Component {
+class SignupBase extends BaseSignup {
   static NAV_NAME = 'signup-base';
 
   state = {
@@ -165,16 +171,28 @@ export default class SignupBase extends React.Component {
                 }}
                 renderErrorMessage={false}
                 onFocus={() => this.onPasswordFocus()}
+                onSubmitEditing={() => {
+                  this.onButNext();
+                }}
               />
             </View>
 
             {/* next */}
-            <View style={styles.viewButNext}>
+            <View style={[styleUtil.withShadow(), styles.viewButNext]}>
               <Button
                 title="NEXT"
                 buttonStyle={stylesApp.butPrimary}
                 titleStyle={stylesApp.titleButPrimary}
                 onPress={() => this.onButNext()}
+                disabled={
+                  !(
+                    this.state.firstName &&
+                    this.state.lastName &&
+                    this.state.email &&
+                    this.state.password
+                  )
+                }
+                disabledStyle={[stylesApp.butPrimary, stylesApp.semiTrans]}
                 icon={
                   <Icon
                     type="ionicon"
@@ -212,6 +230,7 @@ export default class SignupBase extends React.Component {
         console.log('User tapped custom button: ', response.customButton);
       } else {
         const source = {uri: response.uri};
+        this.photoFile = response;
 
         this.setState({
           photoImg: source,
@@ -225,8 +244,66 @@ export default class SignupBase extends React.Component {
     this.keyboardView.moveMainView(30);
   }
 
-  onButNext() {
-    // go to signup advanced page
-    this.props.navigation.push(SignupAdvanced.NAV_NAME);
+  async onButNext() {
+    if (
+      !(
+        this.state.firstName &&
+        this.state.lastName &&
+        this.state.email &&
+        this.state.password
+      )
+    ) {
+      return;
+    }
+
+    // check email validity
+    if (!Utils.isEmailValid(this.state.email)) {
+      Alert.alert('Invalid Email', 'Please input the correct email address', [
+        {
+          text: 'OK',
+          onPress: () => this.inputEmail.focus(),
+        },
+      ]);
+
+      return;
+    }
+
+    // show loading
+    this.loadingHUD.show();
+
+    try {
+      // check email existence
+      const isExisting = await ApiService.checkEmailExisting(this.state.email);
+      console.log(`isExisting: ${this.state.email}`);
+      console.log(isExisting);
+
+      if (isExisting) {
+        Alert.alert('Signup Failed', 'This email address is already used');
+      } else {
+        const userNew = new User();
+        userNew.type = this.userType;
+        userNew.email = this.state.email;
+        userNew.firstName = this.state.firstName;
+        userNew.lastName = this.state.lastName;
+        userNew.password = this.state.password;
+
+        // go to signup advanced page
+        this.props.navigation.push(SignupAdvanced.NAV_NAME, {
+          user: userNew,
+          photoFile: this.photoFile,
+        });
+      }
+    } catch (e) {
+      console.log(e);
+
+      Alert.alert('Signup Failed', e.message);
+    }
+
+    // hide loading
+    this.loadingHUD.hideAll();
   }
 }
+
+const mapStateToProps = (state) => state;
+
+export default connect(mapStateToProps, null)(SignupBase);

@@ -164,7 +164,7 @@ class Login extends BaseAuth {
 
   onButSignup() {
     // go to signup page
-    this.props.navigation.push(SignupBase.NAV_NAME);
+    this.props.navigation.push(SignupBase.NAV_NAME, {userType: this.userType});
   }
 
   onButForget() {

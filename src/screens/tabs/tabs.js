@@ -16,6 +16,7 @@ import Likes from './likes/Likes';
 import {Button, Icon} from 'react-native-elements';
 import MenuModal from '../../components/MenuModal/MenuModal';
 import {stylesApp} from '../../styles/app.style';
+import SplashScreen from 'react-native-splash-screen';
 
 const Tab = createBottomTabNavigator();
 
@@ -44,6 +45,10 @@ export default class TabMain extends React.Component {
     props.navigation.setOptions({
       title: this.getHeaderTitle(),
     });
+  }
+
+  componentDidMount(): void {
+    SplashScreen.hide();
   }
 
   componentDidUpdate(

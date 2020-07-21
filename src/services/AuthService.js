@@ -7,6 +7,32 @@ class AuthService {
     return ApiService.signIn(email, password);
   }
 
+  signUp(
+    firstName,
+    lastName,
+    email,
+    password,
+    type,
+    gender,
+    state,
+    city,
+    zipCode,
+    photo,
+  ) {
+    return ApiService.signUp(
+      firstName,
+      lastName,
+      email,
+      password,
+      type,
+      gender,
+      state,
+      city,
+      zipCode,
+      photo,
+    );
+  }
+
   signOut() {
     // remove user from local storage
     AsyncStorage.removeItem(CURRENT_USER);

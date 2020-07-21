@@ -5,10 +5,17 @@ import {UserHelper} from '../helpers/user-helper';
 export class BaseAuth extends React.Component {
   currentUser: User;
 
+  userType = User.TYPE_STUDENT;
+
   constructor(props) {
     super(props);
 
     this.currentUser = props.UserReducer.user;
+
+    // get parameter
+    if (props.route.params) {
+      this.userType = props.route.params.userType;
+    }
   }
 
   async setUser(user, pageTo) {

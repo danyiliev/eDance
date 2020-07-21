@@ -7,6 +7,7 @@ import {View} from 'react-native';
 import {Button} from 'react-native-elements';
 import {stylesApp, styleUtil} from '../../styles/app.style';
 import Login from '../login/Login';
+import {User} from '../../models/user.model';
 
 export default class Landing extends React.Component {
   static NAV_NAME = 'landing';
@@ -33,7 +34,7 @@ export default class Landing extends React.Component {
               title="BECOME A TEACHER"
               buttonStyle={stylesApp.butPrimary}
               titleStyle={stylesApp.titleButPrimary}
-              onPress={() => this.onButNext()}
+              onPress={() => this.onButNext(User.TYPE_TEACHER)}
             />
           </View>
 
@@ -43,7 +44,7 @@ export default class Landing extends React.Component {
               title="BECOME A STUDENT"
               buttonStyle={stylesApp.butLight}
               titleStyle={stylesApp.titleButLight}
-              onPress={() => this.onButNext()}
+              onPress={() => this.onButNext(User.TYPE_STUDENT)}
             />
           </View>
         </View>
@@ -66,8 +67,8 @@ export default class Landing extends React.Component {
     );
   }
 
-  onButNext() {
+  onButNext(type) {
     // go to login page
-    this.props.navigation.push(Login.NAV_NAME);
+    this.props.navigation.push(Login.NAV_NAME, {userType: type});
   }
 }

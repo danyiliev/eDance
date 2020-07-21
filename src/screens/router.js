@@ -34,6 +34,10 @@ import Messaging from './messaging/Messaging';
 import Chat from './chat/Chat';
 import SettingProfile from './settings/setting-profile/SettingProfile';
 import Championships from './championships/Championships';
+import AsyncStorage from '@react-native-community/async-storage';
+import {CURRENT_USER} from '../constants/storage-key';
+import {User} from '../models/user.model';
+import {ApiService} from '../services';
 
 const Stack = createStackNavigator();
 
@@ -46,13 +50,28 @@ class MainNavigator extends React.Component {
   };
 
   async componentDidMount(): void {
-    await Utils.sleep(2000);
+    try {
+      // check user state
+      const u = await AsyncStorage.getItem(CURRENT_USER);
+      if (u) {
+        let userObj = JSON.parse(u);
+        let user = new User().deserialize(userObj);
+
+        // save user to reduce
+        this.props.setUserInfo(user);
+
+        // set api token
+        ApiService.setHeaderToken(user.apiToken);
+      }
+
+      // SplashScreen.hide();
+    } catch (e) {
+      console.log(e);
+    }
 
     this.setState({
       initializing: false,
     });
-
-    // SplashScreen.hide();
   }
 
   render() {

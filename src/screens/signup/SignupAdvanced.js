@@ -1,7 +1,7 @@
 import React from 'react';
 import DismissKeyboard from '../../components/DismissKeyboard/DismissKeyboard';
 import ContentWithBackground from '../../components/ContentWithBackground/ContentWithBackground';
-import {View, TouchableOpacity, Text, Platform} from 'react-native';
+import {View, TouchableOpacity, Text, Platform, Alert} from 'react-native';
 import {styles} from './styles';
 import {Button, ButtonGroup, Input} from 'react-native-elements';
 import {styles as stylesLogin} from '../login/styles';
@@ -14,8 +14,11 @@ import {STATES} from '../../constants/constant-data';
 import {setUserInfo} from '../../actions/user';
 import {connect} from 'react-redux';
 import {User} from '../../models/user.model';
+import {BaseAuth} from '../base-auth';
+import {BaseSignup} from './base-signup';
+import {AuthService} from '../../services';
 
-class SignupAdvanced extends React.Component {
+class SignupAdvanced extends BaseSignup {
   static NAV_NAME = 'signup-advanced';
 
   state = {
@@ -31,6 +34,7 @@ class SignupAdvanced extends React.Component {
     zipCode: '',
   };
 
+  userNew: User = null;
   genders = ['Male', 'Female'];
 
   constructor(props) {
@@ -39,6 +43,12 @@ class SignupAdvanced extends React.Component {
     props.navigation.setOptions({
       title: 'Registration',
     });
+
+    // get parameter
+    if (props.route.params) {
+      this.userNew = props.route.params.user;
+      this.photoFile = props.route.params.photoFile;
+    }
   }
 
   render() {
@@ -190,8 +200,40 @@ class SignupAdvanced extends React.Component {
     );
   }
 
-  onButSignup() {
-    this.props.setUserInfo(new User());
+  async onButSignup() {
+    // show loading
+    this.loadingHUD.show('Signing up ...');
+
+    try {
+      const user = await AuthService.signUp(
+        this.userNew.firstName,
+        this.userNew.lastName,
+        this.userNew.email,
+        this.userNew.password,
+        this.userNew.type,
+        this.state.genderIndex,
+        this.state.state,
+        this.state.city,
+        this.state.zipCode,
+        this.photoFile
+          ? {
+              name: 'photo.jpg',
+              type: this.photoFile.type,
+              uri:
+                Platform.OS === 'android'
+                  ? this.photoFile.uri
+                  : this.photoFile.uri.replace('file://', ''),
+            }
+          : null,
+      );
+
+      await this.setUser(user);
+    } catch (e) {
+      Alert.alert('Login Failed', e.message);
+    }
+
+    // hide loading
+    this.loadingHUD.hideAll();
   }
 
   onFocusZip() {

@@ -13,6 +13,7 @@ import ScheduleSelect from '../../screens/schedule/ScheduleSelect';
 import Messaging from '../../screens/messaging/Messaging';
 import SettingProfile from '../../screens/settings/setting-profile/SettingProfile';
 import Championships from '../../screens/championships/Championships';
+import {UserHelper} from '../../helpers/user-helper';
 
 class MenuModal extends React.Component {
   static propTypes = {
@@ -178,8 +179,10 @@ class MenuModal extends React.Component {
   }
 
   onLogout() {
-    this.props.setUserInfo(null);
-    this.props.onDismiss();
+    UserHelper.getInstance().onLogout(() => {
+      this.props.setUserInfo(null);
+      this.props.onDismiss();
+    });
   }
 }
 

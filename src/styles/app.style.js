@@ -123,4 +123,8 @@ export const stylesApp = StyleSheet.create({
   input: {
     borderBottomWidth: 0,
   },
+
+  semiTrans: {
+    opacity: 0.7,
+  },
 });
