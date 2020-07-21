@@ -14,12 +14,21 @@ import Messaging from '../../screens/messaging/Messaging';
 import SettingProfile from '../../screens/settings/setting-profile/SettingProfile';
 import Championships from '../../screens/championships/Championships';
 import {UserHelper} from '../../helpers/user-helper';
+import FastImage from 'react-native-fast-image';
 
 class MenuModal extends React.Component {
   static propTypes = {
     visible: PropTypes.bool,
     onMenuItem: PropTypes.func,
   };
+
+  currentUser = null;
+
+  constructor(props) {
+    super(props);
+
+    this.currentUser = props.UserReducer.user;
+  }
 
   render() {
     return (
@@ -44,15 +53,15 @@ class MenuModal extends React.Component {
 
           {/* photo */}
           <View style={styles.viewPhoto}>
-            <Image
+            <FastImage
               style={styles.imgPhoto}
-              source={require('../../../assets/imgs/user_default.png')}
+              source={UserHelper.getUserImage(this.props.UserReducer.user)}
             />
           </View>
 
           {/* name */}
           <View style={styles.viewName}>
-            <Text style={styles.txtName}>John Dancer</Text>
+            <Text style={styles.txtName}>{this.currentUser.getFullName()}</Text>
           </View>
 
           {/* menu */}

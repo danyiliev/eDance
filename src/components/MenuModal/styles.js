@@ -20,7 +20,6 @@ export const styles = StyleSheet.create({
   viewPhoto: {
     height: 240,
     backgroundColor: colorTheme.backgroundGrey,
-    alignItems: 'center',
   },
   imgPhoto: {
     height: 240,

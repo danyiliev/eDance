@@ -56,4 +56,12 @@ export class User extends BaseModel {
     // file name
     return `${ApiService.urlImgUser}/${this.photo}`;
   }
+
+  getFullName() {
+    if (!this.firstName || !this.lastName) {
+      return 'Unnamed';
+    }
+
+    return `${this.firstName} ${this.lastName}`;
+  }
 }

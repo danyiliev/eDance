@@ -16,12 +16,13 @@ import {User} from '../../models/user.model';
 import {LoadingHUD} from 'react-native-hud-hybrid';
 import {AuthService} from '../../services';
 import {BaseAuth} from '../base-auth';
+import {Utils} from '../../helpers/utils';
 
 class Login extends BaseAuth {
   static NAV_NAME = 'login';
 
   state = {
-    username: '',
+    email: '',
     password: '',
   };
 
@@ -43,21 +44,21 @@ class Login extends BaseAuth {
           />
 
           <View style={styles.viewContent}>
-            {/* username */}
+            {/* email */}
             <Input
               containerStyle={styles.ctnInput}
               autoCapitalize={'none'}
               keyboardType="email-address"
               returnKeyType="next"
-              placeholder="Username"
+              placeholder="Email"
               placeholderTextColor={colorTheme.primary}
               inputStyle={styles.input}
               inputContainerStyle={styles.inputCtn}
               autoCorrect={false}
               blurOnSubmit={false}
-              value={this.state.username}
-              onChangeText={(username) => {
-                this.setState({username});
+              value={this.state.email}
+              onChangeText={(email) => {
+                this.setState({email});
               }}
               onSubmitEditing={() => {
                 this.inputPassword.focus();
@@ -132,8 +133,13 @@ class Login extends BaseAuth {
 
   async onButSignin() {
     // check validity
-    if (!this.state.username) {
-      Alert.alert('Invalid Username', 'Username cannot be empty');
+    if (!this.state.email) {
+      Alert.alert('Invalid Email', 'Email cannot be empty');
+      return;
+    }
+
+    if (!Utils.isEmailValid(this.state.email)) {
+      Alert.alert('Invalid Email', 'Please input the correct email address');
       return;
     }
 
@@ -147,7 +153,7 @@ class Login extends BaseAuth {
 
     try {
       let user = await AuthService.signIn(
-        this.state.username,
+        this.state.email,
         this.state.password,
       );
 
