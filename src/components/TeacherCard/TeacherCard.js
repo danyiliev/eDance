@@ -6,9 +6,11 @@ import {stylesApp, styleUtil} from '../../styles/app.style';
 import FastImage from 'react-native-fast-image';
 import {colors as colorTheme} from '../../styles/theme.style';
 import PropTypes from 'prop-types';
+import {UserHelper} from '../../helpers/user-helper';
 
 export default class TeacherCard extends React.Component {
   static propTypes = {
+    user: PropTypes.object,
     onReview: PropTypes.func,
     onSchedule: PropTypes.func,
   };
@@ -19,12 +21,12 @@ export default class TeacherCard extends React.Component {
         {/* photo */}
         <FastImage
           style={styles.imgUser}
-          source={require('../../../assets/imgs/user_default.png')}
+          source={UserHelper.getUserImage(this.props.user)}
           resizeMode={FastImage.resizeMode.cover}
         />
 
         {/* name */}
-        <Text style={styles.txtName}>John Dancer</Text>
+        <Text style={styles.txtName}>{this.props.user.getFullName()}</Text>
 
         {/* star rating */}
         <Rating

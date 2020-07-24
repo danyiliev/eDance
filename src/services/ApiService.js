@@ -41,6 +41,16 @@ class ApiService {
     this.token = token;
   }
 
+  baseHeader() {
+    if (!this.token) {
+      return {};
+    }
+
+    return {
+      token: this.token,
+    };
+  }
+
   async checkEmailExisting(email) {
     const params = {
       email: email,
@@ -97,6 +107,38 @@ class ApiService {
       this.setHeaderToken(data.token);
 
       return Promise.resolve(user);
+    } catch (e) {
+      console.log(e);
+
+      return Promise.reject(e.response.data);
+    }
+  }
+
+  async getUsers(from, count, types) {
+    let params = {
+      from: from,
+      count: count,
+      types: types,
+    };
+
+    try {
+      const options = {
+        params: params,
+        headers: {
+          ...this.baseHeader(),
+        },
+      };
+
+      const {data} = await Axios.get(`${this.baseUrl}/users/all`, options);
+      console.log(data);
+
+      const users = [];
+      for (const obj of data) {
+        const u = new User().initFromObject(obj);
+        users.push(u);
+      }
+
+      return Promise.resolve(users);
     } catch (e) {
       console.log(e);
 

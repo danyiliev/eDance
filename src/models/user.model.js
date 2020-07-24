@@ -7,13 +7,19 @@ export class User extends BaseModel {
   static TYPE_ADJUDICATOR = 3;
   static TYPE_ADMIN = 0;
 
+  static GENDERS = ['Male', 'Female'];
+
   //
   // properties
   //
   firstName = '';
   lastName = '';
   email = '';
-  address = '';
+
+  gender = 0;
+  state = '';
+  city = '';
+  zipCode = '';
 
   password = '';
 
@@ -31,9 +37,19 @@ export class User extends BaseModel {
     if (data.lastName) {
       this.lastName = data.lastName;
     }
-    if (data.address) {
-      this.address = data.address;
+    if (data.gender) {
+      this.gender = data.gender;
     }
+    if (data.state) {
+      this.state = data.state;
+    }
+    if (data.city) {
+      this.city = data.city;
+    }
+    if (data.zipCode) {
+      this.zipCode = data.zipCode;
+    }
+
     if (data.type) {
       this.type = data.type;
     }

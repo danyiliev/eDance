@@ -35,7 +35,6 @@ class SignupAdvanced extends BaseSignup {
   };
 
   userNew: User = null;
-  genders = ['Male', 'Female'];
 
   constructor(props) {
     super(props);
@@ -66,7 +65,7 @@ class SignupAdvanced extends BaseSignup {
 
                 <ButtonGroup
                   containerStyle={styles.ctnSegmentGender}
-                  buttons={this.genders}
+                  buttons={User.GENDERS}
                   textStyle={styles.txtSegment}
                   innerBorderStyle={styles.borderSegment}
                   selectedButtonStyle={styles.butSegmentSelected}
