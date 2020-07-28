@@ -16,7 +16,7 @@ import ForgetCode from './forget/ForgetCode';
 import ForgetReset from './forget/ForgetReset';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Radio from './tabs/radio/Radio';
-import TabMain, {renderMenuButton} from './tabs/tabs';
+import TabMain, {renderMenuButton, renderRightButton} from './tabs/tabs';
 import {styles as stylesTab} from './tabs/styles';
 import ImageScale from 'react-native-scalable-image';
 import {Button} from 'react-native-elements';
@@ -38,6 +38,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import {CURRENT_USER} from '../constants/storage-key';
 import {User} from '../models/user.model';
 import {ApiService} from '../services';
+import Profile from './profile/Profile';
 
 const Stack = createStackNavigator();
 
@@ -92,6 +93,8 @@ class MainNavigator extends React.Component {
                 options={{
                   headerLeft: () =>
                     renderMenuButton(this.onClickMenu.bind(this)),
+                  headerRight: () =>
+                    renderRightButton(this.navigationRef?.current),
                 }}
               />
               <Stack.Screen name={Intro.NAV_NAME} component={Intro} />
@@ -123,6 +126,7 @@ class MainNavigator extends React.Component {
                 name={Championships.NAV_NAME}
                 component={Championships}
               />
+              <Stack.Screen name={Profile.NAV_NAME} component={Profile} />
             </Stack.Navigator>
 
             <MenuModal

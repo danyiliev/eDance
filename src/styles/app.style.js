@@ -127,4 +127,8 @@ export const stylesApp = StyleSheet.create({
   semiTrans: {
     opacity: 0.7,
   },
+
+  viewHeaderRight: {
+    paddingHorizontal: 12,
+  },
 });

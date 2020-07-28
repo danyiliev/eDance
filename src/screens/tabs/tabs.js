@@ -17,6 +17,7 @@ import {Button, Icon} from 'react-native-elements';
 import MenuModal from '../../components/MenuModal/MenuModal';
 import {stylesApp} from '../../styles/app.style';
 import SplashScreen from 'react-native-splash-screen';
+import Profile from '../profile/Profile';
 
 const Tab = createBottomTabNavigator();
 
@@ -32,6 +33,19 @@ export function renderMenuButton(onPress) {
         />
       }
       onPress={onPress}
+    />
+  );
+}
+
+export function renderRightButton(navigation) {
+  return (
+    <Button
+      type="clear"
+      buttonStyle={stylesTab.butHeaderLeft}
+      icon={<Icon type="font-awesome" name="user-o" size={16} />}
+      onPress={() => {
+        navigation.navigate(Profile.NAV_NAME);
+      }}
     />
   );
 }
