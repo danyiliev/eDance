@@ -168,37 +168,6 @@ class SignupAdvanced extends BaseSignup {
     );
   }
 
-  renderSelectStatePicker() {
-    return (
-      <SelectPicker
-        isVisible={this.state.showStatePicker}
-        contentStyle={styles.picker}
-        onDismiss={(done) => this.dismissState(done)}>
-        <Picker
-          selectedValue={
-            Platform.OS === 'ios' ? this.state.stateSelected : this.state.state
-          }
-          onValueChange={(itemValue, itemIndex) => {
-            if (Platform.OS === 'ios') {
-              this.setState({
-                stateSelected: itemValue,
-              });
-            } else {
-              this.setState({
-                state: itemValue,
-              });
-            }
-          }}>
-          {STATES.map((s, i) => {
-            return (
-              <Picker.Item key={i.toString()} label={s.Name} value={s.value} />
-            );
-          })}
-        </Picker>
-      </SelectPicker>
-    );
-  }
-
   async onButSignup() {
     // show loading
     this.loadingHUD.show('Signing up ...');
@@ -240,32 +209,6 @@ class SignupAdvanced extends BaseSignup {
   }
   onFocusCity() {
     this.keyboardView.moveMainView(20);
-  }
-
-  /**
-   * state select picker
-   */
-  dismissState(done) {
-    this.setState({
-      showStatePicker: false,
-    });
-
-    let {stateSelected} = this.state;
-    if (!stateSelected) {
-      // default is the first one
-      stateSelected = STATES[0].value;
-    }
-
-    // update date value based on done/canceled
-    if (done) {
-      this.setState({
-        state: stateSelected,
-      });
-    } else {
-      this.setState({
-        stateSelected: this.state.state,
-      });
-    }
   }
 }
 

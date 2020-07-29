@@ -39,6 +39,7 @@ import {CURRENT_USER} from '../constants/storage-key';
 import {User} from '../models/user.model';
 import {ApiService} from '../services';
 import Profile from './profile/Profile';
+import EditProfile from './profile/edit-profile/EditProfile';
 
 const Stack = createStackNavigator();
 
@@ -127,6 +128,10 @@ class MainNavigator extends React.Component {
                 component={Championships}
               />
               <Stack.Screen name={Profile.NAV_NAME} component={Profile} />
+              <Stack.Screen
+                name={EditProfile.NAV_NAME}
+                component={EditProfile}
+              />
             </Stack.Navigator>
 
             <MenuModal

@@ -9,6 +9,7 @@ import {connect} from 'react-redux';
 import {setUserInfo} from '../../actions/user';
 import PostItem from '../../components/PostItem/PostItem';
 import {stylesApp} from '../../styles/app.style';
+import EditProfile from './edit-profile/EditProfile';
 
 class Profile extends React.Component {
   static NAV_NAME = 'profile';
@@ -84,6 +85,7 @@ class Profile extends React.Component {
 
   onButEdit() {
     // go to edit profile page
+    this.props.navigation.push(EditProfile.NAV_NAME);
   }
 }
 
