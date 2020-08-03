@@ -6,20 +6,21 @@ import {styleUtil} from '../../styles/app.style';
 import {Button, Icon} from 'react-native-elements';
 import {styles} from './styles';
 
-const checkboxWidth = 28;
-
 export default class CheckboxRound extends React.Component {
   static propTypes = {
     label: PropTypes.string,
     checked: PropTypes.bool,
     onPress: PropTypes.func,
     containerStyle: PropTypes.object,
+    checkboxWidth: PropTypes.number,
   };
 
   render() {
+    const checkboxWidth = this.props.checkboxWidth ?? 28;
+
     return (
-      <TouchableOpacity onPress={this.props.onPress}>
-        <View style={{...styles.viewContainer, ...this.props.containerStyle}}>
+      <TouchableOpacity onPress={this.props.onPress} style={this.props.containerStyle}>
+        <View style={{...styles.viewContainer}}>
           <Text style={styles.txtLabel}>{this.props.label}</Text>
 
           <View
@@ -37,7 +38,7 @@ export default class CheckboxRound extends React.Component {
               <Icon
                 type="ionicon"
                 name="md-checkmark"
-                size={18}
+                size={(18 / 28) * checkboxWidth}
                 iconStyle={styles.icnCheck}
                 color={colorTheme.light}
               />

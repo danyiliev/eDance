@@ -20,6 +20,7 @@ import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import SelectPicker from '../../../components/SelectPicker/SelectPicker';
 import {Picker} from '@react-native-community/picker';
 import {STATES} from '../../../constants/constant-data';
+import TagItem from '../../../components/TagItem/TagItem';
 
 const {width: SCREEN_WDITH} = Dimensions.get('window');
 
@@ -27,22 +28,10 @@ export default class SettingProfile extends React.Component {
   static NAV_NAME = 'setting-profile';
 
   state = {
-    // ui
-    showStatePicker: false,
-    stateSelected: '', // for iOS only
-
     // data
-    genderIndex: 0,
-    firstName: '',
-    lastName: '',
-    typeIndex: 0,
-    singleIndex: 0,
     levelIndex: 0,
 
-    email: '',
-    phone: '',
-    state: '',
-    address: '',
+    price: '',
   };
 
   genders = ['Male', 'Female'];
@@ -75,207 +64,172 @@ export default class SettingProfile extends React.Component {
     return (
       <KeyboardAwareScrollView style={stylesApp.viewContainer}>
         <View style={styles.viewContent}>
-          {/* profile */}
-          <View style={stylesSignup.viewForm}>
-            {/* title */}
-            <Text style={[stylesSignup.txtItemTitle, stylesApp.mt6]}>
-              Profile Name
-            </Text>
+          {this.renderTeacherSetting()}
 
-            <ButtonGroup
-              containerStyle={stylesSignup.ctnSegmentGender}
-              buttons={this.genders}
-              textStyle={stylesSignup.txtSegment}
-              innerBorderStyle={stylesSignup.borderSegment}
-              selectedButtonStyle={stylesSignup.butSegmentSelected}
-              selectedTextStyle={stylesSignup.SegmentSelected}
-              selectedIndex={this.state.genderIndex}
-              onPress={(index) => this.setState({genderIndex: index})}
-            />
-
-            {/* first name */}
-            <Input
-              containerStyle={[stylesLogin.ctnInput, stylesApp.mt24]}
-              returnKeyType="next"
-              placeholder="First Name"
-              placeholderTextColor={colorTheme.primary}
-              inputStyle={styles.input}
-              inputContainerStyle={stylesLogin.inputCtn}
-              value={this.state.firstName}
-              onChangeText={(firstName) => {
-                this.setState({firstName});
-              }}
-              onSubmitEditing={() => {
-                this.inputLastName.focus();
-              }}
-              blurOnSubmit={false}
-              renderErrorMessage={false}
-            />
-
-            {/* last name */}
-            <Input
-              ref={(input) => {
-                this.inputLastName = input;
-              }}
-              containerStyle={[stylesLogin.ctnInput, stylesApp.mt12]}
-              returnKeyType="done"
-              placeholder="Last Name"
-              placeholderTextColor={colorTheme.primary}
-              inputStyle={styles.input}
-              inputContainerStyle={stylesLogin.inputCtn}
-              value={this.state.lastName}
-              onChangeText={(lastName) => {
-                this.setState({lastName});
-              }}
-              renderErrorMessage={false}
-            />
-
-            {this.renderTypes()}
-
-            <ButtonGroup
-              containerStyle={[
-                stylesSignup.ctnSegmentGender,
-                styles.segmentSingle,
-              ]}
-              buttons={this.singles}
-              textStyle={stylesSignup.txtSegment}
-              innerBorderStyle={stylesSignup.borderSegment}
-              selectedButtonStyle={stylesSignup.butSegmentSelected}
-              selectedTextStyle={stylesSignup.SegmentSelected}
-              selectedIndex={this.state.singleIndex}
-              onPress={(index) => this.setState({singleIndex: index})}
-            />
-          </View>
-
-          {/* contact */}
-          <View style={[stylesSignup.viewForm, stylesApp.mt14]}>
-            {/* title */}
-            <Text style={[stylesSignup.txtItemTitle, stylesApp.mt6]}>
-              Contacts
-            </Text>
-
-            {/* email address */}
-            <View style={[styles.viewInput, stylesApp.mt20]}>
-              <Input
-                containerStyle={styles.ctnInput}
-                autoCapitalize={'none'}
-                keyboardType="email-address"
-                returnKeyType="done"
-                placeholder="Email Address"
-                placeholderTextColor={colorTheme.primary}
-                inputStyle={styles.input}
-                inputContainerStyle={stylesApp.input}
-                onChangeText={(email) => {
-                  this.setState({email});
-                }}
-                value={this.state.email}
-                renderErrorMessage={false}
-              />
-              {/* right icon */}
-              <ImageScale
-                width={14}
-                source={require('../../../../assets/imgs/ic_input_email.png')}
-              />
-            </View>
-
-            {/* phone */}
-            <View style={[styles.viewInput, stylesApp.mt12]}>
-              <Input
-                containerStyle={styles.ctnInput}
-                autoCapitalize={'none'}
-                keyboardType="number-pad"
-                returnKeyType="done"
-                placeholder="Phone Number"
-                placeholderTextColor={colorTheme.primary}
-                inputStyle={styles.input}
-                inputContainerStyle={stylesApp.input}
-                onChangeText={(phone) => {
-                  this.setState({phone});
-                }}
-                value={this.state.phone}
-                renderErrorMessage={false}
-              />
-              {/* right icon */}
-              <ImageScale
-                width={14}
-                source={require('../../../../assets/imgs/ic_input_phone.png')}
-              />
-            </View>
-
-            {/* state select */}
-            <View style={[styles.viewInput, stylesApp.mt12]}>
-              <TouchableOpacity
-                style={stylesApp.flex1}
-                onPress={() => this.setState({showStatePicker: true})}>
-                {/* text */}
-                <Text style={styles.input}>
-                  {this.state.state ? this.state.state : 'State'}
-                </Text>
-              </TouchableOpacity>
-
-              {/* icon */}
-              <ImageScale
-                width={14}
-                source={require('../../../../assets/imgs/ic_input_state.png')}
-              />
-            </View>
-
-            {/* phone */}
-            <View style={[styles.viewInput, stylesApp.mt12]}>
-              <Input
-                containerStyle={styles.ctnInput}
-                placeholder="Address"
-                multiline
-                placeholderTextColor={colorTheme.primary}
-                inputStyle={styles.input}
-                inputContainerStyle={stylesApp.input}
-                onChangeText={(address) => {
-                  this.setState({address});
-                }}
-                value={this.state.address}
-                renderErrorMessage={false}
-              />
-              {/* right icon */}
-              <ImageScale
-                width={9}
-                source={require('../../../../assets/imgs/ic_input_address.png')}
-              />
-            </View>
-          </View>
-
-          {/* contact */}
-          <View style={[stylesSignup.viewForm, stylesApp.mt14]}>
-            {/* title */}
-            <Text style={[stylesSignup.txtItemTitle, stylesApp.mt6]}>
-              Dance Level Program
-            </Text>
-
-            {this.renderLevels()}
-          </View>
-
-          {/* next */}
-          <View style={styles.viewButNext}>
+          {/* save */}
+          <View style={[styleUtil.withShadow(), styles.viewButSave]}>
             <Button
-              title="CONTINUE"
+              title="SAVE"
               buttonStyle={stylesApp.butPrimary}
               titleStyle={stylesApp.titleButPrimary}
-              onPress={() => this.onButNext()}
-              icon={
-                <Icon
-                  type="ionicon"
-                  name="md-arrow-forward"
-                  containerStyle={stylesSignup.ctnButIcon}
-                  size={22}
-                  color={colorTheme.light}
-                />
-              }
-              iconRight={true}
+              onPress={() => this.onButSave()}
             />
           </View>
         </View>
-
-        {this.renderSelectStatePicker()}
       </KeyboardAwareScrollView>
+    );
+  }
+
+  renderTeacherSetting() {
+    return (
+      <View>
+        <Text style={styles.txtLabel}>Lesson Options You Teach:</Text>
+
+        {/* age groups */}
+        <TouchableOpacity onPress={() => this.onSelectAge()}>
+          <View style={styles.viewListItem}>
+            <Text style={styles.txtItem}>Select Age Groups</Text>
+
+            {/* chevron */}
+            <Icon
+              type="ionicon"
+              name="ios-arrow-forward"
+              size={18}
+              color={colorTheme.primary}
+            />
+          </View>
+        </TouchableOpacity>
+
+        {/*tags of age group */}
+        <View style={styles.viewTapContainer}>
+          <TagItem text={'asdf'}></TagItem>
+          <TagItem text={'asdf'}></TagItem>
+        </View>
+
+        {/* levels */}
+        <View style={[styles.viewForm, stylesApp.mt14]}>
+          {/* title */}
+          <Text style={[stylesSignup.txtItemTitle, stylesApp.mt6]}>
+            Dance Level
+          </Text>
+
+          {this.renderLevels()}
+        </View>
+
+        <Text style={[stylesSignup.txtItemTitle, stylesApp.mt14]}>
+          Dance Styles & Dances
+        </Text>
+
+        {/* american ballroom */}
+        <TouchableOpacity onPress={() => this.onSelectStyle()}>
+          <View style={{...styles.viewListItem, ...stylesApp.mt14}}>
+            <Text style={styles.txtItem}>American Ballroom</Text>
+
+            {/* chevron */}
+            <Icon
+              type="ionicon"
+              name="ios-arrow-forward"
+              size={18}
+              color={colorTheme.primary}
+            />
+          </View>
+        </TouchableOpacity>
+
+        {/* tags */}
+        <View style={styles.viewTapContainer}>
+          <TagItem text={'asdf'}></TagItem>
+          <TagItem text={'asdf'}></TagItem>
+        </View>
+
+        {/* american rhythm */}
+        <TouchableOpacity onPress={() => this.onSelectStyle()}>
+          <View style={{...styles.viewListItem, ...stylesApp.mt12}}>
+            <Text style={styles.txtItem}>American Rhythm</Text>
+
+            {/* chevron */}
+            <Icon
+              type="ionicon"
+              name="ios-arrow-forward"
+              size={18}
+              color={colorTheme.primary}
+            />
+          </View>
+        </TouchableOpacity>
+
+        {/* tags */}
+        <View style={styles.viewTapContainer}>
+          <TagItem text={'asdf'}></TagItem>
+          <TagItem text={'asdf'}></TagItem>
+        </View>
+
+        {/* standard */}
+        <TouchableOpacity onPress={() => this.onSelectStyle()}>
+          <View style={{...styles.viewListItem, ...stylesApp.mt12}}>
+            <Text style={styles.txtItem}>Standard</Text>
+
+            {/* chevron */}
+            <Icon
+              type="ionicon"
+              name="ios-arrow-forward"
+              size={18}
+              color={colorTheme.primary}
+            />
+          </View>
+        </TouchableOpacity>
+
+        {/* tags */}
+        <View style={styles.viewTapContainer}>
+          <TagItem text={'asdf'}></TagItem>
+          <TagItem text={'asdf'}></TagItem>
+        </View>
+
+        {/* latin */}
+        <TouchableOpacity onPress={() => this.onSelectStyle()}>
+          <View style={{...styles.viewListItem, ...stylesApp.mt12}}>
+            <Text style={styles.txtItem}>Latin</Text>
+
+            {/* chevron */}
+            <Icon
+              type="ionicon"
+              name="ios-arrow-forward"
+              size={18}
+              color={colorTheme.primary}
+            />
+          </View>
+        </TouchableOpacity>
+
+        {/* tags */}
+        <View style={styles.viewTapContainer}>
+          <TagItem text={'asdf'}></TagItem>
+          <TagItem text={'asdf'}></TagItem>
+        </View>
+
+        {/* price */}
+        <View style={[styles.viewForm, stylesApp.mt14]}>
+          <Text style={[stylesSignup.txtItemTitle, stylesApp.mt6]}>Price</Text>
+
+          {/* phone */}
+          <View style={[styles.viewInput, stylesApp.mt12]}>
+            <Input
+              containerStyle={styles.ctnInput}
+              autoCapitalize={'none'}
+              keyboardType="numeric"
+              returnKeyType="done"
+              placeholder="Input Price"
+              placeholderTextColor={colorTheme.primary}
+              inputStyle={styles.input}
+              inputContainerStyle={stylesApp.input}
+              onChangeText={(price) => {
+                this.setState({price});
+              }}
+              value={this.state.phone}
+              renderErrorMessage={false}
+            />
+            {/* right icon */}
+            <Icon color={'#cecece'} type="font-awesome" name="usd" size={16} />
+          </View>
+        </View>
+      </View>
     );
   }
 
@@ -301,82 +255,150 @@ export default class SettingProfile extends React.Component {
     );
   }
 
-  renderSelectStatePicker() {
-    return (
-      <SelectPicker
-        isVisible={this.state.showStatePicker}
-        contentStyle={stylesSignup.picker}
-        onDismiss={(done) => this.dismissState(done)}>
-        <Picker
-          selectedValue={
-            Platform.OS === 'ios' ? this.state.stateSelected : this.state.state
-          }
-          onValueChange={(itemValue, itemIndex) => {
-            if (Platform.OS === 'ios') {
-              this.setState({
-                stateSelected: itemValue,
-              });
-            } else {
-              this.setState({
-                state: itemValue,
-              });
-            }
-          }}>
-          {STATES.map((s, i) => {
-            return (
-              <Picker.Item key={i.toString()} label={s.Name} value={s.value} />
-            );
-          })}
-        </Picker>
-      </SelectPicker>
-    );
-  }
-
-  /**
-   * state select picker
-   */
-  dismissState(done) {
-    this.setState({
-      showStatePicker: false,
-    });
-
-    let {stateSelected} = this.state;
-    if (!stateSelected) {
-      // default is the first one
-      stateSelected = STATES[0].value;
-    }
-
-    // update date value based on done/canceled
-    if (done) {
-      this.setState({
-        state: stateSelected,
-      });
-    } else {
-      this.setState({
-        stateSelected: this.state.state,
-      });
-    }
-  }
-
   renderLevels() {
-    const itemWidth = (SCREEN_WDITH - 14 * 4) / 3;
+    const spacing = 14;
 
     return (
-      <View style={styles.viewLevels}>
-        {this.levels.map((s, i) => {
-          return (
+      <View>
+        <Text style={styles.txtFormLabel}>Closed</Text>
+        <View style={styles.viewLevels}>
+          {/* beginner */}
+          <CheckboxRound
+            label="Newcomer"
+            checked={false}
+            onPress={() => this.onSelectLevel()}
+          />
+
+          <View style={stylesApp.flexRow}>
+            {[1, 2, 3].map((s, i) => {
+              return (
+                <CheckboxRound
+                  containerStyle={{
+                    flex: 1,
+                    paddingLeft: i % 3 !== 0 ? spacing / 2 : 0,
+                    paddingRight: i % 3 !== 2 ? spacing / 2 : 0,
+                  }}
+                  label={`Bronze ${s}`}
+                  checked={false}
+                  onPress={() => this.onSelectLevel()}
+                />
+              );
+            })}
+          </View>
+
+          <View style={stylesApp.flexRow}>
+            {[1, 2, 3].map((s, i) => {
+              return (
+                <CheckboxRound
+                  containerStyle={{
+                    flex: 1,
+                    paddingLeft: i % 3 !== 0 ? spacing / 2 : 0,
+                    paddingRight: i % 3 !== 2 ? spacing / 2 : 0,
+                  }}
+                  label={`Silver ${s}`}
+                  checked={false}
+                  onPress={() => this.onSelectLevel()}
+                />
+              );
+            })}
+          </View>
+
+          <View style={stylesApp.flexRow}>
+            {[1, 2, 3].map((s, i) => {
+              return (
+                <CheckboxRound
+                  containerStyle={{
+                    flex: 1,
+                    paddingLeft: i % 3 !== 0 ? spacing / 2 : 0,
+                    paddingRight: i % 3 !== 2 ? spacing / 2 : 0,
+                  }}
+                  label={`Gold ${s}`}
+                  checked={false}
+                  onPress={() => this.onSelectLevel()}
+                />
+              );
+            })}
+          </View>
+
+          {/* advanced */}
+          <CheckboxRound
+            label="Gold Advanced"
+            checked={false}
+            onPress={() => this.onSelectLevel()}
+          />
+        </View>
+
+        <Text style={styles.txtFormLabel}>Open</Text>
+        <View style={styles.viewLevels}>
+          <View style={stylesApp.flexRow}>
+            {/* pre-bronze */}
             <CheckboxRound
+              label="Pre-Bronze"
+              checked={false}
               containerStyle={{
-                width: itemWidth,
-                paddingLeft: i % 3 !== 0 ? 14 : 0,
-                paddingRight: i % 3 !== 2 ? 14 : 0,
+                flex: 1,
+                paddingRight: spacing,
               }}
-              label={s}
-              checked={this.state.levelIndex === i}
-              onPress={() => this.onSelectLevel(i)}
+              onPress={() => this.onSelectLevel()}
             />
-          );
-        })}
+            {/* bronze */}
+            <CheckboxRound
+              label="Bronze"
+              checked={false}
+              containerStyle={{
+                flex: 1,
+                paddingLeft: spacing,
+              }}
+              onPress={() => this.onSelectLevel()}
+            />
+          </View>
+
+          <View style={stylesApp.flexRow}>
+            {/* pre-silver */}
+            <CheckboxRound
+              label="Pre-Silver"
+              checked={false}
+              containerStyle={{
+                flex: 1,
+                paddingRight: spacing,
+              }}
+              onPress={() => this.onSelectLevel()}
+            />
+            {/* silver */}
+            <CheckboxRound
+              label="Silver"
+              checked={false}
+              containerStyle={{
+                flex: 1,
+                paddingLeft: spacing,
+              }}
+              onPress={() => this.onSelectLevel()}
+            />
+          </View>
+
+          <View style={stylesApp.flexRow}>
+            {/* gold */}
+            <CheckboxRound
+              label="Gold"
+              checked={false}
+              containerStyle={{
+                flex: 1,
+                paddingRight: spacing,
+              }}
+              onPress={() => this.onSelectLevel()}
+            />
+            {/* gold advanced */}
+            <CheckboxRound
+              label="Gold Advanced"
+              checked={false}
+              containerStyle={{
+                flex: 1,
+                paddingLeft: spacing,
+              }}
+              onPress={() => this.onSelectLevel()}
+            />
+          </View>
+        </View>
       </View>
     );
   }
@@ -393,4 +415,13 @@ export default class SettingProfile extends React.Component {
   }
 
   onButNext() {}
+
+  onSelectAge() {
+  }
+
+  onSelectStyle() {
+  }
+
+  onButSave() {
+  }
 }

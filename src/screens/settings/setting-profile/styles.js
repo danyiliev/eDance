@@ -2,6 +2,7 @@ import {StyleSheet} from 'react-native';
 import {colors as colorTheme} from '../../../styles/theme.style';
 import {stylesApp, styleUtil} from '../../../styles/app.style';
 import {styles as stylesLogin} from '../../login/styles';
+import {color} from 'react-native-reanimated';
 
 export const styles = StyleSheet.create({
   txtItemTitle: {
@@ -11,7 +12,7 @@ export const styles = StyleSheet.create({
   },
 
   viewContent: {
-    marginVertical: 14,
+    padding: 14,
   },
 
   viewDivider: {
@@ -39,14 +40,51 @@ export const styles = StyleSheet.create({
   },
 
   viewLevels: {
-    marginTop: 14,
-    ...stylesApp.flexRow,
-    flexWrap: 'wrap',
   },
 
   viewButNext: {
     ...styleUtil.withShadow(),
     marginHorizontal: 30,
     marginVertical: 48,
+  },
+
+  viewListItem: {
+    ...stylesApp.flexRowCenter,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    backgroundColor: colorTheme.light,
+    ...styleUtil.withShadow(4),
+    borderRadius: 12,
+    marginBottom: 14,
+  },
+  txtItem: {
+    flex: 1,
+    fontSize: 14,
+    lineHeight: 25,
+  },
+
+  viewTapContainer: {
+    ...stylesApp.flexRow,
+    flexWrap: 'wrap',
+  },
+
+  txtLabel: {
+    color: colorTheme.grey,
+    marginBottom: 12,
+  },
+
+  viewForm: {
+    backgroundColor: colorTheme.backgroundGrey,
+    borderRadius: 12,
+    padding: 14,
+  },
+  txtFormLabel: {
+    marginVertical: 8,
+    fontWeight: 'bold',
+  },
+
+  viewButSave: {
+    marginVertical: 28,
+    marginHorizontal: 80,
   },
 });
