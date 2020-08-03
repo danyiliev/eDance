@@ -223,7 +223,7 @@ class EditProfile extends BaseSignup {
               />
             </View>
 
-            {/* next */}
+            {/* save */}
             <View style={[styleUtil.withShadow(), styles.viewButSave]}>
               <Button
                 title="SAVE"

@@ -38,6 +38,6 @@ export const styles = StyleSheet.create({
   txtAddNew: {
     marginLeft: 16,
     fontSize: 16,
-    color: colorTheme.grey,
+    color: colorTheme.darkGrey,
   },
 });

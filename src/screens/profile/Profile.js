@@ -10,6 +10,8 @@ import {setUserInfo} from '../../actions/user';
 import PostItem from '../../components/PostItem/PostItem';
 import {stylesApp} from '../../styles/app.style';
 import EditProfile from './edit-profile/EditProfile';
+import {colors as colorTheme} from '../../styles/theme.style';
+import AddPost from '../add-post/AddPost';
 
 class Profile extends React.Component {
   static NAV_NAME = 'profile';
@@ -62,12 +64,17 @@ class Profile extends React.Component {
           {/* name */}
           <Text style={styles.txtName}>{this.currentUser?.getFullName()}</Text>
         </View>
+
         {/* add new */}
-        <TouchableOpacity
-          activeOpacity={0.7}>
+        <TouchableOpacity activeOpacity={0.7} onPress={() => this.onNewPost()}>
           <View style={styles.viewAddNew}>
             <View style={styles.viewNewBut}>
-              <Icon color={'#cecece'} type="ionicon" name="md-add" size={60} />
+              <Icon
+                color={colorTheme.grey}
+                type="ionicon"
+                name="md-add"
+                size={60}
+              />
             </View>
 
             <Text style={styles.txtAddNew}>Add New Post</Text>
@@ -86,6 +93,11 @@ class Profile extends React.Component {
   onButEdit() {
     // go to edit profile page
     this.props.navigation.push(EditProfile.NAV_NAME);
+  }
+
+  onNewPost() {
+    // go to edit profile page
+    this.props.navigation.push(AddPost.NAV_NAME);
   }
 }
 

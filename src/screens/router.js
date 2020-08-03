@@ -40,6 +40,7 @@ import {User} from '../models/user.model';
 import {ApiService} from '../services';
 import Profile from './profile/Profile';
 import EditProfile from './profile/edit-profile/EditProfile';
+import AddPost from './add-post/AddPost';
 
 const Stack = createStackNavigator();
 
@@ -132,6 +133,7 @@ class MainNavigator extends React.Component {
                 name={EditProfile.NAV_NAME}
                 component={EditProfile}
               />
+              <Stack.Screen name={AddPost.NAV_NAME} component={AddPost} />
             </Stack.Navigator>
 
             <MenuModal
