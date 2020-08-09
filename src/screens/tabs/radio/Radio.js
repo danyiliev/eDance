@@ -8,6 +8,8 @@ import {VideoHelper} from '../../../helpers/video-helper';
 import FastImage from 'react-native-fast-image';
 import {Video} from '../../../models/video.model';
 import {stylesApp} from '../../../styles/app.style';
+import EditProfile from '../../profile/edit-profile/EditProfile';
+import RadioDetail from './radio-detail/RadioDetail';
 
 export default class Radio extends React.Component {
   static NAV_NAME = 'radio';
@@ -54,7 +56,9 @@ export default class Radio extends React.Component {
   renderItem(item, index) {
     return (
       <View style={styles.viewItem}>
-        <TouchableOpacity style={styles.viewItemContent}>
+        <TouchableOpacity
+          style={styles.viewItemContent}
+          onPress={() => this.onItem(item)}>
           <FastImage
             style={styles.imgItem}
             source={VideoHelper.getHeaderImage(item)}
@@ -155,5 +159,12 @@ export default class Radio extends React.Component {
     }
 
     this.loadData();
+  }
+
+  onItem(item) {
+    // go to radio detail page
+    this.props.navigation.push(RadioDetail.NAV_NAME, {
+      data: item,
+    });
   }
 }

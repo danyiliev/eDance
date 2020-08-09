@@ -41,6 +41,7 @@ import {ApiService} from '../services';
 import Profile from './profile/Profile';
 import EditProfile from './profile/edit-profile/EditProfile';
 import AddPost from './add-post/AddPost';
+import RadioDetail from './tabs/radio/radio-detail/RadioDetail';
 
 const Stack = createStackNavigator();
 
@@ -134,6 +135,7 @@ class MainNavigator extends React.Component {
                 component={EditProfile}
               />
               <Stack.Screen name={AddPost.NAV_NAME} component={AddPost} />
+              <Stack.Screen name={RadioDetail.NAV_NAME} component={RadioDetail} />
             </Stack.Navigator>
 
             <MenuModal

@@ -33,7 +33,9 @@ export class Video extends BaseModel {
   }
 
   getVideoUrl() {
-    return this.videoPath ? ApiService.urlFileBase + this.videoPath : '';
+    return this.videoPath
+      ? ApiService.urlFileBase + encodeURIComponent(this.videoPath)
+      : '';
   }
 
   getHeaderImageUrl() {
