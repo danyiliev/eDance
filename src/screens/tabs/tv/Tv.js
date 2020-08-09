@@ -7,6 +7,7 @@ import FastImage from 'react-native-fast-image';
 import {VideoHelper} from '../../../helpers/video-helper';
 import {ApiService} from '../../../services';
 import {Video} from '../../../models/video.model';
+import {stylesApp} from '../../../styles/app.style';
 
 export default class Tv extends React.Component {
   static NAV_NAME = 'tv';
@@ -35,6 +36,7 @@ export default class Tv extends React.Component {
         {this.renderHeader()}
 
         <FlatList
+          ListEmptyComponent={() => this.renderEmptyItem()}
           contentContainerStyle={stylesRadio.listCtnContainer}
           keyExtractor={(item, index) => index.toString()}
           onRefresh={() => this.onRefresh()}
@@ -91,6 +93,19 @@ export default class Tv extends React.Component {
             }
           />
         </View>
+      </View>
+    );
+  }
+
+  renderEmptyItem() {
+    // do not show anything when loading progress
+    if (this.state.showLoading) {
+      return null;
+    }
+
+    return (
+      <View style={stylesApp.viewLoading}>
+        <Text style={stylesRadio.textEmptyItem}>No tvs available yet</Text>
       </View>
     );
   }

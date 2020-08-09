@@ -7,6 +7,7 @@ import {ApiService} from '../../../services';
 import {VideoHelper} from '../../../helpers/video-helper';
 import FastImage from 'react-native-fast-image';
 import {Video} from '../../../models/video.model';
+import {stylesApp} from '../../../styles/app.style';
 
 export default class Radio extends React.Component {
   static NAV_NAME = 'radio';
@@ -35,6 +36,7 @@ export default class Radio extends React.Component {
         {this.renderHeader()}
 
         <FlatList
+          ListEmptyComponent={() => this.renderEmptyItem()}
           contentContainerStyle={styles.listCtnContainer}
           keyExtractor={(item, index) => index.toString()}
           onRefresh={() => this.onRefresh()}
@@ -91,6 +93,19 @@ export default class Radio extends React.Component {
             }
           />
         </View>
+      </View>
+    );
+  }
+
+  renderEmptyItem() {
+    // do not show anything when loading progress
+    if (this.state.showLoading) {
+      return null;
+    }
+
+    return (
+      <View style={stylesApp.viewLoading}>
+        <Text style={styles.textEmptyItem}>No radios available yet</Text>
       </View>
     );
   }

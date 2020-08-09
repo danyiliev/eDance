@@ -73,4 +73,8 @@ export const styles = StyleSheet.create({
     marginTop: 6,
     textAlign: 'center',
   },
+
+  textEmptyItem: {
+    color: colorTheme.grey,
+  }
 });
