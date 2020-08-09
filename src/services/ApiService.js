@@ -1,6 +1,7 @@
 import {config} from '../helpers/config';
 import Axios from 'axios';
 import {User} from '../models/user.model';
+import {Video} from '../models/video.model';
 
 class ApiService {
   // error codes
@@ -14,6 +15,8 @@ class ApiService {
 
   baseUrl = `${config.serverUrl}/api/v1`;
   urlImgUser = `${config.serverUrl}/static/uploads/imgs/users`;
+
+  urlFileBase = `https://${config.awsS3BucketName}.s3.${config.awsRegion}.amazonaws.com/`;
 
   async signIn(email: string, password: string) {
     const params = {
@@ -139,6 +142,44 @@ class ApiService {
       }
 
       return Promise.resolve(users);
+    } catch (e) {
+      console.log(e);
+
+      return Promise.reject(e.response.data);
+    }
+  }
+
+  async getVideos(from, count, type) {
+    let params = {
+      from: from,
+      count: count,
+    };
+
+    try {
+      const options = {
+        params: params,
+        headers: {
+          ...this.baseHeader(),
+        },
+      };
+
+      const {data} = await Axios.get(
+        type === Video.TYPE_TV
+          ? `${this.baseUrl}/video/tvs`
+          : `${this.baseUrl}/video/radios`,
+        options,
+      );
+      console.log(data);
+
+      const videos = [];
+      for (const obj of data) {
+        const v = new Video().initFromObject(obj);
+        v.type = type;
+
+        videos.push(v);
+      }
+
+      return Promise.resolve(videos);
     } catch (e) {
       console.log(e);
 

@@ -1,37 +1,32 @@
 import React from 'react';
-import DismissKeyboard from '../../../components/DismissKeyboard/DismissKeyboard';
 import {styles} from './styles';
-import {
-  Dimensions,
-  FlatList,
-  Image,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import {Utils} from '../../../helpers/utils';
+import {FlatList, Text, TouchableOpacity, View} from 'react-native';
 import {Button, Icon, SearchBar} from 'react-native-elements';
 import {colors as colorTheme} from '../../../styles/theme.style';
-import MenuModal from '../../../components/MenuModal/MenuModal';
+import {ApiService} from '../../../services';
+import {VideoHelper} from '../../../helpers/video-helper';
+import FastImage from 'react-native-fast-image';
+import {Video} from '../../../models/video.model';
 
 export default class Radio extends React.Component {
   static NAV_NAME = 'radio';
 
+  pageCount = 20;
+
   state = {
     // ui
-    showLoading: false,
-    redrawIndex: 0,
-  };
+    showLoading: true,
 
-  // data
-  channels = [];
+    // data
+    channels: [],
+  };
 
   constructor(props) {
     super(props);
+  }
 
-    // load data
-    for (let i = 0; i < 20; i++) {
-      this.channels.push({});
-    }
+  componentDidMount(): void {
+    this.loadData(true);
   }
 
   render() {
@@ -44,9 +39,11 @@ export default class Radio extends React.Component {
           keyExtractor={(item, index) => index.toString()}
           onRefresh={() => this.onRefresh()}
           refreshing={this.state.showLoading}
-          data={Utils.makeEmptyArray(this.channels.length)}
+          data={this.state.channels}
           renderItem={({item, index}) => this.renderItem(item, index)}
           numColumns={2}
+          onEndReached={() => this.onEndReached()}
+          onEndReachedThreshold={3}
         />
       </View>
     );
@@ -56,11 +53,14 @@ export default class Radio extends React.Component {
     return (
       <View style={styles.viewItem}>
         <TouchableOpacity style={styles.viewItemContent}>
-          <Image
+          <FastImage
             style={styles.imgItem}
-            source={require('../../../../assets/imgs/radio_default.png')}
+            source={VideoHelper.getHeaderImage(item)}
+            resizeMode={FastImage.resizeMode.cover}
           />
         </TouchableOpacity>
+
+        <Text style={styles.txtName}>{item.name}</Text>
       </View>
     );
   }
@@ -95,5 +95,50 @@ export default class Radio extends React.Component {
     );
   }
 
-  onRefresh() {}
+  onRefresh() {
+    this.loadData(true);
+  }
+
+  async loadData(continued = false) {
+    let indexFrom = 0;
+
+    if (!continued) {
+      // show loading mark
+      this.setState({
+        showLoading: true,
+      });
+
+      indexFrom = this.state.channels.length;
+    }
+
+    try {
+      let channels = await ApiService.getVideos(
+        indexFrom,
+        this.pageCount,
+        Video.TYPE_RADIO,
+      );
+
+      if (indexFrom > 0) {
+        // attach
+        channels = [...this.state.channels, ...channels];
+      }
+
+      this.setState({channels});
+    } catch (e) {
+      console.log(e);
+    }
+
+    this.setState({
+      showLoading: false,
+    });
+  }
+
+  onEndReached() {
+    // smaller than one page, no need to load again
+    if (this.state.channels.length < this.pageCount) {
+      return;
+    }
+
+    this.loadData();
+  }
 }

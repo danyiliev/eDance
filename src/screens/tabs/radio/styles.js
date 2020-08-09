@@ -16,22 +16,23 @@ export const styles = StyleSheet.create({
   },
 
   viewItem: {
-    ...styleUtil.withShadow(12, 0.5),
-    borderRadius: 12,
-    backgroundColor: colorTheme.light,
-    height: (SCREEN_WDITH - paddingItem * 6) / 2,
-    flex: 1,
+    flex: 0.5,
     margin: paddingItem,
   },
 
   viewItemContent: {
     flex: 1,
     padding: 6,
+    ...styleUtil.withShadow(12, 0.5),
+    borderRadius: 12,
+    backgroundColor: colorTheme.light,
+    height: (SCREEN_WDITH - paddingItem * 6) / 2,
   },
   imgItem: {
     flex: 1,
     width: '100%',
     resizeMode: 'contain',
+    backgroundColor: colorTheme.lightGrey,
   },
 
   searchCtn: {
@@ -66,5 +67,10 @@ export const styles = StyleSheet.create({
     borderRadius: 100,
     height: 40,
     width: 40,
+  },
+
+  txtName: {
+    marginTop: 6,
+    textAlign: 'center',
   },
 });
