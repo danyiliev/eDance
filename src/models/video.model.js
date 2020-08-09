@@ -33,6 +33,7 @@ export class Video extends BaseModel {
   }
 
   getVideoUrl() {
+    // url of video, handle space in file name
     return this.videoPath
       ? ApiService.urlFileBase + encodeURIComponent(this.videoPath)
       : '';

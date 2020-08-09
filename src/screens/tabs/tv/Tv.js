@@ -8,6 +8,7 @@ import {VideoHelper} from '../../../helpers/video-helper';
 import {ApiService} from '../../../services';
 import {Video} from '../../../models/video.model';
 import {stylesApp} from '../../../styles/app.style';
+import TvDetail from './tv-detail/TvDetail';
 
 export default class Tv extends React.Component {
   static NAV_NAME = 'tv';
@@ -54,7 +55,9 @@ export default class Tv extends React.Component {
   renderItem(item, index) {
     return (
       <View style={stylesRadio.viewItem}>
-        <TouchableOpacity style={stylesRadio.viewItemContent}>
+        <TouchableOpacity
+          style={stylesRadio.viewItemContent}
+          onPress={() => this.onItem(item)}>
           <FastImage
             style={stylesRadio.imgItem}
             source={VideoHelper.getHeaderImage(item)}
@@ -155,5 +158,12 @@ export default class Tv extends React.Component {
     }
 
     this.loadData();
+  }
+
+  onItem(item) {
+    // go to tv detail page
+    this.props.navigation.push(TvDetail.NAV_NAME, {
+      data: item,
+    });
   }
 }
