@@ -2,6 +2,7 @@ import {config} from '../helpers/config';
 import Axios from 'axios';
 import {User} from '../models/user.model';
 import {Video} from '../models/video.model';
+import {Post} from '../models/post.model';
 
 class ApiService {
   // error codes
@@ -217,6 +218,39 @@ class ApiService {
       const user = new User().initFromObject(data);
 
       return Promise.resolve(user);
+    } catch (e) {
+      console.log(e);
+
+      return Promise.reject(e.response.data);
+    }
+  }
+
+  async getPosts(from, count, userId) {
+    let params = {
+      from: from,
+      count: count,
+      userId: userId,
+    };
+
+    try {
+      const options = {
+        params: params,
+        headers: {
+          ...this.baseHeader(),
+        },
+      };
+
+      const {data} = await Axios.get(`${this.baseUrl}/post/`, options);
+      console.log(data);
+
+      const posts = [];
+      for (const obj of data) {
+        const p = new Post().initFromObject(obj);
+
+        posts.push(p);
+      }
+
+      return Promise.resolve(posts);
     } catch (e) {
       console.log(e);
 

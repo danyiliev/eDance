@@ -79,7 +79,9 @@ export default class PostItem extends React.Component {
         {
           comments.map((c, i) => {
             return (
-              <Text style={styles.txtComment}>
+              <Text
+                style={styles.txtComment}
+                key={i.toString()}>
                 <Text style={styles.txtCommentUser}>First Last:</Text>
                 &nbsp;This is sample comment with multiple lines I love you.&nbsp;&nbsp;
                 <Text style={styles.txtTime}>2019/03/22 11:23</Text>
