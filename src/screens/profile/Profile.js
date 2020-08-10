@@ -32,24 +32,31 @@ class Profile extends React.Component {
     posts: [],
   };
 
-  currentUser = null;
+  user = null;
   pageCount = 20;
 
   constructor(props) {
     super(props);
 
+    if (props.route.params) {
+      this.user = props.route.params.user;
+    }
+    else {
+      this.user = props.UserReducer.user;
+    }
+
     props.navigation.setOptions({
       title: 'My Profile',
       headerRight: () => (
-        <TouchableOpacity
-          style={stylesApp.viewHeaderRight}
-          onPress={() => this.onButEdit()}>
-          <Icon type="font-awesome" name="pencil-square-o" size={18} />
-        </TouchableOpacity>
-      ),
+        this.isMine() ? (
+          <TouchableOpacity
+            style={stylesApp.viewHeaderRight}
+            onPress={() => this.onButEdit()}>
+            <Icon type="font-awesome" name="pencil-square-o" size={18} />
+          </TouchableOpacity>
+        ) : null
+      )
     });
-
-    this.currentUser = props.UserReducer.user;
   }
 
   componentDidMount(): void {
@@ -81,29 +88,33 @@ class Profile extends React.Component {
           {/* photo */}
           <FastImage
             style={styles.imgUser}
-            source={UserHelper.getUserImage(this.currentUser)}
+            source={UserHelper.getUserImage(this.user)}
             resizeMode={FastImage.resizeMode.cover}
           />
 
           {/* name */}
-          <Text style={styles.txtName}>{this.currentUser?.getFullName()}</Text>
+          <Text style={styles.txtName}>{this.user?.getFullName()}</Text>
         </View>
 
         {/* add new */}
-        <TouchableOpacity activeOpacity={0.7} onPress={() => this.onNewPost()}>
-          <View style={styles.viewAddNew}>
-            <View style={styles.viewNewBut}>
-              <Icon
-                color={colorTheme.grey}
-                type="ionicon"
-                name="md-add"
-                size={60}
-              />
-            </View>
+        {this.isMine() ? (
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={() => this.onNewPost()}>
+            <View style={styles.viewAddNew}>
+              <View style={styles.viewNewBut}>
+                <Icon
+                  color={colorTheme.grey}
+                  type="ionicon"
+                  name="md-add"
+                  size={60}
+                />
+              </View>
 
-            <Text style={styles.txtAddNew}>Add New Post</Text>
-          </View>
-        </TouchableOpacity>
+              <Text style={styles.txtAddNew}>Add New Post</Text>
+            </View>
+          </TouchableOpacity>
+        ) : null}
       </View>
     );
   }
@@ -121,7 +132,9 @@ class Profile extends React.Component {
           <ActivityIndicator animating={true} />
         ) : (
           <Text style={stylesApp.textEmptyItem}>
-            Your posts will be shown here
+            {this.isMine()
+              ? 'Your stories will be shown here'
+              : 'This user has not added stories yet'}
           </Text>
         )}
       </View>
@@ -153,7 +166,11 @@ class Profile extends React.Component {
     }
 
     try {
-      let posts = await ApiService.getPosts(indexFrom, this.pageCount);
+      let posts = await ApiService.getPosts(
+        indexFrom,
+        this.pageCount,
+        this.user.id,
+      );
 
       if (indexFrom > 0) {
         // attach
@@ -184,6 +201,10 @@ class Profile extends React.Component {
     }
 
     this.loadData();
+  }
+
+  isMine() {
+    return this.props.UserReducer.user?.equalTo(this.user);
   }
 }
 

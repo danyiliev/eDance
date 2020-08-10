@@ -11,6 +11,7 @@ import TeacherCard from '../../../components/TeacherCard/TeacherCard';
 import {ApiService} from '../../../services';
 import Reviews from '../../reviews/Reviews';
 import ScheduleSelect from '../../schedule/ScheduleSelect';
+import Profile from '../../profile/Profile';
 
 export default class Pro extends React.Component {
   static NAV_NAME = 'pro';
@@ -88,6 +89,7 @@ export default class Pro extends React.Component {
             renderCard={(user) => (
               <TeacherCard
                 user={user}
+                onUser={() => this.onUser(user)}
                 onReview={() => this.onUserReviews()}
                 onSchedule={() => this.onUserSchedule()}
               />
@@ -232,5 +234,12 @@ export default class Pro extends React.Component {
   onUserSchedule() {
     // go to reviews page
     this.props.navigation.push(ScheduleSelect.NAV_NAME);
+  }
+
+  onUser(user) {
+    // go to profile page
+    this.props.navigation.push(Profile.NAV_NAME, {
+      user: user,
+    });
   }
 }

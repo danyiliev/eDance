@@ -24,6 +24,10 @@ export class BaseModel {
     return this;
   }
 
+  equalTo(model) {
+    return this.id === model?.id;
+  }
+
   toJsonString() {
     return JSON.stringify(this);
   }
