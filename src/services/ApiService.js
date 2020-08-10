@@ -186,6 +186,43 @@ class ApiService {
       return Promise.reject(e.response.data);
     }
   }
+
+  async updateUser(firstName, lastName, gender, state, city, zipCode, photo) {
+    const formData = new FormData();
+    formData.append('firstName', firstName);
+    formData.append('lastName', lastName);
+    formData.append('gender', gender);
+    formData.append('state', state);
+    formData.append('city', city);
+    formData.append('zipCode', zipCode);
+
+    if (photo) {
+      formData.append('photo', photo);
+    }
+
+    try {
+      const options = {
+        headers: {
+          ...this.baseHeader(),
+        },
+      };
+
+      const {data} = await Axios.post(
+        `${this.baseUrl}/users`,
+        formData,
+        options,
+      );
+      console.log(data);
+
+      const user = new User().initFromObject(data);
+
+      return Promise.resolve(user);
+    } catch (e) {
+      console.log(e);
+
+      return Promise.reject(e.response.data);
+    }
+  }
 }
 
 const apiService = new ApiService();

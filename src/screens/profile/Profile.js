@@ -12,6 +12,7 @@ import {stylesApp} from '../../styles/app.style';
 import EditProfile from './edit-profile/EditProfile';
 import {colors as colorTheme} from '../../styles/theme.style';
 import AddPost from '../add-post/AddPost';
+import {UserHelper} from '../../helpers/user-helper';
 
 class Profile extends React.Component {
   static NAV_NAME = 'profile';
@@ -57,7 +58,7 @@ class Profile extends React.Component {
           {/* photo */}
           <FastImage
             style={styles.imgUser}
-            source={require('../../../assets/imgs/user_default.png')}
+            source={UserHelper.getUserImage(this.currentUser)}
             resizeMode={FastImage.resizeMode.cover}
           />
 

@@ -2,10 +2,13 @@ import React from 'react';
 import {setUserInfo} from '../../../actions/user';
 import {connect} from 'react-redux';
 import {
-  Image, Text,
+  Image,
+  Text,
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
+  Alert,
+  Platform,
 } from 'react-native';
 import {stylesApp, styleUtil} from '../../../styles/app.style';
 import {Button, ButtonGroup, Icon, Input} from 'react-native-elements';
@@ -18,11 +21,17 @@ import {styles as stylesLogin} from '../../login/styles';
 import {colors as colorTheme} from '../../../styles/theme.style';
 import {User} from '../../../models/user.model';
 import {BaseSignup} from '../../signup/base-signup';
+import {UserHelper} from '../../../helpers/user-helper';
+import {ApiService} from '../../../services';
 
 class EditProfile extends BaseSignup {
   static NAV_NAME = 'edit-profile';
 
   state = {
+    // ui
+    showStatePicker: false,
+    stateSelected: '', // for iOS only
+
     // data
     photoImg: '',
     photoFileName: '',
@@ -31,7 +40,6 @@ class EditProfile extends BaseSignup {
     lastName: '',
     email: '',
 
-    // data
     genderIndex: 0,
 
     state: '',
@@ -39,12 +47,25 @@ class EditProfile extends BaseSignup {
     zipCode: '',
   };
 
+  currentUser = null;
+
   constructor(props) {
     super(props);
 
     props.navigation.setOptions({
       title: 'Edit Profile',
     });
+
+    this.currentUser = props.UserReducer.user;
+
+    this.state.firstName = this.currentUser.firstName;
+    this.state.lastName = this.currentUser.lastName;
+    this.state.email = this.currentUser.email;
+    this.state.genderIndex = this.currentUser.gender;
+
+    this.state.state = this.currentUser.state;
+    this.state.city = this.currentUser.city;
+    this.state.zipCode = this.currentUser.zipCode;
   }
 
   render() {
@@ -59,17 +80,14 @@ class EditProfile extends BaseSignup {
             <TouchableWithoutFeedback onPress={() => this.onClickPhoto()}>
               <View style={styles.viewPhoto}>
                 <View style={[styles.viewPhotoMain, styleUtil.withShadow()]}>
-                  {this.state.photoImg ? (
-                    <Image
-                      style={stylesSignup.imgPhoto}
-                      source={this.state.photoImg}
-                    />
-                  ) : (
-                    <Image
-                      style={styles.imgPhotoCore}
-                      source={require('../../../../assets/imgs/user_default.png')}
-                    />
-                  )}
+                  <Image
+                    style={stylesSignup.imgPhoto}
+                    source={
+                      this.state.photoImg
+                        ? this.state.photoImg
+                        : UserHelper.getUserImage(this.currentUser)
+                    }
+                  />
                 </View>
               </View>
             </TouchableWithoutFeedback>
@@ -247,7 +265,51 @@ class EditProfile extends BaseSignup {
     this.keyboardView.moveMainView(80);
   }
 
-  onButSave() {
+  async onButSave() {
+    // show loading
+    this.loadingHUD.show('Updating user profile ...');
+
+    try {
+      const user = await ApiService.updateUser(
+        this.state.firstName,
+        this.state.lastName,
+        this.state.genderIndex,
+        this.state.state,
+        this.state.city,
+        this.state.zipCode,
+        this.photoFile
+          ? {
+              name: 'photo.jpg',
+              type: this.photoFile.type,
+              uri:
+                Platform.OS === 'android'
+                  ? this.photoFile.uri
+                  : this.photoFile.uri.replace('file://', ''),
+            }
+          : null,
+      );
+
+      // save user to local storage
+      this.currentUser.firstName = this.state.firstName;
+      this.currentUser.lastName = this.state.lastName;
+      this.currentUser.genderIndex = this.state.genderIndex;
+      this.currentUser.state = this.state.state;
+      this.currentUser.city = this.state.city;
+      this.currentUser.zipCode = this.state.zipCode;
+      this.currentUser.photo = user.photo;
+
+      UserHelper.saveUserToLocalStorage(this.currentUser, this.props);
+
+      // go back to prev page
+      this.props.navigation.pop();
+
+    } catch (e) {
+      console.log(e);
+
+      Alert.alert('Failed to save user profile', e.message);
+    }
+
+    this.loadingHUD.hideAll();
   }
 }
 
