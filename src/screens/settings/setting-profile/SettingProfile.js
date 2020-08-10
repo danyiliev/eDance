@@ -102,8 +102,8 @@ export default class SettingProfile extends React.Component {
 
         {/*tags of age group */}
         <View style={styles.viewTapContainer}>
-          <TagItem text={'asdf'}></TagItem>
-          <TagItem text={'asdf'}></TagItem>
+          <TagItem text={'sample'}></TagItem>
+          <TagItem text={'sample'}></TagItem>
         </View>
 
         {/* levels */}
@@ -137,8 +137,8 @@ export default class SettingProfile extends React.Component {
 
         {/* tags */}
         <View style={styles.viewTapContainer}>
-          <TagItem text={'asdf'}></TagItem>
-          <TagItem text={'asdf'}></TagItem>
+          <TagItem text={'sample'}></TagItem>
+          <TagItem text={'sample'}></TagItem>
         </View>
 
         {/* american rhythm */}
@@ -158,8 +158,8 @@ export default class SettingProfile extends React.Component {
 
         {/* tags */}
         <View style={styles.viewTapContainer}>
-          <TagItem text={'asdf'}></TagItem>
-          <TagItem text={'asdf'}></TagItem>
+          <TagItem text={'sample'}></TagItem>
+          <TagItem text={'sample'}></TagItem>
         </View>
 
         {/* standard */}
@@ -179,8 +179,8 @@ export default class SettingProfile extends React.Component {
 
         {/* tags */}
         <View style={styles.viewTapContainer}>
-          <TagItem text={'asdf'}></TagItem>
-          <TagItem text={'asdf'}></TagItem>
+          <TagItem text={'sample'}></TagItem>
+          <TagItem text={'sample'}></TagItem>
         </View>
 
         {/* latin */}
@@ -200,8 +200,8 @@ export default class SettingProfile extends React.Component {
 
         {/* tags */}
         <View style={styles.viewTapContainer}>
-          <TagItem text={'asdf'}></TagItem>
-          <TagItem text={'asdf'}></TagItem>
+          <TagItem text={'sample'}></TagItem>
+          <TagItem text={'sample'}></TagItem>
         </View>
 
         {/* price */}

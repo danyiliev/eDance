@@ -15,6 +15,7 @@ import SettingProfile from '../../screens/settings/setting-profile/SettingProfil
 import Championships from '../../screens/championships/Championships';
 import {UserHelper} from '../../helpers/user-helper';
 import FastImage from 'react-native-fast-image';
+import {User} from '../../models/user.model';
 
 class MenuModal extends React.Component {
   static propTypes = {
@@ -66,23 +67,6 @@ class MenuModal extends React.Component {
 
           {/* menu */}
           <View style={styles.viewMenu}>
-            {/* home */}
-            <TouchableOpacity
-              onPress={() => this.props.onMenuItem(Home.NAV_NAME)}>
-              <View style={styles.viewMenuItem}>
-                {/* icon */}
-                <View style={styles.viewMenuIcon}>
-                  <ImageScale
-                    width={14}
-                    source={require('../../../assets/imgs/menu_home.png')}
-                  />
-                </View>
-
-                <Text style={styles.txtMenuItem}>Home</Text>
-              </View>
-            </TouchableOpacity>
-            <Divider style={styles.viewDivider} />
-
             {/* schedule */}
             <TouchableOpacity
               onPress={() => this.props.onMenuItem(ScheduleSelect.NAV_NAME)}>
@@ -100,39 +84,28 @@ class MenuModal extends React.Component {
             </TouchableOpacity>
             <Divider style={styles.viewDivider} />
 
-            {/* Messaging */}
-            <TouchableOpacity
-              onPress={() => this.props.onMenuItem(Messaging.NAV_NAME)}>
-              <View style={styles.viewMenuItem}>
-                {/* icon */}
-                <View style={styles.viewMenuIcon}>
-                  <ImageScale
-                    width={14}
-                    source={require('../../../assets/imgs/menu_message.png')}
-                  />
-                </View>
-
-                <Text style={styles.txtMenuItem}>Messaging</Text>
-              </View>
-            </TouchableOpacity>
-            <Divider style={styles.viewDivider} />
-
             {/* setting */}
-            <TouchableOpacity
-              onPress={() => this.props.onMenuItem(SettingProfile.NAV_NAME)}>
-              <View style={styles.viewMenuItem}>
-                {/* icon */}
-                <View style={styles.viewMenuIcon}>
-                  <ImageScale
-                    width={16}
-                    source={require('../../../assets/imgs/menu_setting.png')}
-                  />
-                </View>
+            {this.currentUser.type === User.TYPE_TEACHER ? (
+              <View>
+                <TouchableOpacity
+                  onPress={() =>
+                    this.props.onMenuItem(SettingProfile.NAV_NAME)
+                  }>
+                  <View style={styles.viewMenuItem}>
+                    {/* icon */}
+                    <View style={styles.viewMenuIcon}>
+                      <ImageScale
+                        width={16}
+                        source={require('../../../assets/imgs/menu_setting.png')}
+                      />
+                    </View>
 
-                <Text style={styles.txtMenuItem}>Settings</Text>
+                    <Text style={styles.txtMenuItem}>Settings</Text>
+                  </View>
+                </TouchableOpacity>
+                <Divider style={styles.viewDivider} />
               </View>
-            </TouchableOpacity>
-            <Divider style={styles.viewDivider} />
+            ) : null}
 
             {/* championship */}
             <TouchableOpacity
@@ -147,22 +120,6 @@ class MenuModal extends React.Component {
                 </View>
 
                 <Text style={styles.txtMenuItem}>World ChampionShips</Text>
-              </View>
-            </TouchableOpacity>
-            <Divider style={styles.viewDivider} />
-
-            {/* near by */}
-            <TouchableOpacity>
-              <View style={styles.viewMenuItem}>
-                {/* icon */}
-                <View style={styles.viewMenuIcon}>
-                  <ImageScale
-                    width={10}
-                    source={require('../../../assets/imgs/menu_near.png')}
-                  />
-                </View>
-
-                <Text style={styles.txtMenuItem}>Who is close by</Text>
               </View>
             </TouchableOpacity>
             <Divider style={styles.viewDivider} />
