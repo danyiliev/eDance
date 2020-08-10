@@ -9,6 +9,7 @@ import {colors as colorTheme} from '../../styles/theme.style';
 export default class PostImage extends React.Component {
   static propTypes = {
     containerStyle: PropTypes.object,
+    imgUrl: PropTypes.string,
   };
 
   render() {
@@ -21,6 +22,7 @@ export default class PostImage extends React.Component {
       <View style={[styles.viewImage, this.props.containerStyle]}>
         {/* background */}
         <Icon
+          style={styles.iconImgThumbnail}
           color={'#cecece'}
           type="font-awesome"
           name="picture-o"
@@ -29,7 +31,7 @@ export default class PostImage extends React.Component {
 
         <FastImage
           style={styles.imgPost}
-          source={require('../../../assets/imgs/lesson_default.png')}
+          source={{uri: this.props.imgUrl}}
           resizeMode={FastImage.resizeMode.cover}
         />
       </View>

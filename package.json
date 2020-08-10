@@ -36,6 +36,7 @@
     "react-native-screens": "^2.8.0",
     "react-native-splash-screen": "^3.2.0",
     "react-native-star-rating": "^1.1.0",
+    "react-native-upload-aws-s3": "^0.8.1",
     "react-native-vector-icons": "^6.6.0",
     "react-native-video": "^4.4.5",
     "react-native-video-controls": "^2.6.0",

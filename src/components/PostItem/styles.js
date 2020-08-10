@@ -32,11 +32,18 @@ export const styles = StyleSheet.create({
     paddingBottom: 8,
   },
 
+  viewImageContainer: {
+    ...stylesApp.flexRow,
+    flexWrap: 'wrap',
+  },
   viewImage: {
     backgroundColor: colorTheme.lightGrey,
     justifyContent: 'center',
   },
   imgPost: {
+    position: 'absolute',
+    width: '100%',
+    height: '100%',
   },
 
   txtPost: {

@@ -194,7 +194,7 @@ class EditProfile extends BaseSignup {
                 inputStyle={styles.input}
                 inputContainerStyle={stylesLogin.inputCtn}
                 blurOnSubmit={false}
-                value={this.state.email}
+                value={this.state.city}
                 onChangeText={(city) => {
                   this.setState({city});
                 }}
@@ -225,7 +225,7 @@ class EditProfile extends BaseSignup {
                 inputStyle={styles.input}
                 inputContainerStyle={stylesLogin.inputCtn}
                 blurOnSubmit={false}
-                value={this.state.firstName}
+                value={this.state.zipCode}
                 onChangeText={(zipCode) => {
                   this.setState({zipCode});
                 }}

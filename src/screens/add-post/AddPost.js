@@ -1,5 +1,12 @@
 import React from 'react';
-import {Dimensions, Image, Keyboard, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Dimensions,
+  Image,
+  Keyboard,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {styles} from './styles';
 import {Button, Icon, Input} from 'react-native-elements';
 import {stylesApp, styleUtil} from '../../styles/app.style';
@@ -10,10 +17,16 @@ import {Utils} from '../../helpers/utils';
 import ImagePicker from 'react-native-image-picker';
 import {UserHelper} from '../../helpers/user-helper';
 import FastImage from 'react-native-fast-image';
+import {Post} from '../../models/post.model';
+import {setUserInfo} from '../../actions/user';
+import {connect} from 'react-redux';
+import {LoadingHUD} from 'react-native-hud-hybrid';
+import {ApiService} from '../../services';
+import {PostHelper} from '../../helpers/post-helper';
 
 const {width: SCREEN_WDITH} = Dimensions.get('window');
 
-export default class AddPost extends React.Component {
+class AddPost extends React.Component {
   static NAV_NAME = 'add-post';
 
   state = {
@@ -22,12 +35,20 @@ export default class AddPost extends React.Component {
     photos: [],
   };
 
+  currentUser = null;
+  onAdded = null;
+
   constructor(props) {
     super(props);
 
     props.navigation.setOptions({
       title: 'Add New Post',
     });
+
+    this.currentUser = props.UserReducer.user;
+    this.onAdded = props.route.params.onAdded;
+
+    this.loadingHUD = new LoadingHUD();
   }
 
   render() {
@@ -67,6 +88,8 @@ export default class AddPost extends React.Component {
                 title="SAVE"
                 buttonStyle={stylesApp.butPrimary}
                 titleStyle={stylesApp.titleButPrimary}
+                disabled={!this.state.text && this.state.photos.length <= 0}
+                disabledStyle={[stylesApp.butPrimary, stylesApp.semiTrans]}
                 onPress={() => this.onButSave()}
               />
             </View>
@@ -82,6 +105,7 @@ export default class AddPost extends React.Component {
 
     return (
       <TouchableOpacity
+        key={index.toString()}
         activeOpacity={0.7}
         onPress={() => this.onClickPhoto(index)}>
         {index >= this.state.photos.length ? (
@@ -140,7 +164,21 @@ export default class AddPost extends React.Component {
       } else if (response.customButton) {
         console.log('User tapped custom button: ', response.customButton);
       } else {
-        const source = {uri: response.uri};
+        //
+        // fileName: null
+        // fileSize: 43644
+        // height: 425
+        // isVertical: false
+        // origURL: "assets-library://asset/asset.JPG?id=B84E8479-475C-4727-A4A4-B77AA9980897&ext=JPG"
+        // type: "image/jpeg"
+        // uri: "file:///Users/highjump/Library/Developer/CoreSimulator/Devices/3E20960D-6DA1-49FE-B5AB-9FCD3852A998/data/Containers/Data/Application/90C1D4B3-E5D9-4828-99DB-4127F352DBBF/tmp/04CA8F42-80B2-43F9-BCA2-1F4E3EDBC29A.jpg"
+        // width: 640
+        //
+        const source = {
+          name: PostHelper.generateFileName(response.fileName),
+          uri: response.uri,
+          type: response.type,
+        };
         const photos = this.state.photos;
 
         this.setState({photos: []});
@@ -157,6 +195,52 @@ export default class AddPost extends React.Component {
     });
   }
 
-  onButSave() {
+  async onButSave() {
+    // show loading
+    this.loadingHUD.show();
+
+    const postNew = new Post();
+    postNew.userId = this.currentUser.id;
+    postNew.text = this.state.text;
+
+    try {
+      // upload photos
+      const photos = [];
+      for (let i = 0; i < this.state.photos.length; i++) {
+        this.loadingHUD.show(
+          `Uploading photos (${i + 1}/${this.state.photos.length}) ...`,
+        );
+
+        const data = await ApiService.uploadFile(
+          this.state.photos[i],
+          PostHelper.BUCKET_PATH,
+        );
+        photos.push(data.key);
+      }
+
+      postNew.photos = photos;
+
+      // upload data
+      await ApiService.addPost(postNew);
+
+      if (this.onAdded) {
+        this.onAdded(postNew);
+      }
+
+      // go back to prev page
+      this.props.navigation.pop();
+    } catch (e) {
+      console.log(e);
+    }
+
+    this.loadingHUD.hideAll();
   }
 }
+
+const mapStateToProps = (state) => state;
+
+const mapDispatchToProps = {
+  setUserInfo,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddPost);

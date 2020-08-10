@@ -1,5 +1,10 @@
 import React from 'react';
-import {ActivityIndicator, FlatList, TouchableOpacity, View} from 'react-native';
+import {
+  ActivityIndicator,
+  FlatList,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import ContentWithBackground from '../../components/ContentWithBackground/ContentWithBackground';
 import {Utils} from '../../helpers/utils';
 import {styles} from './styles';
@@ -61,6 +66,8 @@ class Profile extends React.Component {
           ListHeaderComponent={() => this.renderHeader()}
           ListEmptyComponent={() => this.renderEmptyItem()}
           bounces={false}
+          onEndReached={() => this.onEndReached()}
+          onEndReachedThreshold={3}
         />
       </ContentWithBackground>
     );
@@ -103,7 +110,7 @@ class Profile extends React.Component {
 
   renderItem(item, index) {
     return (
-      <PostItem />
+      <PostItem post={item} />
     );
   }
 
@@ -128,7 +135,9 @@ class Profile extends React.Component {
 
   onNewPost() {
     // go to edit profile page
-    this.props.navigation.push(AddPost.NAV_NAME);
+    this.props.navigation.push(AddPost.NAV_NAME, {
+      onAdded: this.onPostAdded.bind(this),
+    });
   }
 
   async loadData(continued = false) {
@@ -159,6 +168,22 @@ class Profile extends React.Component {
     this.setState({
       showLoading: false,
     });
+  }
+
+  onPostAdded(post) {
+    const {posts} = this.state;
+    posts.unshift(post);
+
+    this.setState({posts});
+  }
+
+  onEndReached() {
+    // smaller than one page, no need to load again
+    if (this.state.posts.length < this.pageCount) {
+      return;
+    }
+
+    this.loadData();
   }
 }
 

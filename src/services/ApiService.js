@@ -3,6 +3,7 @@ import Axios from 'axios';
 import {User} from '../models/user.model';
 import {Video} from '../models/video.model';
 import {Post} from '../models/post.model';
+import {RNS3} from 'react-native-upload-aws-s3';
 
 class ApiService {
   // error codes
@@ -18,6 +19,42 @@ class ApiService {
   urlImgUser = `${config.serverUrl}/static/uploads/imgs/users`;
 
   urlFileBase = `https://${config.awsS3BucketName}.s3.${config.awsRegion}.amazonaws.com/`;
+
+  async uploadFile(file, path, onProgress) {
+    const options = {
+      keyPrefix: path,
+      bucket: config.awsS3BucketName,
+      region: config.awsRegion,
+      accessKey: config.awsAccessKeyId,
+      secretKey: config.awsSecretAccessKey,
+      successActionStatus: 201,
+    };
+
+    const response = await RNS3.put(file, options);
+    if (response.status === 201) {
+      console.log('Success: ', response.body);
+      /**
+       * {
+       *   postResponse: {
+       *     bucket: "your-bucket",
+       *     etag : "9f620878e06d28774406017480a59fd4",
+       *     key: "uploads/image.png",
+       *     location: "https://your-bucket.s3.amazonaws.com/uploads%2Fimage.png"
+       *   }
+       * }
+       */
+
+      return Promise.resolve(response.body.postResponse);
+    } else {
+      console.log('Failed to upload image to S3: ', response);
+
+      return Promise.reject(response);
+    }
+  }
+
+  //
+  // rest apis
+  //
 
   async signIn(email: string, password: string) {
     const params = {
@@ -240,7 +277,7 @@ class ApiService {
         },
       };
 
-      const {data} = await Axios.get(`${this.baseUrl}/post/`, options);
+      const {data} = await Axios.get(`${this.baseUrl}/post`, options);
       console.log(data);
 
       const posts = [];
@@ -251,6 +288,34 @@ class ApiService {
       }
 
       return Promise.resolve(posts);
+    } catch (e) {
+      console.log(e);
+
+      return Promise.reject(e.response.data);
+    }
+  }
+
+  async addPost(post) {
+    const httpOptions = {
+      headers: {
+        ...this.baseHeader(),
+      },
+    };
+
+    let params = {
+      text: post.text,
+      photos: post.photos,
+    };
+
+    try {
+      const {data} = await Axios.post(
+        `${this.baseUrl}/post`,
+        params,
+        httpOptions,
+      );
+      console.log(data);
+
+      return Promise.resolve(data);
     } catch (e) {
       console.log(e);
 
