@@ -15,6 +15,7 @@ export default class PostItem extends React.Component {
   static propTypes = {
     post: PropTypes.object,
     onPressImage: PropTypes.func,
+    onPressComment: PropTypes.func,
   };
 
   render() {
@@ -52,6 +53,11 @@ export default class PostItem extends React.Component {
             titleStyle={styles.titleButComment}
             title="0"
             containerStyle={styles.ctnButComment}
+            onPress={() => {
+              if (this.props.onPressComment) {
+                this.props.onPressComment();
+              }
+            }}
           />
         </View>
 

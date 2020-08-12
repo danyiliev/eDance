@@ -29,4 +29,13 @@ export class PostHelper {
   static imageUrl(imgPath) {
     return ApiService.urlFileBase + imgPath;
   }
+
+  static getImageUris(post) {
+    const images = [];
+    for (const img of post.photos) {
+      images.push({uri: PostHelper.imageUrl(img)});
+    }
+
+    return images;
+  }
 }

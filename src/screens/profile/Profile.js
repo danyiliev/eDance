@@ -22,6 +22,8 @@ import {ApiService} from '../../services';
 import {Video} from '../../models/video.model';
 import ImageView from 'react-native-image-viewing';
 import {PostHelper} from '../../helpers/post-helper';
+import Reviews from '../reviews/Reviews';
+import PostDetail from '../post-detail/PostDetail';
 
 class Profile extends React.Component {
   static NAV_NAME = 'profile';
@@ -45,8 +47,7 @@ class Profile extends React.Component {
 
     if (props.route.params) {
       this.user = props.route.params.user;
-    }
-    else {
+    } else {
       this.user = props.UserReducer.user;
     }
 
@@ -136,6 +137,7 @@ class Profile extends React.Component {
       <PostItem
         post={item}
         onPressImage={(imgIndex) => this.onPressImage(item, imgIndex)}
+        onPressComment={() => this.onPostComment(item)}
       />
     );
   }
@@ -223,16 +225,18 @@ class Profile extends React.Component {
   }
 
   onPressImage(item, imgIndex) {
-    const images = [];
-    for (const img of item.photos) {
-      images.push({uri: PostHelper.imageUrl(img)});
-    }
-
     // show image viewer
     this.setState({
       showImgViewer: true,
-      imageUrls: images,
+      imageUrls: PostHelper.getImageUris(item),
       imageIndex: imgIndex,
+    });
+  }
+
+  onPostComment(item) {
+    // go to post detail page
+    this.props.navigation.push(PostDetail.NAV_NAME, {
+      data: item,
     });
   }
 }
