@@ -20,6 +20,8 @@ import AddPost from '../add-post/AddPost';
 import {UserHelper} from '../../helpers/user-helper';
 import {ApiService} from '../../services';
 import {Video} from '../../models/video.model';
+import ImageView from 'react-native-image-viewing';
+import {PostHelper} from '../../helpers/post-helper';
 
 class Profile extends React.Component {
   static NAV_NAME = 'profile';
@@ -27,9 +29,12 @@ class Profile extends React.Component {
   state = {
     // ui
     showLoading: true,
+    showImgViewer: false,
 
     // data
     posts: [],
+    imageUrls: [],
+    imageIndex: 0,
   };
 
   user = null;
@@ -76,6 +81,13 @@ class Profile extends React.Component {
           onEndReached={() => this.onEndReached()}
           onEndReachedThreshold={3}
         />
+
+        <ImageView
+          images={this.state.imageUrls}
+          imageIndex={0}
+          visible={this.state.showImgViewer}
+          onRequestClose={() => this.setState({showImgViewer: false})}
+        />
       </ContentWithBackground>
     );
   }
@@ -121,7 +133,10 @@ class Profile extends React.Component {
 
   renderItem(item, index) {
     return (
-      <PostItem post={item} />
+      <PostItem
+        post={item}
+        onPressImage={(imgIndex) => this.onPressImage(item, imgIndex)}
+      />
     );
   }
 
@@ -205,6 +220,20 @@ class Profile extends React.Component {
 
   isMine() {
     return this.props.UserReducer.user?.equalTo(this.user);
+  }
+
+  onPressImage(item, imgIndex) {
+    const images = [];
+    for (const img of item.photos) {
+      images.push({uri: PostHelper.imageUrl(img)});
+    }
+
+    // show image viewer
+    this.setState({
+      showImgViewer: true,
+      imageUrls: images,
+      imageIndex: imgIndex,
+    });
   }
 }
 

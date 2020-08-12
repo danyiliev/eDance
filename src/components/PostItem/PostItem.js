@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Dimensions, Text, View} from 'react-native';
+import {Dimensions, Text, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native';
 import {styles} from './styles';
 import FastImage from 'react-native-fast-image';
 import PostImage from './PostImage';
@@ -14,6 +14,7 @@ const {width: SCREEN_WIDTH} = Dimensions.get('window');
 export default class PostItem extends React.Component {
   static propTypes = {
     post: PropTypes.object,
+    onPressImage: PropTypes.func,
   };
 
   render() {
@@ -82,34 +83,23 @@ export default class PostItem extends React.Component {
     if (photos.length === 1) {
       return (
         <View>
-          <PostImage
-            imgUrl={PostHelper.imageUrl(photos[0])}
-            containerStyle={{height: maxHeight}}
-          />
+          {this.renderImage(
+            PostHelper.imageUrl(photos[0]),
+            0,
+            {height: maxHeight}
+          )}
         </View>
       );
     } else if (photos.length === 4) {
       return (
         <View>
           <View style={stylesApp.flexRow}>
-            <PostImage
-              imgUrl={PostHelper.imageUrl(photos[0])}
-              containerStyle={styleImg}
-            />
-            <PostImage
-              imgUrl={PostHelper.imageUrl(photos[1])}
-              containerStyle={styleImg}
-            />
+            {this.renderImage(PostHelper.imageUrl(photos[0]), 0, styleImg)}
+            {this.renderImage(PostHelper.imageUrl(photos[1]), 1, styleImg)}
           </View>
           <View style={stylesApp.flexRow}>
-            <PostImage
-              imgUrl={PostHelper.imageUrl(photos[2])}
-              containerStyle={styleImg}
-            />
-            <PostImage
-              imgUrl={PostHelper.imageUrl(photos[3])}
-              containerStyle={styleImg}
-            />
+            {this.renderImage(PostHelper.imageUrl(photos[2]), 2, styleImg)}
+            {this.renderImage(PostHelper.imageUrl(photos[3]), 3, styleImg)}
           </View>
         </View>
       );
@@ -118,15 +108,20 @@ export default class PostItem extends React.Component {
     return (
       <View style={styles.viewImageContainer}>
         {photos.map((p, i) => {
-          return (
-            <PostImage
-              key={i.toString()}
-              imgUrl={PostHelper.imageUrl(p)}
-              containerStyle={styleImg}
-            />
-          );
+          return this.renderImage(PostHelper.imageUrl(p), i, styleImg);
         })}
       </View>
+    );
+  }
+
+  renderImage(imgUrl, index, style) {
+    return (
+      <TouchableOpacity
+        key={index.toString()}
+        activeOpacity={0.9}
+        onPress={() => this.props.onPressImage(index)}>
+        <PostImage imgUrl={imgUrl} containerStyle={style} />
+      </TouchableOpacity>
     );
   }
 
