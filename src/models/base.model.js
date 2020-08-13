@@ -5,7 +5,11 @@ export class BaseModel {
   createdAt = moment();
 
   initFromObject(data) {
-    this.id = data._id;
+    if (data._id) {
+      this.id = data._id;
+    } else if (data.id) {
+      this.id = data.id;
+    }
 
     if (data.createdAt) {
       this.createdAt = moment(data.createdAt);
@@ -22,6 +26,18 @@ export class BaseModel {
     }
 
     return this;
+  }
+
+  toObject() {
+    const obj = {};
+
+    Object.getOwnPropertyNames(this).forEach((prop) => {
+      obj[prop] = this[prop];
+    });
+
+    obj.createdAt = this.createdAt.format();
+
+    return obj;
   }
 
   equalTo(model) {

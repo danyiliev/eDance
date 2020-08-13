@@ -42,6 +42,8 @@ class Profile extends React.Component {
   user = null;
   pageCount = 20;
 
+  selectedIndex = 0;
+
   constructor(props) {
     super(props);
 
@@ -137,7 +139,7 @@ class Profile extends React.Component {
       <PostItem
         post={item}
         onPressImage={(imgIndex) => this.onPressImage(item, imgIndex)}
-        onPressComment={() => this.onPostComment(item)}
+        onPressComment={() => this.onPostComment(item, index)}
       />
     );
   }
@@ -179,7 +181,7 @@ class Profile extends React.Component {
         showLoading: true,
       });
 
-      indexFrom = this.state.channels.length;
+      indexFrom = this.state.posts.length;
     }
 
     try {
@@ -233,11 +235,22 @@ class Profile extends React.Component {
     });
   }
 
-  onPostComment(item) {
+  onPostComment(item, index) {
+    this.selectedIndex = index;
+
     // go to post detail page
     this.props.navigation.push(PostDetail.NAV_NAME, {
-      data: item,
+      data: item.toObject(),
+      onChangeItem: this.onChangeItem.bind(this),
     });
+  }
+
+  onChangeItem(post) {
+    const {posts} = this.state;
+
+    posts[this.selectedIndex] = post;
+
+    this.setState({posts});
   }
 }
 

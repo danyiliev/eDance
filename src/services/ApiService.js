@@ -3,6 +3,7 @@ import Axios from 'axios';
 import {User} from '../models/user.model';
 import {Video} from '../models/video.model';
 import {Post} from '../models/post.model';
+import {Comment} from '../models/comment.model';
 import {RNS3} from 'react-native-upload-aws-s3';
 
 class ApiService {
@@ -310,6 +311,67 @@ class ApiService {
     try {
       const {data} = await Axios.post(
         `${this.baseUrl}/post`,
+        params,
+        httpOptions,
+      );
+      console.log(data);
+
+      return Promise.resolve(data);
+    } catch (e) {
+      console.log(e);
+
+      return Promise.reject(e.response.data);
+    }
+  }
+
+  async getComments(from, count, postId) {
+    let params = {
+      from: from,
+      count: count,
+      postId: postId,
+    };
+
+    try {
+      const options = {
+        params: params,
+        headers: {
+          ...this.baseHeader(),
+        },
+      };
+
+      const {data} = await Axios.get(`${this.baseUrl}/post/comments`, options);
+      console.log(data);
+
+      const comments = [];
+      for (const obj of data) {
+        const p = new Comment().initFromObject(obj);
+
+        comments.push(p);
+      }
+
+      return Promise.resolve(comments);
+    } catch (e) {
+      console.log(e);
+
+      return Promise.reject(e.response.data);
+    }
+  }
+
+  async addComment(comment) {
+    const httpOptions = {
+      headers: {
+        ...this.baseHeader(),
+      },
+    };
+
+    let params = {
+      text: comment.text,
+      postId: comment.postId,
+    };
+
+    try {
+      const {data} = await Axios.post(
+        `${this.baseUrl}/post/comment`,
         params,
         httpOptions,
       );

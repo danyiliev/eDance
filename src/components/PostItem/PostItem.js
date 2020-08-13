@@ -1,6 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Dimensions, Text, TouchableOpacity, TouchableWithoutFeedback, View} from 'react-native';
+import {
+  Dimensions,
+  Text,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import {styles} from './styles';
 import FastImage from 'react-native-fast-image';
 import PostImage from './PostImage';
@@ -14,8 +20,13 @@ const {width: SCREEN_WIDTH} = Dimensions.get('window');
 export default class PostItem extends React.Component {
   static propTypes = {
     post: PropTypes.object,
+    showComment: PropTypes.bool,
     onPressImage: PropTypes.func,
     onPressComment: PropTypes.func,
+  };
+
+  static defaultProps = {
+    showComment: true,
   };
 
   render() {
@@ -51,7 +62,7 @@ export default class PostItem extends React.Component {
             type="clear"
             icon={<Icon type="font-awesome" name="comment-o" size={14} />}
             titleStyle={styles.titleButComment}
-            title="0"
+            title={this.props.post.commentCount.toString()}
             containerStyle={styles.ctnButComment}
             onPress={() => {
               if (this.props.onPressComment) {
@@ -62,7 +73,7 @@ export default class PostItem extends React.Component {
         </View>
 
         {/* comments */}
-        {/*{this.renderComments()}*/}
+        {this.renderComments()}
       </View>
     );
   }
@@ -132,37 +143,40 @@ export default class PostItem extends React.Component {
   }
 
   renderComments() {
-    const comments = Utils.makeEmptyArray(5);
-
-    return (
-      <View style={styles.viewComments}>
-        {
-          comments.map((c, i) => {
+    if (this.props.showComment) {
+      return (
+        <View style={styles.viewComments}>
+          {this.props.post.comments.slice(0, 5)?.map((c, i) => {
             return (
-              <Text
-                style={styles.txtComment}
-                key={i.toString()}>
-                <Text style={styles.txtCommentUser}>First Last:</Text>
-                &nbsp;This is sample comment with multiple lines I love you.&nbsp;&nbsp;
-                <Text style={styles.txtTime}>2019/03/22 11:23</Text>
+              <Text style={styles.txtComment} key={i.toString()}>
+                <Text style={styles.txtCommentUser}>
+                  {c.user?.getFullName()}:
+                </Text>
+                &nbsp;{c.text}&nbsp;&nbsp;
+                <Text style={styles.txtTime}>{c.createdAt.fromNow()}</Text>
               </Text>
             );
-          })
-        }
+          })}
 
-        {/* all comments */}
-        <Button
-          type="clear"
-          title="View All Comments"
-          // buttonStyle={styles.butClear}
-          titleStyle={styles.titleButAll}
-          onPress={() => this.onButAll()}
-        />
-      </View>
-    );
+          {/* all comments */}
+          {this.props.post.comments.length >= 5 ? (
+            <Button
+              type="clear"
+              title="View All Comments"
+              // buttonStyle={styles.butClear}
+              titleStyle={styles.titleButAll}
+              onPress={() => this.onButAll()}
+            />
+          ) : null}
+        </View>
+      );
+    }
+
+    return null;
   }
 
   onButAll() {
     // go to post detail page
+    this.props.onPressComment();
   }
 }

@@ -8,8 +8,10 @@ import {
   Platform,
   SafeAreaView,
   StatusBarIOS,
-  Text, TouchableOpacity,
+  Text,
+  TouchableOpacity,
   View,
+  Keyboard,
 } from 'react-native';
 import {stylesApp} from '../../styles/app.style';
 import ContentWithBackground from '../../components/ContentWithBackground/ContentWithBackground';
@@ -21,6 +23,9 @@ import PostItem from '../../components/PostItem/PostItem';
 import {PostHelper} from '../../helpers/post-helper';
 import ImageView from 'react-native-image-viewing';
 import FastImage from 'react-native-fast-image';
+import {Post} from '../../models/post.model';
+import {Comment} from '../../models/comment.model';
+import {UserHelper} from '../../helpers/user-helper';
 
 const {StatusBarManager} = NativeModules;
 
@@ -35,11 +40,12 @@ class PostDetail extends React.Component {
     showImgViewer: false,
 
     // data
-    comments: [0, 1, 2],
+    comments: [],
     imageUrls: [],
     imageIndex: 0,
   };
 
+  currentUser = null;
   post = null;
 
   pageCount = 20;
@@ -51,7 +57,11 @@ class PostDetail extends React.Component {
       title: 'Comments',
     });
 
-    this.post = props.route.params.data;
+    this.currentUser = props.UserReducer.user;
+    this.post = new Post().initFromObject(props.route.params.data);
+    this.onChangeItem = props.route.params.onChangeItem;
+
+    this.state.comments = this.post.comments;
   }
 
   componentDidMount(): void {
@@ -133,6 +143,7 @@ class PostDetail extends React.Component {
       <PostItem
         post={this.post}
         onPressImage={(imgIndex) => this.onPressImage(imgIndex)}
+        showComment={false}
       />
     );
   }
@@ -152,7 +163,7 @@ class PostDetail extends React.Component {
         <TouchableOpacity>
           <FastImage
             style={styles.imgUser}
-            source={require('../../../assets/imgs/user_default.png')}
+            source={UserHelper.getUserImage(item?.user)}
             resizeMode={FastImage.resizeMode.cover}
           />
         </TouchableOpacity>
@@ -160,14 +171,12 @@ class PostDetail extends React.Component {
         <View style={styles.viewCommentContent}>
           <View style={styles.viewCommentHeader}>
             {/* name */}
-            <Text style={styles.txtUser}>First Last</Text>
+            <Text style={styles.txtUser}>{item?.user.getFullName()}</Text>
             {/* time */}
-            <Text style={styles.txtTime}>2 hours ago</Text>
+            <Text style={styles.txtTime}>{item?.createdAt.fromNow()}</Text>
           </View>
 
-          <Text style={styles.txtComment}>
-            This is sample comment with multiple lines I love you
-          </Text>
+          <Text style={styles.txtComment}>{item.text}</Text>
         </View>
       </View>
     );
@@ -186,7 +195,18 @@ class PostDetail extends React.Component {
     }
 
     try {
-      // fetch comments
+      let comments = await ApiService.getComments(
+        indexFrom,
+        this.pageCount,
+        this.post.id,
+      );
+
+      if (indexFrom > 0) {
+        // attach
+        comments = [...this.state.comments, ...comments];
+      }
+
+      this.setState({comments});
     } catch (e) {
       console.log(e);
     }
@@ -205,10 +225,39 @@ class PostDetail extends React.Component {
     });
   }
 
-  onButSend() {
+  async onButSend() {
     if (!this.state.text) {
       return;
     }
+
+    const commentNew = new Comment();
+    commentNew.userId = this.currentUser.id;
+    commentNew.user = this.currentUser;
+    commentNew.text = this.state.text;
+    commentNew.postId = this.post.id;
+
+    // upload data
+    ApiService.addComment(commentNew).catch((e) => {
+      console.log(e);
+    });
+
+    // add to list
+    const {comments} = this.state;
+    comments.unshift(commentNew);
+
+    this.post.commentCount++;
+    this.post.comments = comments;
+
+    this.setState({
+      comments: comments,
+      // clear input
+      text: '',
+    });
+
+    // hide keyboard
+    Keyboard.dismiss();
+
+    this.onChangeItem(this.post);
   }
 
   onEndReached() {

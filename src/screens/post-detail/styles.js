@@ -38,7 +38,7 @@ export const styles = StyleSheet.create({
   viewComment: {
     ...stylesApp.flexRow,
     paddingHorizontal: 16,
-    paddingVertical: 8,
+    paddingVertical: 10,
     borderBottomWidth: 1,
     borderColor: colorTheme.lightGrey,
   },
