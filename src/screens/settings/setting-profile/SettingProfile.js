@@ -24,23 +24,34 @@ import TagItem from '../../../components/TagItem/TagItem';
 import ScheduleSelect from '../../schedule/ScheduleSelect';
 import SelectList from '../select-list/SelectList';
 import {
+  AGE_GROUPS,
+  DANCE_LEVELS,
   SELECT_AGE,
   SELECT_AMERICAN_BALLROOM,
-  SELECT_AMERICAN_RHYTHM, SELECT_LATIN,
+  SELECT_AMERICAN_RHYTHM,
+  SELECT_LATIN,
   SELECT_STANDARD,
 } from '../../../constants/dance-data';
+import {setUserInfo} from '../../../actions/user';
+import {connect} from 'react-redux';
 
 const {width: SCREEN_WDITH} = Dimensions.get('window');
 
-export default class SettingProfile extends React.Component {
+class SettingProfile extends React.Component {
   static NAV_NAME = 'setting-profile';
 
   state = {
     // data
-    levelIndex: 0,
-
+    ageGroups: [],
+    styleBallroom: [],
+    styleRythm: [],
+    styleStandard: [],
+    styleLatin: [],
+    danceLevels: [],
     price: '',
   };
+
+  currentUser = null;
 
   constructor(props) {
     super(props);
@@ -48,6 +59,17 @@ export default class SettingProfile extends React.Component {
     props.navigation.setOptions({
       title: 'Settings',
     });
+
+    this.currentUser = props.UserReducer.user;
+
+    // init data
+    this.state.ageGroups = this.currentUser.ageGroups;
+    this.state.styleBallroom = this.currentUser.styleBallroom;
+    this.state.styleRythm = this.currentUser.styleRythm;
+    this.state.styleStandard = this.currentUser.styleStandard;
+    this.state.styleLatin = this.currentUser.styleLatin;
+    this.state.danceLevels = this.currentUser.danceLevels;
+    this.state.price = this.currentUser.price?.toString();
   }
 
   render() {
@@ -92,8 +114,9 @@ export default class SettingProfile extends React.Component {
 
         {/*tags of age group */}
         <View style={styles.viewTapContainer}>
-          <TagItem text={'sample'}></TagItem>
-          <TagItem text={'sample'}></TagItem>
+          {this.state.ageGroups.map((value, i) => {
+            return <TagItem key={i.toString()} text={value} />;
+          })}
         </View>
 
         {/* levels */}
@@ -111,7 +134,8 @@ export default class SettingProfile extends React.Component {
         </Text>
 
         {/* american ballroom */}
-        <TouchableOpacity onPress={() => this.onSelectStyle(SELECT_AMERICAN_BALLROOM)}>
+        <TouchableOpacity
+          onPress={() => this.onSelectStyle(SELECT_AMERICAN_BALLROOM)}>
           <View style={{...styles.viewListItem, ...stylesApp.mt14}}>
             <Text style={styles.txtItem}>American Ballroom</Text>
 
@@ -127,12 +151,14 @@ export default class SettingProfile extends React.Component {
 
         {/* tags */}
         <View style={styles.viewTapContainer}>
-          <TagItem text={'sample'}></TagItem>
-          <TagItem text={'sample'}></TagItem>
+          {this.state.styleBallroom.map((value, i) => {
+            return <TagItem key={i.toString()} text={value} />;
+          })}
         </View>
 
         {/* american rhythm */}
-        <TouchableOpacity onPress={() => this.onSelectStyle(SELECT_AMERICAN_RHYTHM)}>
+        <TouchableOpacity
+          onPress={() => this.onSelectStyle(SELECT_AMERICAN_RHYTHM)}>
           <View style={{...styles.viewListItem, ...stylesApp.mt12}}>
             <Text style={styles.txtItem}>American Rhythm</Text>
 
@@ -148,8 +174,9 @@ export default class SettingProfile extends React.Component {
 
         {/* tags */}
         <View style={styles.viewTapContainer}>
-          <TagItem text={'sample'}></TagItem>
-          <TagItem text={'sample'}></TagItem>
+          {this.state.styleRythm.map((value, i) => {
+            return <TagItem key={i.toString()} text={value} />;
+          })}
         </View>
 
         {/* standard */}
@@ -169,8 +196,9 @@ export default class SettingProfile extends React.Component {
 
         {/* tags */}
         <View style={styles.viewTapContainer}>
-          <TagItem text={'sample'}></TagItem>
-          <TagItem text={'sample'}></TagItem>
+          {this.state.styleStandard.map((value, i) => {
+            return <TagItem key={i.toString()} text={value} />;
+          })}
         </View>
 
         {/* latin */}
@@ -190,8 +218,9 @@ export default class SettingProfile extends React.Component {
 
         {/* tags */}
         <View style={styles.viewTapContainer}>
-          <TagItem text={'sample'}></TagItem>
-          <TagItem text={'sample'}></TagItem>
+          {this.state.styleLatin.map((value, i) => {
+            return <TagItem key={i.toString()} text={value} />;
+          })}
         </View>
 
         {/* price */}
@@ -255,22 +284,25 @@ export default class SettingProfile extends React.Component {
           {/* beginner */}
           <CheckboxRound
             label="Newcomer"
-            checked={false}
-            onPress={() => this.onSelectLevel()}
+            checked={this.isLevelSelected(DANCE_LEVELS.CLOSED_NEWCOMER)}
+            onPress={() => this.onSelectLevel(DANCE_LEVELS.CLOSED_NEWCOMER)}
           />
 
           <View style={stylesApp.flexRow}>
             {[1, 2, 3].map((s, i) => {
               return (
                 <CheckboxRound
+                  key={i.toString()}
                   containerStyle={{
                     flex: 1,
                     paddingLeft: i % 3 !== 0 ? spacing / 2 : 0,
                     paddingRight: i % 3 !== 2 ? spacing / 2 : 0,
                   }}
                   label={`Bronze ${s}`}
-                  checked={false}
-                  onPress={() => this.onSelectLevel()}
+                  checked={this.isLevelSelected(DANCE_LEVELS.CLOSED_BRONZE[i])}
+                  onPress={() =>
+                    this.onSelectLevel(DANCE_LEVELS.CLOSED_BRONZE[i])
+                  }
                 />
               );
             })}
@@ -280,14 +312,17 @@ export default class SettingProfile extends React.Component {
             {[1, 2, 3].map((s, i) => {
               return (
                 <CheckboxRound
+                  key={i.toString()}
                   containerStyle={{
                     flex: 1,
                     paddingLeft: i % 3 !== 0 ? spacing / 2 : 0,
                     paddingRight: i % 3 !== 2 ? spacing / 2 : 0,
                   }}
                   label={`Silver ${s}`}
-                  checked={false}
-                  onPress={() => this.onSelectLevel()}
+                  checked={this.isLevelSelected(DANCE_LEVELS.CLOSED_SILVER[i])}
+                  onPress={() =>
+                    this.onSelectLevel(DANCE_LEVELS.CLOSED_SILVER[i])
+                  }
                 />
               );
             })}
@@ -297,14 +332,17 @@ export default class SettingProfile extends React.Component {
             {[1, 2, 3].map((s, i) => {
               return (
                 <CheckboxRound
+                  key={i.toString()}
                   containerStyle={{
                     flex: 1,
                     paddingLeft: i % 3 !== 0 ? spacing / 2 : 0,
                     paddingRight: i % 3 !== 2 ? spacing / 2 : 0,
                   }}
                   label={`Gold ${s}`}
-                  checked={false}
-                  onPress={() => this.onSelectLevel()}
+                  checked={this.isLevelSelected(DANCE_LEVELS.CLOSED_GOLD[i])}
+                  onPress={() =>
+                    this.onSelectLevel(DANCE_LEVELS.CLOSED_GOLD[i])
+                  }
                 />
               );
             })}
@@ -313,8 +351,10 @@ export default class SettingProfile extends React.Component {
           {/* advanced */}
           <CheckboxRound
             label="Gold Advanced"
-            checked={false}
-            onPress={() => this.onSelectLevel()}
+            checked={this.isLevelSelected(DANCE_LEVELS.CLOSED_GOLD_ADVANCED)}
+            onPress={() =>
+              this.onSelectLevel(DANCE_LEVELS.CLOSED_GOLD_ADVANCED)
+            }
           />
         </View>
 
@@ -324,22 +364,22 @@ export default class SettingProfile extends React.Component {
             {/* pre-bronze */}
             <CheckboxRound
               label="Pre-Bronze"
-              checked={false}
+              checked={this.isLevelSelected(DANCE_LEVELS.OPEN_PREBRONZE)}
               containerStyle={{
                 flex: 1,
                 paddingRight: spacing,
               }}
-              onPress={() => this.onSelectLevel()}
+              onPress={() => this.onSelectLevel(DANCE_LEVELS.OPEN_PREBRONZE)}
             />
             {/* bronze */}
             <CheckboxRound
               label="Bronze"
-              checked={false}
+              checked={this.isLevelSelected(DANCE_LEVELS.OPEN_BRONZE)}
               containerStyle={{
                 flex: 1,
                 paddingLeft: spacing,
               }}
-              onPress={() => this.onSelectLevel()}
+              onPress={() => this.onSelectLevel(DANCE_LEVELS.OPEN_BRONZE)}
             />
           </View>
 
@@ -347,22 +387,22 @@ export default class SettingProfile extends React.Component {
             {/* pre-silver */}
             <CheckboxRound
               label="Pre-Silver"
-              checked={false}
+              checked={this.isLevelSelected(DANCE_LEVELS.OPEN_PRESILVER)}
               containerStyle={{
                 flex: 1,
                 paddingRight: spacing,
               }}
-              onPress={() => this.onSelectLevel()}
+              onPress={() => this.onSelectLevel(DANCE_LEVELS.OPEN_PRESILVER)}
             />
             {/* silver */}
             <CheckboxRound
               label="Silver"
-              checked={false}
+              checked={this.isLevelSelected(DANCE_LEVELS.OPEN_SILVER)}
               containerStyle={{
                 flex: 1,
                 paddingLeft: spacing,
               }}
-              onPress={() => this.onSelectLevel()}
+              onPress={() => this.onSelectLevel(DANCE_LEVELS.OPEN_SILVER)}
             />
           </View>
 
@@ -370,22 +410,24 @@ export default class SettingProfile extends React.Component {
             {/* gold */}
             <CheckboxRound
               label="Gold"
-              checked={false}
+              checked={this.isLevelSelected(DANCE_LEVELS.OPEN_GOLD)}
               containerStyle={{
                 flex: 1,
                 paddingRight: spacing,
               }}
-              onPress={() => this.onSelectLevel()}
+              onPress={() => this.onSelectLevel(DANCE_LEVELS.OPEN_GOLD)}
             />
             {/* gold advanced */}
             <CheckboxRound
               label="Gold Advanced"
-              checked={false}
+              checked={this.isLevelSelected(DANCE_LEVELS.OPEN_GOLD_ADVANCED)}
               containerStyle={{
                 flex: 1,
                 paddingLeft: spacing,
               }}
-              onPress={() => this.onSelectLevel()}
+              onPress={() =>
+                this.onSelectLevel(DANCE_LEVELS.OPEN_GOLD_ADVANCED)
+              }
             />
           </View>
         </View>
@@ -398,10 +440,23 @@ export default class SettingProfile extends React.Component {
       typeIndex: index,
     });
   }
-  onSelectLevel(index) {
-    this.setState({
-      levelIndex: index,
-    });
+  onSelectLevel(level) {
+    const {danceLevels} = this.state;
+    const index = danceLevels.findIndex((data) => data === level);
+
+    if (index >= 0) {
+      // remove if exist
+      danceLevels.splice(index, 1);
+    } else {
+      // add if not exist
+      danceLevels.push(level);
+    }
+
+    this.setState({danceLevels});
+  }
+
+  isLevelSelected(level) {
+    return this.state.danceLevels.findIndex((data) => data === level) >= 0;
   }
 
   onButNext() {}
@@ -409,15 +464,63 @@ export default class SettingProfile extends React.Component {
   onSelectAge() {
     this.props.navigation.push(SelectList.NAV_NAME, {
       type: SELECT_AGE,
+      values: this.state.ageGroups,
+      onSave: this.onSaveItems.bind(this),
     });
   }
 
   onSelectStyle(type) {
+    let values = [];
+
+    if (type === SELECT_AMERICAN_BALLROOM) {
+      values = this.state.styleBallroom;
+    } else if (type === SELECT_AMERICAN_RHYTHM) {
+      values = this.state.styleRythm;
+    } else if (type === SELECT_STANDARD) {
+      values = this.state.styleStandard;
+    } else if (type === SELECT_LATIN) {
+      values = this.state.styleLatin;
+    }
+
     this.props.navigation.push(SelectList.NAV_NAME, {
       type: type,
+      values: values,
+      onSave: this.onSaveItems.bind(this),
     });
+  }
+
+  onSaveItems(type, values) {
+    if (type === SELECT_AGE) {
+      this.setState({
+        ageGroups: values,
+      });
+    } else if (type === SELECT_AMERICAN_BALLROOM) {
+      this.setState({
+        styleBallroom: values,
+      });
+    } else if (type === SELECT_AMERICAN_RHYTHM) {
+      this.setState({
+        styleRythm: values,
+      });
+    } else if (type === SELECT_STANDARD) {
+      this.setState({
+        styleStandard: values,
+      });
+    } else if (type === SELECT_LATIN) {
+      this.setState({
+        styleLatin: values,
+      });
+    }
   }
 
   onButSave() {
   }
 }
+
+const mapStateToProps = (state) => state;
+
+const mapDispatchToProps = {
+  setUserInfo,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SettingProfile);

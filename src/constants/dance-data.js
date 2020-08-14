@@ -10,14 +10,6 @@ export const DANCE_STYLES = [
   {value: 'chacha', name: 'Chacha'},
 ];
 
-export const DANCE_LEVELS = [
-  {value: 'beginner', name: 'Beginner'},
-  {value: 'bronze', name: 'Bronze'},
-  {value: 'bronze1', name: 'Bronze 1'},
-  {value: 'bronze2', name: 'Bronze 2'},
-  {value: 'bronze-open', name: 'Open Bronze'},
-];
-
 export const OCCASIONS = [
   {value: 'wedding', name: 'Wedding Preparation'},
   {value: 'event', name: 'Special Event'},
@@ -81,3 +73,17 @@ export const STYLE_INTERNATIONAL_LATIN = [
   {value: 'PD', name: 'Paso Doble'},
   {value: 'J', name: 'Jive'},
 ];
+
+export const DANCE_LEVELS = {
+  CLOSED_NEWCOMER: 'closed-newcomer',
+  CLOSED_BRONZE: ['closed-bronze1', 'closed-bronze2', 'closed-bronze3'],
+  CLOSED_SILVER: ['closed-silver1', 'closed-silver2', 'closed-silver3'],
+  CLOSED_GOLD: ['closed-gold1', 'closed-gold2', 'closed-gold3'],
+  CLOSED_GOLD_ADVANCED: 'closed-advanced',
+  OPEN_PREBRONZE: 'open-prebronze',
+  OPEN_BRONZE: 'open-bronze',
+  OPEN_PRESILVER: 'open-presilver',
+  OPEN_SILVER: 'open-silver',
+  OPEN_GOLD: 'open-gold',
+  OPEN_GOLD_ADVANCED: 'open-gold-advanced',
+};

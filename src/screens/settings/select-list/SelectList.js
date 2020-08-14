@@ -24,11 +24,13 @@ export default class SelectList extends React.Component {
   };
 
   type = '';
+  onSave = null;
 
   constructor(props) {
     super(props);
 
     this.type = props.route.params.type;
+    this.onSave = props.route.params.onSave;
 
     props.navigation.setOptions({
       title: this.getTitle(),
@@ -37,10 +39,21 @@ export default class SelectList extends React.Component {
           type="clear"
           title="Save"
           titleStyle={styles.butTitleRight}
-          onPress={() => this.onSave()}
+          onPress={() => this.onButSave()}
         />
       ),
     });
+
+    // init data
+    const valueAll = this.getList();
+    const values = props.route.params.values ?? [];
+    for (const v of values) {
+      for (const item of valueAll) {
+        if (v === item.value) {
+          this.state.selected.push(item);
+        }
+      }
+    }
   }
 
   render() {
@@ -58,7 +71,7 @@ export default class SelectList extends React.Component {
   renderItem(item, index) {
     return (
       <ListItem
-        title={item.name}
+        title={this.type === SELECT_AGE ? item.name : `${item.value} - ${item.name}`}
         titleStyle={styles.titleListItem}
         checkmark={
           this.state.selected.findIndex((data) => data.value === item.value) >= 0
@@ -118,6 +131,16 @@ export default class SelectList extends React.Component {
     this.setState({selected});
   }
 
-  onSave() {
+  onButSave() {
+    const values = [];
+
+    for (const item of this.state.selected) {
+      values.push(item.value);
+    }
+
+    this.onSave(this.type, values);
+
+    // back to prev page
+    this.props.navigation.pop();
   }
 }

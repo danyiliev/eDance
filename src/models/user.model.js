@@ -25,6 +25,18 @@ export class User extends BaseModel {
 
   type = User.TYPE_TEACHER;
 
+  // teacher settings
+  price = 0;
+  ageGroups = [];
+
+  // dance styles
+  styleBallroom = [];
+  styleRythm = [];
+  styleStandard = [];
+  styleLatin = [];
+
+  danceLevels = [];
+
   initFromObject(data) {
     super.initFromObject(data);
 
@@ -55,6 +67,33 @@ export class User extends BaseModel {
     }
 
     this.photo = data.photo;
+
+    // teacher settings
+    if (data.price) {
+      this.price = 0;
+    }
+
+    if (data.ageGroups) {
+      this.ageGroups = data.ageGroups || [];
+    }
+
+    // dance styles
+    if (data.styleBallroom) {
+      this.styleBallroom = data.styleBallroom;
+    }
+    if (data.styleRythm) {
+      this.styleRythm = data.styleRythm;
+    }
+    if (data.styleStandard) {
+      this.styleStandard = data.styleStandard;
+    }
+    if (data.styleLatin) {
+      this.styleLatin = data.styleLatin;
+    }
+
+    if (data.danceLevels) {
+      this.danceLevels = data.danceLevels;
+    }
 
     return this;
   }
