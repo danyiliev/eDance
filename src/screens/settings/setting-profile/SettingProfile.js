@@ -21,6 +21,14 @@ import SelectPicker from '../../../components/SelectPicker/SelectPicker';
 import {Picker} from '@react-native-community/picker';
 import {STATES} from '../../../constants/constant-data';
 import TagItem from '../../../components/TagItem/TagItem';
+import ScheduleSelect from '../../schedule/ScheduleSelect';
+import SelectList from '../select-list/SelectList';
+import {
+  SELECT_AGE,
+  SELECT_AMERICAN_BALLROOM,
+  SELECT_AMERICAN_RHYTHM, SELECT_LATIN,
+  SELECT_STANDARD,
+} from '../../../constants/dance-data';
 
 const {width: SCREEN_WDITH} = Dimensions.get('window');
 
@@ -33,24 +41,6 @@ export default class SettingProfile extends React.Component {
 
     price: '',
   };
-
-  genders = ['Male', 'Female'];
-  types = ['Student', 'Professional', 'Cyber Championship Aujudicator'];
-  singles = ['Single', 'Couple'];
-  levels = [
-    'Beginner',
-    'Silver',
-    'Gold',
-    'Bronze',
-    'Silver 1',
-    'Gold 1',
-    'Bronze 1',
-    'Silver 2',
-    'Gold 2',
-    'Bronze 2',
-    'Silver 3',
-    'Gold 3',
-  ];
 
   constructor(props) {
     super(props);
@@ -121,7 +111,7 @@ export default class SettingProfile extends React.Component {
         </Text>
 
         {/* american ballroom */}
-        <TouchableOpacity onPress={() => this.onSelectStyle()}>
+        <TouchableOpacity onPress={() => this.onSelectStyle(SELECT_AMERICAN_BALLROOM)}>
           <View style={{...styles.viewListItem, ...stylesApp.mt14}}>
             <Text style={styles.txtItem}>American Ballroom</Text>
 
@@ -142,7 +132,7 @@ export default class SettingProfile extends React.Component {
         </View>
 
         {/* american rhythm */}
-        <TouchableOpacity onPress={() => this.onSelectStyle()}>
+        <TouchableOpacity onPress={() => this.onSelectStyle(SELECT_AMERICAN_RHYTHM)}>
           <View style={{...styles.viewListItem, ...stylesApp.mt12}}>
             <Text style={styles.txtItem}>American Rhythm</Text>
 
@@ -163,7 +153,7 @@ export default class SettingProfile extends React.Component {
         </View>
 
         {/* standard */}
-        <TouchableOpacity onPress={() => this.onSelectStyle()}>
+        <TouchableOpacity onPress={() => this.onSelectStyle(SELECT_STANDARD)}>
           <View style={{...styles.viewListItem, ...stylesApp.mt12}}>
             <Text style={styles.txtItem}>Standard</Text>
 
@@ -184,7 +174,7 @@ export default class SettingProfile extends React.Component {
         </View>
 
         {/* latin */}
-        <TouchableOpacity onPress={() => this.onSelectStyle()}>
+        <TouchableOpacity onPress={() => this.onSelectStyle(SELECT_LATIN)}>
           <View style={{...styles.viewListItem, ...stylesApp.mt12}}>
             <Text style={styles.txtItem}>Latin</Text>
 
@@ -417,9 +407,15 @@ export default class SettingProfile extends React.Component {
   onButNext() {}
 
   onSelectAge() {
+    this.props.navigation.push(SelectList.NAV_NAME, {
+      type: SELECT_AGE,
+    });
   }
 
-  onSelectStyle() {
+  onSelectStyle(type) {
+    this.props.navigation.push(SelectList.NAV_NAME, {
+      type: type,
+    });
   }
 
   onButSave() {

@@ -44,6 +44,7 @@ import AddPost from './add-post/AddPost';
 import RadioDetail from './tabs/radio/radio-detail/RadioDetail';
 import TvDetail from './tabs/tv/tv-detail/TvDetail';
 import PostDetail from './post-detail/PostDetail';
+import SelectList from './settings/select-list/SelectList';
 
 const Stack = createStackNavigator();
 
@@ -143,6 +144,7 @@ class MainNavigator extends React.Component {
               />
               <Stack.Screen name={TvDetail.NAV_NAME} component={TvDetail} />
               <Stack.Screen name={PostDetail.NAV_NAME} component={PostDetail} />
+              <Stack.Screen name={SelectList.NAV_NAME} component={SelectList} />
             </Stack.Navigator>
 
             <MenuModal
