@@ -30,7 +30,7 @@ export const styles = StyleSheet.create({
 
   viewButNext: {
     ...styleUtil.withShadow(),
-    marginTop: 26,
+    marginVertical: 26,
     marginHorizontal: 30,
   },
 });

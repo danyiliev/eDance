@@ -1,11 +1,12 @@
 import React from 'react';
 import {stylesApp, styleUtil} from '../../styles/app.style';
-import {Text, TouchableOpacity, View} from 'react-native';
+import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import {styles} from './styles';
 import ComboSchedule from '../../components/ComboSchedule/ComboSchedule';
 import SelectPicker from '../../components/SelectPicker/SelectPicker';
 import {STATES} from '../../constants/constant-data';
 import {
+  AGE_GROUPS,
   DANCE_LEVELS,
   DANCE_STYLES,
   LESSON_TYPES,
@@ -15,6 +16,8 @@ import {Button, Icon} from 'react-native-elements';
 import {styles as stylesSignup} from '../signup/styles';
 import {colors as colorTheme} from '../../styles/theme.style';
 import ScheduleCheckout from './schedule-checkout/ScheduleCheckout';
+import {DanceHelper} from '../../helpers/dance-helper';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 export default class ScheduleSelect extends React.Component {
   static NAV_NAME = 'schedule-select';
@@ -22,9 +25,10 @@ export default class ScheduleSelect extends React.Component {
   state = {
     // data
     type: '',
+    ageGroupe: '',
     style: '',
+    dance: '',
     level: '',
-    occasion: '',
   };
 
   constructor(props) {
@@ -37,75 +41,94 @@ export default class ScheduleSelect extends React.Component {
 
   render() {
     return (
-      <View style={styles.viewContainer}>
-        {/* lesson type */}
-        <View style={styles.viewSelect}>
-          {/* title */}
-          <Text style={styles.txtTitle}>Lesson Type</Text>
+      <ScrollView style={stylesApp.viewContainer}>
+        <View style={styles.viewContainer}>
+          {/* lesson type */}
+          <View style={styles.viewSelect}>
+            {/* title */}
+            <Text style={styles.txtTitle}>Lesson Type</Text>
 
-          <ComboSchedule
-            style={styles.styleCombo}
-            placeholder={'Please select lesson type'}
-            items={LESSON_TYPES}
-          />
-        </View>
+            <ComboSchedule
+              style={styles.styleCombo}
+              placeholder={'Please select lesson type'}
+              items={LESSON_TYPES}
+            />
+          </View>
 
-        {/* dance style */}
-        <View style={styles.viewSelect}>
-          {/* title */}
-          <Text style={styles.txtTitle}>Dance Styles</Text>
+          {/* age category */}
+          <View style={styles.viewSelect}>
+            {/* title */}
+            <Text style={styles.txtTitle}>Age Category</Text>
 
-          <ComboSchedule
-            style={styles.styleCombo}
-            placeholder={'Please select dance style'}
-            items={DANCE_STYLES}
-          />
-        </View>
+            <ComboSchedule
+              style={styles.styleCombo}
+              placeholder={'Please select age category'}
+              items={AGE_GROUPS}
+            />
+          </View>
 
-        {/* dance level */}
-        <View style={styles.viewSelect}>
-          {/* title */}
-          <Text style={styles.txtTitle}>Dance Level</Text>
+          {/* dance style */}
+          <View style={styles.viewSelect}>
+            {/* title */}
+            <Text style={styles.txtTitle}>Dance Styles</Text>
 
-          <ComboSchedule
-            style={styles.styleCombo}
-            placeholder={'Please select dance level'}
-            items={DANCE_LEVELS}
-          />
-        </View>
+            <ComboSchedule
+              style={styles.styleCombo}
+              placeholder={'Please select dance style'}
+              items={DanceHelper.danceStylesAll()}
+              onChange={(style) => this.setState({style})}
+            />
+          </View>
 
-        {/* occasion */}
-        <View style={styles.viewSelect}>
-          {/* title */}
-          <Text style={styles.txtTitle}>Special Occasion</Text>
+          {/* dance */}
+          {this.state.style ? (
+            <View style={styles.viewSelect}>
+              {/* title */}
+              <Text style={styles.txtTitle}>Dance</Text>
 
-          <ComboSchedule
-            style={styles.styleCombo}
-            placeholder={'Please select occasion'}
-            items={OCCASIONS}
-          />
-        </View>
-
-        {/* next */}
-        <View style={styles.viewButNext}>
-          <Button
-            title="NEXT"
-            buttonStyle={stylesApp.butPrimary}
-            titleStyle={stylesApp.titleButPrimary}
-            onPress={() => this.onButNext()}
-            icon={
-              <Icon
-                type="ionicon"
-                name="md-arrow-forward"
-                containerStyle={stylesSignup.ctnButIcon}
-                size={22}
-                color={colorTheme.light}
+              <ComboSchedule
+                style={styles.styleCombo}
+                placeholder={'Please select dance'}
+                items={DanceHelper.dancesByStyle(this.state.style)}
+                onChange={(dance) => this.setState({dance})}
               />
-            }
-            iconRight={true}
-          />
+            </View>
+          ) : null}
+
+          {/* dance level */}
+          <View style={styles.viewSelect}>
+            {/* title */}
+            <Text style={styles.txtTitle}>Dance Level</Text>
+
+            <ComboSchedule
+              style={styles.styleCombo}
+              placeholder={'Please select dance level'}
+              items={DanceHelper.danceLevelsAll()}
+              onChange={(level) => this.setState({level})}
+            />
+          </View>
+
+          {/* next */}
+          <View style={styles.viewButNext}>
+            <Button
+              title="NEXT"
+              buttonStyle={stylesApp.butPrimary}
+              titleStyle={stylesApp.titleButPrimary}
+              onPress={() => this.onButNext()}
+              icon={
+                <Icon
+                  type="ionicon"
+                  name="md-arrow-forward"
+                  containerStyle={stylesSignup.ctnButIcon}
+                  size={22}
+                  color={colorTheme.light}
+                />
+              }
+              iconRight={true}
+            />
+          </View>
         </View>
-      </View>
+      </ScrollView>
     );
   }
 

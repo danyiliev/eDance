@@ -13,6 +13,7 @@ export default class ComboSchedule extends React.Component {
     style: PropTypes.object,
     placeholder: PropTypes.string,
     items: PropTypes.array,
+    onChange: PropTypes.func,
   };
 
   state = {
@@ -99,6 +100,10 @@ export default class ComboSchedule extends React.Component {
       this.setState({
         value: valueSelected,
       });
+
+      if (this.props.onChange) {
+        this.props.onChange(valueSelected);
+      }
     } else {
       this.setState({
         valueSelected: this.state.value,
