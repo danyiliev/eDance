@@ -74,7 +74,7 @@ export class User extends BaseModel {
     }
 
     if (data.ageGroups) {
-      this.ageGroups = data.ageGroups || [];
+      this.ageGroups = data.ageGroups;
     }
 
     // dance styles

@@ -263,6 +263,47 @@ class ApiService {
     }
   }
 
+  async updateTeacherInfo(
+    ageGroups,
+    danceLevels,
+    styleBallroom,
+    styleRythm,
+    styleStandard,
+    styleLatin,
+    price,
+  ) {
+    const httpOptions = {
+      headers: {
+        ...this.baseHeader(),
+      },
+    };
+
+    const params = {
+      ageGroups: ageGroups,
+      danceLevels: danceLevels,
+      styleBallroom: styleBallroom,
+      styleRythm: styleRythm,
+      styleStandard: styleStandard,
+      styleLatin: styleLatin,
+      price: price,
+    };
+
+    try {
+      const {data} = await Axios.post(
+        `${this.baseUrl}/users/update/teacher`,
+        params,
+        httpOptions,
+      );
+      console.log(data);
+
+      return Promise.resolve(true);
+    } catch (e) {
+      console.log(e);
+
+      return Promise.reject(e.response ? e.response.data : e);
+    }
+  }
+
   async getPosts(from, count, userId) {
     let params = {
       from: from,

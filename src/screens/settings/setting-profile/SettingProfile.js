@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
   View,
   Platform,
+  Alert,
 } from 'react-native';
 import {stylesApp, styleUtil} from '../../../styles/app.style';
 import {Button, ButtonGroup, Icon, Input} from 'react-native-elements';
@@ -34,6 +35,8 @@ import {
 } from '../../../constants/dance-data';
 import {setUserInfo} from '../../../actions/user';
 import {connect} from 'react-redux';
+import {ApiService} from '../../../services';
+import {UserHelper} from '../../../helpers/user-helper';
 
 const {width: SCREEN_WDITH} = Dimensions.get('window');
 
@@ -513,7 +516,36 @@ class SettingProfile extends React.Component {
     }
   }
 
-  onButSave() {
+  async onButSave() {
+    try {
+      await ApiService.updateTeacherInfo(
+        this.state.ageGroups,
+        this.state.danceLevels,
+        this.state.styleBallroom,
+        this.state.styleRythm,
+        this.state.styleStandard,
+        this.state.styleLatin,
+        Number(this.state.price) ?? 0,
+      );
+
+      // set data
+      this.currentUser.ageGroups = this.state.ageGroups;
+      this.currentUser.danceLevels = this.state.danceLevels;
+      this.currentUser.styleBallroom = this.state.styleBallroom;
+      this.currentUser.styleRythm = this.state.styleRythm;
+      this.currentUser.styleStandard = this.state.styleStandard;
+      this.currentUser.styleLatin = this.state.styleLatin;
+      this.currentUser.price = Number(this.state.price);
+
+      UserHelper.saveUserToLocalStorage(this.currentUser, this.props);
+
+      // go back to prev page
+      this.props.navigation.pop();
+    } catch (e) {
+      console.log(e);
+
+      Alert.alert('Failed to save settings', e.message);
+    }
   }
 }
 

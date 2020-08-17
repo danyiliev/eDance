@@ -302,7 +302,6 @@ class EditProfile extends BaseSignup {
 
       // go back to prev page
       this.props.navigation.pop();
-
     } catch (e) {
       console.log(e);
 
