@@ -27,6 +27,8 @@ import SelectList from '../select-list/SelectList';
 import {
   AGE_GROUPS,
   DANCE_LEVELS,
+  DURATIONS_LESSON,
+  DURATIONS_REST,
   SELECT_AGE,
   SELECT_AMERICAN_BALLROOM,
   SELECT_AMERICAN_RHYTHM,
@@ -37,6 +39,7 @@ import {setUserInfo} from '../../../actions/user';
 import {connect} from 'react-redux';
 import {ApiService} from '../../../services';
 import {UserHelper} from '../../../helpers/user-helper';
+import {User} from '../../../models/user.model';
 
 const {width: SCREEN_WDITH} = Dimensions.get('window');
 
@@ -52,9 +55,25 @@ class SettingProfile extends React.Component {
     styleLatin: [],
     danceLevels: [],
     price: '',
+
+    durationLessonIndex: 0,
+    durationRestIndex: 0,
+    availableDays: [],
   };
 
   currentUser = null;
+
+  lessonDurations = ['30 Minutes', '45 Minutes', 'An hour'];
+  restDurations = ['5 Minutes', '10 Minutes', '15 Minutes'];
+  dayOfWeeks = [
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday',
+  ];
 
   constructor(props) {
     super(props);
@@ -251,6 +270,46 @@ class SettingProfile extends React.Component {
             <Icon color={'#cecece'} type="font-awesome" name="usd" size={16} />
           </View>
         </View>
+
+        {/* time options */}
+        <View style={[styles.viewForm, stylesApp.mt24]}>
+          <Text style={[stylesSignup.txtItemTitle, stylesApp.mt6]}>
+            Time Options You Teach:
+          </Text>
+
+          <Text style={[styles.txtLabel, stylesApp.mt12]}>
+            Duration of a lesson you teach
+          </Text>
+          <ButtonGroup
+            containerStyle={styles.ctnSegmentGender}
+            buttons={this.lessonDurations}
+            textStyle={stylesSignup.txtSegment}
+            innerBorderStyle={stylesSignup.borderSegment}
+            selectedButtonStyle={stylesSignup.butSegmentSelected}
+            selectedTextStyle={stylesSignup.SegmentSelected}
+            selectedIndex={this.state.durationLessonIndex}
+            onPress={(index) => this.setState({lessonDurationIndex: index})}
+          />
+
+          <Text style={[styles.txtLabel, stylesApp.mt12]}>
+            How long do you need between closses?
+          </Text>
+          <ButtonGroup
+            containerStyle={styles.ctnSegmentGender}
+            buttons={this.restDurations}
+            textStyle={stylesSignup.txtSegment}
+            innerBorderStyle={stylesSignup.borderSegment}
+            selectedButtonStyle={stylesSignup.butSegmentSelected}
+            selectedTextStyle={stylesSignup.SegmentSelected}
+            selectedIndex={this.state.durationRestIndex}
+            onPress={(index) => this.setState({restDurationIndex: index})}
+          />
+
+          <Text style={[styles.txtLabel, stylesApp.mt12]}>
+            How long do you need between lessons?
+          </Text>
+          {this.renderDayOfWeeks()}
+        </View>
       </View>
     );
   }
@@ -438,6 +497,32 @@ class SettingProfile extends React.Component {
     );
   }
 
+  renderDayOfWeeks() {
+    const spacing = 14;
+    const padding = 14;
+    const itemWidth = (SCREEN_WDITH - padding * 2 - spacing * 4) / 3;
+
+    return (
+      <View style={styles.viewTapContainer}>
+        {this.dayOfWeeks.map((d, i) => {
+          return (
+            <CheckboxRound
+              key={i.toString()}
+              label={d}
+              checked={this.isDayOfWeekSelected(i)}
+              containerStyle={{
+                width: itemWidth,
+                marginLeft: i % 3 !== 0 ? spacing / 2 : 0,
+                marginRight: i % 3 !== 2 ? spacing / 2 : 0,
+              }}
+              onPress={() => this.onSelectDayOfWeek(i)}
+            />
+          );
+        })}
+      </View>
+    );
+  }
+
   onSelectType(index) {
     this.setState({
       typeIndex: index,
@@ -458,8 +543,26 @@ class SettingProfile extends React.Component {
     this.setState({danceLevels});
   }
 
+  onSelectDayOfWeek(day) {
+    const {availableDays} = this.state;
+    const index = availableDays.findIndex((data) => data === day);
+
+    if (index >= 0) {
+      // remove if exist
+      availableDays.splice(index, 1);
+    } else {
+      // add if not exist
+      availableDays.push(day);
+    }
+
+    this.setState({availableDays});
+  }
+
   isLevelSelected(level) {
     return this.state.danceLevels.findIndex((data) => data === level) >= 0;
+  }
+  isDayOfWeekSelected(day) {
+    return this.state.availableDays.findIndex((data) => data === day) >= 0;
   }
 
   onButNext() {}
@@ -526,6 +629,9 @@ class SettingProfile extends React.Component {
         this.state.styleStandard,
         this.state.styleLatin,
         Number(this.state.price) ?? 0,
+        this.state.availableDays,
+        DURATIONS_LESSON[this.state.durationLessonIndex],
+        DURATIONS_REST[this.state.durationRestIndex],
       );
 
       // set data
@@ -536,6 +642,9 @@ class SettingProfile extends React.Component {
       this.currentUser.styleStandard = this.state.styleStandard;
       this.currentUser.styleLatin = this.state.styleLatin;
       this.currentUser.price = Number(this.state.price);
+      this.currentUser.availableDays = this.state.availableDays;
+      this.currentUser.durationLesson = DURATIONS_LESSON[this.state.durationLessonIndex];
+      this.currentUser.durationRest = DURATIONS_REST[this.state.durationRestIndex];
 
       UserHelper.saveUserToLocalStorage(this.currentUser, this.props);
 

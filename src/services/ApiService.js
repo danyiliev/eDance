@@ -271,6 +271,9 @@ class ApiService {
     styleStandard,
     styleLatin,
     price,
+    availableDays,
+    durationLesson,
+    durationRest,
   ) {
     const httpOptions = {
       headers: {
@@ -286,6 +289,9 @@ class ApiService {
       styleStandard: styleStandard,
       styleLatin: styleLatin,
       price: price,
+      availableDays: availableDays,
+      durationLesson: durationLesson,
+      durationRest: durationRest,
     };
 
     try {

@@ -87,3 +87,6 @@ export const DANCE_LEVELS = {
   OPEN_GOLD: 'open-gold',
   OPEN_GOLD_ADVANCED: 'open-gold-advanced',
 };
+
+export const DURATIONS_LESSON = [30, 45, 60];
+export const DURATIONS_REST = [5, 10, 15];

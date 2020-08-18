@@ -3,6 +3,7 @@ import {colors as colorTheme} from '../../../styles/theme.style';
 import {stylesApp, styleUtil} from '../../../styles/app.style';
 import {styles as stylesLogin} from '../../login/styles';
 import {color} from 'react-native-reanimated';
+import {styles as stylesSignup} from '../../signup/styles';
 
 export const styles = StyleSheet.create({
   txtItemTitle: {
@@ -86,5 +87,11 @@ export const styles = StyleSheet.create({
   viewButSave: {
     marginVertical: 28,
     marginHorizontal: 80,
+  },
+
+  ctnSegmentGender: {
+    ...stylesSignup.ctnSegmentGender,
+    marginTop: 0,
+    marginBottom: 8,
   },
 });
