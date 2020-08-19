@@ -35,7 +35,7 @@ export default class BookingDate extends React.Component {
           type="clear"
           title="Next"
           titleStyle={stylesApp.butTitleNavRight}
-          onPress={() => this.onButSave()}
+          onPress={() => this.onButNext()}
         />
       ),
     });
@@ -145,6 +145,7 @@ export default class BookingDate extends React.Component {
     });
   };
 
-
-  onButNext() {}
+  onButNext() {
+    // go to confirm page
+  }
 }

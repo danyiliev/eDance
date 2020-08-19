@@ -1,6 +1,6 @@
 export const LESSON_TYPES = [
-  {value: 'live', name: 'Live Private or Group Lessons'},
-  {value: 'recorded', name: 'Pre-Recorded Lessons'},
+  {value: 'private', name: 'Private'},
+  {value: 'group', name: 'Group'},
 ];
 
 export const OCCASIONS = [
