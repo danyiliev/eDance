@@ -1,6 +1,6 @@
 import {BaseModel} from './base.model';
 import {ApiService} from '../services';
-import {DURATIONS_LESSON, REST_DURATIONS} from '../constants/dance-data';
+import {DURATIONS_LESSON, DURATIONS_REST} from '../constants/dance-data';
 
 export class User extends BaseModel {
   static TYPE_TEACHER = 1;
@@ -39,7 +39,9 @@ export class User extends BaseModel {
   danceLevels = [];
   availableDays = [];
   durationLesson = DURATIONS_LESSON[0];
-  durationRest = REST_DURATIONS[0];
+  durationRest = DURATIONS_REST[0];
+  timeStart = '09:00';
+  timeEnd = '22:00';
 
   initFromObject(data) {
     super.initFromObject(data);
@@ -107,6 +109,13 @@ export class User extends BaseModel {
     }
     if (data.durationRest) {
       this.durationRest = data.durationRest;
+    }
+
+    if (data.timeStart) {
+      this.timeStart = data.timeStart;
+    }
+    if (data.timeEnd) {
+      this.timeEnd = data.timeEnd;
     }
 
     return this;

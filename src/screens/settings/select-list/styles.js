@@ -17,9 +17,4 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 0,
   },
-
-  butTitleRight: {
-    fontSize: 16,
-    color: colorTheme.primary,
-  },
 });

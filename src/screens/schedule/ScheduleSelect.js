@@ -5,19 +5,14 @@ import {styles} from './styles';
 import ComboSchedule from '../../components/ComboSchedule/ComboSchedule';
 import SelectPicker from '../../components/SelectPicker/SelectPicker';
 import {STATES} from '../../constants/constant-data';
-import {
-  AGE_GROUPS,
-  DANCE_LEVELS,
-  DANCE_STYLES,
-  LESSON_TYPES,
-  OCCASIONS,
-} from '../../constants/dance-data';
+import {AGE_GROUPS, LESSON_TYPES} from '../../constants/dance-data';
 import {Button, Icon} from 'react-native-elements';
 import {styles as stylesSignup} from '../signup/styles';
 import {colors as colorTheme} from '../../styles/theme.style';
 import ScheduleCheckout from './schedule-checkout/ScheduleCheckout';
 import {DanceHelper} from '../../helpers/dance-helper';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {Order} from '../../models/order.model';
+import Pro from '../tabs/pro/Pro';
 
 export default class ScheduleSelect extends React.Component {
   static NAV_NAME = 'schedule-select';
@@ -25,7 +20,7 @@ export default class ScheduleSelect extends React.Component {
   state = {
     // data
     type: '',
-    ageGroupe: '',
+    ageGroup: '',
     style: '',
     dance: '',
     level: '',
@@ -52,6 +47,7 @@ export default class ScheduleSelect extends React.Component {
               style={styles.styleCombo}
               placeholder={'Please select lesson type'}
               items={LESSON_TYPES}
+              onChange={(type) => this.setState({type})}
             />
           </View>
 
@@ -64,6 +60,7 @@ export default class ScheduleSelect extends React.Component {
               style={styles.styleCombo}
               placeholder={'Please select age category'}
               items={AGE_GROUPS}
+              onChange={(ageGroup) => this.setState({ageGroup})}
             />
           </View>
 
@@ -133,7 +130,17 @@ export default class ScheduleSelect extends React.Component {
   }
 
   onButNext() {
+    const orderNew = new Order();
+
+    orderNew.lessonType = this.state.type;
+    orderNew.ageGroup = this.state.ageGroup;
+    orderNew.danceStyle = this.state.danceStyle;
+    orderNew.dance = this.state.dance;
+    orderNew.danceLevel = this.state.level;
+
     // go to checkout page
-    this.props.navigation.push(ScheduleCheckout.NAV_NAME);
+    this.props.navigation.push(Pro.NAV_NAME, {
+      order: orderNew,
+    });
   }
 }

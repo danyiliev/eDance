@@ -131,4 +131,10 @@ export const stylesApp = StyleSheet.create({
   viewHeaderRight: {
     paddingHorizontal: 12,
   },
+
+  butTitleNavRight: {
+    paddingHorizontal: 6,
+    fontSize: 16,
+    color: colorTheme.primary,
+  },
 });

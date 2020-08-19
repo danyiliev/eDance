@@ -3,13 +3,6 @@ export const LESSON_TYPES = [
   {value: 'recorded', name: 'Pre-Recorded Lessons'},
 ];
 
-export const DANCE_STYLES = [
-  {value: 'samba', name: 'Samba'},
-  {value: 'salsa', name: 'Salsa'},
-  {value: 'rumba', name: 'Rumba'},
-  {value: 'chacha', name: 'Chacha'},
-];
-
 export const OCCASIONS = [
   {value: 'wedding', name: 'Wedding Preparation'},
   {value: 'event', name: 'Special Event'},

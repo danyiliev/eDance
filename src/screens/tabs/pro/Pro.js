@@ -12,6 +12,7 @@ import {ApiService} from '../../../services';
 import Reviews from '../../reviews/Reviews';
 import ScheduleSelect from '../../schedule/ScheduleSelect';
 import Profile from '../../profile/Profile';
+import BookingDate from '../../booking/booking-date/BookingDate';
 
 export default class Pro extends React.Component {
   static NAV_NAME = 'pro';
@@ -26,11 +27,18 @@ export default class Pro extends React.Component {
   pageCount = 15;
   userIndexSelected = -1;
 
+  order = null;
+
   constructor(props) {
     super(props);
 
+    // get parameter
+    if (props.route.params) {
+      this.order = props.route.params.order;
+    }
+
     props.navigation.setOptions({
-      title: 'Home',
+      title: this.order ? 'Select Teacher' : 'Home',
     });
   }
 
@@ -91,7 +99,7 @@ export default class Pro extends React.Component {
                 user={user}
                 onUser={() => this.onUser(user)}
                 onReview={() => this.onUserReviews()}
-                onSchedule={() => this.onUserSchedule()}
+                onSchedule={() => this.onUserSchedule(user)}
               />
             )}
             cardIndex={this.userIndexSelected}
@@ -167,13 +175,17 @@ export default class Pro extends React.Component {
 
     let needLoadData = !this.state.users.length > 0;
 
+    const userTypes = this.order
+      ? [User.TYPE_TEACHER]
+      : [User.TYPE_TEACHER, User.TYPE_STUDENT, User.TYPE_ADJUDICATOR];
+
     try {
       // fetch all users
-      let users = await ApiService.getUsers(indexFrom, this.pageCount, [
-        User.TYPE_TEACHER,
-        User.TYPE_STUDENT,
-        User.TYPE_ADJUDICATOR,
-      ]);
+      let users = await ApiService.getUsers(
+        indexFrom,
+        this.pageCount,
+        userTypes,
+      );
 
       if (users.length > 0) {
         await this.setState({
@@ -231,9 +243,18 @@ export default class Pro extends React.Component {
     this.props.navigation.push(Reviews.NAV_NAME);
   }
 
-  onUserSchedule() {
-    // go to reviews page
-    this.props.navigation.push(ScheduleSelect.NAV_NAME);
+  onUserSchedule(user) {
+    if (this.order) {
+      this.order.setTeacher(user);
+
+      // go to select date
+      this.props.navigation.push(BookingDate.NAV_NAME, {
+        order: this.order,
+      });
+    } else {
+      // go to reviews page
+      this.props.navigation.push(ScheduleSelect.NAV_NAME);
+    }
   }
 
   onUser(user) {

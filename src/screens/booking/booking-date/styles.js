@@ -3,6 +3,7 @@ import {stylesApp, styleUtil} from '../../../styles/app.style';
 import {colors as colorTheme} from '../../../styles/theme.style';
 
 export const styles = StyleSheet.create({
+
   viewContainer: {
     ...stylesApp.viewContainer,
     ...stylesApp.justifyBetween,
@@ -41,5 +42,12 @@ export const styles = StyleSheet.create({
     ...styleUtil.withShadow(),
     marginBottom: 70,
     marginHorizontal: 30,
+  },
+
+  viewTimeSlot: {
+    marginTop: 20,
+    marginBottom: 30,
+    ...stylesApp.flexRow,
+    flexWrap: 'wrap',
   },
 });

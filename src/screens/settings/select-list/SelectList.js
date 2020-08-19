@@ -15,6 +15,7 @@ import {
   STYLE_INTERNATIONAL_LATIN,
   STYLE_INTERNATIONAL_STANDARD,
 } from '../../../constants/dance-data';
+import {stylesApp} from '../../../styles/app.style';
 
 export default class SelectList extends React.Component {
   static NAV_NAME = 'select-list';
@@ -38,7 +39,7 @@ export default class SelectList extends React.Component {
         <Button
           type="clear"
           title="Save"
-          titleStyle={styles.butTitleRight}
+          titleStyle={stylesApp.butTitleNavRight}
           onPress={() => this.onButSave()}
         />
       ),

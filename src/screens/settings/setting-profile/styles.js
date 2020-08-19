@@ -94,4 +94,16 @@ export const styles = StyleSheet.create({
     marginTop: 0,
     marginBottom: 8,
   },
+
+  viewTime: {
+    paddingVertical: 6,
+    paddingLeft: 22,
+    flex: 1,
+  },
+  txtTimeLabel: {
+    color: colorTheme.darkGrey,
+  },
+  txtTime: {
+    flex: 1,
+  },
 });
