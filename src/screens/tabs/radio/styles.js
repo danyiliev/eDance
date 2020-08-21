@@ -76,5 +76,5 @@ export const styles = StyleSheet.create({
 
   textEmptyItem: {
     color: colorTheme.grey,
-  }
+  },
 });
