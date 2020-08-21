@@ -103,6 +103,15 @@ export const stylesApp = StyleSheet.create({
     color: colorTheme.grey,
   },
 
+  butLightOutline: {
+    paddingVertical: 14,
+    paddingHorizontal: 20,
+    borderRadius: 100,
+    borderWidth: 1,
+    borderColor: colorTheme.primary,
+    backgroundColor: 'transparent',
+  },
+
   //
   // loading
   //

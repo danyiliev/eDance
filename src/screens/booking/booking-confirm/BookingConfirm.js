@@ -24,7 +24,6 @@ export default class BookingConfirm extends React.Component {
   render() {
     return (
       <View style={styles.viewContainer}>
-        {/* levels */}
         <View style={styles.viewForm}>
           {/* title */}
           <Text style={styles.txtItemTitle}>

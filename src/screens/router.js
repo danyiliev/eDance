@@ -48,6 +48,7 @@ import SelectList from './settings/select-list/SelectList';
 import Pro from './tabs/pro/Pro';
 import BookingConfirm from './booking/booking-confirm/BookingConfirm';
 import Lessons from './lessons/Lessons';
+import LessonDetail from './lesson-detail/LessonDetail';
 
 const Stack = createStackNavigator();
 
@@ -92,7 +93,7 @@ class MainNavigator extends React.Component {
         ) : this.props.UserReducer.user ? (
           <View style={stylesApp.viewContainer}>
             <Stack.Navigator
-              initialRouteName={Lessons.NAV_NAME}
+              initialRouteName={LessonDetail.NAV_NAME}
               screenOptions={{
                 headerTintColor: colorTheme.primary,
               }}>
@@ -154,6 +155,10 @@ class MainNavigator extends React.Component {
                 component={BookingConfirm}
               />
               <Stack.Screen name={Lessons.NAV_NAME} component={Lessons} />
+              <Stack.Screen
+                name={LessonDetail.NAV_NAME}
+                component={LessonDetail}
+              />
             </Stack.Navigator>
 
             <MenuModal
