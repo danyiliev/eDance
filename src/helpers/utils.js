@@ -21,4 +21,12 @@ export class Utils {
     let type = typeof obj;
     return type === 'function' || (type === 'object' && !!obj);
   }
+
+  static leftPad(number, targetLength) {
+    var output = number + '';
+    while (output.length < targetLength) {
+      output = '0' + output;
+    }
+    return output;
+  }
 }

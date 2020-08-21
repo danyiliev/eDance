@@ -21,9 +21,11 @@ export default class LessonDetail extends React.Component {
     return (
       <View style={styles.viewContainer}>
         <View>
-          <View style={styles.viewNotice}>
-            <Text style={styles.txtNotice}>Lesson is not started yet.</Text>
-          </View>
+          {false ?? (
+            <View style={styles.viewNotice}>
+              <Text style={styles.txtNotice}>Lesson is not started yet.</Text>
+            </View>
+          )}
 
           <View style={styles.viewForm}>
             {/* time */}
