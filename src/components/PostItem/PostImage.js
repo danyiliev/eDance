@@ -23,7 +23,6 @@ export default class PostImage extends React.Component {
       <View style={[styles.viewImage, this.props.containerStyle]}>
         {/* background */}
         <Icon
-          style={styles.iconImgThumbnail}
           color={'#cecece'}
           type="font-awesome"
           name="picture-o"
