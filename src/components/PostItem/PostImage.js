@@ -10,10 +10,11 @@ export default class PostImage extends React.Component {
   static propTypes = {
     containerStyle: PropTypes.object,
     imgUrl: PropTypes.string,
+    iconSize: PropTypes.number,
   };
 
   render() {
-    let iconSize = 120;
+    let iconSize = this.props.iconSize || 120;
     if (this.props.containerStyle?.width) {
       iconSize = this.props.containerStyle?.width / 3;
     }
