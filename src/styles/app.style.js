@@ -51,7 +51,10 @@ export const stylesApp = StyleSheet.create({
     marginTop: 4,
   },
   mt6: {
-    marginTop: 4,
+    marginTop: 6,
+  },
+  mt8: {
+    marginTop: 8,
   },
   mt12: {
     marginTop: 12,

@@ -48,6 +48,7 @@ import SelectList from './settings/select-list/SelectList';
 import Pro from './tabs/pro/Pro';
 import BookingConfirm from './booking/booking-confirm/BookingConfirm';
 import Lessons from './lessons/Lessons';
+import Cart from './cart/Cart';
 import LessonDetail from './lesson-detail/LessonDetail';
 import Broadcast from './broadcast/Broadcast';
 import ProductDetail from './product-detail/ProductDetail';
@@ -95,7 +96,7 @@ class MainNavigator extends React.Component {
         ) : this.props.UserReducer.user ? (
           <View style={stylesApp.viewContainer}>
             <Stack.Navigator
-              initialRouteName={ProductDetail.NAV_NAME}
+              initialRouteName={Cart.NAV_NAME}
               screenOptions={{
                 headerTintColor: colorTheme.primary,
               }}>
@@ -163,6 +164,7 @@ class MainNavigator extends React.Component {
               />
               <Stack.Screen name={Broadcast.NAV_NAME} component={Broadcast} />
               <Stack.Screen name={ProductDetail.NAV_NAME} component={ProductDetail} />
+              <Stack.Screen name={Cart.NAV_NAME} component={Cart} />
             </Stack.Navigator>
 
             <MenuModal
