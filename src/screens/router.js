@@ -52,6 +52,8 @@ import Cart from './cart/Cart';
 import LessonDetail from './lesson-detail/LessonDetail';
 import Broadcast from './broadcast/Broadcast';
 import ProductDetail from './product-detail/ProductDetail';
+import Orders from './orders/Orders';
+import Products from './products/Products';
 
 const Stack = createStackNavigator();
 
@@ -96,7 +98,7 @@ class MainNavigator extends React.Component {
         ) : this.props.UserReducer.user ? (
           <View style={stylesApp.viewContainer}>
             <Stack.Navigator
-              initialRouteName={Cart.NAV_NAME}
+              initialRouteName={Products.NAV_NAME}
               screenOptions={{
                 headerTintColor: colorTheme.primary,
               }}>
@@ -165,6 +167,8 @@ class MainNavigator extends React.Component {
               <Stack.Screen name={Broadcast.NAV_NAME} component={Broadcast} />
               <Stack.Screen name={ProductDetail.NAV_NAME} component={ProductDetail} />
               <Stack.Screen name={Cart.NAV_NAME} component={Cart} />
+              <Stack.Screen name={Orders.NAV_NAME} component={Orders} />
+              <Stack.Screen name={Products.NAV_NAME} component={Products} />
             </Stack.Navigator>
 
             <MenuModal
