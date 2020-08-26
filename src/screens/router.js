@@ -49,13 +49,14 @@ import Pro from './tabs/pro/Pro';
 import BookingConfirm from './booking/booking-confirm/BookingConfirm';
 import Lessons from './lessons/Lessons';
 import Cart from './cart/Cart';
-import LessonDetail from './lesson-detail/LessonDetail';
-import Broadcast from './broadcast/Broadcast';
+import LessonDetail from './lessons/lesson-detail/LessonDetail';
+import Broadcast from './lessons/broadcast/Broadcast';
 import ProductDetail from './product-detail/ProductDetail';
 import Orders from './orders/Orders';
 import Products from './products/Products';
 import AddProduct from './add-product/AddProduct';
 import WriteReview from './orders/write-review/WriteReview';
+import Playback from './lessons/playback/Playback';
 
 const Stack = createStackNavigator();
 
@@ -100,7 +101,7 @@ class MainNavigator extends React.Component {
         ) : this.props.UserReducer.user ? (
           <View style={stylesApp.viewContainer}>
             <Stack.Navigator
-              initialRouteName={WriteReview.NAV_NAME}
+              initialRouteName={Playback.NAV_NAME}
               screenOptions={{
                 headerTintColor: colorTheme.primary,
               }}>
@@ -167,6 +168,7 @@ class MainNavigator extends React.Component {
                 component={LessonDetail}
               />
               <Stack.Screen name={Broadcast.NAV_NAME} component={Broadcast} />
+              <Stack.Screen name={Playback.NAV_NAME} component={Playback} />
               <Stack.Screen name={ProductDetail.NAV_NAME} component={ProductDetail} />
               <Stack.Screen name={Cart.NAV_NAME} component={Cart} />
               <Stack.Screen name={Orders.NAV_NAME} component={Orders} />

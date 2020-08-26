@@ -7,8 +7,13 @@ import {
 } from 'react-native';
 import React from 'react';
 import {stylesApp} from '../../styles/app.style';
+import PropTypes from 'prop-types';
 
 export default class DismissKeyboard extends React.Component {
+  static propTypes = {
+    fullHeight: PropTypes.bool,
+  };
+
   state = {
     keyboardHeight: new Animated.Value(0),
   };
@@ -33,7 +38,7 @@ export default class DismissKeyboard extends React.Component {
         accessible={false}>
         <Animated.View
           style={{
-            ...stylesApp.viewContainer,
+            ...(this.props.fullHeight ? stylesApp.viewContainer : {}),
             transform: [
               {
                 translateY: keyboardHeight,

@@ -1,9 +1,9 @@
 import React from 'react';
 import {Text, View} from 'react-native';
 import {styles} from './styles';
-import {stylesApp} from '../../styles/app.style';
+import {stylesApp} from '../../../styles/app.style';
 import FastImage from 'react-native-fast-image';
-import {UserHelper} from '../../helpers/user-helper';
+import {UserHelper} from '../../../helpers/user-helper';
 import {Button} from 'react-native-elements';
 
 export default class LessonDetail extends React.Component {

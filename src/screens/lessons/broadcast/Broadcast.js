@@ -4,11 +4,11 @@ import {View, AppState, Alert, Image, Text} from 'react-native';
 import {styles} from './styles';
 import {NodeCameraView} from 'react-native-nodemediaclient';
 import {LoadingHUD} from 'react-native-hud-hybrid';
-import {Utils} from '../../helpers/utils';
+import {Utils} from '../../../helpers/utils';
 import {Button, Icon} from 'react-native-elements';
-import {stylesApp} from '../../styles/app.style';
+import {stylesApp} from '../../../styles/app.style';
 import Toast from 'react-native-simple-toast';
-import {UserHelper} from '../../helpers/user-helper';
+import {UserHelper} from '../../../helpers/user-helper';
 import FastImage from 'react-native-fast-image';
 
 class Broadcast extends React.Component {
@@ -102,7 +102,7 @@ class Broadcast extends React.Component {
           buttonStyle={styles.butReverse}
           icon={
             <Image
-              source={require('../../../assets/imgs/ic_camera_reverse.png')}
+              source={require('../../../../assets/imgs/ic_camera_reverse.png')}
               style={styles.imgButReverse}
             />
           }

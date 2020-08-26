@@ -1,6 +1,6 @@
 import {StyleSheet} from 'react-native';
-import {stylesApp} from '../../styles/app.style';
-import {colors as colorsTheme} from '../../styles/theme.style';
+import {stylesApp} from '../../../styles/app.style';
+import {colors as colorsTheme} from '../../../styles/theme.style';
 import {colors} from 'react-native-elements';
 import {color} from 'react-native-reanimated';
 
