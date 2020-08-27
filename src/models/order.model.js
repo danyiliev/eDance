@@ -24,6 +24,9 @@ export class Order extends BaseModel {
   userId = '';
   teacherId = '';
 
+  date = '';
+  timeSlots = [];
+
   // logical
   teacher = null;
 
@@ -34,5 +37,18 @@ export class Order extends BaseModel {
   setTeacher(user) {
     this.teacher = user;
     this.teacherId = user.id;
+  }
+
+  timeToString() {
+    let str = '';
+
+    for (let i = 0; i < this.timeSlots.length; i++) {
+      if (i > 0) {
+        str += ', ';
+      }
+      str += this.timeSlots[i].toString();
+    }
+
+    return str;
   }
 }

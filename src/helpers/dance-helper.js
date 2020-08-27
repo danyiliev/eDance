@@ -1,5 +1,5 @@
 import {
-  DANCE_LEVELS,
+  DANCE_LEVELS, LESSON_TYPES,
   SELECT_AMERICAN_BALLROOM,
   SELECT_AMERICAN_RHYTHM,
   SELECT_LATIN,
@@ -53,5 +53,26 @@ export class DanceHelper {
     } else {
       return STYLE_INTERNATIONAL_LATIN;
     }
+  }
+
+  static danceStyleNameByVal(val) {
+    const style = this.danceStylesAll().find((s) => s.value === val);
+    return style ? style.name : '';
+  }
+
+  static danceNameByVal(val, style) {
+    const dances = this.dancesByStyle(style);
+    const dance = dances.find((d) => d.value === val);
+    return dance ? dance.name : '';
+  }
+
+  static danceLevelNameByVal(val) {
+    const level = this.danceLevelsAll().find((l) => l.value === val);
+    return level ? level.name : '';
+  }
+
+  static lessonTypeNameByVal(val) {
+    const type = LESSON_TYPES.find((t) => t.value === val);
+    return type ? type.name : '';
   }
 }

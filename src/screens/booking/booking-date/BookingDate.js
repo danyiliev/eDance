@@ -1,6 +1,6 @@
 import React from 'react';
 import {styles} from './styles';
-import {Dimensions, ScrollView, View} from 'react-native';
+import {ActivityIndicator, Dimensions, ScrollView, View} from 'react-native';
 import {Calendar} from 'react-native-calendars';
 import {colors as colorTheme} from '../../../styles/theme.style';
 import {Button} from 'react-native-elements';
@@ -9,11 +9,16 @@ import {TimeSlot} from '../../../models/order.model';
 import CheckboxRound from '../../../components/CheckboxRound/CheckboxRound';
 const {width: SCREEN_WDITH} = Dimensions.get('window');
 import moment from 'moment';
+import {Utils} from '../../../helpers/utils';
+import ScheduleCheckout from '../../schedule/schedule-checkout/ScheduleCheckout';
 
 export default class BookingDate extends React.Component {
   static NAV_NAME = 'booking-date';
 
   state = {
+    // ui
+    showLoading: true,
+
     selectedDate: '',
     timeSlots: [],
   };
@@ -23,22 +28,18 @@ export default class BookingDate extends React.Component {
   constructor(props) {
     super(props);
 
+    props.navigation.setOptions({
+      title: 'Book Lesson',
+    });
+
     // get parameter
     if (props.route.params) {
       this.order = props.route.params.order;
     }
+    this.renderRightButton();
 
-    props.navigation.setOptions({
-      title: 'Book Lesson',
-      headerRight: () => (
-        <Button
-          type="clear"
-          title="Next"
-          titleStyle={stylesApp.butTitleNavRight}
-          onPress={() => this.onButNext()}
-        />
-      ),
-    });
+    // select today as default
+    this.state.selectedDate = moment().format('yyyy-MM-DD');
   }
 
   componentDidMount(): void {
@@ -87,7 +88,29 @@ export default class BookingDate extends React.Component {
     );
   }
 
+  renderRightButton() {
+    this.props.navigation.setOptions({
+      headerRight: () => (
+        <Button
+          type="clear"
+          title="Next"
+          titleStyle={stylesApp.butTitleNavRight}
+          disabled={!this.isTimeSelected()}
+          onPress={() => this.onButNext()}
+        />
+      ),
+    });
+  }
+
   renderTimeSlots() {
+    if (this.state.showLoading) {
+      return (
+        <View style={stylesApp.viewLoading}>
+          <ActivityIndicator animating={true} />
+        </View>
+      );
+    }
+
     const spacing = 14;
     const padding = 14;
     const itemWidth = (SCREEN_WDITH - padding * 2) / 2;
@@ -97,6 +120,7 @@ export default class BookingDate extends React.Component {
         {this.state.timeSlots.map((slot, i) => {
           return (
             <CheckboxRound
+              key={i.toString()}
               label={slot.toString()}
               checked={slot.selected}
               onPress={() => this.onSelectTimeSlot(i)}
@@ -112,7 +136,19 @@ export default class BookingDate extends React.Component {
     );
   }
 
-  getTimeSlots() {
+  async getTimeSlots() {
+    // show loading
+    this.setState({
+      showLoading: true,
+    });
+
+    await Utils.sleep(1000);
+
+    // hide loading
+    this.setState({
+      showLoading: false,
+    });
+
     let startTime = moment(this.order.teacher?.timeStart, 'HH:mm');
     const endTime = moment(this.order.teacher?.timeEnd, 'HH:mm');
     const durationLesson = this.order.teacher?.durationLesson;
@@ -137,15 +173,33 @@ export default class BookingDate extends React.Component {
     timeSlots[index].selected = !timeSlots[index].selected;
 
     this.setState({timeSlots});
+
+    this.renderRightButton();
+  }
+
+  isTimeSelected() {
+    return this.state.timeSlots.findIndex((t) => t.selected) >= 0;
   }
 
   onDayPress = (day) => {
     this.setState({
-      selectedDate: day.dateString,
-    });
+        selectedDate: day.dateString,
+        timeSlots: [],
+      },
+      () => {
+        this.renderRightButton();
+        this.getTimeSlots();
+      },
+    );
   };
 
   onButNext() {
+    this.order.date = this.state.selectedDate;
+    this.order.timeSlots = this.state.timeSlots.filter((t) => t.selected);
+
     // go to confirm page
+    this.props.navigation.push(ScheduleCheckout.NAV_NAME, {
+      order: this.order,
+    });
   }
 }

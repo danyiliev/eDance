@@ -27,7 +27,7 @@ export class User extends BaseModel {
   type = User.TYPE_TEACHER;
 
   // teacher settings
-  price = 0;
+  price = 25;
   ageGroups = [];
 
   // dance styles

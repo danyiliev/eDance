@@ -6,9 +6,14 @@ import {stylesApp, styleUtil} from '../../../styles/app.style';
 import {Button} from 'react-native-elements';
 import ScheduleSelect from '../ScheduleSelect';
 import BookingMenu from '../../booking/booking-menu/BookingMenu';
+import BookingDate from '../../booking/booking-date/BookingDate';
+import {DanceHelper} from '../../../helpers/dance-helper';
+import ActionSheet from 'react-native-actionsheet';
 
 export default class ScheduleCheckout extends React.Component {
   static NAV_NAME = 'schedule-checkout';
+
+  order = null;
 
   constructor(props) {
     super(props);
@@ -16,6 +21,11 @@ export default class ScheduleCheckout extends React.Component {
     props.navigation.setOptions({
       title: 'Summary',
     });
+
+    // get parameter
+    if (props.route.params) {
+      this.order = props.route.params.order;
+    }
   }
 
   render() {
@@ -25,33 +35,50 @@ export default class ScheduleCheckout extends React.Component {
           <View style={styles.viewInfo}>
             <View style={styles.viewItem}>
               <Text style={styles.txtItemName}>Dance style:</Text>
-              <Text style={styles.txtItemValue}>Smooth</Text>
+              <Text style={styles.txtItemValue}>
+                {DanceHelper.danceStyleNameByVal(this.order?.danceStyle)}
+              </Text>
             </View>
 
             <View style={styles.viewItem}>
               <Text style={styles.txtItemName}>Dance Name:</Text>
-              <Text style={styles.txtItemValue}>Waltz</Text>
+              <Text style={styles.txtItemValue}>
+                {DanceHelper.danceNameByVal(this.order?.dance, this.order?.danceStyle)}
+              </Text>
             </View>
 
             <View style={styles.viewItem}>
               <Text style={styles.txtItemName}>Dance Level:</Text>
-              <Text style={styles.txtItemValue}>Beginer</Text>
+              <Text style={styles.txtItemValue}>
+                {DanceHelper.danceLevelNameByVal(this.order?.danceLevel)}
+              </Text>
             </View>
 
             <View style={styles.viewItem}>
-              <Text style={styles.txtItemName}>Special Ocassion:</Text>
-              <Text style={styles.txtItemValue}>Wedding Preparation</Text>
+              <Text style={styles.txtItemName}>Lesson Type:</Text>
+              <Text style={styles.txtItemValue}>
+                {DanceHelper.lessonTypeNameByVal(this.order?.lessonType)}
+              </Text>
+            </View>
+
+            <View style={styles.viewItem}>
+              <Text style={styles.txtItemName}>Date & Time:</Text>
+              <Text style={styles.txtItemValue}>
+                {this.order?.date}
+                {'\n'}
+                {this.order?.timeToString()}
+              </Text>
             </View>
           </View>
 
           <View style={styles.viewContentFooter}>
-            <Text style={styles.txtFee}>Fee for Purchase: $5</Text>
+            <Text style={styles.txtFee}>Fee for Purchase: $0</Text>
 
             <View style={styles.viewFeeDivider} />
 
             <View style={styles.viewTextTotal}>
               <Text style={styles.txtTotal}>Total :</Text>
-              <Text style={styles.txtTotal}>$25</Text>
+              <Text style={styles.txtTotal}>${this.order?.teacher.price}</Text>
             </View>
           </View>
         </View>
@@ -64,12 +91,31 @@ export default class ScheduleCheckout extends React.Component {
             onPress={() => this.onButCheckout()}
           />
         </View>
+
+        <ActionSheet
+          ref={(o) => (this.ActionSheet = o)}
+          title={'Would you like to book this lesson?'}
+          options={['Book Your Dance Lesson Here', 'Use Credits', 'Refer a Friend', 'Cancel']}
+          cancelButtonIndex={3}
+          destructiveButtonIndex={0}
+          onPress={(index) => {
+            this.onMoreItem(index);
+          }}
+        />
       </View>
     );
   }
 
   onButCheckout() {
-    // go to booking page
-    this.props.navigation.push(BookingMenu.NAV_NAME);
+    this.ActionSheet.show();
+  }
+
+  onMoreItem(index) {
+    if (index === 1) {
+      // book lesson, go to payment
+
+    } else if (index === 2) {
+    } else if (index === 3) {
+    }
   }
 }

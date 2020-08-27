@@ -253,7 +253,9 @@ export default class Pro extends React.Component {
       });
     } else {
       // go to reviews page
-      this.props.navigation.push(ScheduleSelect.NAV_NAME);
+      this.props.navigation.push(ScheduleSelect.NAV_NAME, {
+        user: user,
+      });
     }
   }
 

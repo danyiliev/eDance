@@ -1,6 +1,6 @@
 import React from 'react';
 import {stylesApp, styleUtil} from '../../styles/app.style';
-import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import {Alert, ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import {styles} from './styles';
 import ComboSchedule from '../../components/ComboSchedule/ComboSchedule';
 import SelectPicker from '../../components/SelectPicker/SelectPicker';
@@ -13,6 +13,7 @@ import ScheduleCheckout from './schedule-checkout/ScheduleCheckout';
 import {DanceHelper} from '../../helpers/dance-helper';
 import {Order} from '../../models/order.model';
 import Pro from '../tabs/pro/Pro';
+import BookingDate from '../booking/booking-date/BookingDate';
 
 export default class ScheduleSelect extends React.Component {
   static NAV_NAME = 'schedule-select';
@@ -26,12 +27,26 @@ export default class ScheduleSelect extends React.Component {
     level: '',
   };
 
+  teacher = null;
+
   constructor(props) {
     super(props);
 
     props.navigation.setOptions({
       title: 'Schedule',
     });
+
+    // get parameter
+    if (props.route.params) {
+      this.teacher = props.route.params.user;
+    }
+
+    // test
+    this.state.type = LESSON_TYPES[0].value;
+    this.state.ageGroup = AGE_GROUPS[0].value;
+    this.state.style = DanceHelper.danceStylesAll()[0].value;
+    this.state.dance = DanceHelper.dancesByStyle(this.state.style)[0].value;
+    this.state.level = DanceHelper.danceLevelsAll()[0].value;
   }
 
   render() {
@@ -130,17 +145,47 @@ export default class ScheduleSelect extends React.Component {
   }
 
   onButNext() {
+    // check validity
+    if (!this.state.type) {
+      Alert.alert('Lesson Type is Empty', 'Please select lesson type');
+      return;
+    }
+    if (!this.state.ageGroup) {
+      Alert.alert('Age Group is Empty', 'Please select age group');
+      return;
+    }
+    if (!this.state.style) {
+      Alert.alert('Dance Style is Empty', 'Please select dance');
+      return;
+    }
+    if (!this.state.dance) {
+      Alert.alert('Dance is Empty', 'Please select dance');
+      return;
+    }
+    if (!this.state.level) {
+      Alert.alert('Dance Level is Empty', 'Please select dance level');
+      return;
+    }
+
     const orderNew = new Order();
 
     orderNew.lessonType = this.state.type;
     orderNew.ageGroup = this.state.ageGroup;
-    orderNew.danceStyle = this.state.danceStyle;
+    orderNew.danceStyle = this.state.style;
     orderNew.dance = this.state.dance;
     orderNew.danceLevel = this.state.level;
+    orderNew.setTeacher(this.teacher);
 
-    // go to checkout page
-    this.props.navigation.push(Pro.NAV_NAME, {
-      order: orderNew,
-    });
+    if (this.teacher) {
+      // go to date page
+      this.props.navigation.push(BookingDate.NAV_NAME, {
+        order: orderNew,
+      });
+    } else {
+      // go to select teacher page
+      this.props.navigation.push(Pro.NAV_NAME, {
+        order: orderNew,
+      });
+    }
   }
 }
