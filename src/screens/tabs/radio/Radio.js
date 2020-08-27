@@ -1,6 +1,6 @@
 import React from 'react';
 import {styles} from './styles';
-import {FlatList, Text, TouchableOpacity, View} from 'react-native';
+import {FlatList, Linking, Text, TouchableOpacity, View} from 'react-native';
 import {Button, Icon, SearchBar} from 'react-native-elements';
 import {colors as colorTheme} from '../../../styles/theme.style';
 import {ApiService} from '../../../services';
@@ -10,9 +10,12 @@ import {Video} from '../../../models/video.model';
 import {stylesApp} from '../../../styles/app.style';
 import EditProfile from '../../profile/edit-profile/EditProfile';
 import RadioDetail from './radio-detail/RadioDetail';
+import Pro from '../pro/Pro';
 
 export default class Radio extends React.Component {
   static NAV_NAME = 'radio';
+
+  webAppUrl = 'https://my.radiolize.com/public/edancesportradio.com';
 
   pageCount = 20;
 
@@ -26,6 +29,17 @@ export default class Radio extends React.Component {
 
   constructor(props) {
     super(props);
+
+    this.props.navigation.addListener('tabPress', (e) => {
+      // Prevent default behavior
+      e.preventDefault();
+
+      // open radio web app
+      Linking.openURL(this.webAppUrl);
+    });
+
+    // trick for custom action; navigate to default tab page manually
+    this.props.navigation.navigate(Pro.NAV_NAME);
   }
 
   componentDidMount(): void {

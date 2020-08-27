@@ -110,7 +110,9 @@ export default class TabMain extends React.Component {
           tabBarOptions={{
             activeTintColor: colorTheme.primary,
           }}
-          tabBar={(props) => <BottomTabBar style={styles.tabbar} {...props} />}>
+          tabBar={(props) => {
+            return <BottomTabBar style={styles.tabbar} {...props} />;
+          }}>
           <Tab.Screen
             name={Radio.NAV_NAME}
             component={Radio}
