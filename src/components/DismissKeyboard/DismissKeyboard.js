@@ -65,3 +65,7 @@ export default class DismissKeyboard extends React.Component {
     this.moveMainView(0);
   };
 }
+
+DismissKeyboard.defaultProps = {
+  fullHeight: true,
+};

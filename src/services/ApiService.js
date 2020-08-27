@@ -274,6 +274,8 @@ class ApiService {
     availableDays,
     durationLesson,
     durationRest,
+    timeStart,
+    timeEnd,
   ) {
     const httpOptions = {
       headers: {
@@ -292,6 +294,8 @@ class ApiService {
       availableDays: availableDays,
       durationLesson: durationLesson,
       durationRest: durationRest,
+      timeStart: timeStart,
+      timeEnd: timeEnd,
     };
 
     try {

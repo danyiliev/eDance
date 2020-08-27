@@ -37,7 +37,7 @@ export class User extends BaseModel {
   styleLatin = [];
 
   danceLevels = [];
-  availableDays = [];
+  availableDays = [0, 1, 2, 3, 4, 5, 6];
   durationLesson = DURATIONS_LESSON[0];
   durationRest = DURATIONS_REST[0];
   timeStart = '09:00';
@@ -101,7 +101,7 @@ export class User extends BaseModel {
       this.danceLevels = data.danceLevels;
     }
 
-    if (data.availableDays) {
+    if (data.availableDays && data.availableDays.length > 0) {
       this.availableDays = data.availableDays;
     }
     if (data.durationLesson) {

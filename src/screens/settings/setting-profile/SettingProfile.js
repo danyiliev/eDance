@@ -104,6 +104,13 @@ class SettingProfile extends React.Component {
     this.state.danceLevels = this.currentUser.danceLevels;
     this.state.price = this.currentUser.price?.toString();
 
+    this.state.durationLessonIndex = DURATIONS_LESSON.findIndex(
+      (d) => d === this.currentUser.durationLesson,
+    );
+    this.state.durationRestIndex = DURATIONS_REST.findIndex(
+      (d) => d === this.currentUser.durationRest,
+    );
+    this.state.availableDays = this.currentUser.availableDays;
     this.state.timeStart = this.currentUser.timeStart;
     this.state.timeEnd = this.currentUser.timeEnd;
   }
@@ -302,7 +309,7 @@ class SettingProfile extends React.Component {
             selectedButtonStyle={stylesSignup.butSegmentSelected}
             selectedTextStyle={stylesSignup.SegmentSelected}
             selectedIndex={this.state.durationLessonIndex}
-            onPress={(index) => this.setState({lessonDurationIndex: index})}
+            onPress={(index) => this.setState({durationLessonIndex: index})}
           />
 
           <Text style={[styles.txtLabel, stylesApp.mt12]}>
@@ -316,7 +323,7 @@ class SettingProfile extends React.Component {
             selectedButtonStyle={stylesSignup.butSegmentSelected}
             selectedTextStyle={stylesSignup.SegmentSelected}
             selectedIndex={this.state.durationRestIndex}
-            onPress={(index) => this.setState({restDurationIndex: index})}
+            onPress={(index) => this.setState({durationRestIndex: index})}
           />
 
           <Text style={[styles.txtLabel, stylesApp.mt14]}>
@@ -779,6 +786,8 @@ class SettingProfile extends React.Component {
         this.state.availableDays,
         DURATIONS_LESSON[this.state.durationLessonIndex],
         DURATIONS_REST[this.state.durationRestIndex],
+        this.state.timeStart,
+        this.state.timeEnd,
       );
 
       // set data
@@ -789,9 +798,12 @@ class SettingProfile extends React.Component {
       this.currentUser.styleStandard = this.state.styleStandard;
       this.currentUser.styleLatin = this.state.styleLatin;
       this.currentUser.price = Number(this.state.price);
+
       this.currentUser.availableDays = this.state.availableDays;
       this.currentUser.durationLesson = DURATIONS_LESSON[this.state.durationLessonIndex];
       this.currentUser.durationRest = DURATIONS_REST[this.state.durationRestIndex];
+      this.currentUser.timeStart = this.state.timeStart;
+      this.currentUser.timeEnd = this.state.timeEnd;
 
       UserHelper.saveUserToLocalStorage(this.currentUser, this.props);
 
