@@ -5979,6 +5979,11 @@ react-native-nodemediaclient@^0.2.9:
   resolved "https://registry.yarnpkg.com/react-native-nodemediaclient/-/react-native-nodemediaclient-0.2.9.tgz#55ce66396013ef2f4f1de48137d31e71e5b1f9ad"
   integrity sha512-KWHtW2EdUrVy+7f8ZTcoFptWouceOPOMOs0MB0fdCpXaEPsi/q9Lmu1PJlIIqiZsluXssCd6kDYv2xu7V+DqGw==
 
+react-native-paypal-lib@^1.0.9:
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/react-native-paypal-lib/-/react-native-paypal-lib-1.0.9.tgz#592f8f05308e4fb064e11b487f08db7238583879"
+  integrity sha512-UcpTd2FU2cUdu+PbiDziQvLtqjo/EKPMmH7mIwJ7k8KANIlFpOn6QuDAMKKsQCs1uG511xzlUmQC8HKS3EvKYQ==
+
 react-native-ratings@^7.2.0:
   version "7.2.0"
   resolved "https://registry.yarnpkg.com/react-native-ratings/-/react-native-ratings-7.2.0.tgz#8523e98868470855ec1d2feb112e466e17a1fd9f"

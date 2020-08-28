@@ -5,7 +5,7 @@ import {Calendar} from 'react-native-calendars';
 import {colors as colorTheme} from '../../../styles/theme.style';
 import {Button} from 'react-native-elements';
 import {stylesApp} from '../../../styles/app.style';
-import {TimeSlot} from '../../../models/order.model';
+import {TimeSlot} from '../../../models/lesson.model';
 import CheckboxRound from '../../../components/CheckboxRound/CheckboxRound';
 const {width: SCREEN_WDITH} = Dimensions.get('window');
 import moment from 'moment';
@@ -23,7 +23,7 @@ export default class BookingDate extends React.Component {
     timeSlots: [],
   };
 
-  order = null;
+  lesson = null;
 
   constructor(props) {
     super(props);
@@ -34,7 +34,7 @@ export default class BookingDate extends React.Component {
 
     // get parameter
     if (props.route.params) {
-      this.order = props.route.params.order;
+      this.lesson = props.route.params.lesson;
     }
     this.renderRightButton();
 
@@ -149,10 +149,10 @@ export default class BookingDate extends React.Component {
       showLoading: false,
     });
 
-    let startTime = moment(this.order.teacher?.timeStart, 'HH:mm');
-    const endTime = moment(this.order.teacher?.timeEnd, 'HH:mm');
-    const durationLesson = this.order.teacher?.durationLesson;
-    const durationRest = this.order.teacher?.durationRest;
+    let startTime = moment(this.lesson.teacher?.timeStart, 'HH:mm');
+    const endTime = moment(this.lesson.teacher?.timeEnd, 'HH:mm');
+    const durationLesson = this.lesson.teacher?.durationLesson;
+    const durationRest = this.lesson.teacher?.durationRest;
 
     const timeSlots = [];
 
@@ -194,12 +194,12 @@ export default class BookingDate extends React.Component {
   };
 
   onButNext() {
-    this.order.date = this.state.selectedDate;
-    this.order.timeSlots = this.state.timeSlots.filter((t) => t.selected);
+    this.lesson.date = this.state.selectedDate;
+    this.lesson.timeSlots = this.state.timeSlots.filter((t) => t.selected);
 
     // go to confirm page
     this.props.navigation.push(ScheduleCheckout.NAV_NAME, {
-      order: this.order,
+      lesson: this.lesson,
     });
   }
 }

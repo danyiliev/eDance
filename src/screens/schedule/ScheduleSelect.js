@@ -11,7 +11,7 @@ import {styles as stylesSignup} from '../signup/styles';
 import {colors as colorTheme} from '../../styles/theme.style';
 import ScheduleCheckout from './schedule-checkout/ScheduleCheckout';
 import {DanceHelper} from '../../helpers/dance-helper';
-import {Order} from '../../models/order.model';
+import {Lesson} from '../../models/lesson.model';
 import Pro from '../tabs/pro/Pro';
 import BookingDate from '../booking/booking-date/BookingDate';
 
@@ -167,24 +167,24 @@ export default class ScheduleSelect extends React.Component {
       return;
     }
 
-    const orderNew = new Order();
+    const lessonNew = new Lesson();
 
-    orderNew.lessonType = this.state.type;
-    orderNew.ageGroup = this.state.ageGroup;
-    orderNew.danceStyle = this.state.style;
-    orderNew.dance = this.state.dance;
-    orderNew.danceLevel = this.state.level;
-    orderNew.setTeacher(this.teacher);
+    lessonNew.lessonType = this.state.type;
+    lessonNew.ageGroup = this.state.ageGroup;
+    lessonNew.danceStyle = this.state.style;
+    lessonNew.dance = this.state.dance;
+    lessonNew.danceLevel = this.state.level;
+    lessonNew.setTeacher(this.teacher);
 
     if (this.teacher) {
       // go to date page
       this.props.navigation.push(BookingDate.NAV_NAME, {
-        order: orderNew,
+        lesson: lessonNew,
       });
     } else {
       // go to select teacher page
       this.props.navigation.push(Pro.NAV_NAME, {
-        order: orderNew,
+        lesson: lessonNew,
       });
     }
   }

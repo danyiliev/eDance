@@ -43,6 +43,9 @@ export class User extends BaseModel {
   timeStart = '09:00';
   timeEnd = '22:00';
 
+  // logical
+  lessons = [];
+
   initFromObject(data) {
     super.initFromObject(data);
 

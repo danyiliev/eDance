@@ -11,7 +11,7 @@ export class TimeSlot {
   }
 }
 
-export class Order extends BaseModel {
+export class Lesson extends BaseModel {
   //
   // properties
   //
@@ -29,6 +29,9 @@ export class Order extends BaseModel {
 
   // logical
   teacher = null;
+
+  // data
+  lessons = [];
 
   initFromObject(data) {
     super.initFromObject(data);

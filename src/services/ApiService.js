@@ -435,6 +435,38 @@ class ApiService {
       return Promise.reject(e.response.data);
     }
   }
+
+  async addLesson(lesson) {
+    const httpOptions = {
+      headers: {
+        ...this.baseHeader(),
+      },
+    };
+
+    const timeSlots = lesson.timeSlots.map((t) => t.toString());
+
+    let params = {
+      lessonType: lesson.lessonType,
+      ageGroup: lesson.ageGroup,
+      danceStyle: lesson.danceStyle,
+      dance: lesson.dance,
+      danceLevel: lesson.danceLevel,
+      teacherId: lesson.teacherId,
+      date: lesson.date,
+      timeSlots: timeSlots,
+    };
+
+    try {
+      const {data} = await Axios.post(`${this.baseUrl}/lesson`, params, httpOptions);
+      console.log(data);
+
+      return Promise.resolve(data);
+    } catch (e) {
+      console.log(e);
+
+      return Promise.reject(e.response.data);
+    }
+  }
 }
 
 const apiService = new ApiService();

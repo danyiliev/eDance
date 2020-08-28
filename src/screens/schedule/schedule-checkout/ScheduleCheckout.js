@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, View} from 'react-native';
+import {Alert, Text, View} from 'react-native';
 import {styles as stylesMain} from '../styles';
 import {styles} from './styles';
 import {stylesApp, styleUtil} from '../../../styles/app.style';
@@ -7,13 +7,22 @@ import {Button} from 'react-native-elements';
 import ScheduleSelect from '../ScheduleSelect';
 import BookingMenu from '../../booking/booking-menu/BookingMenu';
 import BookingDate from '../../booking/booking-date/BookingDate';
+import Lessons from '../../lessons/Lessons';
 import {DanceHelper} from '../../../helpers/dance-helper';
 import ActionSheet from 'react-native-actionsheet';
+import RNPaypal from 'react-native-paypal-lib';
+import {config} from '../../../helpers/config';
+import {LoadingHUD} from 'react-native-hud-hybrid';
+import Toast from 'react-native-simple-toast';
+import {setUserInfo} from '../../../actions/user';
+import {connect} from 'react-redux';
+import {ApiService} from '../../../services';
 
-export default class ScheduleCheckout extends React.Component {
+class ScheduleCheckout extends React.Component {
   static NAV_NAME = 'schedule-checkout';
 
-  order = null;
+  currentUser = null;
+  lesson = null;
 
   constructor(props) {
     super(props);
@@ -22,10 +31,14 @@ export default class ScheduleCheckout extends React.Component {
       title: 'Summary',
     });
 
+    this.currentUser = props.UserReducer.user;
+
     // get parameter
     if (props.route.params) {
-      this.order = props.route.params.order;
+      this.lesson = props.route.params.lesson;
     }
+
+    this.loadingHUD = new LoadingHUD();
   }
 
   render() {
@@ -36,37 +49,37 @@ export default class ScheduleCheckout extends React.Component {
             <View style={styles.viewItem}>
               <Text style={styles.txtItemName}>Dance style:</Text>
               <Text style={styles.txtItemValue}>
-                {DanceHelper.danceStyleNameByVal(this.order?.danceStyle)}
+                {DanceHelper.danceStyleNameByVal(this.lesson?.danceStyle)}
               </Text>
             </View>
 
             <View style={styles.viewItem}>
               <Text style={styles.txtItemName}>Dance Name:</Text>
               <Text style={styles.txtItemValue}>
-                {DanceHelper.danceNameByVal(this.order?.dance, this.order?.danceStyle)}
+                {DanceHelper.danceNameByVal(this.lesson?.dance, this.lesson?.danceStyle)}
               </Text>
             </View>
 
             <View style={styles.viewItem}>
               <Text style={styles.txtItemName}>Dance Level:</Text>
               <Text style={styles.txtItemValue}>
-                {DanceHelper.danceLevelNameByVal(this.order?.danceLevel)}
+                {DanceHelper.danceLevelNameByVal(this.lesson?.danceLevel)}
               </Text>
             </View>
 
             <View style={styles.viewItem}>
               <Text style={styles.txtItemName}>Lesson Type:</Text>
               <Text style={styles.txtItemValue}>
-                {DanceHelper.lessonTypeNameByVal(this.order?.lessonType)}
+                {DanceHelper.lessonTypeNameByVal(this.lesson?.lessonType)}
               </Text>
             </View>
 
             <View style={styles.viewItem}>
               <Text style={styles.txtItemName}>Date & Time:</Text>
               <Text style={styles.txtItemValue}>
-                {this.order?.date}
+                {this.lesson?.date}
                 {'\n'}
-                {this.order?.timeToString()}
+                {this.lesson?.timeToString()}
               </Text>
             </View>
           </View>
@@ -78,7 +91,7 @@ export default class ScheduleCheckout extends React.Component {
 
             <View style={styles.viewTextTotal}>
               <Text style={styles.txtTotal}>Total :</Text>
-              <Text style={styles.txtTotal}>${this.order?.teacher.price}</Text>
+              <Text style={styles.txtTotal}>${this.lesson?.teacher.price}</Text>
             </View>
           </View>
         </View>
@@ -111,11 +124,75 @@ export default class ScheduleCheckout extends React.Component {
   }
 
   onMoreItem(index) {
-    if (index === 1) {
+    if (index === 0) {
       // book lesson, go to payment
-
+      this.doPayment();
     } else if (index === 2) {
     } else if (index === 3) {
     }
   }
+
+  async doPayment() {
+    // show loading
+    this.loadingHUD.show();
+
+    //
+    // payment
+    //
+    // try {
+    //   const resp = await RNPaypal.paymentRequest({
+    //     clientId: config.clientId,
+    //     environment: RNPaypal.ENVIRONMENT.SANDBOX,
+    //     intent: RNPaypal.INTENT.SALE,
+    //     price: this.lesson?.teacher.price,
+    //     currency: 'USD',
+    //     description: `Dance Lesson of ${this.lesson?.teacher.getFullName()}`,
+    //     acceptCreditCards: true,
+    //   });
+    //
+    //   console.log(resp);
+    //
+    //   Toast.show('Payment Successful');
+    // } catch (e) {
+    //   console.log(e.code);
+    //
+    //   if (e.code === 'USER_CANCELLED') {
+    //   } else {
+    //     Alert.alert('Payment Failed', e.message);
+    //   }
+    //
+    //   // hide loading
+    //   this.loadingHUD.hideAll();
+    //   return;
+    // }
+
+    // create lesson
+    try {
+      this.lesson.userId = this.currentUser.id;
+
+      await ApiService.addLesson(this.lesson);
+
+      this.currentUser.lessons.unshift(this.lesson);
+
+      // go to lessons page
+      this.props.navigation.popToTop();
+      this.props.navigation.push(Lessons.NAV_NAME);
+
+    } catch (e) {
+      console.log(e);
+
+      Alert.alert('Failed to Create Lesson', e.message);
+    }
+
+    // hide loading
+    this.loadingHUD.hideAll();
+  }
 }
+
+const mapStateToProps = (state) => state;
+
+const mapDispatchToProps = {
+  setUserInfo,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ScheduleCheckout);
