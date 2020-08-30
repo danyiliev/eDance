@@ -1,6 +1,7 @@
 import {StyleSheet} from 'react-native';
 import {colors as colorTheme} from '../../styles/theme.style';
 import {stylesApp, styleUtil} from '../../styles/app.style';
+import {styles as stylesSignup} from '../signup/styles';
 
 export const styles = StyleSheet.create({
   listCtnContainer: {
@@ -67,5 +68,12 @@ export const styles = StyleSheet.create({
 
   txtLabel: {
     color: colorTheme.darkGrey,
+  },
+
+  ctnSegment: {
+    ...stylesSignup.ctnSegmentGender,
+    marginTop: 12,
+    marginBottom: 12,
+    marginHorizontal: 60,
   },
 });

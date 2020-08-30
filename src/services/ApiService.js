@@ -470,11 +470,12 @@ class ApiService {
     }
   }
 
-  async getLessons(userId, from, count) {
+  async getLessons(userId, forTeach, from, count) {
     let params = {
       from: from,
       count: count,
       userId: userId,
+      forTeach: forTeach,
     };
 
     try {

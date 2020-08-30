@@ -4,16 +4,17 @@ import {stylesApp} from '../../styles/app.style';
 import {styles} from './styles';
 import {Utils} from '../../helpers/utils';
 import FastImage from 'react-native-fast-image';
-import {Icon} from 'react-native-elements';
+import {ButtonGroup, Icon} from 'react-native-elements';
 import {colors as colorTheme} from '../../styles/theme.style';
 import Chat from '../chat/Chat';
 import {setUserInfo} from '../../actions/user';
 import {connect} from 'react-redux';
 import {ApiService} from '../../services';
-import {Video} from '../../models/video.model';
+import {User} from '../../models/user.model';
 import {LessonHelper} from '../../helpers/lesson-helper';
 import {UserHelper} from '../../helpers/user-helper';
 import LessonDetail from './lesson-detail/LessonDetail';
+import {styles as stylesSignup} from '../signup/styles';
 
 class Lessons extends React.Component {
   static NAV_NAME = 'lessons';
@@ -23,10 +24,13 @@ class Lessons extends React.Component {
   state = {
     // ui
     showLoading: false,
+    menuIndex: 0,
 
     // data
     lessons: [],
   };
+
+  menus = ['Lessons to Teach', 'Lessons to Attend'];
 
   currentUser = null;
 
@@ -53,6 +57,19 @@ class Lessons extends React.Component {
   render() {
     return (
       <View style={stylesApp.viewContainer}>
+        {this.currentUser?.type === User.TYPE_TEACHER ? (
+          <ButtonGroup
+            containerStyle={styles.ctnSegment}
+            buttons={this.menus}
+            textStyle={stylesSignup.txtSegment}
+            innerBorderStyle={stylesSignup.borderSegment}
+            selectedButtonStyle={stylesSignup.butSegmentSelected}
+            selectedTextStyle={stylesSignup.SegmentSelected}
+            selectedIndex={this.state.menuIndex}
+            onPress={(index) => this.onChangeTab(index)}
+          />
+        ) : null}
+
         <FlatList
           contentContainerStyle={styles.listCtnContainer}
           keyExtractor={(item, index) => index.toString()}
@@ -124,6 +141,26 @@ class Lessons extends React.Component {
     );
   }
 
+  async onChangeTab(index) {
+    try {
+      await this.setState({menuIndex: index});
+
+      if (index === 0) {
+        await this.setState({
+          lessons: this.currentUser.lessonsTeach ?? [],
+        });
+      } else {
+        await this.setState({
+          lessons: this.currentUser.lessonsAttend ?? [],
+        });
+      }
+
+      this.loadData();
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   onItem(index) {
     // go to lesson detail page
     this.props.navigation.push(LessonDetail.NAV_NAME, {
@@ -144,7 +181,12 @@ class Lessons extends React.Component {
     }
 
     try {
-      let lessons = await ApiService.getLessons(this.currentUser.id, indexFrom, this.pageCount);
+      let lessons = await ApiService.getLessons(
+        this.currentUser.id,
+        this.state.menuIndex === 0,
+        indexFrom,
+        this.pageCount,
+      );
 
       if (indexFrom > 0) {
         // attach
@@ -152,6 +194,12 @@ class Lessons extends React.Component {
       }
 
       this.setState({lessons});
+
+      if (this.state.menuIndex === 0) {
+        this.currentUser.lessonsTeach = lessons;
+      } else {
+        this.currentUser.lessonsAttend = lessons;
+      }
     } catch (e) {
       console.log(e);
     }
