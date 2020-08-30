@@ -11,6 +11,7 @@ import {connect} from 'react-redux';
 import Home from '../../screens/home/Home';
 import ScheduleSelect from '../../screens/schedule/ScheduleSelect';
 import Messaging from '../../screens/messaging/Messaging';
+import Lessons from '../../screens/lessons/Lessons';
 import SettingProfile from '../../screens/settings/setting-profile/SettingProfile';
 import Championships from '../../screens/championships/Championships';
 import {UserHelper} from '../../helpers/user-helper';
@@ -67,6 +68,19 @@ class MenuModal extends React.Component {
 
           {/* menu */}
           <View style={styles.viewMenu}>
+            {/* schedule */}
+            <TouchableOpacity onPress={() => this.props.onMenuItem(Lessons.NAV_NAME)}>
+              <View style={styles.viewMenuItem}>
+                {/* icon */}
+                <View style={styles.viewMenuIcon}>
+                  <ImageScale width={14} source={require('../../../assets/imgs/menu_lesson.png')} />
+                </View>
+
+                <Text style={styles.txtMenuItem}>My Lessons</Text>
+              </View>
+            </TouchableOpacity>
+            <Divider style={styles.viewDivider} />
+
             {/* schedule */}
             <TouchableOpacity
               onPress={() => this.props.onMenuItem(ScheduleSelect.NAV_NAME)}>

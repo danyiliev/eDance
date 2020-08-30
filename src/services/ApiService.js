@@ -5,6 +5,7 @@ import {Video} from '../models/video.model';
 import {Post} from '../models/post.model';
 import {Comment} from '../models/comment.model';
 import {RNS3} from 'react-native-upload-aws-s3';
+import {Lesson} from '../models/lesson.model';
 
 class ApiService {
   // error codes
@@ -461,6 +462,39 @@ class ApiService {
       console.log(data);
 
       return Promise.resolve(data);
+    } catch (e) {
+      console.log(e);
+
+      return Promise.reject(e.response.data);
+    }
+  }
+
+  async getLessons(userId, from, count) {
+    let params = {
+      from: from,
+      count: count,
+      userId: userId,
+    };
+
+    try {
+      const options = {
+        params: params,
+        headers: {
+          ...this.baseHeader(),
+        },
+      };
+
+      const {data} = await Axios.get(`${this.baseUrl}/lesson`, options);
+      console.log(data);
+
+      const lessons = [];
+      for (const obj of data) {
+        const p = new Lesson().initFromObject(obj);
+
+        lessons.push(p);
+      }
+
+      return Promise.resolve(lessons);
     } catch (e) {
       console.log(e);
 

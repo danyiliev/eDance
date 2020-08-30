@@ -43,7 +43,7 @@ export default class Radio extends React.Component {
   }
 
   componentDidMount(): void {
-    this.loadData(true);
+    this.loadData();
   }
 
   render() {
@@ -129,7 +129,7 @@ export default class Radio extends React.Component {
   }
 
   onRefresh() {
-    this.loadData(true);
+    this.loadData();
   }
 
   async loadData(continued = false) {
@@ -172,7 +172,7 @@ export default class Radio extends React.Component {
       return;
     }
 
-    this.loadData();
+    this.loadData(true);
   }
 
   onItem(item) {

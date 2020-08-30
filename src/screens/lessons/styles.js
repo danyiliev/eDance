@@ -42,14 +42,9 @@ export const styles = StyleSheet.create({
   txtDate: {
     fontSize: 12,
     color: colorTheme.primary,
-    marginTop: 12,
   },
 
-  viewItemFooter: {
-    position: 'absolute',
-    bottom: 10,
-    right: 10,
-  },
+  viewItemStatus: {},
 
   txtBadge: {
     borderRadius: 12,
@@ -60,5 +55,17 @@ export const styles = StyleSheet.create({
     borderColor: 'blue',
     fontWeight: 'bold',
     fontSize: 12,
+  },
+
+  viewDate: {
+    marginTop: 12,
+  },
+  viewName: {
+    ...stylesApp.flexRow,
+    justifyContent: 'space-between',
+  },
+
+  txtLabel: {
+    color: colorTheme.darkGrey,
   },
 });
