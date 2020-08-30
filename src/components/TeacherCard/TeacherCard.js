@@ -7,6 +7,7 @@ import FastImage from 'react-native-fast-image';
 import {colors as colorTheme} from '../../styles/theme.style';
 import PropTypes from 'prop-types';
 import {UserHelper} from '../../helpers/user-helper';
+import {User} from '../../models/user.model';
 
 export default class TeacherCard extends React.Component {
   static propTypes = {
@@ -31,35 +32,39 @@ export default class TeacherCard extends React.Component {
         {/* name */}
         <Text style={styles.txtName}>{this.props.user.getFullName()}</Text>
 
-        {/* star rating */}
-        <Rating
-          imageSize={24}
-          readonly
-          startingValue={4}
-          style={styles.rating}
-          tintColor={colorTheme.primary}
-        />
+        {this.props.user.type === User.TYPE_TEACHER ? (
+          <View>
+            {/* star rating */}
+            <Rating
+              imageSize={24}
+              readonly
+              startingValue={4}
+              style={styles.rating}
+              tintColor={colorTheme.primary}
+            />
 
-        {/* buttons */}
-        <View style={styles.viewButtons}>
-          {/* reviews */}
-          <Button
-            title="REVIEWS"
-            containerStyle={[stylesApp.flex1, stylesApp.mr10]}
-            buttonStyle={styles.butLightOutline}
-            titleStyle={styles.titleButton}
-            onPress={this.props.onReview}
-          />
+            {/* buttons */}
+            <View style={styles.viewButtons}>
+              {/* reviews */}
+              <Button
+                title="REVIEWS"
+                containerStyle={[stylesApp.flex1, stylesApp.mr10]}
+                buttonStyle={styles.butLightOutline}
+                titleStyle={styles.titleButton}
+                onPress={this.props.onReview}
+              />
 
-          {/* schedule */}
-          <Button
-            title="SCHEDULE"
-            containerStyle={[stylesApp.flex1, stylesApp.ml10]}
-            buttonStyle={styles.butLightOutline}
-            titleStyle={styles.titleButton}
-            onPress={this.props.onSchedule}
-          />
-        </View>
+              {/* schedule */}
+              <Button
+                title="SCHEDULE"
+                containerStyle={[stylesApp.flex1, stylesApp.ml10]}
+                buttonStyle={styles.butLightOutline}
+                titleStyle={styles.titleButton}
+                onPress={this.props.onSchedule}
+              />
+            </View>
+          </View>
+        ) : null}
       </View>
     );
   }

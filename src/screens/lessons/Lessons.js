@@ -45,13 +45,7 @@ class Lessons extends React.Component {
   }
 
   componentDidMount(): void {
-    if (this.currentUser.lessons) {
-      this.setState({
-        lessons: this.currentUser.lessons,
-      });
-    } else {
-      this.loadData();
-    }
+    this.onChangeTab(0);
   }
 
   render() {
@@ -145,7 +139,7 @@ class Lessons extends React.Component {
     try {
       await this.setState({menuIndex: index});
 
-      if (index === 0) {
+      if (index === 0 && this.currentUser.type === User.TYPE_TEACHER) {
         await this.setState({
           lessons: this.currentUser.lessonsTeach ?? [],
         });
@@ -183,7 +177,7 @@ class Lessons extends React.Component {
     try {
       let lessons = await ApiService.getLessons(
         this.currentUser.id,
-        this.state.menuIndex === 0,
+        this.state.menuIndex === 0 && this.currentUser.type === User.TYPE_TEACHER,
         indexFrom,
         this.pageCount,
       );
@@ -195,7 +189,7 @@ class Lessons extends React.Component {
 
       this.setState({lessons});
 
-      if (this.state.menuIndex === 0) {
+      if (this.state.menuIndex === 0 && this.currentUser.type === User.TYPE_TEACHER) {
         this.currentUser.lessonsTeach = lessons;
       } else {
         this.currentUser.lessonsAttend = lessons;

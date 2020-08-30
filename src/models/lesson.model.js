@@ -165,9 +165,9 @@ export class Lesson extends BaseModel {
     const now = moment();
     const date = moment(this.date, 'yyyy-MM-DD');
 
-    if (now.isBefore(date)) {
+    if (now.isBefore(date, 'day')) {
       return false;
-    } else if (now.isAfter(date)) {
+    } else if (now.isAfter(date, 'day')) {
       return true;
     } else {
       // compare time
@@ -184,7 +184,7 @@ export class Lesson extends BaseModel {
     const now = moment();
     const start = moment(`${this.date} ${this.getMinTime()}`, 'yyyy-MM-DD HH:mm');
 
-    return now.diff(start, 'minutes');
+    return start.diff(now, 'minutes');
   }
 
 }

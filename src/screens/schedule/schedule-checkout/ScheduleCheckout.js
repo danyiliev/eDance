@@ -173,7 +173,9 @@ class ScheduleCheckout extends React.Component {
 
       await ApiService.addLesson(this.lesson);
 
-      this.currentUser.lessons.unshift(this.lesson);
+      if (this.currentUser.lessonsAttend) {
+        this.currentUser.lessonsAttend.unshift(this.lesson);
+      }
 
       // go to lessons page
       this.props.navigation.popToTop();
