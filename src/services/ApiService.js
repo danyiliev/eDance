@@ -455,6 +455,7 @@ class ApiService {
       teacherId: lesson.teacherId,
       date: lesson.date,
       timeSlots: timeSlots,
+      price: lesson.price,
     };
 
     try {

@@ -47,4 +47,11 @@ export class BaseModel {
   toJsonString() {
     return JSON.stringify(this);
   }
+
+  createdAtStr() {
+    let time = moment(this.createdAt);
+
+    // date
+    return time.format('YYYY-MM-DD HH:mm:ss');
+  }
 }

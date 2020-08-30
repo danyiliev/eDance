@@ -27,18 +27,18 @@ export default class Pro extends React.Component {
   pageCount = 15;
   userIndexSelected = -1;
 
-  order = null;
+  lesson = null;
 
   constructor(props) {
     super(props);
 
     // get parameter
     if (props.route.params) {
-      this.order = props.route.params.order;
+      this.lesson = props.route.params.lesson;
     }
 
     props.navigation.setOptions({
-      title: this.order ? 'Select Teacher' : 'Home',
+      title: this.lesson ? 'Select Teacher' : 'Home',
     });
   }
 
@@ -175,7 +175,7 @@ export default class Pro extends React.Component {
 
     let needLoadData = !this.state.users.length > 0;
 
-    const userTypes = this.order
+    const userTypes = this.lesson
       ? [User.TYPE_TEACHER]
       : [User.TYPE_TEACHER, User.TYPE_STUDENT, User.TYPE_ADJUDICATOR];
 
@@ -244,12 +244,12 @@ export default class Pro extends React.Component {
   }
 
   onUserSchedule(user) {
-    if (this.order) {
-      this.order.setTeacher(user);
+    if (this.lesson) {
+      this.lesson.setTeacher(user);
 
       // go to select date
       this.props.navigation.push(BookingDate.NAV_NAME, {
-        order: this.order,
+        order: this.lesson,
       });
     } else {
       // go to reviews page

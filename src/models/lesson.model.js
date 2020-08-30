@@ -44,6 +44,8 @@ export class Lesson extends BaseModel {
   date = '';
   timeSlots = [];
 
+  price = 35;
+
   // logical
   user = null;
   teacher = null;
@@ -90,10 +92,18 @@ export class Lesson extends BaseModel {
       }
     }
 
+    if (data.price) {
+      this.price = data.price;
+    }
+
     return this;
   }
 
   setTeacher(user) {
+    if (!user) {
+      return;
+    }
+
     this.teacher = user;
     this.teacherId = user.id;
   }
@@ -113,6 +123,24 @@ export class Lesson extends BaseModel {
 
   simpleDescription() {
     return `${DanceHelper.danceStyleNameByVal(this.danceStyle)}, ${this.dance}, ${DanceHelper.danceLevelNameByVal(this.danceLevel)}`;
+  }
+
+  getMinTime() {
+    if (!this.timeSlots || this.timeSlots.length <= 0) {
+      return '';
+    }
+
+    let time = this.timeSlots[0].start;
+    for (let i = 1; i < this.timeSlots.length; i++) {
+      const m1 = moment(time, 'HH:mm');
+      const m2 = moment(this.timeSlots[i].start, 'HH:mm');
+
+      if (m2.isBefore(m1)) {
+        time = this.timeSlots[i].start;
+      }
+    }
+
+    return time;
   }
 
   getMaxTime() {
@@ -151,4 +179,12 @@ export class Lesson extends BaseModel {
 
     return false;
   }
+
+  minsToStart() {
+    const now = moment();
+    const start = moment(`${this.date} ${this.getMinTime()}`, 'yyyy-MM-DD HH:mm');
+
+    return now.diff(start, 'minutes');
+  }
+
 }

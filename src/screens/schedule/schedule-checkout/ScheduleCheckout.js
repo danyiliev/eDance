@@ -169,6 +169,7 @@ class ScheduleCheckout extends React.Component {
     // create lesson
     try {
       this.lesson.userId = this.currentUser.id;
+      this.lesson.price = this.teacher?.price;
 
       await ApiService.addLesson(this.lesson);
 

@@ -5,9 +5,20 @@ import {stylesApp} from '../../../styles/app.style';
 import FastImage from 'react-native-fast-image';
 import {UserHelper} from '../../../helpers/user-helper';
 import {Button} from 'react-native-elements';
+import {DanceHelper} from '../../../helpers/dance-helper';
+import {connect} from 'react-redux';
+import {LessonHelper} from '../../../helpers/lesson-helper';
+import Broadcast from '../broadcast/Broadcast';
+import Playback from '../playback/Playback';
 
-export default class LessonDetail extends React.Component {
+class LessonDetail extends React.Component {
   static NAV_NAME = 'lesson-detail';
+
+  currentUser = null;
+  lesson = null;
+  isTeacher = true;
+
+  prepareDuration = 10;
 
   constructor(props) {
     super(props);
@@ -15,127 +26,105 @@ export default class LessonDetail extends React.Component {
     props.navigation.setOptions({
       title: 'Lesson Detail',
     });
+
+    this.currentUser = props.UserReducer.user;
+
+    // get parameter
+    if (props.route.params) {
+      this.lesson = props.route.params.lesson;
+      this.isTeacher = this.lesson?.teacherId === this.currentUser.id;
+
+      this.prepareDuration = this.isTeacher ? 10 : 0;
+    }
   }
 
   render() {
+    const targetUser = LessonHelper.getTargetUser(this.lesson, this.currentUser);
+
     return (
       <View style={styles.viewContainer}>
         <View>
-          {false ?? (
-            <View style={styles.viewNotice}>
-              <Text style={styles.txtNotice}>Lesson is not started yet.</Text>
-            </View>
-          )}
+          {this.renderNotice()}
 
           <View style={styles.viewForm}>
             {/* time */}
-            <Text style={styles.txtCreated}>2020-09-13 12:22</Text>
+            <Text style={styles.txtCreated}>{this.lesson?.createdAtStr()}</Text>
 
             {/* title */}
-            <Text style={styles.txtItemTitle}>
-              Summary
-            </Text>
+            <Text style={styles.txtItemTitle}>Summary</Text>
 
             <View style={styles.viewContent}>
               {/* lesson type */}
               <View style={styles.viewItem}>
-                <Text style={styles.txtItemLabel}>
-                  Lesson Type:
-                </Text>
+                <Text style={styles.txtItemLabel}>Lesson Type:</Text>
                 <Text style={styles.txtItemValue}>
-                  Private
+                  {DanceHelper.lessonTypeNameByVal(this.lesson?.lessonType)}
                 </Text>
               </View>
 
               {/* age group */}
               <View style={styles.viewItem}>
-                <Text style={styles.txtItemLabel}>
-                  Age Group:
-                </Text>
+                <Text style={styles.txtItemLabel}>Age Group:</Text>
                 <Text style={styles.txtItemValue}>
-                  J-1
+                  {DanceHelper.ageGroupNameByVal(this.lesson?.ageGroup)}
                 </Text>
               </View>
 
               {/* dance style */}
               <View style={styles.viewItem}>
-                <Text style={styles.txtItemLabel}>
-                  Dance Style:
-                </Text>
+                <Text style={styles.txtItemLabel}>Dance Style:</Text>
                 <Text style={styles.txtItemValue}>
-                  J-1
+                  {DanceHelper.danceStyleNameByVal(this.lesson?.danceStyle)}
                 </Text>
               </View>
 
               {/* dance */}
               <View style={styles.viewItem}>
-                <Text style={styles.txtItemLabel}>
-                  Dance:
-                </Text>
+                <Text style={styles.txtItemLabel}>Dance:</Text>
                 <Text style={styles.txtItemValue}>
-                  J-1
+                  {DanceHelper.danceNameByVal(this.lesson?.dance, this.lesson?.danceStyle)} ({this.lesson?.dance})
                 </Text>
               </View>
 
               {/* dance level */}
               <View style={styles.viewItem}>
-                <Text style={styles.txtItemLabel}>
-                  Dance Level:
-                </Text>
+                <Text style={styles.txtItemLabel}>Dance Level:</Text>
                 <Text style={styles.txtItemValue}>
-                  J-1
+                  {DanceHelper.danceLevelNameByVal(this.lesson?.danceLevel)}
                 </Text>
               </View>
 
-              <Text style={styles.txtSubTitle}>
-                Order Info
-              </Text>
+              <Text style={styles.txtSubTitle}>Order Info</Text>
 
               {/* teacher */}
               <View style={styles.viewItem}>
-                <Text style={styles.txtItemLabel}>
-                  Teacher:
-                </Text>
+                <Text style={styles.txtItemLabel}>{this.isTeacher ? 'Student:' : 'Teacher:'}</Text>
                 <View style={stylesApp.flexRowCenter}>
                   <FastImage
                     style={styles.imgUser}
-                    source={UserHelper.getUserImage()}
+                    source={UserHelper.getUserImage(targetUser)}
                     resizeMode={FastImage.resizeMode.cover}
                   />
-                  <Text style={[styles.txtItemValue, stylesApp.ml10]}>
-                    Teacher Name
-                  </Text>
+                  <Text style={[styles.txtItemValue, stylesApp.ml10]}>{targetUser?.getFullName()}</Text>
                 </View>
               </View>
 
               {/* date */}
               <View style={styles.viewItem}>
-                <Text style={styles.txtItemLabel}>
-                  Date:
-                </Text>
-                <Text style={styles.txtItemValue}>
-                  2091-03-12
-                </Text>
+                <Text style={styles.txtItemLabel}>Date:</Text>
+                <Text style={styles.txtItemValue}>{this.lesson?.date}</Text>
               </View>
 
               {/* time */}
               <View style={styles.viewItem}>
-                <Text style={styles.txtItemLabel}>
-                  Time:
-                </Text>
-                <Text style={styles.txtItemValue}>
-                  09:00 - 12:00
-                </Text>
+                <Text style={styles.txtItemLabel}>Time:</Text>
+                <Text style={styles.txtItemValue}>{this.lesson?.timeToString()}</Text>
               </View>
 
               {/* price */}
               <View style={styles.viewItem}>
-                <Text style={styles.txtItemLabel}>
-                  Price:
-                </Text>
-                <Text style={styles.txtItemValue}>
-                  $35
-                </Text>
+                <Text style={styles.txtItemLabel}>Price:</Text>
+                <Text style={styles.txtItemValue}>$35</Text>
               </View>
             </View>
           </View>
@@ -143,7 +132,7 @@ export default class LessonDetail extends React.Component {
 
         <View style={styles.viewActions}>
           <Button
-            title="Cancel"
+            title="Back"
             type="clear"
             containerStyle={[styles.ctnButAction, stylesApp.mr10]}
             buttonStyle={stylesApp.butLightOutline}
@@ -151,10 +140,12 @@ export default class LessonDetail extends React.Component {
             onPress={() => this.onButCancel()}
           />
           <Button
-            title="Start"
+            title={this.isTeacher ? 'Start' : 'Join'}
             containerStyle={[styles.ctnButAction, stylesApp.ml10]}
             buttonStyle={stylesApp.butPrimary}
             titleStyle={stylesApp.titleButPrimary}
+            disabled={this.lesson?.isClosed() || this.lesson?.minsToStart() > this.prepareDuration}
+            disabledStyle={[stylesApp.butPrimary, stylesApp.semiTrans]}
             onPress={() => this.onButStart()}
           />
         </View>
@@ -162,9 +153,46 @@ export default class LessonDetail extends React.Component {
     );
   }
 
+  renderNotice() {
+    if (this.lesson?.isClosed()) {
+      return (
+        <View style={styles.viewNotice}>
+          <Text style={styles.txtNotice}>Lesson is already closed.</Text>
+        </View>
+      );
+    }
+
+    if (this.lesson?.minsToStart() > this.prepareDuration) {
+      return (
+        <View style={styles.viewNotice}>
+          <Text style={styles.txtNotice}>Lesson is not started yet.</Text>
+        </View>
+      );
+    }
+
+    return null;
+  }
+
   onButCancel() {
+    // go back to prev page
+    this.props.navigation.pop();
   }
 
   onButStart() {
+    if (this.isTeacher) {
+      // go to broadcast page
+      this.props.navigation.push(Broadcast.NAV_NAME, {
+        lesson: this.lesson,
+      });
+    } else {
+      // go to playback page
+      this.props.navigation.push(Playback.NAV_NAME, {
+        lesson: this.lesson,
+      });
+    }
   }
 }
+
+const mapStateToProps = (state) => state;
+
+export default connect(mapStateToProps, null)(LessonDetail);

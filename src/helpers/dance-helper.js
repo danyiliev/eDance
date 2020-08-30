@@ -1,4 +1,5 @@
 import {
+  AGE_GROUPS,
   DANCE_LEVELS,
   LESSON_TYPES,
   SELECT_AMERICAN_BALLROOM,
@@ -75,5 +76,10 @@ export class DanceHelper {
   static lessonTypeNameByVal(val) {
     const type = LESSON_TYPES.find((t) => t.value === val);
     return type ? type.name : '';
+  }
+
+  static ageGroupNameByVal(val) {
+    const age = AGE_GROUPS.find((t) => t.value === val);
+    return age ? age.name : '';
   }
 }
