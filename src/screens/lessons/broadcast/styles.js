@@ -69,9 +69,6 @@ export const styles = StyleSheet.create({
   },
 
   viewUsers: {
-    position: 'absolute',
-    right: 12,
-    top: 12,
     backgroundColor: 'rgba(0,0,0, 0.6)',
     paddingHorizontal: 8,
     paddingTop: 6,

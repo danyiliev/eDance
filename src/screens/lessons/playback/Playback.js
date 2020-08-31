@@ -3,17 +3,31 @@ import {connect} from 'react-redux';
 import {User} from '../../../models/user.model';
 import {View} from 'react-native';
 import {styles} from './styles';
-import { NodePlayerView } from 'react-native-nodemediaclient';
+import {NodePlayerView} from 'react-native-nodemediaclient';
 import RateModal from '../../../components/RateModal/RateModal';
+import BaseLesson from '../base-lesson';
+import {config} from '../../../helpers/config';
+import Toast from 'react-native-simple-toast';
+import {ApiService} from '../../../services';
+import {Lesson} from '../../../models/lesson.model';
 
-class Playback extends React.Component {
+class Playback extends BaseLesson {
   static NAV_NAME = 'playback';
+
+  static STATUS_CONNECTING = 1000;
+  static STATUS_SUCCESS = 1001;
+  static STATUS_FAIL = 1002;
+  static STATUS_RESTART = 1003;
+  static STATUS_CLOSED = 1004;
+  static STATUS_BROKEN = 1005;
 
   state = {
     showRate: false,
+
+    joinedUsers: [],
   };
 
-  currentUser: User;
+  inPlaying = false;
 
   constructor(props) {
     super(props);
@@ -21,11 +35,18 @@ class Playback extends React.Component {
     props.navigation.setOptions({
       title: 'Lesson',
     });
+
+    this.state.joinedUsers.push(this.currentUser);
+  }
+
+  componentWillUnmount() {
+    if (this.inPlaying) {
+      this.quitLesson();
+    }
   }
 
   render() {
-    // let liveUrl = `rtmp://${config.wowza.hostAddress}:1935/${this.video.getApplicationName()}/${this.video.streamName}`;
-    let liveUrl = `rtmp://192.168.0.90`;
+    let liveUrl = `rtmp://${config.wowza.hostAddress}:1935/${config.wowza.applicationName}/${this.lesson?.id}`;
 
     return (
       <View style={styles.viewContainer}>
@@ -42,16 +63,65 @@ class Playback extends React.Component {
           onStatus={(code, msg) => this.onPlayStatus(code, msg)}
         />
 
-        <RateModal
-          visible={this.state.showRate}
-        />
+        <View style={styles.viewIndicator}>{this.renderUsers()}</View>
+
+        <RateModal visible={this.state.showRate} />
       </View>
     );
   }
 
+  async refreshTimer() {
+    await super.refreshTimer();
+
+    if (this.lesson?.status === Lesson.STATUS_DONE) {
+      // show rate modal
+      this.setState({
+        showRate: true,
+      });
+
+      this.quitLesson();
+    }
+  }
+
   onPlayStatus(code, msg) {
-    console.log('onPlayStatus');
-    console.log(code.nativeEvent);
+    console.log('onPlayStatus', code);
+
+    if (code === Playback.STATUS_SUCCESS) {
+      Toast.show('Connected live broadcast');
+
+      // start refreshing
+      this.startRefreshTimer();
+
+      ApiService.joinLesson(this.lesson?.id).catch((e) => console.log(e));
+      this.inPlaying = true;
+    } else {
+      if (code < 1100) {
+        this.inPlaying = false;
+        // error, stop refreshing
+        this.stopRefreshTimer();
+      }
+
+      if (this.lesson?.status === Lesson.STATUS_DONE) {
+        // done, return directly
+        return;
+      }
+
+      if (code === Playback.STATUS_CONNECTING) {
+        Toast.show('Connecting live broadcast...');
+      } else if (code === Playback.STATUS_FAIL) {
+        Toast.show('Connection Failed');
+      } else if (code === Playback.STATUS_CLOSED) {
+        Toast.show('Stopped live broadcast');
+      } else if (code === Playback.STATUS_BROKEN) {
+        Toast.show('Connection broken');
+      } else if (code === Playback.STATUS_RESTART) {
+        Toast.show('Restart Connecting ...');
+      }
+    }
+  }
+
+  quitLesson() {
+    ApiService.quitLesson(this.lesson?.id).catch((e) => console.log(e));
   }
 }
 

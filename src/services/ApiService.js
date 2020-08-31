@@ -503,6 +503,62 @@ class ApiService {
       return Promise.reject(e.response.data);
     }
   }
+
+  async getLessonById(id) {
+    try {
+      const options = {
+        headers: {
+          ...this.baseHeader(),
+        },
+      };
+
+      const {data} = await Axios.get(`${this.baseUrl}/lesson/${id}`, options);
+      console.log(data);
+
+      const lesson = new Lesson().initFromObject(data);
+
+      return Promise.resolve(lesson);
+    } catch (e) {
+      console.log(e);
+
+      return Promise.reject(e.response.data);
+    }
+  }
+
+  async doLessonAction(lessonId, action) {
+    try {
+      const options = {
+        headers: {
+          ...this.baseHeader(),
+        },
+      };
+
+      const {data} = await Axios.get(`${this.baseUrl}/lesson/${lessonId}/${action}`, options);
+      console.log(data);
+
+      return Promise.resolve(data);
+    } catch (e) {
+      console.log(e);
+
+      return Promise.reject(e.response.data);
+    }
+  }
+
+  startLesson(lessonId) {
+    return this.doLessonAction(lessonId, 'start');
+  }
+
+  stopLesson(lessonId) {
+    return this.doLessonAction(lessonId, 'stop');
+  }
+
+  joinLesson(lessonId) {
+    return this.doLessonAction(lessonId, 'join');
+  }
+
+  quitLesson(lessonId) {
+    return this.doLessonAction(lessonId, 'quit');
+  }
 }
 
 const apiService = new ApiService();

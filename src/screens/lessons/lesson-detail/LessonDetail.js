@@ -144,7 +144,7 @@ class LessonDetail extends React.Component {
             containerStyle={[styles.ctnButAction, stylesApp.ml10]}
             buttonStyle={stylesApp.butPrimary}
             titleStyle={stylesApp.titleButPrimary}
-            disabled={this.lesson?.isClosed() || this.lesson?.minsToStart() > this.prepareDuration}
+            // disabled={this.lesson?.isClosed() || this.lesson?.minsToStart() > this.prepareDuration}
             disabledStyle={[stylesApp.butPrimary, stylesApp.semiTrans]}
             onPress={() => this.onButStart()}
           />

@@ -29,6 +29,10 @@ export class TimeSlot {
 }
 
 export class Lesson extends BaseModel {
+  static STATUS_INIT = 'init';
+  static STATUS_LIVE = 'live';
+  static STATUS_DONE = 'done';
+
   //
   // properties
   //
@@ -45,6 +49,8 @@ export class Lesson extends BaseModel {
   timeSlots = [];
 
   price = 35;
+  status = Lesson.STATUS_INIT;
+  joinedUsers = [];
 
   // logical
   user = null;
@@ -94,6 +100,19 @@ export class Lesson extends BaseModel {
 
     if (data.price) {
       this.price = data.price;
+    }
+
+    if (data.status) {
+      this.status = data.status;
+    }
+
+    // joined users
+    this.joinedUsers = [];
+    for (const u of data.joinedUsers) {
+      if (Utils.isObject(u)) {
+        const user = new User().initFromObject(u);
+        this.joinedUsers.push(user);
+      }
     }
 
     return this;

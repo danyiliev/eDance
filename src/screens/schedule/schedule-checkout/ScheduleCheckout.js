@@ -171,7 +171,8 @@ class ScheduleCheckout extends React.Component {
       this.lesson.userId = this.currentUser.id;
       this.lesson.price = this.teacher?.price;
 
-      await ApiService.addLesson(this.lesson);
+      const result = await ApiService.addLesson(this.lesson);
+      this.lesson.id = result.id;
 
       if (this.currentUser.lessonsAttend) {
         this.currentUser.lessonsAttend.unshift(this.lesson);
@@ -180,7 +181,6 @@ class ScheduleCheckout extends React.Component {
       // go to lessons page
       this.props.navigation.popToTop();
       this.props.navigation.push(Lessons.NAV_NAME);
-
     } catch (e) {
       console.log(e);
 
