@@ -35,7 +35,6 @@ export const styles = StyleSheet.create({
     backgroundColor: colorTheme.backgroundGrey,
     borderRadius: 12,
     ...stylesApp.flexRow,
-    minHeight: heightImg,
     marginHorizontal: marginItem,
     marginTop: marginItem,
   },
@@ -43,7 +42,8 @@ export const styles = StyleSheet.create({
   imgItem: {
     ...stylesLikes.imgItem,
     width: heightImg,
-    height: heightImg,
+    height: '100%',
+    resizeMode: 'cover',
   },
 
   viewItemRating: {

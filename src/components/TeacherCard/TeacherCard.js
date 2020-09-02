@@ -8,14 +8,23 @@ import {colors as colorTheme} from '../../styles/theme.style';
 import PropTypes from 'prop-types';
 import {UserHelper} from '../../helpers/user-helper';
 import {User} from '../../models/user.model';
+import {connect} from 'react-redux';
 
-export default class TeacherCard extends React.Component {
+class TeacherCard extends React.Component {
   static propTypes = {
     user: PropTypes.object,
     onUser: PropTypes.func,
     onReview: PropTypes.func,
     onSchedule: PropTypes.func,
   };
+
+  currentUser = null;
+
+  constructor(props) {
+    super(props);
+
+    this.currentUser = props.UserReducer.user;
+  }
 
   render() {
     const {user} = this.props;
@@ -34,7 +43,7 @@ export default class TeacherCard extends React.Component {
         {/* name */}
         <Text style={styles.txtName}>{user.getFullName()}</Text>
 
-        {user.type === User.TYPE_TEACHER ? (
+        {user.type === User.TYPE_TEACHER && !user.equalTo(this.currentUser) ? (
           <View>
             {/* star rating */}
             <Rating
@@ -71,3 +80,7 @@ export default class TeacherCard extends React.Component {
     );
   }
 }
+
+const mapStateToProps = (state) => state;
+
+export default connect(mapStateToProps, null)(TeacherCard);

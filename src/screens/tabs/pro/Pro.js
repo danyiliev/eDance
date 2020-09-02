@@ -98,7 +98,7 @@ export default class Pro extends React.Component {
               <TeacherCard
                 user={user}
                 onUser={() => this.onUser(user)}
-                onReview={() => this.onUserReviews()}
+                onReview={() => this.onUserReviews(user)}
                 onSchedule={() => this.onUserSchedule(user)}
               />
             )}
@@ -238,9 +238,11 @@ export default class Pro extends React.Component {
     }
   }
 
-  onUserReviews() {
+  onUserReviews(user) {
     // go to reviews page
-    this.props.navigation.push(Reviews.NAV_NAME);
+    this.props.navigation.push(Reviews.NAV_NAME, {
+      user: user,
+    });
   }
 
   onUserSchedule(user) {

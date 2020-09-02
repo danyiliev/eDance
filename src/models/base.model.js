@@ -48,10 +48,10 @@ export class BaseModel {
     return JSON.stringify(this);
   }
 
-  createdAtStr() {
+  createdAtStr(format = 'YYYY-MM-DD HH:mm:ss') {
     let time = moment(this.createdAt);
 
     // date
-    return time.format('YYYY-MM-DD HH:mm:ss');
+    return time.format(format);
   }
 }

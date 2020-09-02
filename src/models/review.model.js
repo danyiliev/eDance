@@ -1,17 +1,20 @@
 import {BaseModel} from './base.model';
 import {Utils} from '../helpers/utils';
 import {User} from './user.model';
+import {Lesson} from './lesson.model';
 
 export class Review extends BaseModel {
   //
   // properties
   //
   userId = '';
+  lessonId = '';
   rating = 5;
   review = '';
 
   // logical
   user = null;
+  lesson = null;
 
   initFromObject(data) {
     super.initFromObject(data);
@@ -22,6 +25,14 @@ export class Review extends BaseModel {
       this.userId = this.user.id;
     } else {
       this.userId = data.user;
+    }
+
+    // lesson
+    if (Utils.isObject(data.lesson)) {
+      this.lesson = new Lesson().initFromObject(data.lesson);
+      this.lessonId = this.user.id;
+    } else {
+      this.lessonId = data.user;
     }
 
     this.rating = data.rating;

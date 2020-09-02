@@ -150,7 +150,7 @@ class Playback extends BaseLesson {
     this.loadingHUD.show();
 
     try {
-      await ApiService.addUserReview(this.lesson?.teacherId, rating, review);
+      await ApiService.addUserReview(this.lesson?.teacherId, this.lesson?.id, rating, review);
 
       this.setState({
         showRate: false,

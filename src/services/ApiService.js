@@ -190,6 +190,31 @@ class ApiService {
     }
   }
 
+  async getUserReviews(userId) {
+    try {
+      const options = {
+        headers: {
+          ...this.baseHeader(),
+        },
+      };
+
+      const {data} = await Axios.get(`${this.baseUrl}/users/${userId}/reviews`, options);
+      console.log(data);
+
+      const reviews = [];
+      for (const r of data) {
+        const review = new Review().initFromObject(r);
+        reviews.push(review);
+      }
+
+      return Promise.resolve(reviews);
+    } catch (e) {
+      console.log(e);
+
+      return Promise.reject(e.response.data);
+    }
+  }
+
   async getVideos(from, count, type) {
     let params = {
       from: from,
@@ -316,7 +341,7 @@ class ApiService {
     }
   }
 
-  async addUserReview(userId, rating, review) {
+  async addUserReview(userId, lessonId, rating, review) {
     const httpOptions = {
       headers: {
         ...this.baseHeader(),
@@ -326,7 +351,11 @@ class ApiService {
     const params = {rating, review};
 
     try {
-      const {data} = await Axios.post(`${this.baseUrl}/users/${userId}/review`, params, httpOptions);
+      const {data} = await Axios.post(
+        `${this.baseUrl}/users/${userId}/${lessonId}/review`,
+        params,
+        httpOptions,
+      );
       console.log(data);
 
       return Promise.resolve(new User().initFromObject(data));
