@@ -6,6 +6,7 @@ import {Post} from '../models/post.model';
 import {Comment} from '../models/comment.model';
 import {RNS3} from 'react-native-upload-aws-s3';
 import {Lesson} from '../models/lesson.model';
+import {Review} from '../models/review.model';
 
 class ApiService {
   // error codes
@@ -315,6 +316,54 @@ class ApiService {
     }
   }
 
+  async addUserReview(userId, rating, review) {
+    const httpOptions = {
+      headers: {
+        ...this.baseHeader(),
+      },
+    };
+
+    const params = {rating, review};
+
+    try {
+      const {data} = await Axios.post(`${this.baseUrl}/users/${userId}/review`, params, httpOptions);
+      console.log(data);
+
+      return Promise.resolve(new User().initFromObject(data));
+    } catch (e) {
+      console.log(e);
+
+      return Promise.reject(e.response ? e.response.data : e);
+    }
+  }
+
+  async getMyReviewToUser(userId) {
+    try {
+      const options = {
+        headers: {
+          ...this.baseHeader(),
+        },
+      };
+
+      const {data} = await Axios.get(`${this.baseUrl}/users/${userId}/review`, options);
+      console.log(data);
+
+      let review = null;
+      if (data) {
+        review = new Review().initFromObject(data);
+      }
+
+      return Promise.resolve(review);
+    } catch (e) {
+      console.log(e);
+
+      return Promise.reject(e.response.data);
+    }
+  }
+
+  //
+  // posts
+  //
   async getPosts(from, count, userId) {
     let params = {
       from: from,

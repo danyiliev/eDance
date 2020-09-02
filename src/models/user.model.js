@@ -1,6 +1,7 @@
 import {BaseModel} from './base.model';
 import {ApiService} from '../services';
 import {DURATIONS_LESSON, DURATIONS_REST} from '../constants/dance-data';
+import {Review} from './review.model';
 
 export class User extends BaseModel {
   static TYPE_TEACHER = 1;
@@ -42,6 +43,9 @@ export class User extends BaseModel {
   durationRest = DURATIONS_REST[0];
   timeStart = '09:00';
   timeEnd = '22:00';
+
+  rate = 5;
+  reviews = [];
 
   // logical
   lessonsTeach = null;
@@ -120,6 +124,19 @@ export class User extends BaseModel {
     }
     if (data.timeEnd) {
       this.timeEnd = data.timeEnd;
+    }
+
+    // reviews
+    if (data.rate) {
+      this.rate = data.rate;
+    }
+
+    if (data.reviews) {
+      this.reviews = [];
+      for (const r of data.reviews) {
+        const review = new Review().initFromObject(r);
+        this.reviews.push(review);
+      }
     }
 
     return this;

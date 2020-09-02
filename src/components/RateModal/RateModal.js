@@ -15,6 +15,8 @@ import {Button, Input} from 'react-native-elements';
 export default class RateModal extends React.Component {
   static propTypes = {
     visible: PropTypes.bool,
+    teacher: PropTypes.object,
+    onSave: PropTypes.func,
   };
 
   state = {
@@ -38,12 +40,10 @@ export default class RateModal extends React.Component {
               <View style={styles.viewUser}>
                 <FastImage
                   style={styles.imgUser}
-                  source={UserHelper.getUserImage()}
+                  source={UserHelper.getUserImage(this.props.teacher)}
                   resizeMode={FastImage.resizeMode.cover}
                 />
-                <Text style={styles.txtUserName}>
-                  Teacher Name
-                </Text>
+                <Text style={styles.txtUserName}>{this.props.teacher?.getFullName()}</Text>
               </View>
 
               <StarRating
@@ -77,7 +77,9 @@ export default class RateModal extends React.Component {
                   title="Save"
                   buttonStyle={stylesApp.butPrimary}
                   titleStyle={stylesApp.titleButPrimary}
-                  onPress={() => this.onButSave()}
+                  disabled={!(this.state.rating > 0 && this.state.review)}
+                  disabledStyle={[stylesApp.butPrimary, stylesApp.semiTrans]}
+                  onPress={() => this.props.onSave(this.state.rating, this.state.review)}
                 />
               </View>
             </View>
@@ -89,9 +91,5 @@ export default class RateModal extends React.Component {
 
   onFocusReview() {
     this.keyboardView.moveMainView(120);
-  }
-
-  onButSave() {
-
   }
 }

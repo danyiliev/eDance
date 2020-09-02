@@ -1,7 +1,7 @@
 import React from 'react';
 import {connect} from 'react-redux';
 import {User} from '../../../models/user.model';
-import {View} from 'react-native';
+import {Alert, View} from 'react-native';
 import {styles} from './styles';
 import {NodePlayerView} from 'react-native-nodemediaclient';
 import RateModal from '../../../components/RateModal/RateModal';
@@ -45,6 +45,20 @@ class Playback extends BaseLesson {
     }
   }
 
+  componentDidMount(): void {
+    if (this.lesson?.status === Lesson.STATUS_DONE) {
+      // check if already reviewed
+      ApiService.getMyReviewToUser(this.lesson?.teacherId).then((review) => {
+        if (!review) {
+          // no review given, show rate modal
+          this.setState({
+            showRate: true,
+          });
+        }
+      });
+    }
+  }
+
   render() {
     let liveUrl = `rtmp://${config.wowza.hostAddress}:1935/${config.wowza.applicationName}/${this.lesson?.id}`;
 
@@ -65,7 +79,11 @@ class Playback extends BaseLesson {
 
         <View style={styles.viewIndicator}>{this.renderUsers()}</View>
 
-        <RateModal visible={this.state.showRate} />
+        <RateModal
+          visible={this.state.showRate}
+          teacher={this.lesson?.teacher}
+          onSave={(rating, review) => this.onSaveReview(rating, review)}
+        />
       </View>
     );
   }
@@ -73,6 +91,10 @@ class Playback extends BaseLesson {
   async refreshTimer() {
     await super.refreshTimer();
 
+    this.checkLessonStatus();
+  }
+
+  checkLessonStatus() {
     if (this.lesson?.status === Lesson.STATUS_DONE) {
       // show rate modal
       this.setState({
@@ -122,6 +144,26 @@ class Playback extends BaseLesson {
 
   quitLesson() {
     ApiService.quitLesson(this.lesson?.id).catch((e) => console.log(e));
+  }
+
+  async onSaveReview(rating, review) {
+    this.loadingHUD.show();
+
+    try {
+      await ApiService.addUserReview(this.lesson?.teacherId, rating, review);
+
+      this.setState({
+        showRate: false,
+      });
+
+      Toast.show('Saved the review successfully');
+    } catch (e) {
+      console.log(e);
+
+      Alert.alert('Failed to Save Review', e.message);
+    }
+
+    this.loadingHUD.hideAll();
   }
 }
 

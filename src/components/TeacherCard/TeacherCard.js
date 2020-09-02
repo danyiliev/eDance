@@ -18,27 +18,29 @@ export default class TeacherCard extends React.Component {
   };
 
   render() {
+    const {user} = this.props;
+
     return (
       <View style={[styleUtil.withShadow(14, 0.6), styles.viewContainer]}>
         {/* photo */}
         <TouchableOpacity activeOpacity={0.8} onPress={this.props.onUser}>
           <FastImage
             style={styles.imgUser}
-            source={UserHelper.getUserImage(this.props.user)}
+            source={UserHelper.getUserImage(user)}
             resizeMode={FastImage.resizeMode.cover}
           />
         </TouchableOpacity>
 
         {/* name */}
-        <Text style={styles.txtName}>{this.props.user.getFullName()}</Text>
+        <Text style={styles.txtName}>{user.getFullName()}</Text>
 
-        {this.props.user.type === User.TYPE_TEACHER ? (
+        {user.type === User.TYPE_TEACHER ? (
           <View>
             {/* star rating */}
             <Rating
               imageSize={24}
               readonly
-              startingValue={4}
+              startingValue={user.rate}
               style={styles.rating}
               tintColor={colorTheme.primary}
             />

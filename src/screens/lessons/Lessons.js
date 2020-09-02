@@ -11,6 +11,7 @@ import {setUserInfo} from '../../actions/user';
 import {connect} from 'react-redux';
 import {ApiService} from '../../services';
 import {User} from '../../models/user.model';
+import {Lesson} from '../../models/lesson.model';
 import {LessonHelper} from '../../helpers/lesson-helper';
 import {UserHelper} from '../../helpers/user-helper';
 import LessonDetail from './lesson-detail/LessonDetail';
@@ -110,12 +111,7 @@ class Lessons extends React.Component {
               {/* name */}
               <Text style={styles.txtName}>{targetUser.getFullName()}</Text>
 
-              {/* status */}
-              {item.isClosed() ? (
-                <View style={styles.viewItemStatus}>
-                  <Text style={styles.txtBadge}>Closed</Text>
-                </View>
-              ) : null}
+              {this.renderLessonStatus(item)}
             </View>
 
             {/* text */}
@@ -133,6 +129,24 @@ class Lessons extends React.Component {
         </View>
       </TouchableOpacity>
     );
+  }
+
+  renderLessonStatus(lesson) {
+    if (lesson.isClosed()) {
+      return (
+        <View style={styles.viewItemStatus}>
+          <Text style={styles.txtBadge}>Closed</Text>
+        </View>
+      );
+    } else if (lesson.status === Lesson.STATUS_LIVE) {
+      return (
+        <View style={styles.viewItemStatus}>
+          <Text style={[styles.txtBadge, styles.txtBadgeGreen]}>Live</Text>
+        </View>
+      );
+    }
+
+    return null;
   }
 
   async onChangeTab(index) {

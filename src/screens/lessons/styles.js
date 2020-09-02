@@ -57,6 +57,10 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 12,
   },
+  txtBadgeGreen: {
+    color: 'green',
+    borderColor: 'green',
+  },
 
   viewDate: {
     marginTop: 12,
