@@ -186,8 +186,7 @@ class Store extends React.Component {
     });
   }
 
-  onItem(item) {
-  }
+  onItem(item) {}
 
   onButCart() {
     this.props.navigation.push(Cart.NAV_NAME);

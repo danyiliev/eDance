@@ -35,7 +35,7 @@ export default class Orders extends React.Component {
         <FlatList
           contentContainerStyle={styles.listCtnContainer}
           keyExtractor={(item, index) => index.toString()}
-          data={Utils.makeEmptyArray(4)}
+          data={[]}
           ListHeaderComponent={() => this.renderHeader()}
           ListEmptyComponent={() => this.renderEmptyItem()}
           renderItem={({item, index}) => this.renderItem(item, index)}

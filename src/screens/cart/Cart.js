@@ -32,7 +32,7 @@ export default class Cart extends React.Component {
         <FlatList
           contentContainerStyle={styles.listCtnContainer}
           keyExtractor={(item, index) => index.toString()}
-          data={Utils.makeEmptyArray(4)}
+          data={this.state.products}
           ListEmptyComponent={() => this.renderEmptyItem()}
           renderItem={({item, index}) => this.renderItem(item, index)}
           refreshing={this.state.showLoading}
@@ -41,7 +41,9 @@ export default class Cart extends React.Component {
         {/* login */}
         <View style={[styleUtil.withShadow(), styles.viewButBuy]}>
           <Button
-            title="BUY $230.2"
+            title="BUY"
+            disabled={this.state.products.length <= 0}
+            disabledStyle={[stylesApp.butPrimary, stylesApp.semiTrans]}
             buttonStyle={stylesApp.butPrimary}
             titleStyle={stylesApp.titleButPrimary}
             onPress={() => this.onButBuy()}
