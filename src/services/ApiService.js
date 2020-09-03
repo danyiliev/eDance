@@ -728,6 +728,34 @@ class ApiService {
       return Promise.reject(e.response.data);
     }
   }
+
+  async getLessonsByIds(ids) {
+    const httpOptions = {
+      headers: {
+        ...this.baseHeader(),
+      },
+    };
+
+    let params = {ids};
+
+    try {
+      const {data} = await Axios.post(`${this.baseUrl}/lesson/fromIds`, params, httpOptions);
+      console.log(data);
+
+      const lessons = [];
+      for (const obj of data) {
+        const p = new Lesson().initFromObject(obj);
+
+        lessons.push(p);
+      }
+
+      return Promise.resolve(lessons);
+    } catch (e) {
+      console.log(e);
+
+      return Promise.reject(e.response.data);
+    }
+  }
 }
 
 const apiService = new ApiService();

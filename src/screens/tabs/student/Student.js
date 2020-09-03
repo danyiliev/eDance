@@ -14,15 +14,12 @@ import Profile from '../../profile/Profile';
 import RNPaypal from 'react-native-paypal-lib';
 import {config} from '../../../helpers/config';
 import Toast from 'react-native-simple-toast';
-import {Lesson} from '../../../models/lesson.model';
-import Lessons from '../../lessons/Lessons';
 import {connect} from 'react-redux';
 import {LoadingHUD} from 'react-native-hud-hybrid';
-import {setUserInfo} from '../../../actions/user';
-import LessonDetail from '../../lessons/lesson-detail/LessonDetail';
 import LessonPlayback from '../../lessons/lesson-playback/LessonPlayback';
+import BaseLessonList from '../base-lesson-list';
 
-class Student extends React.Component {
+class Student extends BaseLessonList {
   static NAV_NAME = 'student';
 
   state = {
@@ -33,17 +30,15 @@ class Student extends React.Component {
     lessons: [],
   };
 
-  currentUser = null;
-  pageCount = 20;
-
   constructor(props) {
     super(props);
 
-    this.currentUser = props.UserReducer.user;
     this.loadingHUD = new LoadingHUD();
   }
 
   componentDidMount(): void {
+    super.componentDidMount();
+
     this.loadData();
   }
 
@@ -126,22 +121,6 @@ class Student extends React.Component {
     });
   }
 
-  onEndReached() {
-    // smaller than one page, no need to load again
-    if (this.state.lessons.length < this.pageCount) {
-      return;
-    }
-
-    this.loadData(true);
-  }
-
-  onTeacher(lesson) {
-    // go to teacher profile page
-    this.props.navigation.push(Profile.NAV_NAME, {
-      user: lesson.teacher,
-    });
-  }
-
   async onPurchase(lesson) {
     // show loading
     this.loadingHUD.show();
@@ -192,40 +171,6 @@ class Student extends React.Component {
 
     // hide loading
     this.loadingHUD.hideAll();
-  }
-
-  async onLike(lesson) {
-    // add to liked list
-    try {
-      const isLike = !this.currentUser?.isLessonLiked(lesson.id);
-      await ApiService.likeLesson(lesson.id, isLike);
-
-      if (isLike) {
-        this.currentUser?.lessonsLiked.unshift(lesson.id);
-      } else {
-        this.currentUser?.unlikeLesson(lesson);
-      }
-
-      this.updateList();
-    } catch (e) {
-      console.log(e);
-
-      Toast.show(e.message);
-    }
-  }
-
-  onItem(lesson) {
-    // go to lesson detail page
-    this.props.navigation.push(LessonPlayback.NAV_NAME, {
-      lesson: lesson,
-    });
-  }
-
-  async updateList() {
-    const {lessons} = this.state;
-
-    this.setState({lessons: []});
-    this.setState({lessons});
   }
 }
 

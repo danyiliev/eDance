@@ -52,6 +52,7 @@ export class User extends BaseModel {
   // logical
   lessonsTeach = null;
   lessonsAttend = null;
+  lessonsLikedObj = null;
 
   initFromObject(data) {
     super.initFromObject(data);
@@ -180,8 +181,19 @@ export class User extends BaseModel {
     return this.lessonsLiked.indexOf(lessonId) >= 0;
   }
 
+  likeLesson(lesson) {
+    this.lessonsLiked.unshift(lesson.id);
+
+    this.lessonsLikedObj?.unshift(lesson);
+  }
+
   unlikeLesson(lesson) {
-    const index = this.lessonsLiked.indexOf(lesson.id);
+    let index = this.lessonsLiked.indexOf(lesson.id);
     this.lessonsLiked.splice(index, 1);
+
+    index = this.lessonsLikedObj?.findIndex((l) => l.equalTo(lesson));
+    if (index >= 0) {
+      this.lessonsLikedObj?.splice(index, 1);
+    }
   }
 }

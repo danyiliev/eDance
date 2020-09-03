@@ -5,25 +5,29 @@ import {FlatList, Image, Text, View} from 'react-native';
 import {Utils} from '../../../helpers/utils';
 import {stylesApp} from '../../../styles/app.style';
 import ImageScale from 'react-native-scalable-image';
+import {connect} from 'react-redux';
+import LessonItem from '../../../components/LessonItem/LessonItem';
+import {ApiService} from '../../../services';
+import BaseLessonList from '../base-lesson-list';
 
-export default class Likes extends React.Component {
+class Likes extends BaseLessonList {
   static NAV_NAME = 'likes';
 
   state = {
     // ui
     showLoading: false,
-    redrawIndex: 0,
+    lessons: [],
   };
-
-  // data
-  lessons = [];
 
   constructor(props) {
     super(props);
+  }
 
-    // load data
-    for (let i = 0; i < 20; i++) {
-      this.lessons.push({});
+  componentDidMount(): void {
+    super.componentDidMount();
+
+    if (!this.currentUser?.lessonsLikedObj) {
+      this.loadData();
     }
   }
 
@@ -35,8 +39,9 @@ export default class Likes extends React.Component {
           keyExtractor={(item, index) => index.toString()}
           onRefresh={() => this.onRefresh()}
           refreshing={this.state.showLoading}
-          data={Utils.makeEmptyArray(this.lessons.length)}
+          data={this.state.lessons}
           renderItem={({item, index}) => this.renderItem(item, index)}
+          ListEmptyComponent={() => this.renderEmptyItem()}
         />
       </View>
     );
@@ -44,47 +49,79 @@ export default class Likes extends React.Component {
 
   renderItem(item, index) {
     return (
-      <View style={styles.viewItem}>
-        <View style={styles.viewItemImage}>
-          {/* image */}
-          <Image
-            style={styles.imgItem}
-            source={require('../../../../assets/imgs/lesson_default.png')}
-          />
+      <LessonItem
+        lesson={item}
+        index={index + 1}
+        onTeacher={() => this.onTeacher(item)}
+        onLike={() => this.onLike(item)}
+        onPress={() => this.onItem(item)}
+      />
+    );
+  }
 
-          {/* length */}
-          <View style={styles.viewTxtLength}>
-            <Text style={styles.txtLength}>01:32</Text>
-          </View>
-        </View>
+  renderEmptyItem() {
+    // do not show anything when loading progress
+    if (this.state.showLoading) {
+      return null;
+    }
 
-        {/* content */}
-        <View style={styles.viewItemContent}>
-          <View style={styles.viewItemHeader}>
-            <Text style={styles.txtLesson}>Lesson {index + 1}</Text>
-            <Text style={styles.txtStatus}>Purchased</Text>
-          </View>
-
-          <View style={styles.viewItemContentBody}>
-            <View style={stylesApp.flex1}>
-              {/* name */}
-              <Text style={styles.txtName}>John Smith</Text>
-
-              {/* category */}
-              <Text style={styles.txtCategory}>Samba/Waltz</Text>
-            </View>
-
-            <View style={styles.viewLike}>
-              <ImageScale
-                width={33}
-                source={require('../../../../assets/imgs/tab_like.png')}
-              />
-            </View>
-          </View>
-        </View>
+    return (
+      <View style={stylesApp.viewLoading}>
+        <Text style={stylesApp.textEmptyItem}>No liked lessons yet</Text>
       </View>
     );
   }
 
-  onRefresh() {}
+  onRefresh() {
+    this.updateList();
+  }
+
+  async loadData(continued = false) {
+    let indexFrom = 0;
+
+    if (!continued) {
+      // show loading mark
+      this.setState({
+        showLoading: true,
+      });
+
+      indexFrom = this.state.lessons.length;
+    }
+
+    try {
+      const lessonIds = this.currentUser?.lessonsLiked.slice(indexFrom, indexFrom + this.pageCount);
+
+      let lessons = await ApiService.getLessonsByIds(lessonIds);
+      if (indexFrom > 0) {
+        // attach
+        lessons = [...this.state.lessons, ...lessons];
+      }
+
+      this.currentUser.lessonsLikedObj = lessons;
+      this.updateList();
+    } catch (e) {
+      console.log(e);
+    }
+
+    // hide loading
+    this.setState({
+      showLoading: false,
+    });
+  }
+
+  updateList() {
+    if (!this.currentUser?.lessonsLikedObj) {
+      return;
+    }
+
+    this.setState({
+      lessons: this.currentUser?.lessonsLikedObj,
+    });
+
+    super.updateList();
+  }
 }
+
+const mapStateToProps = (state) => state;
+
+export default connect(mapStateToProps, null)(Likes);
