@@ -1,6 +1,7 @@
 import React from 'react';
 import {User} from '../models/user.model';
 import {UserHelper} from '../helpers/user-helper';
+import {ApiService} from '../services';
 
 export class BaseAuth extends React.Component {
   currentUser: User;
@@ -22,5 +23,19 @@ export class BaseAuth extends React.Component {
     // fetch user from server to update latest
 
     UserHelper.saveUserToLocalStorage(user, this.props);
+  }
+
+  async fetchUserData(user) {
+    if (!user.id) {
+      return Promise.resolve();
+    }
+
+    try {
+      const u = await ApiService.getMe();
+
+      // fill data
+      user.lessonsPurchased = u.lessonsPurchased;
+      user.lessonsLiked = u.lessonsLiked;
+    } catch (e) {}
   }
 }

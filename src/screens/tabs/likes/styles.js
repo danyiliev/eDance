@@ -2,7 +2,7 @@ import {StyleSheet} from 'react-native';
 import {stylesApp, styleUtil} from '../../../styles/app.style';
 import {colors as colorTheme} from '../../../styles/theme.style';
 
-const heightImg = 113;
+const heightImg = 106;
 
 export const styles = StyleSheet.create({
   listCtnContainer: {
@@ -15,7 +15,6 @@ export const styles = StyleSheet.create({
     borderRadius: 12,
     backgroundColor: colorTheme.light,
     marginBottom: 14,
-    height: heightImg,
   },
   viewItemImage: {
     position: 'relative',
@@ -25,6 +24,7 @@ export const styles = StyleSheet.create({
     resizeMode: 'cover',
     flex: 1,
     width: heightImg,
+    height: '100%',
     borderTopLeftRadius: 12,
     borderBottomLeftRadius: 12,
   },

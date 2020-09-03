@@ -33,6 +33,8 @@ export class Lesson extends BaseModel {
   static STATUS_LIVE = 'live';
   static STATUS_DONE = 'done';
 
+  static PRICE_RECORDED = 35;
+
   //
   // properties
   //

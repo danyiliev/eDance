@@ -57,6 +57,7 @@ import Products from './products/Products';
 import AddProduct from './add-product/AddProduct';
 import WriteReview from './orders/write-review/WriteReview';
 import Playback from './lessons/playback/Playback';
+import LessonPlayback from './lessons/lesson-playback/LessonPlayback';
 
 const Stack = createStackNavigator();
 
@@ -76,11 +77,18 @@ class MainNavigator extends React.Component {
         let userObj = JSON.parse(u);
         let user = new User().deserialize(userObj);
 
-        // save user to reduce
-        this.props.setUserInfo(user);
-
         // set api token
         ApiService.setHeaderToken(user.apiToken);
+
+        //
+        // fill data
+        //
+        const me = await ApiService.getMe();
+        user.lessonsPurchased = me.lessonsPurchased;
+        user.lessonsLiked = me.lessonsLiked;
+
+        // save user to reduce
+        this.props.setUserInfo(user);
       }
 
       // SplashScreen.hide();
@@ -175,6 +183,7 @@ class MainNavigator extends React.Component {
               <Stack.Screen name={Products.NAV_NAME} component={Products} />
               <Stack.Screen name={AddProduct.NAV_NAME} component={AddProduct} />
               <Stack.Screen name={WriteReview.NAV_NAME} component={WriteReview} />
+              <Stack.Screen name={LessonPlayback.NAV_NAME} component={LessonPlayback} />
             </Stack.Navigator>
 
             <MenuModal

@@ -7,6 +7,8 @@ import {Comment} from '../models/comment.model';
 import {RNS3} from 'react-native-upload-aws-s3';
 import {Lesson} from '../models/lesson.model';
 import {Review} from '../models/review.model';
+import Lessons from '../screens/lessons/Lessons';
+import {Alert} from 'react-native';
 
 class ApiService {
   // error codes
@@ -183,6 +185,25 @@ class ApiService {
       }
 
       return Promise.resolve(users);
+    } catch (e) {
+      console.log(e);
+
+      return Promise.reject(e.response.data);
+    }
+  }
+
+  async getMe() {
+    try {
+      const options = {
+        headers: {
+          ...this.baseHeader(),
+        },
+      };
+
+      const {data} = await Axios.get(`${this.baseUrl}/users/me`, options);
+      console.log(data);
+
+      return Promise.resolve(new User().initFromObject(data));
     } catch (e) {
       console.log(e);
 
@@ -500,11 +521,7 @@ class ApiService {
     };
 
     try {
-      const {data} = await Axios.post(
-        `${this.baseUrl}/post/comment`,
-        params,
-        httpOptions,
-      );
+      const {data} = await Axios.post(`${this.baseUrl}/post/comment`, params, httpOptions);
       console.log(data);
 
       return Promise.resolve(data);
@@ -582,6 +599,38 @@ class ApiService {
     }
   }
 
+  async getLessonsAll(from, count) {
+    let params = {
+      from: from,
+      count: count,
+    };
+
+    try {
+      const options = {
+        params: params,
+        headers: {
+          ...this.baseHeader(),
+        },
+      };
+
+      const {data} = await Axios.get(`${this.baseUrl}/lesson/all`, options);
+      console.log(data);
+
+      const lessons = [];
+      for (const obj of data) {
+        const p = new Lesson().initFromObject(obj);
+
+        lessons.push(p);
+      }
+
+      return Promise.resolve(lessons);
+    } catch (e) {
+      console.log(e);
+
+      return Promise.reject(e.response.data);
+    }
+  }
+
   async getLessonById(id) {
     try {
       const options = {
@@ -636,6 +685,48 @@ class ApiService {
 
   quitLesson(lessonId) {
     return this.doLessonAction(lessonId, 'quit');
+  }
+
+  async purchaseLesson(lessonId) {
+    const httpOptions = {
+      headers: {
+        ...this.baseHeader(),
+      },
+    };
+
+    let params = {lessonId};
+
+    try {
+      const {data} = await Axios.post(`${this.baseUrl}/users/lesson/purchase`, params, httpOptions);
+      console.log(data);
+
+      return Promise.resolve(data);
+    } catch (e) {
+      console.log(e);
+
+      return Promise.reject(e.response.data);
+    }
+  }
+
+  async likeLesson(lessonId, like = true) {
+    const httpOptions = {
+      headers: {
+        ...this.baseHeader(),
+      },
+    };
+
+    let params = {lessonId, like};
+
+    try {
+      const {data} = await Axios.post(`${this.baseUrl}/users/lesson/like`, params, httpOptions);
+      console.log(data);
+
+      return Promise.resolve(data);
+    } catch (e) {
+      console.log(e);
+
+      return Promise.reject(e.response.data);
+    }
   }
 }
 

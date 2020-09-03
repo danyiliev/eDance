@@ -46,6 +46,8 @@ export class User extends BaseModel {
 
   rate = 5;
   reviews = [];
+  lessonsPurchased = [];
+  lessonsLiked = [];
 
   // logical
   lessonsTeach = null;
@@ -139,6 +141,13 @@ export class User extends BaseModel {
       }
     }
 
+    if (data.lessonsPurchased) {
+      this.lessonsPurchased = data.lessonsPurchased;
+    }
+    if (data.lessonsLiked) {
+      this.lessonsLiked = data.lessonsLiked;
+    }
+
     return this;
   }
 
@@ -162,5 +171,17 @@ export class User extends BaseModel {
     }
 
     return `${this.firstName} ${this.lastName}`;
+  }
+
+  isLessonPurchased(lessonId) {
+    return this.lessonsPurchased.indexOf(lessonId) >= 0;
+  }
+  isLessonLiked(lessonId) {
+    return this.lessonsLiked.indexOf(lessonId) >= 0;
+  }
+
+  unlikeLesson(lesson) {
+    const index = this.lessonsLiked.indexOf(lesson.id);
+    this.lessonsLiked.splice(index, 1);
   }
 }
