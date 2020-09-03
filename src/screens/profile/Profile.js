@@ -180,7 +180,7 @@ class Profile extends React.Component {
       this.setState({
         showLoading: true,
       });
-
+    } else {
       indexFrom = this.state.posts.length;
     }
 
@@ -219,7 +219,7 @@ class Profile extends React.Component {
       return;
     }
 
-    this.loadData();
+    this.loadData(true);
   }
 
   isMine() {

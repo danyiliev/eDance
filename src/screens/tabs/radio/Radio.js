@@ -140,7 +140,7 @@ export default class Radio extends React.Component {
       this.setState({
         showLoading: true,
       });
-
+    } else {
       indexFrom = this.state.channels.length;
     }
 

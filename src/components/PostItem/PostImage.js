@@ -9,6 +9,7 @@ import {colors as colorTheme} from '../../styles/theme.style';
 export default class PostImage extends React.Component {
   static propTypes = {
     containerStyle: PropTypes.object,
+    imageStyle: PropTypes.object,
     imgUrl: PropTypes.string,
     iconSize: PropTypes.number,
   };
@@ -30,7 +31,7 @@ export default class PostImage extends React.Component {
         />
 
         <FastImage
-          style={styles.imgPost}
+          style={[styles.imgPost, this.props.imageStyle]}
           source={{uri: this.props.imgUrl}}
           resizeMode={FastImage.resizeMode.cover}
         />

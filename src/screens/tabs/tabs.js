@@ -18,6 +18,9 @@ import MenuModal from '../../components/MenuModal/MenuModal';
 import {stylesApp} from '../../styles/app.style';
 import SplashScreen from 'react-native-splash-screen';
 import Profile from '../profile/Profile';
+import ActionSheet from 'react-native-actionsheet';
+import Orders from '../orders/Orders';
+import Products from '../products/Products';
 
 const Tab = createBottomTabNavigator();
 
@@ -37,19 +40,6 @@ export function renderMenuButton(onPress) {
   );
 }
 
-export function renderRightButton(navigation) {
-  return (
-    <Button
-      type="clear"
-      buttonStyle={stylesTab.butHeaderLeft}
-      icon={<Icon type="font-awesome" name="user-o" size={16} />}
-      onPress={() => {
-        navigation.navigate(Profile.NAV_NAME);
-      }}
-    />
-  );
-}
-
 export default class TabMain extends React.Component {
   static NAV_NAME = 'tabs';
 
@@ -58,6 +48,7 @@ export default class TabMain extends React.Component {
 
     props.navigation.setOptions({
       title: this.getHeaderTitle(),
+      headerRight: () => this.renderRightButton(),
     });
   }
 
@@ -76,7 +67,7 @@ export default class TabMain extends React.Component {
     });
   }
 
-  getHeaderTitle() {
+  getRouteName() {
     const route = this.props.route;
     // Access the tab navigator's state using `route.state`
     const routeName = route.state
@@ -85,6 +76,12 @@ export default class TabMain extends React.Component {
       : // If state doesn't exist, we need to default to `screen` param if available, or the initial screen
         // In our case, it's "Feed" as that's the first screen inside the navigator
         route.params?.screen || Radio.NAV_NAME;
+
+    return routeName;
+  }
+
+  getHeaderTitle() {
+    const routeName = this.getRouteName();
 
     switch (routeName) {
       case Radio.NAV_NAME:
@@ -210,7 +207,56 @@ export default class TabMain extends React.Component {
             }}
           />
         </Tab.Navigator>
+
+        <ActionSheet
+          ref={(o) => (this.ActionSheet = o)}
+          options={['My Orders', 'My Products', 'Cancel']}
+          cancelButtonIndex={2}
+          onPress={(index) => {
+            this.onMoreItem(index);
+          }}
+        />
       </View>
     );
+  }
+
+  renderRightButton() {
+    const routeName = this.getRouteName();
+
+    if (routeName === Store.NAV_NAME) {
+      return (
+        <Button
+          type="clear"
+          buttonStyle={stylesTab.butHeaderLeft}
+          icon={<Icon type="ionicon" name="ios-more" size={20} />}
+          onPress={() => this.onStoreMore()}
+        />
+      );
+    } else {
+      return (
+        <Button
+          type="clear"
+          buttonStyle={stylesTab.butHeaderLeft}
+          icon={<Icon type="font-awesome" name="user-o" size={16} />}
+          onPress={() => {
+            this.props.navigation.navigate(Profile.NAV_NAME);
+          }}
+        />
+      );
+    }
+  }
+
+  onStoreMore() {
+    this.ActionSheet.show();
+  }
+
+  onMoreItem(index) {
+    if (index === 0) {
+      // go to my orders
+      this.props.navigation.push(Orders.NAV_NAME);
+    } else if (index === 1) {
+      // go to my products
+      this.props.navigation.push(Products.NAV_NAME);
+    }
   }
 }

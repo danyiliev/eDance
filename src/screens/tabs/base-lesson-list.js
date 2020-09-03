@@ -16,9 +16,13 @@ export default class BaseLessonList extends React.Component {
 
   componentDidMount(): void {
     this._sub = this.props.navigation.addListener(
-      'didFocus',
+      'focus',
       this._componentFocused
     );
+  }
+
+  componentWillUnmount(): void {
+    this._sub();
   }
 
   _componentFocused = () => {

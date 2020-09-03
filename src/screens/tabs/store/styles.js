@@ -15,6 +15,10 @@ export const styles = StyleSheet.create({
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
   },
+  imgItemCore: {
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
+  },
 
   viewItemContent: {
     padding: 12,

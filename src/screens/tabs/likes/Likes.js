@@ -84,7 +84,7 @@ class Likes extends BaseLessonList {
       this.setState({
         showLoading: true,
       });
-
+    } else {
       indexFrom = this.state.lessons.length;
     }
 

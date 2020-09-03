@@ -190,7 +190,7 @@ class PostDetail extends React.Component {
       this.setState({
         showLoading: true,
       });
-
+    } else {
       indexFrom = this.state.comments.length;
     }
 
@@ -266,7 +266,7 @@ class PostDetail extends React.Component {
       return;
     }
 
-    this.loadData();
+    this.loadData(true);
   }
 }
 

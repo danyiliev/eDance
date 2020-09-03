@@ -125,7 +125,7 @@ export default class Tv extends React.Component {
       this.setState({
         showLoading: true,
       });
-
+    } else {
       indexFrom = this.state.channels.length;
     }
 

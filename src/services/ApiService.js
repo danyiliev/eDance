@@ -9,6 +9,7 @@ import {Lesson} from '../models/lesson.model';
 import {Review} from '../models/review.model';
 import Lessons from '../screens/lessons/Lessons';
 import {Alert} from 'react-native';
+import {Product} from '../models/product.model';
 
 class ApiService {
   // error codes
@@ -750,6 +751,94 @@ class ApiService {
       }
 
       return Promise.resolve(lessons);
+    } catch (e) {
+      console.log(e);
+
+      return Promise.reject(e.response.data);
+    }
+  }
+
+  async addProduct(product) {
+    const httpOptions = {
+      headers: {
+        ...this.baseHeader(),
+      },
+    };
+
+    let params = {
+      name: product.name,
+      desc: product.description,
+      price: product.price,
+      photos: product.photos,
+    };
+
+    try {
+      const {data} = await Axios.post(`${this.baseUrl}/product`, params, httpOptions);
+      console.log(data);
+
+      return Promise.resolve(data);
+    } catch (e) {
+      console.log(e);
+
+      return Promise.reject(e.response.data);
+    }
+  }
+
+  //
+  // products
+  //
+  async getProducts(url, from, count) {
+    let params = {
+      from: from,
+      count: count,
+    };
+
+    try {
+      const options = {
+        params: params,
+        headers: {
+          ...this.baseHeader(),
+        },
+      };
+
+      const {data} = await Axios.get(url, options);
+      console.log(data);
+
+      const products = [];
+      for (const obj of data) {
+        const p = new Product().initFromObject(obj);
+
+        products.push(p);
+      }
+
+      return Promise.resolve(products);
+    } catch (e) {
+      console.log(e);
+
+      return Promise.reject(e.response.data);
+    }
+  }
+
+  getProductsAll(from, count) {
+    return this.getProducts(`${this.baseUrl}/product`, from, count);
+  }
+
+  getUserProducts(from, count) {
+    return this.getProducts(`${this.baseUrl}/product/mine`, from, count);
+  }
+
+  async deleteProduct(productId) {
+    try {
+      const options = {
+        headers: {
+          ...this.baseHeader(),
+        },
+      };
+
+      const {data} = await Axios.delete(`${this.baseUrl}/product/${productId}`, options);
+      console.log(data);
+
+      return Promise.resolve(data.result);
     } catch (e) {
       console.log(e);
 

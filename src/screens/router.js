@@ -119,8 +119,6 @@ class MainNavigator extends React.Component {
                 options={{
                   headerLeft: () =>
                     renderMenuButton(this.onClickMenu.bind(this)),
-                  headerRight: () =>
-                    renderRightButton(this.navigationRef?.current),
                 }}
               />
               <Stack.Screen name={Intro.NAV_NAME} component={Intro} />

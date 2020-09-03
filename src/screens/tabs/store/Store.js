@@ -10,8 +10,15 @@ import PostImage from '../../../components/PostItem/PostImage';
 import {Button, Icon, Rating} from 'react-native-elements';
 import {colors as colorTheme} from '../../../styles/theme.style';
 import StarRating from 'react-native-star-rating';
+import AddPost from '../../add-post/AddPost';
+import Cart from '../../cart/Cart';
+import {ApiService} from '../../../services';
+import {connect} from 'react-redux';
+import {setProducts} from '../../../actions/product';
+import {ProductHelper} from '../../../helpers/product-helper';
+import {PostHelper} from '../../../helpers/post-helper';
 
-export default class Store extends React.Component {
+class Store extends React.Component {
   static NAV_NAME = 'store';
 
   pageCount = 20;
@@ -25,7 +32,13 @@ export default class Store extends React.Component {
   };
 
   componentDidMount(): void {
-    this.loadData(true);
+    this.loadData();
+
+    this._sub = this.props.navigation.addListener('focus', this._componentFocused);
+  }
+
+  componentWillUnmount(): void {
+    this._sub();
   }
 
   render() {
@@ -67,40 +80,36 @@ export default class Store extends React.Component {
   renderItem(item, index) {
     return (
       <View style={stylesMain.viewItem}>
-        <TouchableOpacity
-          style={styles.viewItemMain}
-          activeOpacity={0.8}
-          onPress={() => this.onItem(item)}>
+        <TouchableOpacity style={styles.viewItemMain} activeOpacity={0.8} onPress={() => this.onItem(item)}>
           <View>
             <PostImage
               iconSize={64}
-              imgUrl=""
+              imgUrl={PostHelper.imageUrl(item.photos[0])}
               containerStyle={styles.imgItem}
+              imageStyle={styles.imgItemCore}
             />
 
             <View style={styles.viewItemContent}>
               {/* name */}
-              <Text style={styles.txtItemTitle}>
-                FlexTek Shimmer Zip Bra top
-              </Text>
+              <Text style={styles.txtItemTitle}>{item.name}</Text>
 
               <View style={styles.viewPrice}>
-                <Text style={styles.txtGrey}>0 sold</Text>
-                <Text style={styles.txtPrice}>$150</Text>
+                <Text style={styles.txtGrey}>{item.soldCount} sold</Text>
+                <Text style={styles.txtPrice}>${item.price}</Text>
               </View>
 
               <View style={[styles.viewPrice, stylesApp.mt4]}>
                 {/* star rating */}
                 <StarRating
                   activeOpacity={1}
-                  rating={0}
+                  rating={item.rate}
                   starSize={14}
                   starStyle={{marginRight: 2}}
                   fullStarColor={colorTheme.primary}
                   emptyStarColor={colorTheme.primary}
                 />
 
-                <Text style={styles.txtGrey}>0 reviews</Text>
+                <Text style={styles.txtGrey}>{item.reviewCount} reviews</Text>
               </View>
             </View>
           </View>
@@ -123,16 +132,36 @@ export default class Store extends React.Component {
   }
 
   onRefresh() {
-    this.loadData(true);
+    this.loadData();
   }
 
   async loadData(continued = false) {
-    await Utils.sleep(1000);
+    let indexFrom = 0;
 
-    this.setState({
-      products: Utils.makeEmptyArray(20),
-    });
+    if (!continued) {
+      // show loading mark
+      this.setState({
+        showLoading: true,
+      });
+    } else {
+      indexFrom = this.state.products.length;
+    }
 
+    try {
+      let products = await ApiService.getProductsAll(indexFrom, this.pageCount);
+
+      if (indexFrom > 0) {
+        // attach
+        products = [...this.state.products, ...products];
+      }
+
+      this.props.setProducts(products);
+      this.setState({products});
+    } catch (e) {
+      console.log(e);
+    }
+
+    // hide loading
     this.setState({
       showLoading: false,
     });
@@ -144,12 +173,31 @@ export default class Store extends React.Component {
       return;
     }
 
-    this.loadData();
+    this.loadData(true);
+  }
+
+  _componentFocused = () => {
+    this.refreshList();
+  };
+
+  refreshList() {
+    this.setState({
+      products: this.props.ProductReducer.products,
+    });
   }
 
   onItem(item) {
   }
 
   onButCart() {
+    this.props.navigation.push(Cart.NAV_NAME);
   }
 }
+
+const mapStateToProps = (state) => state;
+
+const mapDispatchToProps = {
+  setProducts,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Store);
