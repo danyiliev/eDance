@@ -24,18 +24,4 @@ export class BaseAuth extends React.Component {
 
     UserHelper.saveUserToLocalStorage(user, this.props);
   }
-
-  async fetchUserData(user) {
-    if (!user.id) {
-      return Promise.resolve();
-    }
-
-    try {
-      const u = await ApiService.getMe();
-
-      // fill data
-      user.lessonsPurchased = u.lessonsPurchased;
-      user.lessonsLiked = u.lessonsLiked;
-    } catch (e) {}
-  }
 }

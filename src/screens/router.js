@@ -58,6 +58,7 @@ import AddProduct from './add-product/AddProduct';
 import WriteReview from './orders/write-review/WriteReview';
 import Playback from './lessons/playback/Playback';
 import LessonPlayback from './lessons/lesson-playback/LessonPlayback';
+import {UserHelper} from '../helpers/user-helper';
 
 const Stack = createStackNavigator();
 
@@ -83,9 +84,7 @@ class MainNavigator extends React.Component {
         //
         // fill data
         //
-        const me = await ApiService.getMe();
-        user.lessonsPurchased = me.lessonsPurchased;
-        user.lessonsLiked = me.lessonsLiked;
+        await UserHelper.fetchUserData(user);
 
         // save user to reduce
         this.props.setUserInfo(user);
@@ -117,62 +116,31 @@ class MainNavigator extends React.Component {
                 name={TabMain.NAV_NAME}
                 component={TabMain}
                 options={{
-                  headerLeft: () =>
-                    renderMenuButton(this.onClickMenu.bind(this)),
+                  headerLeft: () => renderMenuButton(this.onClickMenu.bind(this)),
                 }}
               />
               <Stack.Screen name={Intro.NAV_NAME} component={Intro} />
               <Stack.Screen name={Home.NAV_NAME} component={Home} />
               <Stack.Screen name={Reviews.NAV_NAME} component={Reviews} />
-              <Stack.Screen
-                name={ScheduleSelect.NAV_NAME}
-                component={ScheduleSelect}
-              />
-              <Stack.Screen
-                name={ScheduleCheckout.NAV_NAME}
-                component={ScheduleCheckout}
-              />
-              <Stack.Screen
-                name={BookingMenu.NAV_NAME}
-                component={BookingMenu}
-              />
-              <Stack.Screen
-                name={BookingDate.NAV_NAME}
-                component={BookingDate}
-              />
+              <Stack.Screen name={ScheduleSelect.NAV_NAME} component={ScheduleSelect} />
+              <Stack.Screen name={ScheduleCheckout.NAV_NAME} component={ScheduleCheckout} />
+              <Stack.Screen name={BookingMenu.NAV_NAME} component={BookingMenu} />
+              <Stack.Screen name={BookingDate.NAV_NAME} component={BookingDate} />
               <Stack.Screen name={Messaging.NAV_NAME} component={Messaging} />
               <Stack.Screen name={Chat.NAV_NAME} component={Chat} />
-              <Stack.Screen
-                name={SettingProfile.NAV_NAME}
-                component={SettingProfile}
-              />
-              <Stack.Screen
-                name={Championships.NAV_NAME}
-                component={Championships}
-              />
+              <Stack.Screen name={SettingProfile.NAV_NAME} component={SettingProfile} />
+              <Stack.Screen name={Championships.NAV_NAME} component={Championships} />
               <Stack.Screen name={Profile.NAV_NAME} component={Profile} />
-              <Stack.Screen
-                name={EditProfile.NAV_NAME}
-                component={EditProfile}
-              />
+              <Stack.Screen name={EditProfile.NAV_NAME} component={EditProfile} />
               <Stack.Screen name={AddPost.NAV_NAME} component={AddPost} />
-              <Stack.Screen
-                name={RadioDetail.NAV_NAME}
-                component={RadioDetail}
-              />
+              <Stack.Screen name={RadioDetail.NAV_NAME} component={RadioDetail} />
               <Stack.Screen name={TvDetail.NAV_NAME} component={TvDetail} />
               <Stack.Screen name={PostDetail.NAV_NAME} component={PostDetail} />
               <Stack.Screen name={SelectList.NAV_NAME} component={SelectList} />
               <Stack.Screen name={Pro.NAV_NAME} component={Pro} />
-              <Stack.Screen
-                name={BookingConfirm.NAV_NAME}
-                component={BookingConfirm}
-              />
+              <Stack.Screen name={BookingConfirm.NAV_NAME} component={BookingConfirm} />
               <Stack.Screen name={Lessons.NAV_NAME} component={Lessons} />
-              <Stack.Screen
-                name={LessonDetail.NAV_NAME}
-                component={LessonDetail}
-              />
+              <Stack.Screen name={LessonDetail.NAV_NAME} component={LessonDetail} />
               <Stack.Screen name={Broadcast.NAV_NAME} component={Broadcast} />
               <Stack.Screen name={Playback.NAV_NAME} component={Playback} />
               <Stack.Screen name={ProductDetail.NAV_NAME} component={ProductDetail} />
@@ -198,21 +166,10 @@ class MainNavigator extends React.Component {
               headerBackTitleVisible: false,
               headerTintColor: colorTheme.primary,
             }}>
-            <Stack.Screen
-              name={Landing.NAV_NAME}
-              component={Landing}
-              options={{headerShown: false}}
-            />
-            <Stack.Screen
-              name={Login.NAV_NAME}
-              component={Login}
-              options={{headerShown: false}}
-            />
+            <Stack.Screen name={Landing.NAV_NAME} component={Landing} options={{headerShown: false}} />
+            <Stack.Screen name={Login.NAV_NAME} component={Login} options={{headerShown: false}} />
             <Stack.Screen name={SignupBase.NAV_NAME} component={SignupBase} />
-            <Stack.Screen
-              name={SignupAdvanced.NAV_NAME}
-              component={SignupAdvanced}
-            />
+            <Stack.Screen name={SignupAdvanced.NAV_NAME} component={SignupAdvanced} />
             <Stack.Screen name={ForgetEmail.NAV_NAME} component={ForgetEmail} />
             <Stack.Screen name={ForgetCode.NAV_NAME} component={ForgetCode} />
             <Stack.Screen name={ForgetReset.NAV_NAME} component={ForgetReset} />

@@ -1,6 +1,13 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {FlatList, Text, TouchableOpacity, View} from 'react-native';
+import {
+  ActivityIndicator,
+  FlatList,
+  Text,
+  TouchableOpacity,
+  TouchableWithoutFeedback,
+  View,
+} from 'react-native';
 import {stylesApp, styleUtil} from '../../styles/app.style';
 import {Utils} from '../../helpers/utils';
 import Carousel, { Pagination } from 'react-native-x-carousel';
@@ -12,13 +19,30 @@ import FastImage from 'react-native-fast-image';
 import {UserHelper} from '../../helpers/user-helper';
 import StarRating from 'react-native-star-rating';
 import {colors as colorTheme} from '../../styles/theme.style';
+import {PostHelper} from '../../helpers/post-helper';
+import ImageView from 'react-native-image-viewing';
+import {ProductHelper} from '../../helpers/product-helper';
+import {ApiService} from '../../services';
+import Toast from 'react-native-simple-toast';
+import {setUserInfo} from '../../actions/user';
 
 class ProductDetail extends React.Component {
   static NAV_NAME = 'product-detail';
 
   state = {
+    showLoading: true,
+
+    // ui for image viewer
+    imageIndex: 0,
+    showImgViewer: false,
+
+    // data
     quantity: 1,
+    reviews: [],
   };
+
+  product = null;
+  currentUser = null;
 
   constructor(props) {
     super(props);
@@ -26,18 +50,28 @@ class ProductDetail extends React.Component {
     props.navigation.setOptions({
       title: 'Product Detail',
     });
+
+    this.currentUser = props.UserReducer.user;
+
+    // get parameter
+    if (props.route.params) {
+      this.product = props.route.params.product;
+    }
   }
 
   componentDidMount(): void {
     SplashScreen.hide();
+
+    this.loadData();
   }
 
   render() {
     return (
       <View style={stylesApp.viewContainer}>
         <FlatList
+          bounces={false}
           keyExtractor={(item, index) => index.toString()}
-          data={Utils.makeEmptyArray(7)}
+          data={this.state.reviews}
           renderItem={({item, index}) => this.renderItem(item, index)}
           ListHeaderComponent={() => this.renderHeader()}
           ListEmptyComponent={() => this.renderEmptyItem()}
@@ -47,13 +81,17 @@ class ProductDetail extends React.Component {
   }
 
   renderHeader() {
+    const imgData = this.product?.photos.map((p) => {
+      return {path: p};
+    });
+
     return (
       <View>
         {/* image */}
         <Carousel
           pagination={Pagination}
           renderItem={(img, index) => this.renderImage(img, index)}
-          data={Utils.makeEmptyArray(3)}
+          data={imgData}
         />
 
         <View style={styles.viewContent}>
@@ -87,32 +125,40 @@ class ProductDetail extends React.Component {
             />
           </View>
 
-          <Text style={styles.txtTitle}>
-            Fabric Polyeste/Spandex Descripton
-          </Text>
-          <Text style={styles.txtDescription}>
-            Qui tempor do ut Lorem voluptate elit excepteur
-            consectetur. Non minim excepteur amet ut
-            duis proident cupidatat proident ea.
-            Consectetur do eu velit commodo sint voluptate.
-            Duis dolor ad fugiat labore adipisicing eiusmod
-            Lorem consectetur.
-          </Text>
+          <Text style={styles.txtTitle}>{this.product?.name}</Text>
+          {this.product?.description ? (
+            <Text style={styles.txtDescription}>{this.product?.description}</Text>
+          ) : (
+            <View style={styles.viewLoading}>
+              <Text style={styles.txtEmptyItem}>No Description</Text>
+            </View>
+          )}
 
           <Text style={styles.txtTitle}>Reviews</Text>
         </View>
+
+        <ImageView
+          images={ProductHelper.getImageUris(this.product)}
+          imageIndex={this.state.imageIndex}
+          visible={this.state.showImgViewer}
+          onRequestClose={() => this.setState({showImgViewer: false})}
+        />
       </View>
     );
   }
 
   renderImage(img, index) {
     return (
-      <PostImage
-        key={index.toString()}
-        iconSize={48}
-        imgUrl=""
-        containerStyle={styles.imgItem}
-      />
+      <TouchableWithoutFeedback onPress={() => this.onImage(index)}>
+        <View>
+          <PostImage
+            key={index.toString()}
+            iconSize={48}
+            imgUrl={PostHelper.imageUrl(img.path)}
+            containerStyle={styles.imgItem}
+          />
+        </View>
+      </TouchableWithoutFeedback>
     );
   }
 
@@ -154,14 +200,13 @@ class ProductDetail extends React.Component {
   }
 
   renderEmptyItem() {
-    // do not show anything when loading progress
-    if (this.state.showLoading) {
-      return null;
-    }
-
     return (
       <View style={stylesApp.viewLoading}>
-        <Text style={stylesApp.textEmptyItem}>No reviews received yet</Text>
+        {this.state.showLoading ? (
+          <ActivityIndicator animating={true} />
+        ) : (
+          <Text style={stylesApp.txtEmptyItem}>No reviews received yet</Text>
+        )}
       </View>
     );
   }
@@ -174,9 +219,44 @@ class ProductDetail extends React.Component {
   }
 
   onButAddCart() {
+    this.product.quantity = this.state.quantity;
+
+    if (this.currentUser?.addProductToCart(this.product)) {
+      ApiService.addProductToCart(this.product);
+
+      UserHelper.saveUserToLocalStorage(this.currentUser, this.props);
+      Toast.show('Added to Cart successfully');
+    } else {
+      Toast.show('Already added in Cart');
+    }
+  }
+
+  onImage(index) {
+    // show image viewer
+    this.setState({
+      showImgViewer: true,
+      imageIndex: index,
+    });
+  }
+
+  async loadData(continued = false) {
+    try {
+      const reviews = await ApiService.getProductReviews(this.product?.id);
+      this.setState({reviews});
+    } catch (e) {
+      console.log(e);
+    }
+
+    // hide loading
+    this.setState({
+      showLoading: false,
+    });
   }
 }
 
 const mapStateToProps = (state) => state;
+const mapDispatchToProps = {
+  setUserInfo,
+};
 
-export default connect(mapStateToProps, null)(ProductDetail);
+export default connect(mapStateToProps, mapDispatchToProps)(ProductDetail);

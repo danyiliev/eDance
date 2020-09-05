@@ -136,7 +136,7 @@ export default class Reviews extends React.Component {
 
     return (
       <View style={stylesApp.viewLoading}>
-        <Text style={stylesApp.textEmptyItem}>No reviews received yet</Text>
+        <Text style={stylesApp.txtEmptyItem}>No reviews received yet</Text>
       </View>
     );
   }

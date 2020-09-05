@@ -28,11 +28,13 @@ export class Review extends BaseModel {
     }
 
     // lesson
-    if (Utils.isObject(data.lesson)) {
-      this.lesson = new Lesson().initFromObject(data.lesson);
-      this.lessonId = this.user.id;
-    } else {
-      this.lessonId = data.user;
+    if (data.lesson) {
+      if (Utils.isObject(data.lesson)) {
+        this.lesson = new Lesson().initFromObject(data.lesson);
+        this.lessonId = this.lesson.id;
+      } else {
+        this.lessonId = data.lesson;
+      }
     }
 
     this.rating = data.rating;

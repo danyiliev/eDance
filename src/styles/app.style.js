@@ -123,7 +123,7 @@ export const stylesApp = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  textEmptyItem: {
+  txtEmptyItem: {
     color: '#bbb',
   },
 

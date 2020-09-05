@@ -2,6 +2,7 @@ import {BaseModel} from './base.model';
 import {ApiService} from '../services';
 import {DURATIONS_LESSON, DURATIONS_REST} from '../constants/dance-data';
 import {Review} from './review.model';
+import {Product} from './product.model';
 
 export class User extends BaseModel {
   static TYPE_TEACHER = 1;
@@ -48,6 +49,8 @@ export class User extends BaseModel {
   reviews = [];
   lessonsPurchased = [];
   lessonsLiked = [];
+
+  carts = [];
 
   // logical
   lessonsTeach = null;
@@ -149,6 +152,19 @@ export class User extends BaseModel {
       this.lessonsLiked = data.lessonsLiked;
     }
 
+    // carts
+    const carts = [];
+    if (data.carts) {
+      for (const obj of data.carts) {
+        const productNew = new Product().initFromObject(obj.product);
+        // quantity
+        productNew.quantity = obj.quantity;
+
+        carts.push(productNew);
+      }
+    }
+    this.carts = carts;
+
     return this;
   }
 
@@ -195,5 +211,18 @@ export class User extends BaseModel {
     if (index >= 0) {
       this.lessonsLikedObj?.splice(index, 1);
     }
+  }
+
+  addProductToCart(product) {
+    // already added, increase quantity
+    let item = this.carts.find((p) => p.id === product.id);
+    if (item) {
+      item.quantity += product.quantity;
+      return false;
+    }
+
+    this.carts.push(product);
+
+    return true;
   }
 }

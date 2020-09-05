@@ -17,6 +17,8 @@ export class Product extends BaseModel {
   soldCount = 0;
   reviewCount = 0;
 
+  quantity = 1;
+
   // data
   user = null;
 
@@ -44,6 +46,8 @@ export class Product extends BaseModel {
     if (data.rate) {
       this.rate = data.rate;
     }
+    this.soldCount = data.soldCount;
+    this.reviewCount = data.soldCount;
 
     return this;
   }

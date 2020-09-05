@@ -119,7 +119,7 @@ class Products extends React.Component {
 
     return (
       <View style={stylesApp.viewLoading}>
-        <Text style={stylesApp.textEmptyItem}>No products added yet</Text>
+        <Text style={stylesApp.txtEmptyItem}>No products added yet</Text>
       </View>
     );
   }

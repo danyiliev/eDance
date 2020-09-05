@@ -53,7 +53,7 @@ export const styles = StyleSheet.create({
   },
   txtDescription: {
     marginVertical: 10,
-    fontSize: 10,
+    fontSize: 11,
     lineHeight: 12,
   },
 
@@ -94,5 +94,14 @@ export const styles = StyleSheet.create({
   txtReview: {
     marginTop: 6,
     fontSize: 14,
+  },
+
+  viewLoading: {
+    ...stylesApp.viewLoading,
+    height: 40,
+  },
+  txtEmptyItem: {
+    ...stylesApp.txtEmptyItem,
+    fontSize: 11,
   },
 });

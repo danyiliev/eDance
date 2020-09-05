@@ -75,7 +75,7 @@ export default class Pro extends React.Component {
       return (
         <View style={stylesHome.viewHeader}>
           <View style={stylesApp.viewLoading}>
-            <Text style={stylesApp.textEmptyItem}>No users available yet</Text>
+            <Text style={stylesApp.txtEmptyItem}>No users available yet</Text>
           </View>
         </View>
       );
@@ -137,7 +137,7 @@ export default class Pro extends React.Component {
         {this.state.loadingData ? (
           <ActivityIndicator animating={true} />
         ) : (
-          <Text style={stylesApp.textEmptyItem}>No badges yet</Text>
+          <Text style={stylesApp.txtEmptyItem}>No badges yet</Text>
         )}
       </View>
     );

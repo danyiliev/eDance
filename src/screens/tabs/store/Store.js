@@ -17,6 +17,7 @@ import {connect} from 'react-redux';
 import {setProducts} from '../../../actions/product';
 import {ProductHelper} from '../../../helpers/product-helper';
 import {PostHelper} from '../../../helpers/post-helper';
+import ProductDetail from '../../product-detail/ProductDetail';
 
 class Store extends React.Component {
   static NAV_NAME = 'store';
@@ -126,7 +127,7 @@ class Store extends React.Component {
 
     return (
       <View style={stylesApp.viewLoading}>
-        <Text style={stylesApp.textEmptyItem}>No products available yet</Text>
+        <Text style={stylesApp.txtEmptyItem}>No products available yet</Text>
       </View>
     );
   }
@@ -186,7 +187,12 @@ class Store extends React.Component {
     });
   }
 
-  onItem(item) {}
+  onItem(item) {
+    // go to product detail page
+    this.props.navigation.push(ProductDetail.NAV_NAME, {
+      product: item,
+    });
+  }
 
   onButCart() {
     this.props.navigation.push(Cart.NAV_NAME);

@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import {CURRENT_USER} from '../constants/storage-key';
 import {Alert} from 'react-native';
-import {AuthService} from '../services';
+import {ApiService, AuthService} from '../services';
 import {User} from '../models/user.model';
 
 export class UserHelper {
@@ -53,5 +53,22 @@ export class UserHelper {
 
     // save user to local storage
     AsyncStorage.setItem(CURRENT_USER, user.toJsonString());
+  }
+
+  static async fetchUserData(user) {
+    if (!user.id) {
+      return Promise.resolve(false);
+    }
+
+    try {
+      const u = await ApiService.getMe();
+
+      // fill data
+      user.lessonsPurchased = u.lessonsPurchased;
+      user.lessonsLiked = u.lessonsLiked;
+      user.carts = u.carts;
+    } catch (e) {}
+
+    return Promise.resolve(true);
   }
 }

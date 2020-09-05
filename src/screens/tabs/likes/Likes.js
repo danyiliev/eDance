@@ -67,7 +67,7 @@ class Likes extends BaseLessonList {
 
     return (
       <View style={stylesApp.viewLoading}>
-        <Text style={stylesApp.textEmptyItem}>No liked lessons yet</Text>
+        <Text style={stylesApp.txtEmptyItem}>No liked lessons yet</Text>
       </View>
     );
   }

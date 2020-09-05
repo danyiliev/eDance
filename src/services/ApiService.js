@@ -845,6 +845,78 @@ class ApiService {
       return Promise.reject(e.response.data);
     }
   }
+
+  async getProductReviews(productId) {
+    try {
+      const options = {
+        headers: {
+          ...this.baseHeader(),
+        },
+      };
+
+      const {data} = await Axios.get(`${this.baseUrl}/product/${productId}/reviews`, options);
+      console.log(data);
+
+      const reviews = [];
+      for (const r of data) {
+        const review = new Review().initFromObject(r);
+        reviews.push(review);
+      }
+
+      return Promise.resolve(reviews);
+    } catch (e) {
+      console.log(e);
+
+      return Promise.reject(e.response.data);
+    }
+  }
+
+  async addProductToCart(product) {
+    const options = {
+      headers: {
+        ...this.baseHeader(),
+      },
+    };
+
+    const params = {
+      productId: product.id,
+      quantity: product.quantity,
+    };
+
+    try {
+      const {data} = await Axios.post(
+        `${this.baseUrl}/users/cart`,
+        params,
+        options
+      );
+      console.log(data);
+
+      return Promise.resolve();
+    } catch (e) {
+      console.log(e);
+
+      return Promise.reject(e.response.data);
+    }
+  }
+
+  async removeProductFromCart(product) {
+    const options = {
+      headers: {
+        ...this.baseHeader(),
+      },
+    };
+
+    try {
+      const {data} = await Axios.delete(`${this.baseUrl}/users/cart/${product.id}`, options);
+      console.log(data);
+
+      return Promise.resolve(data.result);
+    } catch (e) {
+      console.log(e);
+
+      return Promise.reject(e.response.data);
+    }
+  }
 }
 
 const apiService = new ApiService();

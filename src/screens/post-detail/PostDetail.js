@@ -77,7 +77,7 @@ class PostDetail extends React.Component {
       );
     }
 
-    this.loadData(true);
+    this.loadData();
   }
 
   render() {
@@ -151,7 +151,7 @@ class PostDetail extends React.Component {
   renderEmptyItem() {
     return (
       <View style={stylesApp.viewLoading}>
-        <Text style={stylesApp.textEmptyItem}>No comments</Text>
+        <Text style={stylesApp.txtEmptyItem}>No comments</Text>
       </View>
     );
   }

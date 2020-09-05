@@ -114,7 +114,7 @@ export default class Orders extends React.Component {
 
     return (
       <View style={stylesApp.viewLoading}>
-        <Text style={stylesApp.textEmptyItem}>No orders yet</Text>
+        <Text style={stylesApp.txtEmptyItem}>No orders yet</Text>
       </View>
     );
   }

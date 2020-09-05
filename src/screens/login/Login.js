@@ -17,6 +17,7 @@ import {LoadingHUD} from 'react-native-hud-hybrid';
 import {AuthService} from '../../services';
 import {BaseAuth} from '../base-auth';
 import {Utils} from '../../helpers/utils';
+import {UserHelper} from '../../helpers/user-helper';
 
 class Login extends BaseAuth {
   static NAV_NAME = 'login';
@@ -157,6 +158,7 @@ class Login extends BaseAuth {
         this.state.password,
       );
 
+      await UserHelper.fetchUserData(user);
       await this.setUser(user);
     } catch (e) {
       console.log(e);

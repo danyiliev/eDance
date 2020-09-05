@@ -1,22 +1,28 @@
 import React from 'react';
-import {FlatList, Text, TouchableOpacity, View} from 'react-native';
+import {FlatList, Text, TouchableOpacity, View, Alert} from 'react-native';
 import {stylesApp, styleUtil} from '../../styles/app.style';
 import {styles} from './styles';
 import {styles as stylesProduct} from '../product-detail/styles';
 import {Utils} from '../../helpers/utils';
 import PostImage from '../../components/PostItem/PostImage';
 import {Button} from 'react-native-elements';
+import {setUserInfo} from '../../actions/user';
+import {connect} from 'react-redux';
+import {PostHelper} from '../../helpers/post-helper';
+import {ApiService} from '../../services';
+import {UserHelper} from '../../helpers/user-helper';
 
-export default class Cart extends React.Component {
+class Cart extends React.Component {
   static NAV_NAME = 'cart';
 
   state = {
     // ui
     showLoading: false,
 
-    // data
-    products: [],
+    reloadData: true,
   };
+
+  currentUser = null;
 
   constructor(props) {
     super(props);
@@ -24,15 +30,22 @@ export default class Cart extends React.Component {
     props.navigation.setOptions({
       title: 'Cart',
     });
+
+    this.currentUser = props.UserReducer.user;
   }
 
   render() {
+    let priceTotal = 0;
+    for (const p of this.currentUser?.carts) {
+      priceTotal += p.price * p.quantity;
+    }
+
     return (
       <View style={stylesApp.viewContainer}>
         <FlatList
           contentContainerStyle={styles.listCtnContainer}
           keyExtractor={(item, index) => index.toString()}
-          data={this.state.products}
+          data={this.currentUser?.carts}
           ListEmptyComponent={() => this.renderEmptyItem()}
           renderItem={({item, index}) => this.renderItem(item, index)}
           refreshing={this.state.showLoading}
@@ -41,8 +54,8 @@ export default class Cart extends React.Component {
         {/* login */}
         <View style={[styleUtil.withShadow(), styles.viewButBuy]}>
           <Button
-            title="BUY"
-            disabled={this.state.products.length <= 0}
+            title={`BUY $${priceTotal ? priceTotal : ''}`}
+            disabled={this.currentUser?.carts.length <= 0}
             disabledStyle={[stylesApp.butPrimary, stylesApp.semiTrans]}
             buttonStyle={stylesApp.butPrimary}
             titleStyle={stylesApp.titleButPrimary}
@@ -61,7 +74,7 @@ export default class Cart extends React.Component {
 
     return (
       <View style={stylesApp.viewLoading}>
-        <Text style={stylesApp.textEmptyItem}>No products in cart yet</Text>
+        <Text style={stylesApp.txtEmptyItem}>No products in cart yet</Text>
       </View>
     );
   }
@@ -71,42 +84,37 @@ export default class Cart extends React.Component {
       <TouchableOpacity activeOpacity={0.7} onPress={() => this.onItem(index)}>
         <View style={styles.viewItem}>
           {/* photo */}
-          <PostImage iconSize={64} imgUrl="" containerStyle={styles.imgItem} />
+          <PostImage
+            iconSize={64}
+            imgUrl={PostHelper.imageUrl(item.photos[0])}
+            containerStyle={styles.imgItem}
+          />
 
           <View style={styles.viewItemContent}>
             <View style={styles.viewTitle}>
-              <Text style={styles.txtTitle}>FlexTek Shimmer Zip Bra top</Text>
+              <Text style={styles.txtTitle}>{item.name}</Text>
             </View>
 
             <View style={styles.viewContentMain}>
               <View style={styles.viewPrice}>
                 <Text style={styles.txtLabel}>Price:</Text>
-                <Text style={styles.txtPrice}>$150.97</Text>
+                <Text style={styles.txtPrice}>${item.price}</Text>
               </View>
 
               <View style={styles.viewQuantity}>
                 <View style={stylesApp.flexRowCenter}>
                   {/* minus */}
-                  <TouchableOpacity
-                    onPress={() => this.onIncrementQuantity(index, -1)}>
-                    <View
-                      style={[
-                        stylesProduct.butQuantity,
-                        stylesProduct.butMinus,
-                      ]}>
+                  <TouchableOpacity onPress={() => this.onIncrementQuantity(index, -1)}>
+                    <View style={[stylesProduct.butQuantity, stylesProduct.butMinus]}>
                       <Text style={stylesProduct.titleButMinus}>-</Text>
                     </View>
                   </TouchableOpacity>
 
-                  <Text style={stylesProduct.txtQuantity}>1</Text>
+                  <Text style={stylesProduct.txtQuantity}>{item.quantity}</Text>
 
                   {/* plus */}
                   <TouchableOpacity onPress={() => this.onIncrementQuantity(index, 1)}>
-                    <View
-                      style={[
-                        stylesProduct.butQuantity,
-                        stylesProduct.butPlus,
-                      ]}>
+                    <View style={[stylesProduct.butQuantity, stylesProduct.butPlus]}>
                       <Text style={stylesProduct.titleButPlus}>+</Text>
                     </View>
                   </TouchableOpacity>
@@ -121,10 +129,8 @@ export default class Cart extends React.Component {
               </View>
 
               <View style={[stylesApp.flexRowCenter, stylesApp.mt4]}>
-                <Text style={{...styles.txtLabel, fontWeight: 'bold'}}>
-                  Subtotal Price:
-                </Text>
-                <Text style={styles.txtPrice}>$150.97</Text>
+                <Text style={{...styles.txtLabel, fontWeight: 'bold'}}>Subtotal Price:</Text>
+                <Text style={styles.txtPrice}>${item.price * item.quantity}</Text>
               </View>
             </View>
           </View>
@@ -138,11 +144,42 @@ export default class Cart extends React.Component {
   }
 
   onRemove(index) {
+    Alert.alert(
+      'Are you sure to remove this item?',
+      '',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {text: 'Yes', onPress: () => this.doDeleteItem(index)},
+      ],
+      {cancelable: true},
+    );
+  }
+
+  doDeleteItem(index) {
+    // remove from db
+    ApiService.removeProductFromCart(this.currentUser?.carts[index]);
+
+    // remove from user object
+    this.currentUser?.carts.splice(index, 1);
+    UserHelper.saveUserToLocalStorage(this.currentUser, this.props);
   }
 
   onIncrementQuantity(index, increment) {
+    this.currentUser.carts[index].quantity = Math.max(this.currentUser.carts[index].quantity + increment, 1);
+
+    this.setState({reloadData: true});
   }
 
-  onButBuy() {
-  }
+  onButBuy() {}
 }
+
+const mapStateToProps = (state) => state;
+const mapDispatchToProps = {
+  setUserInfo,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Cart);

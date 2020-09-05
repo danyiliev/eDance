@@ -141,7 +141,7 @@ export default class Chat extends React.Component {
   renderEmptyItem() {
     return (
       <View style={stylesApp.viewLoading}>
-        <Text style={stylesApp.textEmptyItem}>No messages yet</Text>
+        <Text style={stylesApp.txtEmptyItem}>No messages yet</Text>
       </View>
     );
   }

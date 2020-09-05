@@ -50,6 +50,11 @@ export default class BaseLessonList extends React.Component {
   }
 
   onItem(lesson) {
+    // check if lesson is purchased
+    if (!this.currentUser?.isLessonPurchased(lesson.id)) {
+      return;
+    }
+
     // go to lesson detail page
     this.props.navigation.push(LessonPlayback.NAV_NAME, {
       lesson: lesson,

@@ -81,7 +81,7 @@ class Student extends BaseLessonList {
 
     return (
       <View style={stylesApp.viewLoading}>
-        <Text style={stylesApp.textEmptyItem}>No lessons available yet</Text>
+        <Text style={stylesApp.txtEmptyItem}>No lessons available yet</Text>
       </View>
     );
   }

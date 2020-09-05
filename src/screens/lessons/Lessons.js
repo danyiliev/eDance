@@ -88,7 +88,7 @@ class Lessons extends React.Component {
 
     return (
       <View style={stylesApp.viewLoading}>
-        <Text style={stylesApp.textEmptyItem}>No lessons available yet</Text>
+        <Text style={stylesApp.txtEmptyItem}>No lessons available yet</Text>
       </View>
     );
   }

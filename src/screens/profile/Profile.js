@@ -87,7 +87,7 @@ class Profile extends React.Component {
 
         <ImageView
           images={this.state.imageUrls}
-          imageIndex={0}
+          imageIndex={this.state.imageIndex}
           visible={this.state.showImgViewer}
           onRequestClose={() => this.setState({showImgViewer: false})}
         />
@@ -150,7 +150,7 @@ class Profile extends React.Component {
         {this.state.loadingData ? (
           <ActivityIndicator animating={true} />
         ) : (
-          <Text style={stylesApp.textEmptyItem}>
+          <Text style={stylesApp.txtEmptyItem}>
             {this.isMine()
               ? 'Your stories will be shown here'
               : 'This user has not added stories yet'}
