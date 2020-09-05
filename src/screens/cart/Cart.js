@@ -11,6 +11,7 @@ import {connect} from 'react-redux';
 import {PostHelper} from '../../helpers/post-helper';
 import {ApiService} from '../../services';
 import {UserHelper} from '../../helpers/user-helper';
+import ProductDetail from '../product-detail/ProductDetail';
 
 class Cart extends React.Component {
   static NAV_NAME = 'cart';
@@ -141,6 +142,10 @@ class Cart extends React.Component {
 
   onItem(index) {
     // go to product detail page
+    this.props.navigation.push(ProductDetail.NAV_NAME, {
+      product: this.currentUser?.carts[index],
+      fromCart: true,
+    });
   }
 
   onRemove(index) {

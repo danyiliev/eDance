@@ -51,6 +51,7 @@ export class User extends BaseModel {
   lessonsLiked = [];
 
   carts = [];
+  deliveryAddresses = [];
 
   // logical
   lessonsTeach = null;

@@ -1,8 +1,13 @@
 import AsyncStorage from '@react-native-community/async-storage';
 import {CURRENT_USER} from '../constants/storage-key';
-import {Alert} from 'react-native';
+import {Alert, Platform} from 'react-native';
 import {ApiService, AuthService} from '../services';
 import {User} from '../models/user.model';
+import SelectPicker from '../components/SelectPicker/SelectPicker';
+import {styles} from '../screens/signup/styles';
+import {Picker} from '@react-native-community/picker';
+import {STATES} from '../constants/constant-data';
+import React from 'react';
 
 export class UserHelper {
   static instance: UserHelper;
@@ -70,5 +75,60 @@ export class UserHelper {
     } catch (e) {}
 
     return Promise.resolve(true);
+  }
+
+  renderSelectStatePicker(page) {
+    return (
+      <SelectPicker
+        isVisible={page.state.showStatePicker}
+        contentStyle={styles.picker}
+        onDismiss={(done) => this.dismissState(page, done)}>
+        <Picker
+          selectedValue={Platform.OS === 'ios' ? page.state.stateSelected : page.state.state}
+          onValueChange={(itemValue, itemIndex) => {
+            if (Platform.OS === 'ios') {
+              page.setState({
+                stateSelected: itemValue,
+              });
+            } else {
+              page.setState({
+                state: itemValue,
+              });
+            }
+          }}>
+          {STATES.map((s, i) => {
+            return (
+              <Picker.Item key={i.toString()} label={s.Name} value={s.value} />
+            );
+          })}
+        </Picker>
+      </SelectPicker>
+    );
+  }
+
+  /**
+   * state select picker
+   */
+  dismissState(page, done) {
+    page.setState({
+      showStatePicker: false,
+    });
+
+    let {stateSelected} = page.state;
+    if (!stateSelected) {
+      // default is the first one
+      stateSelected = STATES[0].value;
+    }
+
+    // update date value based on done/canceled
+    if (done) {
+      page.setState({
+        state: stateSelected,
+      });
+    } else {
+      page.setState({
+        stateSelected: page.state.state,
+      });
+    }
   }
 }

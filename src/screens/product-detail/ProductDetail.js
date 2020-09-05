@@ -42,6 +42,8 @@ class ProductDetail extends React.Component {
   };
 
   product = null;
+  fromCart = false;
+
   currentUser = null;
 
   constructor(props) {
@@ -56,6 +58,7 @@ class ProductDetail extends React.Component {
     // get parameter
     if (props.route.params) {
       this.product = props.route.params.product;
+      this.fromCart = props.route.params.fromCart || false;
     }
   }
 
@@ -95,36 +98,39 @@ class ProductDetail extends React.Component {
         />
 
         <View style={styles.viewContent}>
-          {/* quantity */}
-          <View style={styles.viewQuantity}>
-            <Text style={styles.txtQuantityLabel}>Quantity</Text>
-            {/* minus */}
-            <TouchableOpacity onPress={() => this.onIncrementQuantity(-1)}>
-              <View style={[styles.butQuantity, styles.butMinus]}>
-                <Text style={styles.titleButMinus}>-</Text>
+          {this.fromCart ? null : (
+            <View>
+              {/* quantity */}
+              <View style={styles.viewQuantity}>
+                <Text style={styles.txtQuantityLabel}>Quantity</Text>
+                {/* minus */}
+                <TouchableOpacity onPress={() => this.onIncrementQuantity(-1)}>
+                  <View style={[styles.butQuantity, styles.butMinus]}>
+                    <Text style={styles.titleButMinus}>-</Text>
+                  </View>
+                </TouchableOpacity>
+
+                <Text style={styles.txtQuantity}>{this.state.quantity}</Text>
+
+                {/* plus */}
+                <TouchableOpacity onPress={() => this.onIncrementQuantity(1)}>
+                  <View style={[styles.butQuantity, styles.butPlus]}>
+                    <Text style={styles.titleButPlus}>+</Text>
+                  </View>
+                </TouchableOpacity>
               </View>
-            </TouchableOpacity>
 
-            <Text style={styles.txtQuantity}>{this.state.quantity}</Text>
-
-            {/* plus */}
-            <TouchableOpacity onPress={() => this.onIncrementQuantity(1)}>
-              <View style={[styles.butQuantity, styles.butPlus]}>
-                <Text style={styles.titleButPlus}>+</Text>
+              {/* add cart */}
+              <View style={styleUtil.withShadow()}>
+                <Button
+                  title="ADD TO CART"
+                  buttonStyle={styles.butAddCart}
+                  titleStyle={stylesApp.titleButPrimary}
+                  onPress={() => this.onButAddCart()}
+                />
               </View>
-            </TouchableOpacity>
-          </View>
-
-          {/* add cart */}
-          <View style={styleUtil.withShadow()}>
-            <Button
-              title="ADD TO CART"
-              buttonStyle={styles.butAddCart}
-              titleStyle={stylesApp.titleButPrimary}
-              onPress={() => this.onButAddCart()}
-            />
-          </View>
-
+            </View>
+          )}
           <Text style={styles.txtTitle}>{this.product?.name}</Text>
           {this.product?.description ? (
             <Text style={styles.txtDescription}>{this.product?.description}</Text>

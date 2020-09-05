@@ -64,6 +64,7 @@ class EditProfile extends BaseSignup {
     this.state.genderIndex = this.currentUser.gender;
 
     this.state.state = this.currentUser.state;
+    this.state.stateSelected = this.currentUser.state;
     this.state.city = this.currentUser.city;
     this.state.zipCode = this.currentUser.zipCode;
   }
@@ -251,7 +252,7 @@ class EditProfile extends BaseSignup {
               />
             </View>
 
-            {this.renderSelectStatePicker()}
+            {UserHelper.getInstance().renderSelectStatePicker(this)}
           </View>
         </ContentWithBackground>
       </DismissKeyboard>

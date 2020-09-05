@@ -17,6 +17,7 @@ import {User} from '../../models/user.model';
 import {BaseAuth} from '../base-auth';
 import {BaseSignup} from './base-signup';
 import {AuthService} from '../../services';
+import {UserHelper} from '../../helpers/user-helper';
 
 class SignupAdvanced extends BaseSignup {
   static NAV_NAME = 'signup-advanced';
@@ -161,7 +162,7 @@ class SignupAdvanced extends BaseSignup {
               />
             </View>
 
-            {this.renderSelectStatePicker()}
+            {UserHelper.getInstance().renderSelectStatePicker(this)}
           </View>
         </ContentWithBackground>
       </DismissKeyboard>
