@@ -2,7 +2,7 @@ import React from 'react';
 import {setUserInfo} from '../../actions/user';
 import {connect} from 'react-redux';
 import DismissKeyboard from '../../components/DismissKeyboard/DismissKeyboard';
-import {Text, TouchableOpacity, View} from 'react-native';
+import {Text, TouchableOpacity, View, Alert} from 'react-native';
 import {styles} from '../profile/edit-profile/styles';
 import ContentWithBackground from '../../components/ContentWithBackground/ContentWithBackground';
 import {Button, Input} from 'react-native-elements';
@@ -12,6 +12,9 @@ import {colors as colorTheme} from '../../styles/theme.style';
 import ImageScale from 'react-native-scalable-image';
 import {styles as stylesSignup} from '../signup/styles';
 import {UserHelper} from '../../helpers/user-helper';
+import {Address} from '../../models/address.model';
+import {ApiService} from '../../services';
+import Toast from 'react-native-simple-toast';
 
 class AddressDetail extends React.Component {
   static NAV_NAME = 'address-detail';
@@ -75,7 +78,7 @@ class AddressDetail extends React.Component {
                 placeholderTextColor={colorTheme.primary}
                 inputStyle={styles.input}
                 inputContainerStyle={stylesLogin.inputCtn}
-                value={this.state.building}
+                value={this.state.street}
                 onChangeText={(street) => {
                   this.setState({street});
                 }}
@@ -97,7 +100,7 @@ class AddressDetail extends React.Component {
                 placeholderTextColor={colorTheme.primary}
                 inputStyle={styles.input}
                 inputContainerStyle={stylesLogin.inputCtn}
-                value={this.state.building}
+                value={this.state.city}
                 onChangeText={(city) => {
                   this.setState({city});
                 }}
@@ -137,6 +140,50 @@ class AddressDetail extends React.Component {
         </ContentWithBackground>
       </DismissKeyboard>
     );
+  }
+
+  async onButSave() {
+    // check validity
+    if (!this.state.building) {
+      Alert.alert('Invalid Address', 'Building cannot be empty');
+      return;
+    }
+
+    if (!this.state.street) {
+      Alert.alert('Invalid Address', 'Street cannot be empty');
+      return;
+    }
+
+    if (!this.state.city) {
+      Alert.alert('Invalid Address', 'City cannot be empty');
+      return;
+    }
+
+    if (!this.state.state) {
+      Alert.alert('Invalid Address', 'State cannot be empty');
+      return;
+    }
+
+    try {
+      const addressNew = new Address();
+      addressNew.building = this.state.building;
+      addressNew.street = this.state.street;
+      addressNew.city = this.state.city;
+      addressNew.state = this.state.state;
+
+      // save item to favourite
+      await ApiService.saveDeliveryAddress(addressNew);
+
+      this.currentUser?.deliveryAddresses.push(addressNew);
+      UserHelper.saveUserToLocalStorage(this.currentUser, this.props);
+
+      Toast.show('Added new address successfully');
+
+      // go back
+      this.props.navigation.pop();
+    } catch (e) {
+      Alert.alert('Failed to create new address', e.message);
+    }
   }
 }
 

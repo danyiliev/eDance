@@ -917,6 +917,32 @@ class ApiService {
       return Promise.reject(e.response.data);
     }
   }
+
+  async saveDeliveryAddress(address) {
+    const options = {
+      headers: {
+        ...this.baseHeader(),
+      },
+    };
+
+    const params = {
+      building: address.building,
+      street: address.street,
+      city: address.city,
+      state: address.state,
+    };
+
+    try {
+      const {data} = await Axios.post(`${this.baseUrl}/users/address`, params, options);
+      console.log(data);
+
+      return Promise.resolve();
+    } catch (e) {
+      console.log(e);
+
+      return Promise.reject(e.response.data);
+    }
+  }
 }
 
 const apiService = new ApiService();

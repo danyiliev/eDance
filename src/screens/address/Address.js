@@ -3,12 +3,14 @@ import {setUserInfo} from '../../actions/user';
 import {connect} from 'react-redux';
 import {FlatList, Text, TouchableOpacity, View} from 'react-native';
 import {stylesApp, styleUtil} from '../../styles/app.style';
-import {Icon} from 'react-native-elements';
+import {Button, Icon} from 'react-native-elements';
 import AddProduct from '../add-product/AddProduct';
 import {styles} from './styles';
 import {Utils} from '../../helpers/utils';
 import {colors as colorTheme} from '../../styles/theme.style';
 import {styles as stylesCheckbox} from '../../components/CheckboxRound/styles';
+import AddressDetail from '../address-detail/AddressDetail';
+import {styles as stylesEditProfile} from '../profile/edit-profile/styles';
 
 class Address extends React.Component {
   static NAV_NAME = 'address';
@@ -42,6 +44,7 @@ class Address extends React.Component {
           keyExtractor={(item, index) => index.toString()}
           data={this.currentUser?.deliveryAddresses}
           ListEmptyComponent={() => this.renderEmptyItem()}
+          ListFooterComponent={() => this.renderFooter()}
           renderItem={({item, index}) => this.renderItem(item, index)}
         />
       </View>
@@ -60,7 +63,7 @@ class Address extends React.Component {
 
             {/* address */}
             <Text style={styles.txtItemAddress}>
-              asldkfj alskdfj alskdjf alsdkfja lsdkfjalsdkfjasdlkf
+              {item.getFullAddress()}
             </Text>
 
           </View>
@@ -97,13 +100,30 @@ class Address extends React.Component {
     );
   }
 
+  renderFooter() {
+    return (
+      <View style={[styleUtil.withShadow(), stylesEditProfile.viewButSave]}>
+        <Button
+          title="Done"
+          buttonStyle={stylesApp.butPrimary}
+          titleStyle={stylesApp.titleButPrimary}
+          onPress={() => this.onButDone()}
+        />
+      </View>
+    );
+  }
+
   onItem(index) {
     this.setState({selectedIndex: index});
   }
 
   onButAdd() {
     // go to add address page
-    this.props.navigation.push(AddProduct.NAV_NAME);
+    this.props.navigation.push(AddressDetail.NAV_NAME);
+  }
+
+  onButDone() {
+
   }
 }
 

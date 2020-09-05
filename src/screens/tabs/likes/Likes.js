@@ -21,6 +21,10 @@ class Likes extends BaseLessonList {
 
   constructor(props) {
     super(props);
+
+    if (this.currentUser?.lessonsLikedObj) {
+      this.state.lessons = this.currentUser?.lessonsLikedObj;
+    }
   }
 
   componentDidMount(): void {

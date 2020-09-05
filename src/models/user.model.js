@@ -3,6 +3,7 @@ import {ApiService} from '../services';
 import {DURATIONS_LESSON, DURATIONS_REST} from '../constants/dance-data';
 import {Review} from './review.model';
 import {Product} from './product.model';
+import {Address} from './address.model';
 
 export class User extends BaseModel {
   static TYPE_TEACHER = 1;
@@ -165,6 +166,25 @@ export class User extends BaseModel {
       }
     }
     this.carts = carts;
+
+    // addresses
+    const addresses = [];
+    if (data.deliveryAddresses) {
+      for (const obj of data.deliveryAddresses) {
+        const addressNew = new Address().initFromObject(obj);
+        addresses.push(addressNew);
+      }
+    }
+    this.deliveryAddresses = addresses;
+
+    return this;
+  }
+
+  deserialize(input: any): this {
+    super.deserialize(input);
+
+    // init data
+    this.lessonsLikedObj = null;
 
     return this;
   }

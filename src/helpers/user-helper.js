@@ -72,6 +72,7 @@ export class UserHelper {
       user.lessonsPurchased = u.lessonsPurchased;
       user.lessonsLiked = u.lessonsLiked;
       user.carts = u.carts;
+      user.deliveryAddresses = u.deliveryAddresses;
     } catch (e) {}
 
     return Promise.resolve(true);

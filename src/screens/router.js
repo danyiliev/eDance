@@ -61,6 +61,7 @@ import LessonPlayback from './lessons/lesson-playback/LessonPlayback';
 import {UserHelper} from '../helpers/user-helper';
 import Address from './address/Address';
 import AddressDetail from './address-detail/AddressDetail';
+import OrderConfirm from './orders/order-confirm/OrderConfirm';
 
 const Stack = createStackNavigator();
 
@@ -110,7 +111,7 @@ class MainNavigator extends React.Component {
         ) : this.props.UserReducer.user ? (
           <View style={stylesApp.viewContainer}>
             <Stack.Navigator
-              initialRouteName={Address.NAV_NAME}
+              initialRouteName={OrderConfirm.NAV_NAME}
               screenOptions={{
                 headerTintColor: colorTheme.primary,
               }}>
@@ -154,6 +155,7 @@ class MainNavigator extends React.Component {
               <Stack.Screen name={LessonPlayback.NAV_NAME} component={LessonPlayback} />
               <Stack.Screen name={Address.NAV_NAME} component={Address} />
               <Stack.Screen name={AddressDetail.NAV_NAME} component={AddressDetail} />
+              <Stack.Screen name={OrderConfirm.NAV_NAME} component={OrderConfirm} />
             </Stack.Navigator>
 
             <MenuModal

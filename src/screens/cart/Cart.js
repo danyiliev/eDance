@@ -12,6 +12,7 @@ import {PostHelper} from '../../helpers/post-helper';
 import {ApiService} from '../../services';
 import {UserHelper} from '../../helpers/user-helper';
 import ProductDetail from '../product-detail/ProductDetail';
+import Address from '../address/Address';
 
 class Cart extends React.Component {
   static NAV_NAME = 'cart';
@@ -179,7 +180,9 @@ class Cart extends React.Component {
     this.setState({reloadData: true});
   }
 
-  onButBuy() {}
+  onButBuy() {
+    this.props.navigation.push(Address.NAV_NAME);
+  }
 }
 
 const mapStateToProps = (state) => state;
