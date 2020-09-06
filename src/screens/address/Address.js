@@ -11,6 +11,7 @@ import {colors as colorTheme} from '../../styles/theme.style';
 import {styles as stylesCheckbox} from '../../components/CheckboxRound/styles';
 import AddressDetail from '../address-detail/AddressDetail';
 import {styles as stylesEditProfile} from '../profile/edit-profile/styles';
+import OrderConfirm from '../orders/order-confirm/OrderConfirm';
 
 class Address extends React.Component {
   static NAV_NAME = 'address';
@@ -101,6 +102,10 @@ class Address extends React.Component {
   }
 
   renderFooter() {
+    if (this.currentUser?.deliveryAddresses.length <= 0) {
+      return null;
+    }
+
     return (
       <View style={[styleUtil.withShadow(), stylesEditProfile.viewButSave]}>
         <Button
@@ -123,7 +128,10 @@ class Address extends React.Component {
   }
 
   onButDone() {
-
+    // go to order confirm page
+    this.props.navigation.push(OrderConfirm.NAV_NAME, {
+      addressIndex: this.state.selectedIndex,
+    });
   }
 }
 

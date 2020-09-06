@@ -4,13 +4,16 @@ import {connect} from 'react-redux';
 import {LoadingHUD} from 'react-native-hud-hybrid';
 import {stylesApp, styleUtil} from '../../../styles/app.style';
 import {styles} from './styles';
-import {FlatList, Text, TouchableOpacity, View} from 'react-native';
+import {Alert, FlatList, Text, TouchableOpacity, View} from 'react-native';
 import PostImage from '../../../components/PostItem/PostImage';
 import {PostHelper} from '../../../helpers/post-helper';
 import {styles as stylesProduct} from '../../product-detail/styles';
 import {styles as stylesCart} from '../../cart/styles';
 import {Button} from 'react-native-elements';
 import ProductDetail from '../../product-detail/ProductDetail';
+import {ApiService} from '../../../services';
+import Orders from '../Orders';
+import {UserHelper} from '../../../helpers/user-helper';
 
 class OrderConfirm extends React.Component {
   static NAV_NAME = 'order-confirm';
@@ -58,7 +61,7 @@ class OrderConfirm extends React.Component {
         {/* order info */}
         <View style={styles.viewHeaderItem}>
           <Text style={styles.txtLabel}>Address: </Text>
-          <Text style={styles.txtHeaderItem}> asdlkj asldkfj lakjsdf alkjsdf</Text>
+          <Text style={styles.txtHeaderItem}>{this.address}</Text>
         </View>
       </View>
     );
@@ -104,7 +107,7 @@ class OrderConfirm extends React.Component {
         {/* order info */}
         <View style={styles.viewFooterItem}>
           <Text style={styles.txtLabelLarge}>Total Price: </Text>
-          <Text style={styles.txtPrice}>$223</Text>
+          <Text style={styles.txtPrice}>${this.currentUser?.getTotalPrice()}</Text>
         </View>
 
         {/* save */}
@@ -113,7 +116,7 @@ class OrderConfirm extends React.Component {
             title="Proceed"
             buttonStyle={stylesApp.butPrimary}
             titleStyle={stylesApp.titleButPrimary}
-            onPress={() => this.onButSave()}
+            onPress={() => this.onButProceed()}
           />
         </View>
       </View>
@@ -127,8 +130,36 @@ class OrderConfirm extends React.Component {
       fromCart: true,
     });
   }
-}
 
+  async onButProceed() {
+    // show loading
+    this.loadingHUD.show();
+
+    // TODO - payment
+
+    try {
+      // make order
+      await ApiService.makeOrder(this.currentUser?.getTotalPrice(), this.currentUser?.carts, this.address);
+
+      // clear carts
+      ApiService.clearCart();
+
+      this.currentUser.carts = [];
+      UserHelper.saveUserToLocalStorage(this.currentUser, this.props);
+
+      // go to orders page
+      this.props.navigation.popToTop();
+      this.props.navigation.navigate(Orders.NAV_NAME);
+    } catch (err) {
+      console.log(err);
+
+      Alert.alert('Failed to Make Order', err.message);
+    }
+
+    // hide loading
+    this.loadingHUD.hideAll();
+  }
+}
 
 const mapStateToProps = (state) => state;
 const mapDispatchToProps = {

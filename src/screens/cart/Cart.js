@@ -37,10 +37,7 @@ class Cart extends React.Component {
   }
 
   render() {
-    let priceTotal = 0;
-    for (const p of this.currentUser?.carts) {
-      priceTotal += p.price * p.quantity;
-    }
+    let priceTotal = this.currentUser?.getTotalPrice();
 
     return (
       <View style={stylesApp.viewContainer}>
@@ -56,7 +53,7 @@ class Cart extends React.Component {
         {/* login */}
         <View style={[styleUtil.withShadow(), styles.viewButBuy]}>
           <Button
-            title={`BUY $${priceTotal ? priceTotal : ''}`}
+            title={`BUY ${priceTotal > 0 ? '$' + priceTotal : ''}`}
             disabled={this.currentUser?.carts.length <= 0}
             disabledStyle={[stylesApp.butPrimary, stylesApp.semiTrans]}
             buttonStyle={stylesApp.butPrimary}

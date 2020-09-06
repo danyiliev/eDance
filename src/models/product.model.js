@@ -46,8 +46,12 @@ export class Product extends BaseModel {
     if (data.rate) {
       this.rate = data.rate;
     }
-    this.soldCount = data.soldCount;
-    this.reviewCount = data.soldCount;
+    if (data.soldCount) {
+      this.soldCount = data.soldCount;
+    }
+    if (data.reviewCount) {
+      this.reviewCount = data.soldCount;
+    }
 
     return this;
   }

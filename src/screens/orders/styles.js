@@ -10,8 +10,7 @@ export const styles = StyleSheet.create({
 
   ctnSegment: {
     ...stylesSignup.ctnSegmentGender,
-    marginBottom: 20,
-    marginTop: 4,
+    marginVertical: 12,
     marginHorizontal: 60,
   },
 

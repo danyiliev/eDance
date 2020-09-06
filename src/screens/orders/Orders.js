@@ -8,18 +8,26 @@ import {User} from '../../models/user.model';
 import {styles as stylesSignup} from '../signup/styles';
 import {ButtonGroup} from 'react-native-elements';
 import PostImage from '../../components/PostItem/PostImage';
+import {ApiService} from '../../services';
+import {connect} from 'react-redux';
+import {PostHelper} from '../../helpers/post-helper';
 
-export default class Orders extends React.Component {
+class Orders extends React.Component {
   static NAV_NAME = 'orders';
 
   state = {
     // ui
     showLoading: false,
-
     menuIndex: 0,
+
+    // data
+    orders: [],
   };
 
+  currentUser = null;
+
   menus = ['Buyer', 'Seller'];
+  pageCount = 20;
 
   constructor(props) {
     super(props);
@@ -27,19 +35,27 @@ export default class Orders extends React.Component {
     props.navigation.setOptions({
       title: 'Orders',
     });
+
+    this.currentUser = props.UserReducer.user;
+  }
+
+  componentDidMount(): void {
+    this.onChangeTab(0);
   }
 
   render() {
     return (
       <View style={stylesApp.viewContainer}>
+        {this.renderHeader()}
+
         <FlatList
           contentContainerStyle={styles.listCtnContainer}
           keyExtractor={(item, index) => index.toString()}
-          data={[]}
-          ListHeaderComponent={() => this.renderHeader()}
+          data={this.state.orders}
           ListEmptyComponent={() => this.renderEmptyItem()}
           renderItem={({item, index}) => this.renderItem(item, index)}
           refreshing={this.state.showLoading}
+          onRefresh={() => this.loadData()}
         />
       </View>
     );
@@ -55,7 +71,7 @@ export default class Orders extends React.Component {
         selectedButtonStyle={stylesSignup.butSegmentSelected}
         selectedTextStyle={stylesSignup.SegmentSelected}
         selectedIndex={this.state.menuIndex}
-        onPress={(index) => this.setState({menuIndex: index})}
+        onPress={(index) => this.onChangeTab(index)}
       />
     );
   }
@@ -64,44 +80,44 @@ export default class Orders extends React.Component {
     return (
       <View>
         <View style={styles.viewHeader}>
-          <Text style={styles.viewHeaderDate}>2020-03-23 08:33:22</Text>
-          <Text style={styles.viewHeaderPrice}>$323.35</Text>
+          <Text style={styles.viewHeaderDate}>{item.createdAtStr()}</Text>
+          <Text style={styles.viewHeaderPrice}>${item.amount}</Text>
         </View>
-        <TouchableOpacity
-          activeOpacity={0.7}
-          onPress={() => this.onItem(index)}>
-          <View style={stylesCart.viewItem}>
-            {/* photo */}
-            <PostImage
-              iconSize={64}
-              imgUrl=""
-              containerStyle={stylesCart.imgItem}
-            />
+        {item.products.map((p, i) => {
+          return (
+            <TouchableOpacity activeOpacity={0.7} onPress={() => this.onItem(index)}>
+              <View style={stylesCart.viewItem}>
+                {/* photo */}
+                <PostImage
+                  iconSize={64}
+                  imgUrl={PostHelper.imageUrl(p.photos[0])}
+                  containerStyle={stylesCart.imgItem}
+                />
 
-            <View style={stylesCart.viewItemContent}>
-              <View style={stylesCart.viewTitle}>
-                <Text style={stylesCart.txtTitle}>FlexTek Shimmer Zip Bra top</Text>
-              </View>
-
-              <View style={stylesCart.viewContentMain}>
-                <View style={styles.viewPrice}>
-                  <View style={stylesApp.flexRowCenter}>
-                    <Text style={stylesCart.txtLabel}>Price:</Text>
-                    <Text style={stylesCart.txtPrice}>$150.97</Text>
+                <View style={stylesCart.viewItemContent}>
+                  <View style={stylesCart.viewTitle}>
+                    <Text style={stylesCart.txtTitle}>{p.name}</Text>
                   </View>
-                  <Text style={stylesCart.txtLabel}>&#215; 2</Text>
-                </View>
 
-                <View style={[stylesApp.flexRowCenter, stylesApp.mt4]}>
-                  <Text style={{...stylesCart.txtLabel, fontWeight: 'bold'}}>
-                    Subtotal Price:
-                  </Text>
-                  <Text style={stylesCart.txtPrice}>$150.97</Text>
+                  <View style={stylesCart.viewContentMain}>
+                    <View style={styles.viewPrice}>
+                      <View style={stylesApp.flexRowCenter}>
+                        <Text style={stylesCart.txtLabel}>Price:</Text>
+                        <Text style={stylesCart.txtPrice}>${p.price}</Text>
+                      </View>
+                      <Text style={stylesCart.txtLabel}>&#215; {p.quantity}</Text>
+                    </View>
+
+                    <View style={[stylesApp.flexRowCenter, stylesApp.mt4]}>
+                      <Text style={{...stylesCart.txtLabel, fontWeight: 'bold'}}>Subtotal Price:</Text>
+                      <Text style={stylesCart.txtPrice}>${p.price * p.quantity}</Text>
+                    </View>
+                  </View>
                 </View>
               </View>
-            </View>
-          </View>
-        </TouchableOpacity>
+            </TouchableOpacity>
+          );
+        })}
       </View>
     );
   }
@@ -118,4 +134,53 @@ export default class Orders extends React.Component {
       </View>
     );
   }
+
+  async onChangeTab(index) {
+    try {
+      await this.setState({menuIndex: index});
+
+      this.loadData();
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  async loadData(continued = false) {
+    let indexFrom = 0;
+
+    if (!continued) {
+      // show loading mark
+      this.setState({
+        showLoading: true,
+      });
+    } else {
+      indexFrom = this.state.orders.length;
+    }
+
+    try {
+      let orders = await ApiService.getOrders(
+        this.currentUser.id,
+        this.state.menuIndex === 0 ? 1 : 0,
+        indexFrom,
+        this.pageCount,
+      );
+
+      if (indexFrom > 0) {
+        // attach
+        orders = [...this.state.orders, ...orders];
+      }
+
+      this.setState({orders});
+    } catch (e) {
+      console.log(e);
+    }
+
+    this.setState({
+      showLoading: false,
+    });
+  }
 }
+
+const mapStateToProps = (state) => state;
+
+export default connect(mapStateToProps, null)(Orders);

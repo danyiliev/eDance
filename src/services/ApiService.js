@@ -10,6 +10,7 @@ import {Review} from '../models/review.model';
 import Lessons from '../screens/lessons/Lessons';
 import {Alert} from 'react-native';
 import {Product} from '../models/product.model';
+import {Order} from '../models/order.model';
 
 class ApiService {
   // error codes
@@ -918,6 +919,25 @@ class ApiService {
     }
   }
 
+  async clearCart() {
+    const options = {
+      headers: {
+        ...this.baseHeader(),
+      },
+    };
+
+    try {
+      const {data} = await Axios.delete(`${this.baseUrl}/users/cart`, options);
+      console.log(data);
+
+      return Promise.resolve(data);
+    } catch (e) {
+      console.log(e);
+
+      return Promise.reject(e.response.data);
+    }
+  }
+
   async saveDeliveryAddress(address) {
     const options = {
       headers: {
@@ -937,6 +957,70 @@ class ApiService {
       console.log(data);
 
       return Promise.resolve();
+    } catch (e) {
+      console.log(e);
+
+      return Promise.reject(e.response.data);
+    }
+  }
+
+  async makeOrder(amount, products, address) {
+    const options = {
+      headers: {
+        ...this.baseHeader(),
+      },
+    };
+
+    const params = {
+      amount: amount,
+      address: address,
+      products: [],
+    };
+    for (const p of products) {
+      params.products.push({
+        productId: p.id,
+        quantity: p.quantity,
+      });
+    }
+
+    try {
+      const {data} = await Axios.post(`${this.baseUrl}/order`, params, options);
+      console.log(data);
+
+      return Promise.resolve(data);
+    } catch (e) {
+      console.log(e);
+
+      return Promise.reject(e.response.data);
+    }
+  }
+
+  async getOrders(userId, isBuyer, from, count) {
+    let params = {
+      from: from,
+      count: count,
+      isBuyer: isBuyer,
+    };
+
+    try {
+      const options = {
+        params: params,
+        headers: {
+          ...this.baseHeader(),
+        },
+      };
+
+      const {data} = await Axios.get(`${this.baseUrl}/order`, options);
+      console.log(data);
+
+      const orders = [];
+      for (const obj of data) {
+        const p = new Order().initFromObject(obj);
+
+        orders.push(p);
+      }
+
+      return Promise.resolve(orders);
     } catch (e) {
       console.log(e);
 

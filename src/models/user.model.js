@@ -246,4 +246,14 @@ export class User extends BaseModel {
 
     return true;
   }
+
+  getTotalPrice() {
+    let sum = 0;
+
+    for (let p of this.carts) {
+      sum += p.price * p.quantity;
+    }
+
+    return sum.toFixed(2);
+  }
 }

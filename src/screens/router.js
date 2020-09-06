@@ -111,7 +111,7 @@ class MainNavigator extends React.Component {
         ) : this.props.UserReducer.user ? (
           <View style={stylesApp.viewContainer}>
             <Stack.Navigator
-              initialRouteName={OrderConfirm.NAV_NAME}
+              initialRouteName={TabMain.NAV_NAME}
               screenOptions={{
                 headerTintColor: colorTheme.primary,
               }}>
