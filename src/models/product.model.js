@@ -1,6 +1,7 @@
 import {BaseModel} from './base.model';
 import {Utils} from '../helpers/utils';
 import {User} from './user.model';
+import {Review} from './review.model';
 
 export class Product extends BaseModel {
   //
@@ -18,6 +19,7 @@ export class Product extends BaseModel {
   reviewCount = 0;
 
   quantity = 1;
+  reviews = [];
 
   // data
   user = null;
@@ -51,6 +53,15 @@ export class Product extends BaseModel {
     }
     if (data.reviewCount) {
       this.reviewCount = data.soldCount;
+    }
+
+    // reviews
+    if (data.reviews) {
+      this.reviews = [];
+      for (const r of data.reviews) {
+        const review = new Review().initFromObject(r);
+        this.reviews.push(review);
+      }
     }
 
     return this;

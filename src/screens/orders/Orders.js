@@ -11,6 +11,8 @@ import PostImage from '../../components/PostItem/PostImage';
 import {ApiService} from '../../services';
 import {connect} from 'react-redux';
 import {PostHelper} from '../../helpers/post-helper';
+import OrderConfirm from './order-confirm/OrderConfirm';
+import WriteReview from './write-review/WriteReview';
 
 class Orders extends React.Component {
   static NAV_NAME = 'orders';
@@ -85,7 +87,10 @@ class Orders extends React.Component {
         </View>
         {item.products.map((p, i) => {
           return (
-            <TouchableOpacity activeOpacity={0.7} onPress={() => this.onItem(index)}>
+            <TouchableOpacity
+              key={index.toString()}
+              activeOpacity={0.7}
+              onPress={() => this.onItem(item, i)}>
               <View style={stylesCart.viewItem}>
                 {/* photo */}
                 <PostImage
@@ -177,6 +182,17 @@ class Orders extends React.Component {
 
     this.setState({
       showLoading: false,
+    });
+  }
+
+  onItem(order, productIndex) {
+    if (this.state.menuIndex === 1) {
+      return;
+    }
+
+    // go to write review
+    this.props.navigation.push(WriteReview.NAV_NAME, {
+      product: order.products[productIndex],
     });
   }
 }

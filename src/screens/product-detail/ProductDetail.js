@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import {stylesApp, styleUtil} from '../../styles/app.style';
 import {Utils} from '../../helpers/utils';
-import Carousel, { Pagination } from 'react-native-x-carousel';
+import Carousel, {Pagination} from 'react-native-x-carousel';
 import {styles} from './styles';
 import PostImage from '../../components/PostItem/PostImage';
 import {Button} from 'react-native-elements';
@@ -25,6 +25,7 @@ import {ProductHelper} from '../../helpers/product-helper';
 import {ApiService} from '../../services';
 import Toast from 'react-native-simple-toast';
 import {setUserInfo} from '../../actions/user';
+import Profile from '../profile/Profile';
 
 class ProductDetail extends React.Component {
   static NAV_NAME = 'product-detail';
@@ -172,10 +173,10 @@ class ProductDetail extends React.Component {
     return (
       <View style={styles.viewReview} key={index.toString()}>
         {/* user */}
-        <TouchableOpacity activeOpacity={0.8} onPress={this.props.onUser}>
+        <TouchableOpacity activeOpacity={0.8} onPress={() => this.onUser(item.user)}>
           <FastImage
             style={styles.imgUser}
-            source={UserHelper.getUserImage(this.props.user)}
+            source={UserHelper.getUserImage(item.user)}
             resizeMode={FastImage.resizeMode.cover}
           />
         </TouchableOpacity>
@@ -186,20 +187,20 @@ class ProductDetail extends React.Component {
               {/* star rating */}
               <StarRating
                 activeOpacity={1}
-                rating={4}
+                rating={item.rating}
                 starSize={16}
                 starStyle={{marginRight: 4}}
                 fullStarColor={colorTheme.primary}
                 emptyStarColor={colorTheme.primary}
               />
-              <Text style={stylesApp.ml10}>4.0</Text>
+              <Text style={stylesApp.ml10}>{item.rating.toFixed(1)}</Text>
             </View>
 
             {/* time */}
-            <Text style={styles.txtTime}>2020-08-29 23:23:11</Text>
+            <Text style={styles.txtTime}>{item.createdAtStr()}</Text>
           </View>
 
-          <Text style={styles.txtReview}>a asdlkfj i aslkdjfio pweo</Text>
+          <Text style={styles.txtReview}>{item.review}</Text>
         </View>
       </View>
     );
@@ -248,6 +249,9 @@ class ProductDetail extends React.Component {
   async loadData(continued = false) {
     try {
       const reviews = await ApiService.getProductReviews(this.product?.id);
+      // sort descending based on time
+      reviews.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
+
       this.setState({reviews});
     } catch (e) {
       console.log(e);
@@ -256,6 +260,13 @@ class ProductDetail extends React.Component {
     // hide loading
     this.setState({
       showLoading: false,
+    });
+  }
+
+  onUser(user) {
+    // go to profile page
+    this.props.navigation.push(Profile.NAV_NAME, {
+      user: user,
     });
   }
 }

@@ -872,6 +872,32 @@ class ApiService {
     }
   }
 
+  async addProductReview(productId, rating, review) {
+    const httpOptions = {
+      headers: {
+        ...this.baseHeader(),
+      },
+    };
+
+    const params = {rating, review};
+
+    try {
+      const {data} = await Axios.post(`${this.baseUrl}/product/${productId}/review`, params, httpOptions);
+      console.log(data);
+
+      let prod = null;
+      if (data) {
+        prod = new Product().initFromObject(data);
+      }
+
+      return Promise.resolve(prod);
+    } catch (e) {
+      console.log(e);
+
+      return Promise.reject(e.response ? e.response.data : e);
+    }
+  }
+
   async addProductToCart(product) {
     const options = {
       headers: {
