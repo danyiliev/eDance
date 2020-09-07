@@ -3,7 +3,7 @@ import ContentWithBackground from '../../components/ContentWithBackground/Conten
 import ImageScale from 'react-native-scalable-image';
 import {styles as stylesLanding} from '../landing/styles';
 import {styles} from './styles';
-import {Text, View, Alert} from 'react-native';
+import {Text, View, Alert, Settings} from 'react-native';
 import {Button, Input} from 'react-native-elements';
 import {colors as colorTheme} from '../../styles/theme.style';
 import DismissKeyboard from '../../components/DismissKeyboard/DismissKeyboard';
@@ -18,6 +18,7 @@ import {AuthService} from '../../services';
 import {BaseAuth} from '../base-auth';
 import {Utils} from '../../helpers/utils';
 import {UserHelper} from '../../helpers/user-helper';
+import SettingProfile from '../settings/setting-profile/SettingProfile';
 
 class Login extends BaseAuth {
   static NAV_NAME = 'login';
@@ -171,6 +172,12 @@ class Login extends BaseAuth {
   }
 
   onButSignup() {
+    if (this.userType === User.TYPE_TEACHER) {
+      // go to base setting page
+      this.props.navigation.push(SettingProfile.NAV_NAME);
+      return;
+    }
+
     // go to signup page
     this.props.navigation.push(SignupBase.NAV_NAME, {userType: this.userType});
   }

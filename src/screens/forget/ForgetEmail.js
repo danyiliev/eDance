@@ -1,7 +1,7 @@
 import React from 'react';
 import DismissKeyboard from '../../components/DismissKeyboard/DismissKeyboard';
 import ContentWithBackground from '../../components/ContentWithBackground/ContentWithBackground';
-import {Text, View} from 'react-native';
+import {Alert, Text, View} from 'react-native';
 import {styles} from './styles';
 import {styles as stylesSignup} from '../signup/styles';
 import {Button, Icon, Input} from 'react-native-elements';
@@ -10,6 +10,7 @@ import {stylesApp, styleUtil} from '../../styles/app.style';
 import {colors as colorTheme} from '../../styles/theme.style';
 import ImageScale from 'react-native-scalable-image';
 import ForgetCode from './ForgetCode';
+import {Utils} from '../../helpers/utils';
 
 export default class ForgetEmail extends React.Component {
   static NAV_NAME = 'forget-email';
@@ -49,6 +50,9 @@ export default class ForgetEmail extends React.Component {
 
             {/* email */}
             <Input
+              ref={(input) => {
+                this.inputEmail = input;
+              }}
               containerStyle={styles.ctnInput}
               autoCapitalize={'none'}
               keyboardType="email-address"
@@ -96,6 +100,18 @@ export default class ForgetEmail extends React.Component {
   }
 
   onButNext() {
+    // check email validity
+    if (!Utils.isEmailValid(this.state.email)) {
+      Alert.alert('Invalid Email', 'Please input the correct email address', [
+        {
+          text: 'OK',
+          onPress: () => this.inputEmail.focus(),
+        },
+      ]);
+
+      return;
+    }
+
     // go to forget page
     this.props.navigation.push(ForgetCode.NAV_NAME);
   }

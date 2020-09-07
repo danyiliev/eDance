@@ -42,8 +42,11 @@ import {UserHelper} from '../../../helpers/user-helper';
 import {User} from '../../../models/user.model';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
+import {LoadingHUD} from 'react-native-hud-hybrid';
+import SignupBase from '../../signup/SignupBase';
 
 const {width: SCREEN_WDITH} = Dimensions.get('window');
+const HEIGHT_TIMER = 140;
 
 class SettingProfile extends React.Component {
   static NAV_NAME = 'setting-profile';
@@ -73,15 +76,7 @@ class SettingProfile extends React.Component {
 
   lessonDurations = ['30 Minutes', '45 Minutes', 'An hour'];
   restDurations = ['5 Minutes', '10 Minutes', '15 Minutes'];
-  dayOfWeeks = [
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday',
-    'Sunday',
-  ];
+  dayOfWeeks = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
   timeSelected = new Date();
   strTimeSelected = '';
@@ -89,48 +84,57 @@ class SettingProfile extends React.Component {
   constructor(props) {
     super(props);
 
-    props.navigation.setOptions({
-      title: 'Settings',
-    });
-
     this.currentUser = props.UserReducer.user;
 
     // init data
-    this.state.ageGroups = this.currentUser.ageGroups;
-    this.state.styleBallroom = this.currentUser.styleBallroom;
-    this.state.styleRythm = this.currentUser.styleRythm;
-    this.state.styleStandard = this.currentUser.styleStandard;
-    this.state.styleLatin = this.currentUser.styleLatin;
-    this.state.danceLevels = this.currentUser.danceLevels;
-    this.state.price = this.currentUser.price?.toString();
+    if (this.currentUser) {
+      this.state.ageGroups = this.currentUser.ageGroups;
+      this.state.styleBallroom = this.currentUser.styleBallroom;
+      this.state.styleRythm = this.currentUser.styleRythm;
+      this.state.styleStandard = this.currentUser.styleStandard;
+      this.state.styleLatin = this.currentUser.styleLatin;
+      this.state.danceLevels = this.currentUser.danceLevels;
+      this.state.price = this.currentUser.price?.toString();
 
-    this.state.durationLessonIndex = DURATIONS_LESSON.findIndex(
-      (d) => d === this.currentUser.durationLesson,
-    );
-    this.state.durationRestIndex = DURATIONS_REST.findIndex(
-      (d) => d === this.currentUser.durationRest,
-    );
-    this.state.availableDays = this.currentUser.availableDays;
-    this.state.timeStart = this.currentUser.timeStart;
-    this.state.timeEnd = this.currentUser.timeEnd;
+      this.state.durationLessonIndex = DURATIONS_LESSON.findIndex(
+        (d) => d === this.currentUser.durationLesson,
+      );
+      this.state.durationRestIndex = DURATIONS_REST.findIndex(
+        (d) => d === this.currentUser.durationRest,
+      );
+      this.state.availableDays = this.currentUser.availableDays;
+      this.state.timeStart = this.currentUser.timeStart;
+      this.state.timeEnd = this.currentUser.timeEnd;
+    }
+
+    this.loadingHUD = new LoadingHUD();
+
+    props.navigation.setOptions({
+      title: this.isSignup() ? 'Create a Dance Teacer' : 'Settings',
+    });
   }
 
   render() {
     return (
       <KeyboardAwareScrollView style={stylesApp.viewContainer}>
-        <View style={styles.viewContent}>
-          {this.renderTeacherSetting()}
+        <DismissKeyboard
+          ref={(view) => {
+            this.keyboardView = view;
+          }}>
+          <View style={styles.viewContent}>
+            {this.renderTeacherSetting()}
 
-          {/* save */}
-          <View style={[styleUtil.withShadow(), styles.viewButSave]}>
-            <Button
-              title="SAVE"
-              buttonStyle={stylesApp.butPrimary}
-              titleStyle={stylesApp.titleButPrimary}
-              onPress={() => this.onButSave()}
-            />
+            {/* save */}
+            <View style={[styleUtil.withShadow(), styles.viewButSave]}>
+              <Button
+                title="SAVE"
+                buttonStyle={stylesApp.butPrimary}
+                titleStyle={stylesApp.titleButPrimary}
+                onPress={() => this.onButSave()}
+              />
+            </View>
           </View>
-        </View>
+        </DismissKeyboard>
       </KeyboardAwareScrollView>
     );
   }
@@ -146,12 +150,7 @@ class SettingProfile extends React.Component {
             <Text style={styles.txtItem}>Select Age Groups</Text>
 
             {/* chevron */}
-            <Icon
-              type="ionicon"
-              name="ios-arrow-forward"
-              size={18}
-              color={colorTheme.primary}
-            />
+            <Icon type="ionicon" name="ios-arrow-forward" size={18} color={colorTheme.primary} />
           </View>
         </TouchableOpacity>
 
@@ -678,6 +677,7 @@ class SettingProfile extends React.Component {
       showTimePickerStart: false,
       showTimePickerEnd: false,
     });
+    this.keyboardView.moveMainView(0);
 
     // update date value based on done/canceled
     if (this.state.showTimePickerStart) {
@@ -707,6 +707,7 @@ class SettingProfile extends React.Component {
     this.setState({
       showTimePickerStart: true,
     });
+    this.keyboardView.moveMainView(HEIGHT_TIMER);
   }
 
   onTimeEnd() {
@@ -717,6 +718,7 @@ class SettingProfile extends React.Component {
     this.setState({
       showTimePickerEnd: true,
     });
+    this.keyboardView.moveMainView(HEIGHT_TIMER);
   }
 
   onButNext() {}
@@ -775,45 +777,66 @@ class SettingProfile extends React.Component {
 
   async onButSave() {
     try {
-      await ApiService.updateTeacherInfo(
-        this.state.ageGroups,
-        this.state.danceLevels,
-        this.state.styleBallroom,
-        this.state.styleRythm,
-        this.state.styleStandard,
-        this.state.styleLatin,
-        Number(this.state.price) ?? 0,
-        this.state.availableDays,
-        DURATIONS_LESSON[this.state.durationLessonIndex],
-        DURATIONS_REST[this.state.durationRestIndex],
-        this.state.timeStart,
-        this.state.timeEnd,
-      );
+      if (!this.isSignup()) {
+        // show loading
+        this.loadingHUD.show();
+
+        await ApiService.updateTeacherInfo(
+          this.state.ageGroups,
+          this.state.danceLevels,
+          this.state.styleBallroom,
+          this.state.styleRythm,
+          this.state.styleStandard,
+          this.state.styleLatin,
+          Number(this.state.price) ?? 0,
+          this.state.availableDays,
+          DURATIONS_LESSON[this.state.durationLessonIndex],
+          DURATIONS_REST[this.state.durationRestIndex],
+          this.state.timeStart,
+          this.state.timeEnd,
+        );
+      }
+
+      let user = this.currentUser;
+      if (!user) {
+        user = new User();
+      }
 
       // set data
-      this.currentUser.ageGroups = this.state.ageGroups;
-      this.currentUser.danceLevels = this.state.danceLevels;
-      this.currentUser.styleBallroom = this.state.styleBallroom;
-      this.currentUser.styleRythm = this.state.styleRythm;
-      this.currentUser.styleStandard = this.state.styleStandard;
-      this.currentUser.styleLatin = this.state.styleLatin;
-      this.currentUser.price = Number(this.state.price);
+      user.ageGroups = this.state.ageGroups;
+      user.danceLevels = this.state.danceLevels;
+      user.styleBallroom = this.state.styleBallroom;
+      user.styleRythm = this.state.styleRythm;
+      user.styleStandard = this.state.styleStandard;
+      user.styleLatin = this.state.styleLatin;
+      user.price = Number(this.state.price);
 
-      this.currentUser.availableDays = this.state.availableDays;
-      this.currentUser.durationLesson = DURATIONS_LESSON[this.state.durationLessonIndex];
-      this.currentUser.durationRest = DURATIONS_REST[this.state.durationRestIndex];
-      this.currentUser.timeStart = this.state.timeStart;
-      this.currentUser.timeEnd = this.state.timeEnd;
+      user.availableDays = this.state.availableDays;
+      user.durationLesson = DURATIONS_LESSON[this.state.durationLessonIndex];
+      user.durationRest = DURATIONS_REST[this.state.durationRestIndex];
+      user.timeStart = this.state.timeStart;
+      user.timeEnd = this.state.timeEnd;
 
-      UserHelper.saveUserToLocalStorage(this.currentUser, this.props);
+      UserHelper.saveUserToLocalStorage(user, this.props);
 
-      // go back to prev page
-      this.props.navigation.pop();
+      if (this.isSignup()) {
+        // go to signup page
+        this.props.navigation.push(SignupBase.NAV_NAME);
+      } else {
+        // go back to prev page
+        this.props.navigation.pop();
+      }
     } catch (e) {
       console.log(e);
 
       Alert.alert('Failed to save settings', e.message);
     }
+
+    this.loadingHUD.hideAll();
+  }
+
+  isSignup() {
+    return !(this.currentUser && this.currentUser.id);
   }
 }
 

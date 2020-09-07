@@ -216,14 +216,7 @@ class SignupBase extends BaseSignup {
   }
 
   async onButNext() {
-    if (
-      !(
-        this.state.firstName &&
-        this.state.lastName &&
-        this.state.email &&
-        this.state.password
-      )
-    ) {
+    if (!(this.state.firstName && this.state.lastName && this.state.email && this.state.password)) {
       return;
     }
 
@@ -251,7 +244,10 @@ class SignupBase extends BaseSignup {
       if (isExisting) {
         Alert.alert('Signup Failed', 'This email address is already used');
       } else {
-        const userNew = new User();
+        let userNew = this.props.UserReducer.user;
+        if (!userNew) {
+          userNew = new User();
+        }
         userNew.type = this.userType;
         userNew.email = this.state.email;
         userNew.firstName = this.state.firstName;

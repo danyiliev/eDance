@@ -10,6 +10,7 @@ export const styles = StyleSheet.create({
 
   viewPhoto: {
     flex: 1,
+    maxHeight: 180,
     marginVertical: 40,
     alignSelf: 'center',
   },

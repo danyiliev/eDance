@@ -31,7 +31,7 @@ export default class Landing extends React.Component {
           {/* teacher */}
           <View style={styleUtil.withShadow()}>
             <Button
-              title="BECOME A TEACHER"
+              title="BECOME A DANCE TEACHER"
               buttonStyle={stylesApp.butPrimary}
               titleStyle={stylesApp.titleButPrimary}
               onPress={() => this.onButNext(User.TYPE_TEACHER)}

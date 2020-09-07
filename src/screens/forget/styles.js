@@ -10,6 +10,7 @@ export const styles = StyleSheet.create({
 
   viewTop: {
     flex: 1,
+    maxHeight: 280,
     justifyContent: 'space-around',
     alignItems: 'center',
   },

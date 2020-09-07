@@ -62,6 +62,7 @@ import {UserHelper} from '../helpers/user-helper';
 import Address from './address/Address';
 import AddressDetail from './address-detail/AddressDetail';
 import OrderConfirm from './orders/order-confirm/OrderConfirm';
+import AddChampionship from './championships/AddChampionship';
 
 const Stack = createStackNavigator();
 
@@ -108,7 +109,7 @@ class MainNavigator extends React.Component {
       <NavigationContainer ref={this.navigationRef}>
         {this.state.initializing ? (
           <Splash />
-        ) : this.props.UserReducer.user ? (
+        ) : this.props.UserReducer.user && this.props.UserReducer.user.id ? (
           <View style={stylesApp.viewContainer}>
             <Stack.Navigator
               initialRouteName={TabMain.NAV_NAME}
@@ -156,6 +157,7 @@ class MainNavigator extends React.Component {
               <Stack.Screen name={Address.NAV_NAME} component={Address} />
               <Stack.Screen name={AddressDetail.NAV_NAME} component={AddressDetail} />
               <Stack.Screen name={OrderConfirm.NAV_NAME} component={OrderConfirm} />
+              <Stack.Screen name={AddChampionship.NAV_NAME} component={AddChampionship} />
             </Stack.Navigator>
 
             <MenuModal
@@ -179,6 +181,8 @@ class MainNavigator extends React.Component {
             <Stack.Screen name={ForgetEmail.NAV_NAME} component={ForgetEmail} />
             <Stack.Screen name={ForgetCode.NAV_NAME} component={ForgetCode} />
             <Stack.Screen name={ForgetReset.NAV_NAME} component={ForgetReset} />
+            <Stack.Screen name={SettingProfile.NAV_NAME} component={SettingProfile} />
+            <Stack.Screen name={SelectList.NAV_NAME} component={SelectList} />
           </Stack.Navigator>
         )}
       </NavigationContainer>
