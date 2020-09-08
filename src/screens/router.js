@@ -181,7 +181,7 @@ class MainNavigator extends React.Component {
             <Stack.Screen name={ForgetEmail.NAV_NAME} component={ForgetEmail} />
             <Stack.Screen name={ForgetCode.NAV_NAME} component={ForgetCode} />
             <Stack.Screen name={ForgetReset.NAV_NAME} component={ForgetReset} />
-            <Stack.Screen name={SettingProfile.NAV_NAME} component={SettingProfile} />
+            <Stack.Screen name={SettingProfile.NAV_NAME_SIGNUP} component={SettingProfile} />
             <Stack.Screen name={SelectList.NAV_NAME} component={SelectList} />
           </Stack.Navigator>
         )}

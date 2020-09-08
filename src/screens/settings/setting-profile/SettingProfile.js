@@ -50,6 +50,7 @@ const HEIGHT_TIMER = 140;
 
 class SettingProfile extends React.Component {
   static NAV_NAME = 'setting-profile';
+  static NAV_NAME_SIGNUP = 'setting-profile-signup';
 
   state = {
     // ui

@@ -174,7 +174,7 @@ class Login extends BaseAuth {
   onButSignup() {
     if (this.userType === User.TYPE_TEACHER) {
       // go to base setting page
-      this.props.navigation.push(SettingProfile.NAV_NAME);
+      this.props.navigation.push(SettingProfile.NAV_NAME_SIGNUP);
       return;
     }
 
