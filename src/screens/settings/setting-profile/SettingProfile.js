@@ -295,11 +295,11 @@ class SettingProfile extends React.Component {
         {/* time options */}
         <View style={[styles.viewForm, stylesApp.mt24]}>
           <Text style={[stylesSignup.txtItemTitle, stylesApp.mt6]}>
-            Time Options You Teach:
+            Create your own dance schedule:
           </Text>
 
           <Text style={[styles.txtLabel, stylesApp.mt12]}>
-            Duration of a lesson you teach
+            Choose how long your dance classes will be
           </Text>
           <ButtonGroup
             containerStyle={styles.ctnSegmentGender}
@@ -313,7 +313,7 @@ class SettingProfile extends React.Component {
           />
 
           <Text style={[styles.txtLabel, stylesApp.mt12]}>
-            How long do you need between closses?
+            How long do you need between dance classes?
           </Text>
           <ButtonGroup
             containerStyle={styles.ctnSegmentGender}
@@ -327,7 +327,7 @@ class SettingProfile extends React.Component {
           />
 
           <Text style={[styles.txtLabel, stylesApp.mt14]}>
-            How long do you need between lessons?
+            Choose your available days to teach
           </Text>
           {this.renderDayOfWeeks()}
 

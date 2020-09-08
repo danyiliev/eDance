@@ -121,7 +121,6 @@ class SignupAdvanced extends BaseSignup {
                     source={require('../../../assets/imgs/ic_input_city.png')}
                   />
                 }
-                onFocus={() => this.onFocusCity()}
               />
 
               {/* zip code */}
@@ -141,7 +140,6 @@ class SignupAdvanced extends BaseSignup {
                 onChangeText={(zipCode) => {
                   this.setState({zipCode});
                 }}
-                onFocus={() => this.onFocusZip()}
                 renderErrorMessage={false}
                 rightIcon={
                   <ImageScale
@@ -203,13 +201,6 @@ class SignupAdvanced extends BaseSignup {
 
     // hide loading
     this.loadingHUD.hideAll();
-  }
-
-  onFocusZip() {
-    this.keyboardView.moveMainView(30);
-  }
-  onFocusCity() {
-    this.keyboardView.moveMainView(20);
   }
 }
 

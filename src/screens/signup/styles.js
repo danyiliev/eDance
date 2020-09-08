@@ -66,8 +66,7 @@ export const styles = StyleSheet.create({
   },
 
   viewTop: {
-    flex: 1,
-    justifyContent: 'flex-end',
+    marginTop: 34,
     marginBottom: 14,
   },
   txtItemTitle: {
