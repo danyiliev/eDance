@@ -62,7 +62,8 @@ import {UserHelper} from '../helpers/user-helper';
 import Address from './address/Address';
 import AddressDetail from './address-detail/AddressDetail';
 import OrderConfirm from './orders/order-confirm/OrderConfirm';
-import AddChampionship from './championships/AddChampionship';
+import AddChampionship from './championships/add-championship/AddChampionship';
+import AddSession from './championships/add-session/AddSession';
 
 const Stack = createStackNavigator();
 
@@ -158,6 +159,7 @@ class MainNavigator extends React.Component {
               <Stack.Screen name={AddressDetail.NAV_NAME} component={AddressDetail} />
               <Stack.Screen name={OrderConfirm.NAV_NAME} component={OrderConfirm} />
               <Stack.Screen name={AddChampionship.NAV_NAME} component={AddChampionship} />
+              <Stack.Screen name={AddSession.NAV_NAME} component={AddSession} />
             </Stack.Navigator>
 
             <MenuModal

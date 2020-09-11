@@ -6,7 +6,7 @@ import {colors as colorTheme} from '../../styles/theme.style';
 import {stylesApp, styleUtil} from '../../styles/app.style';
 import {styles as stylesCart} from '../cart/styles';
 import Reviews from '../reviews/Reviews';
-import AddChampionship from './AddChampionship';
+import AddChampionship from './add-championship/AddChampionship';
 import {setUserInfo} from '../../actions/user';
 import {connect} from 'react-redux';
 import {User} from '../../models/user.model';
@@ -27,6 +27,8 @@ class Championships extends React.Component {
     props.navigation.setOptions({
       title: 'World Championships',
     });
+
+    this.currentUser = props.UserReducer.user;
   }
 
   render() {
@@ -46,8 +48,6 @@ class Championships extends React.Component {
           <View style={[styleUtil.withShadow(), stylesCart.viewButBuy]}>
             <Button
               title="Create Championship"
-              disabled={this.currentUser?.carts.length <= 0}
-              disabledStyle={[stylesApp.butPrimary, stylesApp.semiTrans]}
               buttonStyle={stylesApp.butPrimary}
               titleStyle={stylesApp.titleButPrimary}
               onPress={() => this.onButCreate()}
