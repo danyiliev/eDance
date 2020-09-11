@@ -15,7 +15,7 @@ import Pro from '../pro/Pro';
 export default class Radio extends React.Component {
   static NAV_NAME = 'radio';
 
-  webAppUrl = 'https://my.radiolize.com/public/edancesportradio.com';
+  webAppUrl = 'https://www.edancesportradio.com/';
 
   pageCount = 20;
 
