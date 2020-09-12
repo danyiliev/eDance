@@ -3,7 +3,11 @@ import {ScrollView, View} from 'react-native';
 import {stylesApp} from '../../../styles/app.style';
 import {SELECT_AGE} from '../../../constants/dance-data';
 import {styles as stylesSelect} from '../../settings/select-list/styles';
-import {ListItem} from 'react-native-elements';
+import {styles} from './styles';
+import {Button, Icon, ListItem} from 'react-native-elements';
+import Collapsible from 'react-native-collapsible';
+import {DanceHelper} from '../../../helpers/dance-helper';
+import {SessionType} from '../../../models/event.model';
 
 export default class AddSession extends React.Component {
   static NAV_NAME = 'add-session';
@@ -18,13 +22,24 @@ export default class AddSession extends React.Component {
     'OPEN PROFESSIONAL CHAMPIONSHIPS',
   ];
 
-  typesSelected = [];
+  state = {
+    sessionTypes: [],
+    expandedIndex: [],
+  };
 
   constructor(props) {
     super(props);
 
     props.navigation.setOptions({
       title: 'Edit Session',
+      headerRight: () => (
+        <Button
+          type="clear"
+          title="Save"
+          titleStyle={stylesApp.butTitleNavRight}
+          onPress={() => this.onButSave()}
+        />
+      ),
     });
   }
 
@@ -34,7 +49,7 @@ export default class AddSession extends React.Component {
         <ScrollView>
           <View style={stylesApp.viewContainer}>
             {this.sessionTypes.map((t, i) => {
-              return this.renderType(t);
+              return this.renderType(t, i);
             })}
           </View>
         </ScrollView>
@@ -42,20 +57,97 @@ export default class AddSession extends React.Component {
     );
   }
 
-  renderType(type) {
+  renderType(type, index) {
+    const isCollapsed = this.state.expandedIndex.indexOf(index) < 0;
+
     return (
-      <ListItem
-        title={type}
-        titleStyle={stylesSelect.titleListItem}
-        checkmark={this.typesSelected.findIndex((item) => item.type === type) >= 0}
-        bottomDivider
-        containerStyle={stylesSelect.contentListItem}
-        contentContainerStyle={stylesSelect.ctnListItem}
-        onPress={() => this.onItem(type)}
-      />
+      <View>
+        <ListItem
+          title={type}
+          titleStyle={styles.titleTypeListItem}
+          checkmark={this.isTypeSelected(type)}
+          bottomDivider
+          leftIcon={
+            <Icon
+              style={styles.iconCollapse}
+              type="ionicon"
+              name={isCollapsed ? 'ios-arrow-forward' : 'ios-arrow-down'}
+              size={18}
+            />
+          }
+          containerStyle={styles.contentTypeListItem}
+          contentContainerStyle={styles.ctnListItem}
+          onPress={() => this.onItem(index)}
+        />
+
+        <Collapsible collapsed={isCollapsed}>
+          {DanceHelper.danceStylesAll().map((style, i) => {
+            return (
+              <ListItem
+                title={style.name}
+                titleStyle={styles.titleTypeListItem}
+                bottomDivider
+                checkmark={this.isStyleSelected(type, style)}
+                containerStyle={styles.ctnListItem}
+                contentContainerStyle={styles.contentStyleListItem}
+                onPress={() => this.onStyleItem(type, style)}
+              />
+            );
+          })}
+        </Collapsible>
+      </View>
     );
   }
 
-  onItem(type) {
+  isTypeSelected(type) {
+    const sessionType = this.getSelectedType(type);
+    return sessionType && sessionType.danceStyles.length > 0;
+  }
+
+  onItem(index) {
+    // expand / collapse item
+    const {expandedIndex} = this.state;
+    const i = expandedIndex.indexOf(index);
+    if (i >= 0) {
+      expandedIndex.splice(i, 1);
+    } else {
+      expandedIndex.push(index);
+    }
+
+    this.setState({expandedIndex});
+  }
+
+  onStyleItem(type, style) {
+    const {sessionTypes} = this.state;
+
+    let sessionType = this.getSelectedType(type);
+    if (!sessionType) {
+      sessionType = new SessionType();
+      sessionType.type = type;
+
+      sessionTypes.push(sessionType);
+    }
+
+    // add or remove style
+    const i = sessionType.danceStyles.indexOf(style.value);
+    if (i >= 0) {
+      sessionType.danceStyles.splice(i, 1);
+    } else {
+      sessionType.danceStyles.push(style.value);
+    }
+
+    this.setState({sessionTypes});
+  }
+
+  getSelectedType(type) {
+    return this.state.sessionTypes.find((st) => st.type === type);
+  }
+
+  isStyleSelected(type, style) {
+    let sessionType = this.getSelectedType(type);
+    return sessionType?.danceStyles.indexOf(style.value) >= 0;
+  }
+
+  onButSave() {
   }
 }
