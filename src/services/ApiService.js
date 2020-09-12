@@ -1053,6 +1053,30 @@ class ApiService {
       return Promise.reject(e.response.data);
     }
   }
+
+  async addEvent(event) {
+    const httpOptions = {
+      headers: {
+        ...this.baseHeader(),
+      },
+    };
+
+    let params = {
+      sessions: event.sessions,
+      prizeOptions: event.prizeOptions,
+    };
+
+    try {
+      const {data} = await Axios.post(`${this.baseUrl}/event`, params, httpOptions);
+      console.log(data);
+
+      return Promise.resolve(data);
+    } catch (e) {
+      console.log(e);
+
+      return Promise.reject(e.response.data);
+    }
+  }
 }
 
 const apiService = new ApiService();

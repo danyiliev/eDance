@@ -1,15 +1,20 @@
 import React from 'react';
 import {Button} from 'react-native-elements';
 import {stylesApp} from '../../../styles/app.style';
-import {Dimensions, ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import {Alert, Dimensions, ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import {styles} from './styles';
 import CheckboxWithShadow from '../../../components/CheckboxRound/CheckboxWithShadow';
 import {PRIZE_OPTIONS} from '../../../constants/dance-data';
 const {width: SCREEN_WIDTH} = Dimensions.get('window');
 import {UiHelper} from '../../../helpers/ui-helper';
 import moment from 'moment';
+import {LoadingHUD} from 'react-native-hud-hybrid';
+import Championships from '../Championships';
+import {ApiService} from '../../../services';
+import {setEvents} from '../../../actions/event';
+import {connect} from 'react-redux';
 
-export default class AddPrize extends React.Component {
+class AddPrize extends React.Component {
   static NAV_NAME = 'add-prize';
 
   state = {
@@ -19,6 +24,9 @@ export default class AddPrize extends React.Component {
     selectedOptions: [],
     dateDue: '',
   };
+
+  event = null;
+  currentUser = null;
 
   constructor(props) {
     super(props);
@@ -34,6 +42,14 @@ export default class AddPrize extends React.Component {
         />
       ),
     });
+
+    // get parameter
+    if (props.route.params) {
+      this.event = props.route.params.event;
+    }
+
+    this.currentUser = props.UserReducer.user;
+    this.loadingHUD = new LoadingHUD();
   }
 
   render() {
@@ -500,6 +516,42 @@ export default class AddPrize extends React.Component {
     });
   }
 
-  onButSave() {
+  async onButSave() {
+    if (!this.event) {
+      return;
+    }
+
+    // show loading
+    this.loadingHUD.show();
+
+    this.event.prizeOptions = this.state.selectedOptions;
+    this.event.user = this.currentUser;
+
+    // create lesson
+    try {
+      // const result = await ApiService.addLesson(this.lesson);
+      // this.event.id = result.id;
+
+      // add to reducers
+      let {events} = this.props.EventReducer;
+      events.unshift(this.event);
+
+      // go to events page
+      this.props.navigation.navigate(Championships.NAV_NAME);
+    } catch (e) {
+      console.log(e);
+
+      Alert.alert('Failed to Create Event', e.message);
+    }
+
+    // hide loading
+    this.loadingHUD.hideAll();
   }
 }
+
+const mapStateToProps = (state) => state;
+const mapDispatchToProps = {
+  setEvents,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddPrize);

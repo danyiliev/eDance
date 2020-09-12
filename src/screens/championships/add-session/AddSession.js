@@ -27,6 +27,9 @@ export default class AddSession extends React.Component {
     expandedIndex: [],
   };
 
+  session = null;
+  onSave = null;
+
   constructor(props) {
     super(props);
 
@@ -41,6 +44,12 @@ export default class AddSession extends React.Component {
         />
       ),
     });
+
+    // get params
+    this.session = props.route.params.session;
+    this.onSave = props.route.params.onSave;
+
+    this.state.sessionTypes = this.session?.types;
   }
 
   render() {
@@ -149,5 +158,9 @@ export default class AddSession extends React.Component {
   }
 
   onButSave() {
+    this.onSave(this.state.sessionTypes);
+
+    // go back to prev page
+    this.props.navigation.pop();
   }
 }

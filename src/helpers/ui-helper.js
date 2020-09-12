@@ -19,12 +19,13 @@ export class UiHelper {
     return this.instance;
   }
 
-  renderDateTimePicker(page, mode = 'time', onSelectTime) {
+  renderDateTimePicker(page, mode = 'time', onSelectTime, title = '') {
     if (Platform.OS === 'ios') {
       return (
         <SelectPicker
           isVisible={page.state.showTimePicker}
           contentStyle={stylesSignup.picker}
+          title={title}
           onDismiss={(done) => this.dismissTime(page, done, onSelectTime)}>
           {this.renderTimePickerCore(page, mode, onSelectTime)}
         </SelectPicker>

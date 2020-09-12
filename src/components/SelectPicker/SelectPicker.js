@@ -1,11 +1,12 @@
 import React from 'react';
 import {styles} from './styles';
-import {Modal, TouchableWithoutFeedback, View} from 'react-native';
+import {Modal, Text, TouchableWithoutFeedback, View} from 'react-native';
 import {Button} from 'react-native-elements';
 
 export default class SelectPicker extends React.Component {
   state = {
     visible: false,
+    title: '',
   };
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -26,6 +27,7 @@ export default class SelectPicker extends React.Component {
                   {/* header */}
                   <View style={styles.viewHeader}>
                     <View />
+                    <Text style={styles.txtTitle}>{this.props.title}</Text>
 
                     <Button
                       type="clear"

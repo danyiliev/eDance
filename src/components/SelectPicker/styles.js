@@ -43,4 +43,11 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 10,
   },
+
+  txtTitle: {
+    fontSize: 16,
+    position: 'absolute',
+    width: '100%',
+    textAlign: 'center',
+  },
 });

@@ -114,7 +114,7 @@ class MainNavigator extends React.Component {
         ) : this.props.UserReducer.user && this.props.UserReducer.user.id ? (
           <View style={stylesApp.viewContainer}>
             <Stack.Navigator
-              initialRouteName={AddPrize.NAV_NAME}
+              initialRouteName={TabMain.NAV_NAME}
               screenOptions={{
                 headerTintColor: colorTheme.primary,
               }}>

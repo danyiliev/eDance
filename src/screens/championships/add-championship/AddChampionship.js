@@ -7,11 +7,19 @@ import {stylesApp, styleUtil} from '../../../styles/app.style';
 import {styles as stylesCart} from '../../cart/styles';
 import Reviews from '../../reviews/Reviews';
 import AddSession from '../add-session/AddSession';
+import {UiHelper} from '../../../helpers/ui-helper';
+import moment from 'moment';
+import {Event, EventSession} from '../../../models/event.model';
+import {DanceHelper} from '../../../helpers/dance-helper';
+import AddPrize from '../add-prize/AddPrize';
 
 export default class AddChampionship extends React.Component {
   static NAV_NAME = 'add-championship';
 
   state = {
+    // ui
+    showTimePicker: false,
+
     sessions: [],
   };
 
@@ -29,7 +37,7 @@ export default class AddChampionship extends React.Component {
     super(props);
 
     props.navigation.setOptions({
-      title: 'Create a Championship',
+      title: 'Tentative Schedule',
     });
   }
 
@@ -38,55 +46,12 @@ export default class AddChampionship extends React.Component {
       <View style={stylesApp.viewContainer}>
         <ScrollView bounces={false}>
           <View style={styles.viewContainer}>
-            <Text style={styles.txtSessionLabel}>
-              Session 1
-            </Text>
-            <View style={styles.viewForm}>
-              {/* delete */}
-              <Button
-                type="clear"
-                icon={<Icon type="font-awesome" name="trash" size={18} color={colorTheme.primary} />}
-                containerStyle={styles.ctnButDelete}
-                onPress={() => this.onDelete()}
-              />
-
-              {/* time */}
-              <View style={stylesApp.flexRowCenter}>
-                <Text style={styles.txtFormLabel}>Date & Time: </Text>
-                <Text style={styles.txtFormValue}>2020-08-31 23:32</Text>
-              </View>
-
-              <Text style={styles.txtSessionType}>SOLO EXHIBITIONS</Text>
-              <Text style={styles.txtSessionDanceStyle}>American Style</Text>
-            </View>
+            {this.state.sessions.map((s, i) => {
+              return this.renderSession(s, i);
+            })}
 
             <Text style={styles.txtSessionLabel}>
-              Session 2
-            </Text>
-            <View style={styles.viewForm}>
-              {/* delete */}
-              <Button
-                type="clear"
-                icon={<Icon type="font-awesome" name="trash" size={18} color={colorTheme.primary} />}
-                containerStyle={styles.ctnButDelete}
-                onPress={() => this.onDelete()}
-              />
-
-              {/* time */}
-              <View style={stylesApp.flexRowCenter}>
-                <Text style={styles.txtFormLabel}>Date & Time: </Text>
-                <Text style={styles.txtFormValue}>2020-08-31 23:32</Text>
-              </View>
-
-              <TouchableOpacity onPress={() => this.onAddSessionContent()}>
-                <View style={stylesApp.viewLoading}>
-                  <Text style={stylesApp.txtEmptyItem}>Click here to add session items</Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-
-            <Text style={styles.txtSessionLabel}>
-              Session 3
+              Session {this.state.sessions.length + 1}
             </Text>
             <View style={styles.viewForm}>
               <TouchableOpacity onPress={() => this.onAddSession()}>
@@ -95,14 +60,22 @@ export default class AddChampionship extends React.Component {
                 </View>
               </TouchableOpacity>
             </View>
-
           </View>
 
+          {/* time picker */}
+          {UiHelper.getInstance().renderDateTimePicker(
+            this,
+            'datetime',
+            (time) => {
+              this.onSelectTime(time);
+            },
+            'Select Time For Event',
+          )}
 
           {/* save */}
           <View style={[styleUtil.withShadow(), styles.viewButSave]}>
             <Button
-              title="SAVE"
+              title="Next"
               buttonStyle={stylesApp.butPrimary}
               titleStyle={stylesApp.titleButPrimary}
               onPress={() => this.onButSave()}
@@ -111,6 +84,59 @@ export default class AddChampionship extends React.Component {
         </ScrollView>
       </View>
     );
+  }
+
+  renderSession(session, index) {
+    return (
+      <View key={index.toString()}>
+        <Text style={styles.txtSessionLabel}>Session {index + 1}</Text>
+        <View style={styles.viewForm}>
+          {/* delete */}
+          <Button
+            type="clear"
+            icon={<Icon type="font-awesome" name="trash" size={18} color={colorTheme.primary} />}
+            containerStyle={styles.ctnButDelete}
+            onPress={() => this.onDelete(index)}
+          />
+
+          {/* time */}
+          <View style={stylesApp.flexRowCenter}>
+            <Text style={styles.txtFormLabel}>Date & Time: </Text>
+            <Text style={styles.txtFormValue}>{session.startAt}</Text>
+          </View>
+
+          {this.renderSessionTypes(index)}
+        </View>
+      </View>
+    );
+  }
+
+  renderSessionTypes(index) {
+    const types = this.state.sessions[index].types;
+
+    if (types.length <= 0) {
+      return (
+        <TouchableOpacity onPress={() => this.onAddSessionContent(index)}>
+          <View style={stylesApp.viewLoading}>
+            <Text style={stylesApp.txtEmptyItem}>Click here to add session items</Text>
+          </View>
+        </TouchableOpacity>
+      );
+    }
+
+    const viewTypes = types.map((t, i) => {
+      return (
+        <View>
+          <Text style={styles.txtSessionType}>{t.type}</Text>
+
+          {t.danceStyles.map((s, i) => {
+            return <Text style={styles.txtSessionDanceStyle}>{DanceHelper.danceStyleNameByVal(s)}</Text>;
+          })}
+        </View>
+      );
+    })
+
+    return <TouchableOpacity onPress={() => this.onAddSessionContent(index)}>{viewTypes}</TouchableOpacity>;
   }
 
   renderMenuItem(title) {
@@ -127,16 +153,42 @@ export default class AddChampionship extends React.Component {
   }
 
   onAddSession() {
+    // show time picker
+    UiHelper.getInstance().timeSelected = new Date();
+
+    this.setState({
+      showTimePicker: true,
+    });
   }
 
-  onAddSessionContent() {
+  onSelectTime(time) {
+    const sessionNew = new EventSession();
+    sessionNew.startAt = moment(time).format('YYYY-MM-DD HH:mm');
+
+    const {sessions} = this.state;
+    sessions.push(sessionNew);
+
+    this.setState({sessions});
+  }
+
+  onAddSessionContent(index) {
     // go to add session page
-    this.props.navigation.push(AddSession.NAV_NAME);
+    this.props.navigation.push(AddSession.NAV_NAME, {
+      session: this.state.sessions[index],
+      onSave: (types) => this.onSaveTypes(index, types),
+    });
+  }
+
+  onSaveTypes(index, types) {
+    const {sessions} = this.state;
+    sessions[index].types = types;
+
+    this.setState({sessions});
   }
 
   onDelete(index) {
     Alert.alert(
-      'Are you sure to remove this session?',
+      'Are you sure you want to remove this session?',
       '',
       [
         {
@@ -151,5 +203,19 @@ export default class AddChampionship extends React.Component {
   }
 
   doDeleteItem(index) {
+    const {sessions} = this.state;
+    sessions.splice(index, 1);
+
+    this.setState({sessions});
+  }
+
+  onButSave() {
+    let event = new Event();
+    event.sessions = this.state.sessions;
+
+    // go to add prize page
+    this.props.navigation.push(AddPrize.NAV_NAME, {
+      event: event,
+    });
   }
 }
