@@ -5,6 +5,7 @@ import {colors as colorTheme} from '../../styles/theme.style';
 import {styleUtil} from '../../styles/app.style';
 import {Button, Icon} from 'react-native-elements';
 import {styles} from './styles';
+import CheckboxWithShadow from './CheckboxWithShadow';
 
 export default class CheckboxRound extends React.Component {
   static propTypes = {
@@ -47,27 +48,7 @@ export default class CheckboxRound extends React.Component {
           {this.props.label}
         </Text>
 
-        <View
-          style={{
-            ...styles.viewIcon,
-            width: checkboxWidth,
-            height: checkboxWidth,
-            borderRadius: checkboxWidth / 2,
-            backgroundColor: this.props.checked
-              ? colorTheme.primary
-              : colorTheme.lightGrey,
-            ...(this.props.checked ? styleUtil.withShadow(6) : {}),
-          }}>
-          {this.props.checked ? (
-            <Icon
-              type="ionicon"
-              name="md-checkmark"
-              size={(18 / 28) * checkboxWidth}
-              iconStyle={styles.icnCheck}
-              color={colorTheme.light}
-            />
-          ) : null}
-        </View>
+        <CheckboxWithShadow width={checkboxWidth} checked={this.props.checked} />
       </View>
     );
   }

@@ -64,6 +64,7 @@ import AddressDetail from './address-detail/AddressDetail';
 import OrderConfirm from './orders/order-confirm/OrderConfirm';
 import AddChampionship from './championships/add-championship/AddChampionship';
 import AddSession from './championships/add-session/AddSession';
+import AddPrize from './championships/add-prize/AddPrize';
 
 const Stack = createStackNavigator();
 
@@ -113,7 +114,7 @@ class MainNavigator extends React.Component {
         ) : this.props.UserReducer.user && this.props.UserReducer.user.id ? (
           <View style={stylesApp.viewContainer}>
             <Stack.Navigator
-              initialRouteName={TabMain.NAV_NAME}
+              initialRouteName={AddPrize.NAV_NAME}
               screenOptions={{
                 headerTintColor: colorTheme.primary,
               }}>
@@ -160,6 +161,7 @@ class MainNavigator extends React.Component {
               <Stack.Screen name={OrderConfirm.NAV_NAME} component={OrderConfirm} />
               <Stack.Screen name={AddChampionship.NAV_NAME} component={AddChampionship} />
               <Stack.Screen name={AddSession.NAV_NAME} component={AddSession} />
+              <Stack.Screen name={AddPrize.NAV_NAME} component={AddPrize} />
             </Stack.Navigator>
 
             <MenuModal

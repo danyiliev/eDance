@@ -45,7 +45,7 @@ import moment from 'moment';
 import {LoadingHUD} from 'react-native-hud-hybrid';
 import SignupBase from '../../signup/SignupBase';
 
-const {width: SCREEN_WDITH} = Dimensions.get('window');
+const {width: SCREEN_WIDTH} = Dimensions.get('window');
 const HEIGHT_TIMER = 140;
 
 class SettingProfile extends React.Component {
@@ -546,7 +546,7 @@ class SettingProfile extends React.Component {
   renderDayOfWeeks() {
     const spacing = 14;
     const padding = 14;
-    const itemWidth = (SCREEN_WDITH - padding * 2 - spacing * 4) / 3;
+    const itemWidth = (SCREEN_WIDTH - padding * 2 - spacing * 4) / 3;
 
     return (
       <View style={styles.viewTapContainer}>

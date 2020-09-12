@@ -83,3 +83,17 @@ export const DANCE_LEVELS = {
 
 export const DURATIONS_LESSON = [30, 45, 60];
 export const DURATIONS_REST = [5, 10, 15];
+
+export const PRIZE_OPTIONS = {
+  TOP_STUDIO_SINGLE: 'top-studio-single',
+  TOP_STUDIO_MULTI: 'top-studio-multi',
+  TOP_TEACHER_PROAM: 'top-teacher-proam',
+  SINGLE_ENTRIES: 'single-entries',
+  MULTI_ENTRIES: 'multi-entries',
+  PRE_TEEN: 'pre-teens',
+  PROFESSIONAL: 'professional',
+  PROAM_AMATEUR: 'proam-amateur',
+  SOLO: 'solo',
+  PROAM_SCHOLAR_CLOSED: 'proam-scholars-closed',
+  PROAM_SCHOLAR_OPEN: 'proam-scholars-open',
+};
