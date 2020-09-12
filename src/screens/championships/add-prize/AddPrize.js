@@ -480,7 +480,7 @@ class AddPrize extends React.Component {
 
             {/* time picker */}
             {UiHelper.getInstance().renderDateTimePicker(this, 'date', (dateDue) => {
-              this.setState({dateDue: moment(dateDue).format('yyyy-MM-DD')});
+              this.setState({dateDue: moment(dateDue).format('YYYY-MM-DD')});
             })}
           </View>
         </ScrollView>
@@ -507,7 +507,7 @@ class AddPrize extends React.Component {
 
   onSelectDate() {
     if (this.state.dateDue) {
-      UiHelper.getInstance().timeSelected = moment(this.state.dateDue, 'yyyy-MM-DD').toDate();
+      UiHelper.getInstance().timeSelected = moment(this.state.dateDue, 'YYYY-MM-DD').toDate();
     }
 
     // show time picker

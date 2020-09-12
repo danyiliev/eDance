@@ -39,7 +39,7 @@ export default class BookingDate extends React.Component {
     this.renderRightButton();
 
     // select today as default
-    this.state.selectedDate = moment().format('yyyy-MM-DD');
+    this.state.selectedDate = moment().format('YYYY-MM-DD');
   }
 
   componentDidMount(): void {

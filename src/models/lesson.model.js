@@ -184,7 +184,7 @@ export class Lesson extends BaseModel {
 
   isClosed() {
     const now = moment();
-    const date = moment(this.date, 'yyyy-MM-DD');
+    const date = moment(this.date, 'YYYY-MM-DD');
 
     if (now.isBefore(date, 'day')) {
       return false;
@@ -203,7 +203,7 @@ export class Lesson extends BaseModel {
 
   minsToStart() {
     const now = moment();
-    const start = moment(`${this.date} ${this.getMinTime()}`, 'yyyy-MM-DD HH:mm');
+    const start = moment(`${this.date} ${this.getMinTime()}`, 'YYYY-MM-DD HH:mm');
 
     return start.diff(now, 'minutes');
   }
