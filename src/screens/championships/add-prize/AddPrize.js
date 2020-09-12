@@ -6,12 +6,18 @@ import {styles} from './styles';
 import CheckboxWithShadow from '../../../components/CheckboxRound/CheckboxWithShadow';
 import {PRIZE_OPTIONS} from '../../../constants/dance-data';
 const {width: SCREEN_WIDTH} = Dimensions.get('window');
+import {UiHelper} from '../../../helpers/ui-helper';
+import moment from 'moment';
 
 export default class AddPrize extends React.Component {
   static NAV_NAME = 'add-prize';
 
   state = {
+    // ui
+    showTimePicker: false,
+
     selectedOptions: [],
+    dateDue: '',
   };
 
   constructor(props) {
@@ -141,9 +147,19 @@ export default class AddPrize extends React.Component {
 
                 <View style={styles.viewForm}>
                   {/* date picker */}
+                  <TouchableOpacity onPress={() => this.onSelectDate()}>
+                    <View style={stylesApp.flexRowCenter}>
+                      <Text style={[styles.txtFormItem, stylesApp.mr10]}>Due Date:</Text>
+                      {this.state.dateDue ? (
+                        <Text style={styles.txtSubTitle}>{this.state.dateDue}</Text>
+                      ) : (
+                        <Text style={styles.txtPlaceholder}>Select a Date Due</Text>
+                      )}
+                    </View>
+                  </TouchableOpacity>
 
                   {/* table */}
-                  <View style={styles.viewColumns}>
+                  <View style={[styles.viewColumns, stylesApp.mt12]}>
                     {/* header */}
                     <View style={{...styles.viewTableItem, width: widthSubItem3}}>
                       <Text style={styles.txtTableHeader}>Level</Text>
@@ -445,6 +461,11 @@ export default class AddPrize extends React.Component {
                 </View>
               </View>
             </TouchableOpacity>
+
+            {/* time picker */}
+            {UiHelper.getInstance().renderDateTimePicker(this, 'date', (dateDue) => {
+              this.setState({dateDue: moment(dateDue).format('yyyy-MM-DD')});
+            })}
           </View>
         </ScrollView>
       </View>
@@ -466,6 +487,17 @@ export default class AddPrize extends React.Component {
 
   isOptionSelected(option) {
     return this.state.selectedOptions.indexOf(option) >= 0;
+  }
+
+  onSelectDate() {
+    if (this.state.dateDue) {
+      UiHelper.getInstance().timeSelected = moment(this.state.dateDue, 'yyyy-MM-DD').toDate();
+    }
+
+    // show time picker
+    this.setState({
+      showTimePicker: true,
+    });
   }
 
   onButSave() {

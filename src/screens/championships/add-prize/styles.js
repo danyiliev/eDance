@@ -63,4 +63,9 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+
+  txtPlaceholder: {
+    fontSize: 14,
+    color: colorTheme.grey,
+  },
 });
