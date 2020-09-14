@@ -134,22 +134,9 @@ export default class AddChampionship extends React.Component {
           })}
         </View>
       );
-    })
+    });
 
     return <TouchableOpacity onPress={() => this.onAddSessionContent(index)}>{viewTypes}</TouchableOpacity>;
-  }
-
-  renderMenuItem(title) {
-    return (
-      <TouchableOpacity onPress={() => this.onMenuItem()}>
-        <View style={styles.viewListItem}>
-          <Text style={styles.txtItem}>{title}</Text>
-
-          {/* chevron */}
-          <Icon type="ionicon" name="ios-arrow-forward" size={24} color={colorTheme.primary} />
-        </View>
-      </TouchableOpacity>
-    );
   }
 
   onAddSession() {

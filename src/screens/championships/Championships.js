@@ -14,6 +14,7 @@ import {User} from '../../models/user.model';
 import {Event, EventSession, SessionType} from '../../models/event.model';
 import {DanceHelper} from '../../helpers/dance-helper';
 import {SELECT_AMERICAN_BALLROOM} from '../../constants/dance-data';
+import ChampionshipDetail from './championship-detail/ChampionshipDetail';
 
 class Championships extends React.Component {
   static NAV_NAME = 'championships';
@@ -40,34 +41,34 @@ class Championships extends React.Component {
     //
     // TODO: delete dummy data
     //
-    // const events = [];
-    // for (let i = 0; i < 2; i++) {
-    //   const s = new EventSession();
-    //   s.startAt = '2002-23-32 23:33';
-    //
-    //   const st = new SessionType();
-    //   st.type = 'PRO-AM CLOSED 3-DANCE SCHOLARSHIP CHAMPIONSHIPS';
-    //   st.danceStyles = [SELECT_AMERICAN_BALLROOM, SELECT_AMERICAN_BALLROOM, SELECT_AMERICAN_BALLROOM];
-    //   s.types.push(st);
-    //   s.types.push(st);
-    //
-    //   const e = new Event();
-    //   e.sessions.push(s);
-    //   e.sessions.push(s);
-    //
-    //   events.push(e);
-    // }
-    // this.state.events = events;
+    const events = [];
+    for (let i = 0; i < 2; i++) {
+      const s = new EventSession();
+      s.startAt = '2002-23-32 23:33';
+
+      const st = new SessionType();
+      st.type = 'PRO-AM CLOSED 3-DANCE SCHOLARSHIP CHAMPIONSHIPS';
+      st.danceStyles = [SELECT_AMERICAN_BALLROOM, SELECT_AMERICAN_BALLROOM, SELECT_AMERICAN_BALLROOM];
+      s.types.push(st);
+      s.types.push(st);
+
+      const e = new Event();
+      e.sessions.push(s);
+      e.sessions.push(s);
+
+      events.push(e);
+    }
+    this.state.events = events;
   }
 
   componentDidMount(): void {
-    this.loadData();
-
-    this._sub = this.props.navigation.addListener('focus', this._componentFocused);
+    // this.loadData();
+    //
+    // this._sub = this.props.navigation.addListener('focus', this._componentFocused);
   }
 
   componentWillUnmount(): void {
-    this._sub();
+    // this._sub();
   }
 
   render() {
@@ -105,17 +106,17 @@ class Championships extends React.Component {
         </View>
 
         {item.sessions.map((s, i) => {
-          return this.renderSession(s, i);
+          return this.renderSession(item, s, i);
         })}
       </View>
     );
   }
 
-  renderSession(session, index) {
+  renderSession(event, session, index) {
     return (
       <TouchableOpacity
         activeOpacity={0.7}
-        onPress={() => this.onSessionItem(session)}
+        onPress={() => this.onSessionItem(event, session)}
         key={index.toString()}>
         <View style={styles.viewItem}>
           {/* time */}
@@ -174,7 +175,12 @@ class Championships extends React.Component {
     );
   }
 
-  onSessionItem(session) {
+  onSessionItem(event, session) {
+    // go to event detail page
+    this.props.navigation.push(ChampionshipDetail.NAV_NAME, {
+      event: event,
+      session: session,
+    });
   }
 
   loadData() {

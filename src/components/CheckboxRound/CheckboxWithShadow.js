@@ -10,6 +10,7 @@ export default class CheckboxWithShadow extends React.Component {
   static propTypes = {
     width: PropTypes.number,
     checked: PropTypes.bool,
+    containerStyle: PropTypes.object,
   };
 
   static defaultProps = {
@@ -21,6 +22,7 @@ export default class CheckboxWithShadow extends React.Component {
       <View
         style={{
           ...styles.viewIcon,
+          ...this.props.containerStyle,
           width: this.props.width,
           height: this.props.width,
           borderRadius: this.props.width / 2,
