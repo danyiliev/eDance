@@ -1,6 +1,7 @@
 import {BaseModel} from './base.model';
 import {Utils} from '../helpers/utils';
 import {User} from './user.model';
+import moment from 'moment';
 
 export class SessionType {
   //
@@ -8,14 +9,33 @@ export class SessionType {
   //
   type = '';
   danceStyles = [];
+
+  initFromObject(data) {
+    this.type = data.type;
+    this.danceStyles = data.danceStyles;
+
+    return this;
+  }
 }
 
 export class EventSession {
   //
   // properties
   //
-  startAt = '';
+  startAt = null;
   types = [];
+
+  initFromObject(data) {
+    this.startAt = moment.parseZone(data.startAt).format('YYYY-MM-DD HH:mm');
+
+    this.types = [];
+    for (const t of data.types) {
+      const type = new SessionType().initFromObject(t);
+      this.types.push(type);
+    }
+
+    return this;
+  }
 }
 
 export class Event extends BaseModel {
@@ -40,7 +60,15 @@ export class Event extends BaseModel {
       this.userId = data.user;
     }
 
-    this.sessions = data.sessions;
+    // session
+    this.sessions = [];
+    for (const s of data.sessions) {
+      const session = new EventSession().initFromObject(s);
+      this.sessions.push(session);
+    }
+
     this.prizeOptions = data.prizeOptions;
+
+    return this;
   }
 }

@@ -11,6 +11,7 @@ import Lessons from '../screens/lessons/Lessons';
 import {Alert} from 'react-native';
 import {Product} from '../models/product.model';
 import {Order} from '../models/order.model';
+import {Event} from '../models/event.model';
 
 class ApiService {
   // error codes
@@ -1071,6 +1072,38 @@ class ApiService {
       console.log(data);
 
       return Promise.resolve(data);
+    } catch (e) {
+      console.log(e);
+
+      return Promise.reject(e.response.data);
+    }
+  }
+
+  async getEvents(from, count) {
+    let params = {
+      from: from,
+      count: count,
+    };
+
+    try {
+      const options = {
+        params: params,
+        headers: {
+          ...this.baseHeader(),
+        },
+      };
+
+      const {data} = await Axios.get(`${this.baseUrl}/event`, options);
+      console.log(data);
+
+      const events = [];
+      for (const obj of data) {
+        const e = new Event().initFromObject(obj);
+
+        events.push(e);
+      }
+
+      return Promise.resolve(events);
     } catch (e) {
       console.log(e);
 

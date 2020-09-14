@@ -178,8 +178,8 @@ class AddPrize extends BasePrize {
 
     // create lesson
     try {
-      // const result = await ApiService.addLesson(this.lesson);
-      // this.event.id = result.id;
+      const result = await ApiService.addEvent(this.event);
+      this.event.id = result.id;
 
       // add to reducers
       let {events} = this.props.EventReducer;

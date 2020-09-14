@@ -15,6 +15,8 @@ import {Event, EventSession, SessionType} from '../../models/event.model';
 import {DanceHelper} from '../../helpers/dance-helper';
 import {SELECT_AMERICAN_BALLROOM} from '../../constants/dance-data';
 import ChampionshipDetail from './championship-detail/ChampionshipDetail';
+import {ApiService} from '../../services';
+import {setEvents} from '../../actions/event';
 
 class Championships extends React.Component {
   static NAV_NAME = 'championships';
@@ -29,6 +31,8 @@ class Championships extends React.Component {
 
   currentUser = null;
 
+  pageCount = 15;
+
   constructor(props) {
     super(props);
 
@@ -37,38 +41,16 @@ class Championships extends React.Component {
     });
 
     this.currentUser = props.UserReducer.user;
-
-    //
-    // TODO: delete dummy data
-    //
-    const events = [];
-    for (let i = 0; i < 2; i++) {
-      const s = new EventSession();
-      s.startAt = '2002-23-32 23:33';
-
-      const st = new SessionType();
-      st.type = 'PRO-AM CLOSED 3-DANCE SCHOLARSHIP CHAMPIONSHIPS';
-      st.danceStyles = [SELECT_AMERICAN_BALLROOM, SELECT_AMERICAN_BALLROOM, SELECT_AMERICAN_BALLROOM];
-      s.types.push(st);
-      s.types.push(st);
-
-      const e = new Event();
-      e.sessions.push(s);
-      e.sessions.push(s);
-
-      events.push(e);
-    }
-    this.state.events = events;
   }
 
   componentDidMount(): void {
-    // this.loadData();
-    //
-    // this._sub = this.props.navigation.addListener('focus', this._componentFocused);
+    this.loadData();
+
+    this._sub = this.props.navigation.addListener('focus', this._componentFocused);
   }
 
   componentWillUnmount(): void {
-    // this._sub();
+    this._sub();
   }
 
   render() {
@@ -117,7 +99,7 @@ class Championships extends React.Component {
       <TouchableOpacity
         activeOpacity={0.7}
         onPress={() => this.onSessionItem(event, session)}
-        key={index.toString()}>
+        key={`session${index}`}>
         <View style={styles.viewItem}>
           {/* time */}
           <View style={stylesApp.flexRowCenter}>
@@ -138,7 +120,7 @@ class Championships extends React.Component {
   renderSessionTypes(types) {
     const viewTypes = types.map((t, i) => {
       return (
-        <View>
+        <View key={`sessionType${i}`}>
           <Text style={styles.txtSessionType}>{t.type}</Text>
         </View>
       );
@@ -183,14 +165,43 @@ class Championships extends React.Component {
     });
   }
 
-  loadData() {
+  async loadData(continued = false) {
+    let indexFrom = 0;
+
+    if (!continued) {
+      // show loading mark
+      this.setState({
+        showLoading: true,
+      });
+    } else {
+      indexFrom = this.state.events.length;
+    }
+
+    try {
+      let events = await ApiService.getEvents(indexFrom, this.pageCount);
+
+      if (indexFrom > 0) {
+        // attach
+        events = [...this.state.events, ...events];
+      }
+
+      // save to store
+      this.props.setEvents(events);
+      this.setState({events});
+    } catch (e) {
+      console.log(e);
+    }
+
     this.setState({
-      events: this.props.EventReducer.events,
+      showLoading: false,
     });
   }
 }
 
 const mapStateToProps = (state) => state;
+const mapDispatchToProps = {
+  setEvents,
+};
 
-export default connect(mapStateToProps, null)(Championships);
+export default connect(mapStateToProps, mapDispatchToProps)(Championships);
 
