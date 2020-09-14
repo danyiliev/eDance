@@ -111,7 +111,7 @@ class SettingProfile extends React.Component {
     this.loadingHUD = new LoadingHUD();
 
     props.navigation.setOptions({
-      title: this.isSignup() ? 'Create a Dance Teacer' : 'Settings',
+      title: this.isSignup() ? 'Create a Dance Teacher Profile' : 'Settings',
     });
   }
 
@@ -822,7 +822,9 @@ class SettingProfile extends React.Component {
 
       if (this.isSignup()) {
         // go to signup page
-        this.props.navigation.push(SignupBase.NAV_NAME);
+        this.props.navigation.push(SignupBase.NAV_NAME, {
+          userType: User.TYPE_TEACHER,
+        });
       } else {
         // go back to prev page
         this.props.navigation.pop();

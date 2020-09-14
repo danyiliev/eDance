@@ -8,6 +8,8 @@ import {Button} from 'react-native-elements';
 import {stylesApp, styleUtil} from '../../styles/app.style';
 import Login from '../login/Login';
 import {User} from '../../models/user.model';
+import SettingProfile from '../settings/setting-profile/SettingProfile';
+import SignupBase from '../signup/SignupBase';
 
 export default class Landing extends React.Component {
   static NAV_NAME = 'landing';
@@ -47,6 +49,15 @@ export default class Landing extends React.Component {
               onPress={() => this.onButNext(User.TYPE_STUDENT)}
             />
           </View>
+
+          <Button
+            type="clear"
+            title="Log In"
+            containerStyle={styles.ctnButLogin}
+            // buttonStyle={styles.butClear}
+            titleStyle={styles.titleButLogin}
+            onPress={() => this.onButLogin()}
+          />
         </View>
 
         {/* footer */}
@@ -68,7 +79,18 @@ export default class Landing extends React.Component {
   }
 
   onButNext(type) {
+    if (type === User.TYPE_TEACHER) {
+      // go to base setting page
+      this.props.navigation.push(SettingProfile.NAV_NAME_SIGNUP);
+      return;
+    }
+
+    // go to signup page
+    this.props.navigation.push(SignupBase.NAV_NAME, {userType: type});
+  }
+
+  onButLogin() {
     // go to login page
-    this.props.navigation.push(Login.NAV_NAME, {userType: type});
+    this.props.navigation.push(Login.NAV_NAME);
   }
 }

@@ -183,7 +183,7 @@ class MainNavigator extends React.Component {
               headerTintColor: colorTheme.primary,
             }}>
             <Stack.Screen name={Landing.NAV_NAME} component={Landing} options={{headerShown: false}} />
-            <Stack.Screen name={Login.NAV_NAME} component={Login} options={{headerShown: false}} />
+            <Stack.Screen name={Login.NAV_NAME} component={Login} />
             <Stack.Screen name={SignupBase.NAV_NAME} component={SignupBase} />
             <Stack.Screen name={SignupAdvanced.NAV_NAME} component={SignupAdvanced} />
             <Stack.Screen name={ForgetEmail.NAV_NAME} component={ForgetEmail} />

@@ -31,6 +31,10 @@ class Login extends BaseAuth {
   constructor(props) {
     super(props);
 
+    props.navigation.setOptions({
+      title: 'Login',
+    });
+
     this.loadingHUD = new LoadingHUD();
   }
 
@@ -107,15 +111,6 @@ class Login extends BaseAuth {
               <View style={styles.viewOrBar} />
             </View>
 
-            {/* sign up */}
-            <View style={styleUtil.withShadow()}>
-              <Button
-                title="REGISTER"
-                buttonStyle={stylesApp.butLight}
-                titleStyle={stylesApp.titleButLight}
-                onPress={() => this.onButSignup()}
-              />
-            </View>
           </View>
 
           {/* footer */}
