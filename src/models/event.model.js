@@ -18,20 +18,45 @@ export class SessionType {
   }
 }
 
-export class EventSession {
+export class EventSession extends BaseModel {
   //
   // properties
   //
   startAt = null;
   types = [];
 
+  entryCount = 0;
+  joinedUsers = [];
+
   initFromObject(data) {
+    super.initFromObject(data);
+
     this.startAt = moment.parseZone(data.startAt).format('YYYY-MM-DD HH:mm');
 
     this.types = [];
     for (const t of data.types) {
       const type = new SessionType().initFromObject(t);
       this.types.push(type);
+    }
+
+    if (data.entryCount) {
+      this.entryCount = data.entryCount;
+    }
+
+    // joined users
+    if (data.joinedUsers) {
+      this.joinedUsers = [];
+      for (const u of data.joinedUsers) {
+        if (Utils.isObject(u)) {
+          const user = new User().initFromObject(u);
+          this.joinedUsers.push(user);
+        } else {
+          const user = new User();
+          user.id = u;
+
+          this.joinedUsers.push(user);
+        }
+      }
     }
 
     return this;

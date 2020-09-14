@@ -11,7 +11,7 @@ import Lessons from '../screens/lessons/Lessons';
 import {Alert} from 'react-native';
 import {Product} from '../models/product.model';
 import {Order} from '../models/order.model';
-import {Event} from '../models/event.model';
+import {Event, EventSession} from '../models/event.model';
 
 class ApiService {
   // error codes
@@ -1104,6 +1104,50 @@ class ApiService {
       }
 
       return Promise.resolve(events);
+    } catch (e) {
+      console.log(e);
+
+      return Promise.reject(e.response.data);
+    }
+  }
+
+  async getEventSessionById(eventId, sessionId) {
+    try {
+      const options = {
+        headers: {
+          ...this.baseHeader(),
+        },
+      };
+
+      const {data} = await Axios.get(`${this.baseUrl}/event/${eventId}/session/${sessionId}`, options);
+      console.log(data);
+
+      const session = new EventSession().initFromObject(data);
+
+      return Promise.resolve(session);
+    } catch (e) {
+      console.log(e);
+
+      return Promise.reject(e.response.data);
+    }
+  }
+
+  async applyEventSession(eventId, sessionId) {
+    try {
+      const options = {
+        headers: {
+          ...this.baseHeader(),
+        },
+      };
+
+      const {data} = await Axios.post(
+        `${this.baseUrl}/event/${eventId}/session/${sessionId}/apply`,
+        {},
+        options,
+      );
+      console.log(data);
+
+      return Promise.resolve(data);
     } catch (e) {
       console.log(e);
 

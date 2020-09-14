@@ -84,7 +84,7 @@ class Championships extends React.Component {
     return (
       <View>
         <View style={styles.viewEventHeader}>
-          <Text style={styles.txtEventLabel}>Event {index + 1}</Text>
+          <Text style={styles.txtEventLabel}>Event Id: {item.id}</Text>
         </View>
 
         {item.sessions.map((s, i) => {
@@ -110,7 +110,7 @@ class Championships extends React.Component {
           {this.renderSessionTypes(session.types)}
 
           <View style={styles.viewSessionFooter}>
-            <Text>0 Entries</Text>
+            <Text>{session.entryCount} Entries</Text>
           </View>
         </View>
       </TouchableOpacity>
