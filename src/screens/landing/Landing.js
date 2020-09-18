@@ -10,6 +10,7 @@ import Login from '../login/Login';
 import {User} from '../../models/user.model';
 import SettingProfile from '../settings/setting-profile/SettingProfile';
 import SignupBase from '../signup/SignupBase';
+import Terms from '../terms/Terms';
 
 export default class Landing extends React.Component {
   static NAV_NAME = 'landing';
@@ -69,9 +70,10 @@ export default class Landing extends React.Component {
           />
 
           <Button
-            title="customer support"
+            title="terms of services"
             type="clear"
             titleStyle={stylesApp.titleButClear}
+            onPress={() => this.onButTerms()}
           />
         </View>
       </ContentWithBackground>
@@ -92,5 +94,10 @@ export default class Landing extends React.Component {
   onButLogin() {
     // go to login page
     this.props.navigation.push(Login.NAV_NAME);
+  }
+
+  onButTerms() {
+    // go to terms page
+    this.props.navigation.push(Terms.NAV_NAME);
   }
 }

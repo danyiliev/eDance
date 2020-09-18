@@ -67,6 +67,7 @@ import AddSession from './championships/add-session/AddSession';
 import AddPrize from './championships/add-prize/AddPrize';
 import ChampionshipDetail from './championships/championship-detail/ChampionshipDetail';
 import PrizeDetail from './championships/prize-detail/PrizeDetail';
+import Terms from './terms/Terms';
 
 const Stack = createStackNavigator();
 
@@ -191,6 +192,7 @@ class MainNavigator extends React.Component {
             <Stack.Screen name={ForgetReset.NAV_NAME} component={ForgetReset} />
             <Stack.Screen name={SettingProfile.NAV_NAME_SIGNUP} component={SettingProfile} />
             <Stack.Screen name={SelectList.NAV_NAME} component={SelectList} />
+            <Stack.Screen name={Terms.NAV_NAME} component={Terms} />
           </Stack.Navigator>
         )}
       </NavigationContainer>
