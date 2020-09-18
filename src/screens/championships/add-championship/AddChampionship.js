@@ -12,6 +12,7 @@ import moment from 'moment';
 import {Event, EventSession} from '../../../models/event.model';
 import {DanceHelper} from '../../../helpers/dance-helper';
 import AddPrize from '../add-prize/AddPrize';
+import Toast from 'react-native-simple-toast';
 
 export default class AddChampionship extends React.Component {
   static NAV_NAME = 'add-championship';
@@ -78,7 +79,7 @@ export default class AddChampionship extends React.Component {
               title="Next"
               buttonStyle={stylesApp.butPrimary}
               titleStyle={stylesApp.titleButPrimary}
-              onPress={() => this.onButSave()}
+              onPress={() => this.onButNext()}
             />
           </View>
         </ScrollView>
@@ -124,13 +125,17 @@ export default class AddChampionship extends React.Component {
       );
     }
 
-    const viewTypes = types.map((t, i) => {
+    const viewTypes = types.map((t, idx) => {
       return (
-        <View>
+        <View key={`session${index}-type${idx}`}>
           <Text style={styles.txtSessionType}>{t.type}</Text>
 
           {t.danceStyles.map((s, i) => {
-            return <Text style={styles.txtSessionDanceStyle}>{DanceHelper.danceStyleNameByVal(s)}</Text>;
+            return (
+              <Text key={`session${index}-type${i}-style${i}`} style={styles.txtSessionDanceStyle}>
+                {DanceHelper.danceStyleNameByVal(s)}
+              </Text>
+            );
           })}
         </View>
       );
@@ -196,7 +201,21 @@ export default class AddChampionship extends React.Component {
     this.setState({sessions});
   }
 
-  onButSave() {
+  onButNext() {
+    // check sessions are added
+    if (this.state.sessions.length <= 0) {
+      Toast.show('Session should be added first');
+      return;
+    }
+
+    // check all sessions are filled
+    for (const s of this.state.sessions) {
+      if (s.types.length <= 0) {
+        Toast.show('All event sessions should be filled.');
+        return;
+      }
+    }
+
     let event = new Event();
     event.sessions = this.state.sessions;
 
