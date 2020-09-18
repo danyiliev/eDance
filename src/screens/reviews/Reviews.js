@@ -165,7 +165,7 @@ export default class Reviews extends React.Component {
 
       // go to select date
       this.props.navigation.push(BookingDate.NAV_NAME, {
-        order: this.lesson,
+        lesson: this.lesson,
       });
     } else {
       // go to reviews page

@@ -16,8 +16,9 @@ import {connect} from 'react-redux';
 import {User} from '../../models/user.model';
 import {BaseAuth} from '../base-auth';
 import {BaseSignup} from './base-signup';
-import {AuthService} from '../../services';
+import {ApiService, AuthService} from '../../services';
 import {UserHelper} from '../../helpers/user-helper';
+import {DURATIONS_LESSON, DURATIONS_REST} from '../../constants/dance-data';
 
 class SignupAdvanced extends BaseSignup {
   static NAV_NAME = 'signup-advanced';
@@ -194,7 +195,25 @@ class SignupAdvanced extends BaseSignup {
           : null,
       );
 
-      await this.setUser(user);
+      if (this.userNew.type === User.TYPE_TEACHER) {
+        await ApiService.updateTeacherInfo(
+          this.userNew.ageGroups,
+          this.userNew.danceLevels,
+          this.userNew.styleBallroom,
+          this.userNew.styleRythm,
+          this.userNew.styleStandard,
+          this.userNew.styleLatin,
+          Number(this.userNew.price) ?? 0,
+          this.userNew.availableDays,
+          this.userNew.durationLesson,
+          this.userNew.durationRest,
+          this.userNew.timeStart,
+          this.userNew.timeEnd,
+        );
+      }
+
+      this.userNew.id = user.id;
+      await this.setUser(this.userNew);
     } catch (e) {
       Alert.alert('Login Failed', e.message);
     }

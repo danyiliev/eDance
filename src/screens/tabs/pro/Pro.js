@@ -242,6 +242,7 @@ export default class Pro extends React.Component {
     // go to reviews page
     this.props.navigation.push(Reviews.NAV_NAME, {
       user: user,
+      lesson: this.lesson,
     });
   }
 

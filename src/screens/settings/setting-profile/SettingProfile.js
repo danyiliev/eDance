@@ -128,7 +128,7 @@ class SettingProfile extends React.Component {
             {/* save */}
             <View style={[styleUtil.withShadow(), styles.viewButSave]}>
               <Button
-                title="SAVE"
+                title={this.isSignup() ? 'NEXT' : 'SAVE'}
                 buttonStyle={stylesApp.butPrimary}
                 titleStyle={stylesApp.titleButPrimary}
                 onPress={() => this.onButSave()}
@@ -818,14 +818,17 @@ class SettingProfile extends React.Component {
       user.timeStart = this.state.timeStart;
       user.timeEnd = this.state.timeEnd;
 
-      UserHelper.saveUserToLocalStorage(user, this.props);
-
       if (this.isSignup()) {
+        // save user to reduce
+        this.props.setUserInfo(user);
+
         // go to signup page
         this.props.navigation.push(SignupBase.NAV_NAME, {
           userType: User.TYPE_TEACHER,
         });
       } else {
+        UserHelper.saveUserToLocalStorage(user, this.props);
+
         // go back to prev page
         this.props.navigation.pop();
       }
