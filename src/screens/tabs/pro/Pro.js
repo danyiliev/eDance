@@ -251,7 +251,7 @@ export default class Pro extends React.Component {
 
       // go to select date
       this.props.navigation.push(BookingDate.NAV_NAME, {
-        order: this.lesson,
+        lesson: this.lesson,
       });
     } else {
       // go to reviews page

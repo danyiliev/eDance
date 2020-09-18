@@ -47,12 +47,15 @@ export default class BookingDate extends React.Component {
   }
 
   render() {
+    const today = moment().format('YYYY-MM-DD');
+
     return (
       <ScrollView style={stylesApp.viewContainer}>
         <View style={styles.viewContainer}>
           <View style={styles.viewCalendar}>
             <Calendar
               style={styles.calContainer}
+              minDate={today}
               theme={{
                 arrowColor: colorTheme.light,
                 monthTextColor: colorTheme.light,
@@ -141,8 +144,6 @@ export default class BookingDate extends React.Component {
     this.setState({
       showLoading: true,
     });
-
-    await Utils.sleep(1000);
 
     // hide loading
     this.setState({
