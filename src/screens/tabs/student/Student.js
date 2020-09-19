@@ -11,7 +11,6 @@ import {styles} from './styles';
 import {ApiService} from '../../../services';
 import LessonItem from '../../../components/LessonItem/LessonItem';
 import Profile from '../../profile/Profile';
-import RNPaypal from 'react-native-paypal-lib';
 import {config} from '../../../helpers/config';
 import Toast from 'react-native-simple-toast';
 import {connect} from 'react-redux';

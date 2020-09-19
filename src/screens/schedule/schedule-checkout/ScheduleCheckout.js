@@ -10,7 +10,6 @@ import BookingDate from '../../booking/booking-date/BookingDate';
 import Lessons from '../../lessons/Lessons';
 import {DanceHelper} from '../../../helpers/dance-helper';
 import ActionSheet from 'react-native-actionsheet';
-import RNPaypal from 'react-native-paypal-lib';
 import {config} from '../../../helpers/config';
 import {LoadingHUD} from 'react-native-hud-hybrid';
 import Toast from 'react-native-simple-toast';

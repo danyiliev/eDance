@@ -77,8 +77,6 @@ target 'eDance' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
-  pod 'RNPaypal', :path => '../node_modules/react-native-paypal-lib/ios'
-
   target 'eDanceTests' do
     inherit! :complete
     # Pods for testing
