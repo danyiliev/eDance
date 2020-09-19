@@ -14,9 +14,11 @@ import {ApiService} from '../../../services';
 import {setEvents} from '../../../actions/event';
 import {connect} from 'react-redux';
 import BasePrize from '../base-prize';
+import Login from '../../login/Login';
 
 class AddPrize extends BasePrize {
   static NAV_NAME = 'add-prize';
+  static NAV_NAME_SIGNUP = 'add-prize-signup';
 
   state = {
     // ui
@@ -170,31 +172,38 @@ class AddPrize extends BasePrize {
       return;
     }
 
-    // show loading
-    this.loadingHUD.show();
+    if (this.currentUser && this.currentUser.id) {
+      // show loading
+      this.loadingHUD.show();
 
-    this.event.prizeOptions = this.state.selectedOptions;
-    this.event.user = this.currentUser;
+      this.event.prizeOptions = this.state.selectedOptions;
+      this.event.user = this.currentUser;
 
-    // create lesson
-    try {
-      const result = await ApiService.addEvent(this.event);
-      this.event.id = result.id;
+      // create event
+      try {
+        const result = await ApiService.addEvent(this.event);
+        this.event.id = result.id;
 
-      // add to reducers
-      let {events} = this.props.EventReducer;
-      events.unshift(this.event);
+        // add to reducers
+        let {events} = this.props.EventReducer;
+        events.unshift(this.event);
 
-      // go to events page
-      this.props.navigation.navigate(Championships.NAV_NAME);
-    } catch (e) {
-      console.log(e);
+        // go to events page
+        this.props.navigation.navigate(Championships.NAV_NAME);
+      } catch (e) {
+        console.log(e);
 
-      Alert.alert('Failed to Create Event', e.message);
+        Alert.alert('Failed to Create Event', e.message);
+      }
+
+      // hide loading
+      this.loadingHUD.hideAll();
+    } else {
+      // go to log in page
+      this.props.navigation.push(Login.NAV_NAME, {
+        event: this.event,
+      });
     }
-
-    // hide loading
-    this.loadingHUD.hideAll();
   }
 }
 

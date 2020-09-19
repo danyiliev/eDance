@@ -2,6 +2,7 @@ import {SET_USER} from '../constants/action-types';
 
 const initialState = {
   user: null,
+  isLoggedIn: false,
 };
 
 export const reducer = (state = initialState, action) => {
@@ -10,6 +11,7 @@ export const reducer = (state = initialState, action) => {
       return {
         ...state,
         user: action.payload,
+        isLoggedIn: action.payload && action.payload.id,
       };
 
     default:

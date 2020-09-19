@@ -14,11 +14,12 @@ import {setUserInfo} from '../../actions/user';
 import {connect} from 'react-redux';
 import {User} from '../../models/user.model';
 import {LoadingHUD} from 'react-native-hud-hybrid';
-import {AuthService} from '../../services';
+import {ApiService, AuthService} from '../../services';
 import {BaseAuth} from '../base-auth';
 import {Utils} from '../../helpers/utils';
 import {UserHelper} from '../../helpers/user-helper';
 import SettingProfile from '../settings/setting-profile/SettingProfile';
+import Championships from '../championships/Championships';
 
 class Login extends BaseAuth {
   static NAV_NAME = 'login';
@@ -156,6 +157,27 @@ class Login extends BaseAuth {
 
       await UserHelper.fetchUserData(user);
       await this.setUser(user);
+
+      // check data
+      const {params} = this.props.route;
+      if (params && params.event) {
+        // create event
+        try {
+          const result = await ApiService.addEvent(params.event);
+          params.event.id = result.id;
+
+          // add to reducers
+          let {events} = this.props.EventReducer;
+          events.unshift(params.event);
+
+          // go to events page
+          this.props.navigation.navigate(Championships.NAV_NAME);
+        } catch (e) {
+          console.log(e);
+
+          Alert.alert('Failed to Create Event', e.message);
+        }
+      }
     } catch (e) {
       console.log(e);
 
@@ -164,17 +186,6 @@ class Login extends BaseAuth {
 
     // hide loading
     this.loadingHUD.hideAll();
-  }
-
-  onButSignup() {
-    if (this.userType === User.TYPE_TEACHER) {
-      // go to base setting page
-      this.props.navigation.push(SettingProfile.NAV_NAME_SIGNUP);
-      return;
-    }
-
-    // go to signup page
-    this.props.navigation.push(SignupBase.NAV_NAME, {userType: this.userType});
   }
 
   onButForget() {

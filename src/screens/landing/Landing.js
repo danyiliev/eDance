@@ -11,6 +11,7 @@ import {User} from '../../models/user.model';
 import SettingProfile from '../settings/setting-profile/SettingProfile';
 import SignupBase from '../signup/SignupBase';
 import Terms from '../terms/Terms';
+import AddChampionship from '../championships/add-championship/AddChampionship';
 
 export default class Landing extends React.Component {
   static NAV_NAME = 'landing';
@@ -48,6 +49,15 @@ export default class Landing extends React.Component {
               buttonStyle={stylesApp.butLight}
               titleStyle={stylesApp.titleButLight}
               onPress={() => this.onButNext(User.TYPE_STUDENT)}
+            />
+          </View>
+
+          <View style={{...styleUtil.withShadow(), ...styles.viewButStudent}}>
+            <Button
+              title="CREATE DANCESPORT CHAMPIONSHIPS"
+              buttonStyle={stylesApp.butLightOutline}
+              titleStyle={stylesApp.titleButLight}
+              onPress={() => this.onButEvent()}
             />
           </View>
 
@@ -99,5 +109,10 @@ export default class Landing extends React.Component {
   onButTerms() {
     // go to terms page
     this.props.navigation.push(Terms.NAV_NAME);
+  }
+
+  onButEvent() {
+    // go to create event page
+    this.props.navigation.push(AddChampionship.NAV_NAME_SIGNUP);
   }
 }

@@ -14,7 +14,7 @@ export const styles = StyleSheet.create({
     marginHorizontal: 30,
   },
   viewButStudent: {
-    marginTop: 40,
+    marginTop: 34,
   },
 
   viewFooter: {

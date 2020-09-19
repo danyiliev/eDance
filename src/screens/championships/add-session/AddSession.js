@@ -8,9 +8,11 @@ import {Button, Icon, ListItem} from 'react-native-elements';
 import Collapsible from 'react-native-collapsible';
 import {DanceHelper} from '../../../helpers/dance-helper';
 import {SessionType} from '../../../models/event.model';
+import {connect} from 'react-redux';
 
-export default class AddSession extends React.Component {
+class AddSession extends React.Component {
   static NAV_NAME = 'add-session';
+  static NAV_NAME_SIGNUP = 'add-session-signup';
 
   sessionTypes = [
     'SOLO EXHIBITIONS',
@@ -70,7 +72,7 @@ export default class AddSession extends React.Component {
     const isCollapsed = this.state.expandedIndex.indexOf(index) < 0;
 
     return (
-      <View>
+      <View key={`type${index}`}>
         <ListItem
           title={type}
           titleStyle={styles.titleTypeListItem}
@@ -93,6 +95,7 @@ export default class AddSession extends React.Component {
           {DanceHelper.danceStylesAll().map((style, i) => {
             return (
               <ListItem
+                key={`type${index}-style${i}`}
                 title={style.name}
                 titleStyle={styles.titleTypeListItem}
                 bottomDivider
@@ -164,3 +167,7 @@ export default class AddSession extends React.Component {
     this.props.navigation.pop();
   }
 }
+
+const mapStateToProps = (state) => state;
+
+export default connect(mapStateToProps, null)(AddSession);

@@ -193,6 +193,9 @@ class MainNavigator extends React.Component {
             <Stack.Screen name={SettingProfile.NAV_NAME_SIGNUP} component={SettingProfile} />
             <Stack.Screen name={SelectList.NAV_NAME} component={SelectList} />
             <Stack.Screen name={Terms.NAV_NAME} component={Terms} />
+            <Stack.Screen name={AddChampionship.NAV_NAME_SIGNUP} component={AddChampionship} />
+            <Stack.Screen name={AddSession.NAV_NAME_SIGNUP} component={AddSession} />
+            <Stack.Screen name={AddPrize.NAV_NAME_SIGNUP} component={AddPrize} />
           </Stack.Navigator>
         )}
       </NavigationContainer>

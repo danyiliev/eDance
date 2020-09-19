@@ -85,7 +85,7 @@ export const stylesApp = StyleSheet.create({
     backgroundColor: colorTheme.primary,
   },
   titleButPrimary: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: 'bold',
     color: colorTheme.light,
   },
@@ -97,7 +97,7 @@ export const stylesApp = StyleSheet.create({
     backgroundColor: colorTheme.light,
   },
   titleButLight: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: 'bold',
     color: colorTheme.primary,
   },

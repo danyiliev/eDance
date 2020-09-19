@@ -66,16 +66,14 @@ class Championships extends React.Component {
         />
 
         {/* add */}
-        {this.currentUser?.type === User.TYPE_TEACHER ? (
-          <View style={[styleUtil.withShadow(), stylesCart.viewButBuy]}>
-            <Button
-              title="Create Championship"
-              buttonStyle={stylesApp.butPrimary}
-              titleStyle={stylesApp.titleButPrimary}
-              onPress={() => this.onButCreate()}
-            />
-          </View>
-        ) : null}
+        <View style={[styleUtil.withShadow(), stylesCart.viewButBuy]}>
+          <Button
+            title="Create Championship"
+            buttonStyle={stylesApp.butPrimary}
+            titleStyle={stylesApp.titleButPrimary}
+            onPress={() => this.onButCreate()}
+          />
+        </View>
       </View>
     );
   }

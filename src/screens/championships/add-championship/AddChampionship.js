@@ -13,9 +13,11 @@ import {Event, EventSession} from '../../../models/event.model';
 import {DanceHelper} from '../../../helpers/dance-helper';
 import AddPrize from '../add-prize/AddPrize';
 import Toast from 'react-native-simple-toast';
+import {connect} from 'react-redux';
 
-export default class AddChampionship extends React.Component {
+class AddChampionship extends React.Component {
   static NAV_NAME = 'add-championship';
+  static NAV_NAME_SIGNUP = 'add-championship-signup';
 
   state = {
     // ui
@@ -165,10 +167,13 @@ export default class AddChampionship extends React.Component {
 
   onAddSessionContent(index) {
     // go to add session page
-    this.props.navigation.push(AddSession.NAV_NAME, {
-      session: this.state.sessions[index],
-      onSave: (types) => this.onSaveTypes(index, types),
-    });
+    this.props.navigation.push(
+      this.props.UserReducer.isLoggedIn ? AddSession.NAV_NAME : AddSession.NAV_NAME_SIGNUP,
+      {
+        session: this.state.sessions[index],
+        onSave: (types) => this.onSaveTypes(index, types),
+      },
+    );
   }
 
   onSaveTypes(index, types) {
@@ -220,8 +225,15 @@ export default class AddChampionship extends React.Component {
     event.sessions = this.state.sessions;
 
     // go to add prize page
-    this.props.navigation.push(AddPrize.NAV_NAME, {
-      event: event,
-    });
+    this.props.navigation.push(
+      this.props.UserReducer.isLoggedIn ? AddPrize.NAV_NAME : AddPrize.NAV_NAME_SIGNUP,
+      {
+        event: event,
+      },
+    );
   }
 }
+
+const mapStateToProps = (state) => state;
+
+export default connect(mapStateToProps, null)(AddChampionship);
