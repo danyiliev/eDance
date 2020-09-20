@@ -19,6 +19,7 @@ import FastImage from 'react-native-fast-image';
 import {User} from '../../models/user.model';
 import {clearProducts} from '../../actions/product';
 import {clearEvents} from '../../actions/event';
+import SettingMain from '../../screens/settings/setting-main/SettingMain';
 
 class MenuModal extends React.Component {
   static propTypes = {
@@ -101,27 +102,25 @@ class MenuModal extends React.Component {
             <Divider style={styles.viewDivider} />
 
             {/* setting */}
-            {this.currentUser.type === User.TYPE_TEACHER ? (
-              <View>
-                <TouchableOpacity
-                  onPress={() =>
-                    this.props.onMenuItem(SettingProfile.NAV_NAME)
-                  }>
-                  <View style={styles.viewMenuItem}>
-                    {/* icon */}
-                    <View style={styles.viewMenuIcon}>
-                      <ImageScale
-                        width={16}
-                        source={require('../../../assets/imgs/menu_setting.png')}
-                      />
-                    </View>
-
-                    <Text style={styles.txtMenuItem}>Settings</Text>
+            <View>
+              <TouchableOpacity
+                onPress={() =>
+                  this.props.onMenuItem(SettingMain.NAV_NAME)
+                }>
+                <View style={styles.viewMenuItem}>
+                  {/* icon */}
+                  <View style={styles.viewMenuIcon}>
+                    <ImageScale
+                      width={16}
+                      source={require('../../../assets/imgs/menu_setting.png')}
+                    />
                   </View>
-                </TouchableOpacity>
-                <Divider style={styles.viewDivider} />
-              </View>
-            ) : null}
+
+                  <Text style={styles.txtMenuItem}>Settings</Text>
+                </View>
+              </TouchableOpacity>
+              <Divider style={styles.viewDivider} />
+            </View>
 
             {/* championship */}
             <TouchableOpacity

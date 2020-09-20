@@ -68,6 +68,7 @@ import AddPrize from './championships/add-prize/AddPrize';
 import ChampionshipDetail from './championships/championship-detail/ChampionshipDetail';
 import PrizeDetail from './championships/prize-detail/PrizeDetail';
 import Terms from './terms/Terms';
+import SettingMain from './settings/setting-main/SettingMain';
 
 const Stack = createStackNavigator();
 
@@ -167,6 +168,7 @@ class MainNavigator extends React.Component {
               <Stack.Screen name={AddPrize.NAV_NAME} component={AddPrize} />
               <Stack.Screen name={ChampionshipDetail.NAV_NAME} component={ChampionshipDetail} />
               <Stack.Screen name={PrizeDetail.NAV_NAME} component={PrizeDetail} />
+              <Stack.Screen name={SettingMain.NAV_NAME} component={SettingMain} />
             </Stack.Navigator>
 
             <MenuModal

@@ -75,6 +75,10 @@ export const stylesApp = StyleSheet.create({
     marginLeft: 10,
   },
 
+  mb12: {
+    marginBottom: 12,
+  },
+
   //
   // buttons
   //
