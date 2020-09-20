@@ -27,6 +27,8 @@ class Products extends React.Component {
     products: [],
   };
 
+  pageCount = 20;
+
   constructor(props) {
     super(props);
 
@@ -225,7 +227,7 @@ class Products extends React.Component {
 
   refreshList() {
     this.setState({
-      products: this.props.ProductReducer.products,
+      products: this.props.ProductReducer.myProducts,
     });
   }
 }

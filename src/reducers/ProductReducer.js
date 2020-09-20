@@ -1,4 +1,4 @@
-import {SET_MY_PRODUCTS, SET_PRODUCTS} from '../constants/action-types';
+import {CLEAR_PRODUCTS, SET_MY_PRODUCTS, SET_PRODUCTS} from '../constants/action-types';
 
 const initialState = {
   products: null,
@@ -17,6 +17,12 @@ export const reducer = (state = initialState, action) => {
       return {
         ...state,
         myProducts: action.payload,
+      };
+
+    case CLEAR_PRODUCTS:
+      return {
+        products: null,
+        myProducts: null,
       };
 
     default:

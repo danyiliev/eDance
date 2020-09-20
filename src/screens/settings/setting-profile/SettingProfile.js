@@ -111,7 +111,7 @@ class SettingProfile extends React.Component {
     this.loadingHUD = new LoadingHUD();
 
     props.navigation.setOptions({
-      title: this.isSignup() ? 'Create a Dance Teacher Profile' : 'Settings',
+      title: this.props.UserReducer.isLoggedIn ? 'Lesson Options' : 'Create a Dance Teacher Profile',
     });
   }
 
@@ -128,7 +128,7 @@ class SettingProfile extends React.Component {
             {/* save */}
             <View style={[styleUtil.withShadow(), styles.viewButSave]}>
               <Button
-                title={this.isSignup() ? 'NEXT' : 'SAVE'}
+                title={this.props.UserReducer.isLoggedIn ? 'SAVE' : 'NEXT'}
                 buttonStyle={stylesApp.butPrimary}
                 titleStyle={stylesApp.titleButPrimary}
                 onPress={() => this.onButSave()}
@@ -778,7 +778,7 @@ class SettingProfile extends React.Component {
 
   async onButSave() {
     try {
-      if (!this.isSignup()) {
+      if (this.props.UserReducer.isLoggedIn) {
         // show loading
         this.loadingHUD.show();
 
@@ -818,7 +818,12 @@ class SettingProfile extends React.Component {
       user.timeStart = this.state.timeStart;
       user.timeEnd = this.state.timeEnd;
 
-      if (this.isSignup()) {
+      if (this.props.UserReducer.isLoggedIn) {
+        UserHelper.saveUserToLocalStorage(user, this.props);
+
+        // go back to prev page
+        this.props.navigation.pop();
+      } else {
         // save user to reduce
         this.props.setUserInfo(user);
 
@@ -826,11 +831,6 @@ class SettingProfile extends React.Component {
         this.props.navigation.push(SignupBase.NAV_NAME, {
           userType: User.TYPE_TEACHER,
         });
-      } else {
-        UserHelper.saveUserToLocalStorage(user, this.props);
-
-        // go back to prev page
-        this.props.navigation.pop();
       }
     } catch (e) {
       console.log(e);
@@ -839,10 +839,6 @@ class SettingProfile extends React.Component {
     }
 
     this.loadingHUD.hideAll();
-  }
-
-  isSignup() {
-    return !(this.currentUser && this.currentUser.id);
   }
 }
 

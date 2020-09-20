@@ -1,4 +1,4 @@
-import {SET_EVENTS} from '../constants/action-types';
+import {CLEAR_EVENTS, SET_EVENTS} from '../constants/action-types';
 
 const initialState = {
   events: [],
@@ -10,6 +10,11 @@ export const reducer = (state = initialState, action) => {
       return {
         ...state,
         events: action.payload,
+      };
+
+    case CLEAR_EVENTS:
+      return {
+        events: null,
       };
 
     default:

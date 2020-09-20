@@ -17,6 +17,8 @@ import Championships from '../../screens/championships/Championships';
 import {UserHelper} from '../../helpers/user-helper';
 import FastImage from 'react-native-fast-image';
 import {User} from '../../models/user.model';
+import {clearProducts} from '../../actions/product';
+import {clearEvents} from '../../actions/event';
 
 class MenuModal extends React.Component {
   static propTypes = {
@@ -161,6 +163,11 @@ class MenuModal extends React.Component {
   onLogout() {
     UserHelper.getInstance().onLogout(() => {
       this.props.setUserInfo(null);
+
+      // clear data
+      this.props.clearProducts();
+      this.props.clearEvents();
+
       this.props.onDismiss();
     });
   }
@@ -170,6 +177,8 @@ const mapStateToProps = (state) => state;
 
 const mapDispatchToProps = {
   setUserInfo,
+  clearProducts,
+  clearEvents,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(MenuModal);
