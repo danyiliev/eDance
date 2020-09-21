@@ -14,6 +14,8 @@ import ProductDetail from '../../product-detail/ProductDetail';
 import {ApiService} from '../../../services';
 import Orders from '../Orders';
 import {UserHelper} from '../../../helpers/user-helper';
+import stripe from 'tipsi-stripe';
+import Toast from 'react-native-simple-toast';
 
 class OrderConfirm extends React.Component {
   static NAV_NAME = 'order-confirm';
@@ -132,10 +134,51 @@ class OrderConfirm extends React.Component {
   }
 
   async onButProceed() {
+    try {
+      // payment
+      let stripeTokenInfo = await stripe.paymentRequestWithCardForm();
+      console.log(stripeTokenInfo);
+
+      // token
+      let tokenId = stripeTokenInfo.tokenId;
+
+      this.createCharge(tokenId);
+    } catch (e) {
+      console.log(e.code);
+
+      if (e.code !== 'cancelled') {
+        Alert.alert('Payment Failed', e.message);
+      }
+    }
+  }
+
+  async createCharge(token) {
     // show loading
     this.loadingHUD.show();
 
-    // TODO - payment
+    try {
+      let response = await ApiService.stripeCreateCharge(
+        token,
+        this.currentUser?.getTotalPrice(),
+        'Purchase store items',
+      );
+
+      Toast.show('Payment is successful');
+
+      // make order
+      await this.makeOrder();
+    } catch (e) {
+      console.log(e);
+
+      Alert.alert('Payment Failed', e.message);
+    }
+
+    // hide loading
+    this.loadingHUD.hideAll();
+  }
+
+  async makeOrder() {
+    this.loadingHUD.show();
 
     try {
       // make order

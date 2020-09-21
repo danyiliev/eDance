@@ -1233,6 +1233,33 @@ class ApiService {
 
     return Promise.resolve(resp.data);
   }
+
+  async stripeCreateCharge(token, amount, desc = '', toAccount = null) {
+    const headers = {
+      Authorization: 'Bearer ' + config.stripeSecretKey,
+      'Content-Type': 'application/x-www-form-urlencoded',
+    };
+
+    if (toAccount) {
+      headers['Stripe-Account'] = toAccount;
+    }
+
+    let resp = await Axios.post(
+      `${this.baseStripUrl}/charges`,
+      qs.stringify({
+        source: token,
+        amount: amount * 100,
+        currency: 'usd',
+        description: desc,
+      }),
+      {
+        headers: headers,
+      },
+    );
+    console.log(resp.data);
+
+    return Promise.resolve(resp.data);
+  }
 }
 
 const apiService = new ApiService();
