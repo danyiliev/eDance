@@ -57,7 +57,7 @@ export default class Tv extends React.Component {
       <View style={stylesRadio.viewItem}>
         <TouchableOpacity
           style={stylesRadio.viewItemContent}
-          onPress={() => this.onItem(item)}>
+          onPress={() => this.onItem(index)}>
           <FastImage
             style={stylesRadio.imgItem}
             source={VideoHelper.getHeaderImage(item)}
@@ -160,10 +160,11 @@ export default class Tv extends React.Component {
     this.loadData();
   }
 
-  onItem(item) {
+  onItem(index) {
     // go to tv detail page
     this.props.navigation.push(TvDetail.NAV_NAME, {
-      data: item,
+      videos: this.state.channels,
+      index: index,
     });
   }
 }
