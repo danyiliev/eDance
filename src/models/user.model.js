@@ -179,6 +179,11 @@ export class User extends BaseModel {
     }
     this.deliveryAddresses = addresses;
 
+    // stripe
+    if (data.stripeAccountId) {
+      this.stripeAccountId = data.stripeAccountId;
+    }
+
     return this;
   }
 

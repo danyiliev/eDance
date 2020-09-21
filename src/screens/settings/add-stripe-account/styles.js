@@ -11,7 +11,7 @@ export const styles = StyleSheet.create({
   },
 
   viewData: {
-    marginTop: 40,
+    marginTop: 24,
   },
 
   txtLabel: {
@@ -32,8 +32,18 @@ export const styles = StyleSheet.create({
     position: 'absolute',
   },
 
-  viewButDone: {
-    marginHorizontal: 40,
+  viewActions: {
+    ...stylesApp.flexRow,
+    marginHorizontal: 14,
     marginVertical: 32,
+  },
+  ctnButAction: {
+    flex: 1,
+  },
+
+  txtTitle: {
+    color: colors.grey3,
+    marginTop: 24,
+    marginBottom: 8,
   },
 });

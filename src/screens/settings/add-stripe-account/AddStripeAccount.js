@@ -10,6 +10,7 @@ import {setUserInfo} from '../../../actions/user';
 import {LoadingHUD} from 'react-native-hud-hybrid';
 import WebView from 'react-native-webview';
 import {config} from '../../../helpers/config';
+import Toast from 'react-native-simple-toast';
 
 class AddStripeAccount extends React.Component {
   static NAV_NAME = 'add-stripe-account';
@@ -23,6 +24,9 @@ class AddStripeAccount extends React.Component {
     accountId: '',
     email: '',
     country: '',
+    businessName: '',
+    businessDesc: '',
+    detailsSubmitted: false,
   };
 
   currentUser = null;
@@ -36,14 +40,34 @@ class AddStripeAccount extends React.Component {
 
     this.currentUser = props.UserReducer.user;
 
-    // init
-    this.state.url = `https://connect.stripe.com/oauth/authorize?response_type=code&client_id=${config.stripeClientId}&scope=read_write`;
-    // this.state.url = `https://connect.stripe.com/express/oauth/authorize?client_id=${config.stripeCustomerId}`;
-
     this.state.accountId = this.currentUser?.stripeAccountId;
-    this.state.showWebView = !this.currentUser?.stripeAccountId;
 
     this.loadingHUD = new LoadingHUD();
+  }
+
+  async componentDidMount(): void {
+    this.loadingHUD.show();
+
+    try {
+      // check account Id
+      if (this.state.accountId) {
+        const resp = await ApiService.stripeGetAccountDetail(this.state.accountId);
+        await this.setAccount(resp);
+      } else {
+        const resp = await ApiService.stripeCreateAccount(this.currentUser?.email);
+        await this.setAccount(resp);
+
+        await this.saveAccountId();
+
+        await this.showCompleteForm();
+      }
+    } catch (e) {
+      console.log(e);
+
+      Toast.show(e.message);
+    }
+
+    this.loadingHUD.hideAll();
   }
 
   render() {
@@ -80,16 +104,36 @@ class AddStripeAccount extends React.Component {
             <Text style={styles.txtLabel}>Country</Text>
             <Text style={styles.txtValue}>{this.state.country}</Text>
           </View>
+
+          <Text style={styles.txtTitle}>Business Profile</Text>
+          {/* business name */}
+          <View style={stylesApp.flexRowCenter}>
+            <Text style={styles.txtLabel}>Name</Text>
+            <Text style={styles.txtValue}>{this.state.businessName}</Text>
+          </View>
+
+          <View style={stylesApp.flexRowCenter}>
+            <Text style={styles.txtLabel}>Description</Text>
+            <Text style={styles.txtValue}>{this.state.businessDesc}</Text>
+          </View>
         </View>
 
-        {/* done */}
-        <View style={[styleUtil.withShadow(), styles.viewButDone]}>
+        <View style={styles.viewActions}>
+          <Button
+            title="Complete Profile"
+            type="clear"
+            containerStyle={[styles.ctnButAction, stylesApp.mr10]}
+            buttonStyle={stylesApp.butLightOutline}
+            titleStyle={stylesApp.titleButLight}
+            onPress={() => this.onButComplete()}
+          />
           <Button
             title="Done"
-            disabled={!this.state.accountId}
-            disabledStyle={[stylesApp.butPrimary, stylesApp.semiTrans]}
+            containerStyle={[styles.ctnButAction, stylesApp.ml10]}
             buttonStyle={stylesApp.butPrimary}
             titleStyle={stylesApp.titleButPrimary}
+            disabled={!this.state.accountId}
+            disabledStyle={[stylesApp.butPrimary, stylesApp.semiTrans]}
             onPress={() => this.onButDone()}
           />
         </View>
@@ -121,26 +165,58 @@ class AddStripeAccount extends React.Component {
     );
   }
 
-  async onButDone() {
-    // show loading
-    this.loadingHUD.show();
-
+  async saveAccountId() {
     try {
-      // update db
       await ApiService.updateUserFields({stripeAccountId: this.state.accountId});
       this.currentUser.stripeAccountId = this.state.accountId;
 
       UserHelper.saveUserToLocalStorage(this.currentUser, this.props);
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
-      // go back to prev page
-      this.props.navigation.pop();
+  async onButDone() {
+    // go back to prev page
+    this.props.navigation.pop();
+  }
+
+  setAccount(data) {
+    return this.setState({
+      accountId: data.id,
+      email: data.email,
+      country: data.country,
+      businessName: data.business_profile?.name,
+      businessDesc: data.business_profile?.product_description,
+      detailsSubmitted: data.details_submitted,
+    });
+  }
+
+  async showCompleteForm() {
+    // check if details submitted
+    if (!this.state.detailsSubmitted) {
+      // get account url
+      const resp = await ApiService.stripeCreateAccountLink(this.state.accountId);
+
+      // show web page
+      this.setState({
+        showWebView: true,
+        url: resp.url,
+      });
+    }
+  }
+
+  async onButComplete() {
+    this.loadingHUD.show();
+
+    try {
+      await this.showCompleteForm();
     } catch (e) {
       console.log(e);
 
-      Alert.alert('Failed to Save Account Id', e.message);
+      Toast.show(e.message);
     }
 
-    // hide loading
     this.loadingHUD.hideAll();
   }
 }

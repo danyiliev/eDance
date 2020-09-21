@@ -12,6 +12,7 @@ import {Alert} from 'react-native';
 import {Product} from '../models/product.model';
 import {Order} from '../models/order.model';
 import {Event, EventSession} from '../models/event.model';
+import qs from 'qs';
 
 class ApiService {
   // error codes
@@ -27,6 +28,8 @@ class ApiService {
   urlImgUser = `${config.serverUrl}/static/uploads/imgs/users`;
 
   urlFileBase = `https://${config.awsS3BucketName}.s3.${config.awsRegion}.amazonaws.com/`;
+
+  baseStripUrl = 'https://api.stripe.com/v1';
 
   async uploadFile(file, path, onProgress) {
     const options = {
@@ -314,6 +317,25 @@ class ApiService {
     }
   }
 
+  async updateUserFields(values) {
+    const httpOptions = {
+      headers: {
+        ...this.baseHeader(),
+      },
+    };
+
+    try {
+      const {data} = await Axios.post(`${this.baseUrl}/users/update`, values, httpOptions);
+      console.log(data);
+
+      return Promise.resolve(true);
+    } catch (e) {
+      console.log(e);
+
+      return Promise.reject(e.response ? e.response.data : e);
+    }
+  }
+
   // deprecated
   async updateTeacherInfo(
     ageGroups,
@@ -364,10 +386,6 @@ class ApiService {
 
       return Promise.reject(e.response ? e.response.data : e);
     }
-  }
-
-  async updateUserFields(values) {
-
   }
 
   async addUserReview(userId, lessonId, rating, review) {
@@ -1158,6 +1176,62 @@ class ApiService {
 
       return Promise.reject(e.response.data);
     }
+  }
+
+  //
+  // Stripe
+  //
+  async stripeCreateAccount(email) {
+    let resp = await Axios.post(
+      this.baseStripUrl + '/accounts',
+      qs.stringify({
+        email: email,
+        type: 'standard',
+      }),
+      {
+        headers: {
+          Authorization: 'Bearer ' + config.stripeSecretKey,
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      },
+    );
+
+    console.log(resp.data);
+
+    return Promise.resolve(resp.data);
+  }
+
+  async stripeGetAccountDetail(accId) {
+    let resp = await Axios.get(`${this.baseStripUrl}/accounts/${accId}`, {
+      headers: {
+        Authorization: 'Bearer ' + config.stripeSecretKey,
+      },
+    });
+    console.log(resp);
+
+    return Promise.resolve(resp.data);
+  }
+
+  async stripeCreateAccountLink(accId) {
+    let resp = await Axios.post(
+      this.baseStripUrl + '/account_links',
+      qs.stringify({
+        account: accId,
+        type: 'account_onboarding',
+        return_url: config.stripeReturnUrl,
+        refresh_url: config.stripeRefreshUrl,
+      }),
+      {
+        headers: {
+          Authorization: 'Bearer ' + config.stripeSecretKey,
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      },
+    );
+
+    console.log(resp.data);
+
+    return Promise.resolve(resp.data);
   }
 }
 

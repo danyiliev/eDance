@@ -9,6 +9,7 @@ import {connect} from 'react-redux';
 import {User} from '../../../models/user.model';
 import SettingProfile from '../setting-profile/SettingProfile';
 import AddStripeAccount from '../add-stripe-account/AddStripeAccount';
+import stripe from 'tipsi-stripe';
 
 class SettingMain extends React.Component {
   static NAV_NAME = 'setting-main';
@@ -42,28 +43,30 @@ class SettingMain extends React.Component {
 
         {/* payment setting */}
         <Text style={stylesSetting.txtLabel}>Payment Settings</Text>
-        {this.currentUser?.type === User.TYPE_TEACHER ? (
-          <TouchableOpacity onPress={() => this.onStripeAccount()}>
-            <View style={stylesSetting.viewListItem}>
-              <View style={styles.viewListItemContent}>
-                <Text style={stylesSetting.txtItem}>Stripe Account</Text>
-                <Text style={styles.txtItemDesc}>Uninitialized</Text>
-              </View>
-
-              {/* chevron */}
-              <Icon type="ionicon" name="ios-arrow-forward" size={18} color={colorTheme.primary} />
-            </View>
-          </TouchableOpacity>
-        ) : null}
-
-        <TouchableOpacity style={stylesApp.mb12} onPress={() => this.onPaymentMethod()}>
+        <TouchableOpacity onPress={() => this.onStripeAccount()}>
           <View style={stylesSetting.viewListItem}>
-            <Text style={stylesSetting.txtItem}>Payment Methods</Text>
+            <View style={styles.viewListItemContent}>
+              <Text style={stylesSetting.txtItem}>Stripe Account</Text>
+              <Text style={styles.txtItemDesc}>
+                {this.currentUser?.stripeAccountId ? this.currentUser?.stripeAccountId : 'Uninitialized'}
+              </Text>
+            </View>
 
             {/* chevron */}
             <Icon type="ionicon" name="ios-arrow-forward" size={18} color={colorTheme.primary} />
           </View>
         </TouchableOpacity>
+
+        {false ?? (
+          <TouchableOpacity style={stylesApp.mb12} onPress={() => this.onPaymentMethod()}>
+            <View style={stylesSetting.viewListItem}>
+              <Text style={stylesSetting.txtItem}>Payment Methods</Text>
+
+              {/* chevron */}
+              <Icon type="ionicon" name="ios-arrow-forward" size={18} color={colorTheme.primary} />
+            </View>
+          </TouchableOpacity>
+        )}
       </View>
     );
   }
@@ -78,7 +81,7 @@ class SettingMain extends React.Component {
     this.props.navigation.push(SettingProfile.NAV_NAME);
   }
 
-  onPaymentMethod() {
+  async onPaymentMethod() {
   }
 }
 

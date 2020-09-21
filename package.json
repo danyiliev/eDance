@@ -20,6 +20,7 @@
     "axios": "^0.19.2",
     "moment": "^2.27.0",
     "prop-types": "^15.7.2",
+    "qs": "^6.9.4",
     "react": "16.11.0",
     "react-native": "0.62.2",
     "react-native-actionsheet": "^2.4.2",
@@ -50,7 +51,8 @@
     "react-native-webview": "^10.9.0",
     "react-native-x-carousel": "^1.0.1",
     "react-redux": "^7.2.0",
-    "redux": "^4.0.5"
+    "redux": "^4.0.5",
+    "tipsi-stripe": "^7.5.3"
   },
   "devDependencies": {
     "@babel/core": "^7.10.2",

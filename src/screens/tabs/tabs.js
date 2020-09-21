@@ -21,6 +21,8 @@ import Profile from '../profile/Profile';
 import ActionSheet from 'react-native-actionsheet';
 import Orders from '../orders/Orders';
 import Products from '../products/Products';
+import stripe from 'tipsi-stripe';
+import {config} from '../../helpers/config';
 
 const Tab = createBottomTabNavigator();
 
@@ -54,6 +56,11 @@ export default class TabMain extends React.Component {
 
   componentDidMount(): void {
     SplashScreen.hide();
+
+    // init stripe
+    stripe.setOptions({
+      publishableKey: config.stripeKey,
+    });
   }
 
   componentDidUpdate(
