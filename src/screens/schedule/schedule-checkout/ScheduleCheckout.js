@@ -16,6 +16,7 @@ import Toast from 'react-native-simple-toast';
 import {setUserInfo} from '../../../actions/user';
 import {connect} from 'react-redux';
 import {ApiService} from '../../../services';
+import stripe from 'tipsi-stripe';
 
 class ScheduleCheckout extends React.Component {
   static NAV_NAME = 'schedule-checkout';
@@ -132,38 +133,53 @@ class ScheduleCheckout extends React.Component {
   }
 
   async doPayment() {
+    try {
+      // payment
+      let stripeTokenInfo = await stripe.paymentRequestWithCardForm();
+      console.log(stripeTokenInfo);
+
+      // token
+      let tokenId = stripeTokenInfo.tokenId;
+
+      this.createCharge(tokenId);
+    } catch (e) {
+      console.log(e.code);
+
+      if (e.code !== 'cancelled') {
+        Alert.alert('Payment Failed', e.message);
+      }
+    }
+  }
+
+  async createCharge(token) {
     // show loading
     this.loadingHUD.show();
 
-    //
-    // payment
-    //
-    // try {
-    //   const resp = await RNPaypal.paymentRequest({
-    //     clientId: config.clientId,
-    //     environment: RNPaypal.ENVIRONMENT.SANDBOX,
-    //     intent: RNPaypal.INTENT.SALE,
-    //     price: this.lesson?.teacher.price,
-    //     currency: 'USD',
-    //     description: `Dance Lesson of ${this.lesson?.teacher.getFullName()}`,
-    //     acceptCreditCards: true,
-    //   });
-    //
-    //   console.log(resp);
-    //
-    //   Toast.show('Payment Successful');
-    // } catch (e) {
-    //   console.log(e.code);
-    //
-    //   if (e.code === 'USER_CANCELLED') {
-    //   } else {
-    //     Alert.alert('Payment Failed', e.message);
-    //   }
-    //
-    //   // hide loading
-    //   this.loadingHUD.hideAll();
-    //   return;
-    // }
+    try {
+      let response = await ApiService.stripeCreateCharge(
+        token,
+        this.lesson?.teacher.price,
+        `Dance Lesson of ${this.lesson?.teacher.getFullName()}`,
+        this.lesson?.teacher?.stripeAccountId,
+      );
+
+      Toast.show('Payment is successful');
+
+      // make order
+      await this.makeOrder();
+    } catch (e) {
+      console.log(e);
+
+      Alert.alert('Payment Failed', e.message);
+    }
+
+    // hide loading
+    this.loadingHUD.hideAll();
+  }
+
+  async makeOrder() {
+    // show loading
+    this.loadingHUD.show();
 
     // create lesson
     try {

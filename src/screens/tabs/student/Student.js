@@ -17,6 +17,8 @@ import {connect} from 'react-redux';
 import {LoadingHUD} from 'react-native-hud-hybrid';
 import LessonPlayback from '../../lessons/lesson-playback/LessonPlayback';
 import BaseLessonList from '../base-lesson-list';
+import stripe from 'tipsi-stripe';
+import {Lesson} from '../../../models/lesson.model';
 
 class Student extends BaseLessonList {
   static NAV_NAME = 'student';
@@ -121,38 +123,53 @@ class Student extends BaseLessonList {
   }
 
   async onPurchase(lesson) {
+    try {
+      // payment
+      let stripeTokenInfo = await stripe.paymentRequestWithCardForm();
+      console.log(stripeTokenInfo);
+
+      // token
+      let tokenId = stripeTokenInfo.tokenId;
+
+      this.createCharge(tokenId, lesson);
+    } catch (e) {
+      console.log(e.code);
+
+      if (e.code !== 'cancelled') {
+        Alert.alert('Payment Failed', e.message);
+      }
+    }
+  }
+
+  async createCharge(token, lesson) {
     // show loading
     this.loadingHUD.show();
 
-    //
-    // payment
-    //
-    // try {
-    //   const resp = await RNPaypal.paymentRequest({
-    //     clientId: config.clientId,
-    //     environment: RNPaypal.ENVIRONMENT.SANDBOX,
-    //     intent: RNPaypal.INTENT.SALE,
-    //     price: Lesson.PRICE_RECORDED,
-    //     currency: 'USD',
-    //     description: `Recorded Dance Lesson of ${item.teacher.getFullName()}`,
-    //     acceptCreditCards: true,
-    //   });
-    //
-    //   console.log(resp);
-    //
-    //   Toast.show('Payment Successful');
-    // } catch (e) {
-    //   console.log(e.code);
-    //
-    //   if (e.code === 'USER_CANCELLED') {
-    //   } else {
-    //     Alert.alert('Payment Failed', e.message);
-    //   }
-    //
-    //   // hide loading
-    //   this.loadingHUD.hideAll();
-    //   return;
-    // }
+    try {
+      let response = await ApiService.stripeCreateCharge(
+        token,
+        Lesson.PRICE_RECORDED,
+        `Recorded Dance Lesson of ${lesson.teacher.getFullName()}`,
+        this.lesson?.teacher?.stripeAccountId,
+      );
+
+      Toast.show('Payment is successful');
+
+      // make order
+      await this.makeOrder(lesson);
+    } catch (e) {
+      console.log(e);
+
+      Alert.alert('Payment Failed', e.message);
+    }
+
+    // hide loading
+    this.loadingHUD.hideAll();
+  }
+
+  async makeOrder(lesson) {
+    // show loading
+    this.loadingHUD.show();
 
     // add to purchased list
     try {
