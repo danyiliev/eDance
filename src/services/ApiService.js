@@ -314,6 +314,7 @@ class ApiService {
     }
   }
 
+  // deprecated
   async updateTeacherInfo(
     ageGroups,
     danceLevels,
@@ -363,6 +364,10 @@ class ApiService {
 
       return Promise.reject(e.response ? e.response.data : e);
     }
+  }
+
+  async updateUserFields(values) {
+
   }
 
   async addUserReview(userId, lessonId, rating, review) {

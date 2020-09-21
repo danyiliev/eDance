@@ -8,6 +8,7 @@ import {colors as colorTheme} from '../../../styles/theme.style';
 import {connect} from 'react-redux';
 import {User} from '../../../models/user.model';
 import SettingProfile from '../setting-profile/SettingProfile';
+import AddStripeAccount from '../add-stripe-account/AddStripeAccount';
 
 class SettingMain extends React.Component {
   static NAV_NAME = 'setting-main';
@@ -68,10 +69,12 @@ class SettingMain extends React.Component {
   }
 
   onStripeAccount() {
+    // go to stripe account page
+    this.props.navigation.push(AddStripeAccount.NAV_NAME);
   }
 
   onLessonOption() {
-    // go to base setting page
+    // go to lesson options page
     this.props.navigation.push(SettingProfile.NAV_NAME);
   }
 
