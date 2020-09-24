@@ -45,8 +45,24 @@ export default class Tv extends React.Component {
           data={this.state.channels}
           renderItem={({item, index}) => this.renderItem(item, index)}
           numColumns={2}
-          onEndReached={() => this.onEndReached()}
-          onEndReachedThreshold={3}
+          onEndReached={() => {
+            console.log('onEndReached');
+
+            this.endReached = true;
+          }}
+          onMomentumScrollEnd={() => {
+            console.log('onMomentumScrollEnd');
+
+            if (
+              this.endReached &&
+              !this.state.showLoading &&
+              this.state.channels.length >= this.pageCount
+            ) {
+              this.loadData(true);
+            }
+            this.endReached = false;
+          }}
+          onEndReachedThreshold={0.01}
         />
       </View>
     );
@@ -149,15 +165,6 @@ export default class Tv extends React.Component {
     this.setState({
       showLoading: false,
     });
-  }
-
-  onEndReached() {
-    // smaller than one page, no need to load again
-    if (this.state.channels.length < this.pageCount) {
-      return;
-    }
-
-    this.loadData();
   }
 
   onItem(index) {
