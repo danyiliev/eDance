@@ -30,15 +30,17 @@ class Tv extends React.Component {
   }
 
   componentDidMount(): void {
-    this.loadData(true);
+    this.loadData();
   }
 
   shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
     const {channels} = this.state;
 
     // check if tvs are updated
-    if (channels.length !== nextProps.RadioReducer.tvs.length) {
-      this.setState({channels: nextProps.RadioReducer.tvs});
+    if (nextProps.RadioReducer.tvs) {
+      if (channels.length !== nextProps.RadioReducer.tvs.length) {
+        this.setState({channels: nextProps.RadioReducer.tvs});
+      }
     }
 
     return true;
@@ -66,11 +68,7 @@ class Tv extends React.Component {
           onMomentumScrollEnd={() => {
             console.log('onMomentumScrollEnd');
 
-            if (
-              this.endReached &&
-              !this.state.showLoading &&
-              this.state.channels.length >= this.pageCount
-            ) {
+            if (this.endReached && !this.state.showLoading && this.state.channels.length >= this.pageCount) {
               this.loadData(true);
             }
             this.endReached = false;

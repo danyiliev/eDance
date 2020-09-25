@@ -110,7 +110,7 @@ export default class TabMain extends React.Component {
     return (
       <View style={stylesApp.viewContainer}>
         <Tab.Navigator
-          initialRouteName={Radio.NAV_NAME}
+          initialRouteName={Pro.NAV_NAME}
           tabBarOptions={{
             activeTintColor: colorTheme.primary,
           }}

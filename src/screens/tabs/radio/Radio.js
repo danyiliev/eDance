@@ -11,11 +11,11 @@ import {stylesApp} from '../../../styles/app.style';
 import EditProfile from '../../profile/edit-profile/EditProfile';
 import RadioDetail from './radio-detail/RadioDetail';
 import Pro from '../pro/Pro';
+import {setRadios} from '../../../actions/radio';
+import {connect} from 'react-redux';
 
-export default class Radio extends React.Component {
+class Radio extends React.Component {
   static NAV_NAME = 'radio';
-
-  webAppUrl = 'https://www.edancesportradio.com/';
 
   pageCount = 20;
 
@@ -29,21 +29,23 @@ export default class Radio extends React.Component {
 
   constructor(props) {
     super(props);
-
-    this.props.navigation.addListener('tabPress', (e) => {
-      // Prevent default behavior
-      e.preventDefault();
-
-      // open radio web app
-      Linking.openURL(this.webAppUrl);
-    });
-
-    // trick for custom action; navigate to default tab page manually
-    this.props.navigation.navigate(Pro.NAV_NAME);
   }
 
   componentDidMount(): void {
     this.loadData();
+  }
+
+  shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
+    const {channels} = this.state;
+
+    // check if radios are updated
+    if (nextProps.RadioReducer.radios) {
+      if (channels.length !== nextProps.RadioReducer.radios?.length) {
+        this.setState({channels: nextProps.RadioReducer.radios});
+      }
+    }
+
+    return true;
   }
 
   render() {
@@ -60,8 +62,20 @@ export default class Radio extends React.Component {
           data={this.state.channels}
           renderItem={({item, index}) => this.renderItem(item, index)}
           numColumns={2}
-          onEndReached={() => this.onEndReached()}
-          onEndReachedThreshold={3}
+          onEndReached={() => {
+            console.log('onEndReached');
+
+            this.endReached = true;
+          }}
+          onMomentumScrollEnd={() => {
+            console.log('onMomentumScrollEnd');
+
+            if (this.endReached && !this.state.showLoading && this.state.channels.length >= this.pageCount) {
+              this.loadData(true);
+            }
+            this.endReached = false;
+          }}
+          onEndReachedThreshold={0.01}
         />
       </View>
     );
@@ -72,7 +86,7 @@ export default class Radio extends React.Component {
       <View style={styles.viewItem}>
         <TouchableOpacity
           style={styles.viewItemContent}
-          onPress={() => this.onItem(item)}>
+          onPress={() => this.onItem(index)}>
           <FastImage
             style={styles.imgItem}
             source={VideoHelper.getHeaderImage(item)}
@@ -156,7 +170,7 @@ export default class Radio extends React.Component {
         channels = [...this.state.channels, ...channels];
       }
 
-      this.setState({channels});
+      this.props.setRadios(channels);
     } catch (e) {
       console.log(e);
     }
@@ -166,19 +180,17 @@ export default class Radio extends React.Component {
     });
   }
 
-  onEndReached() {
-    // smaller than one page, no need to load again
-    if (this.state.channels.length < this.pageCount) {
-      return;
-    }
-
-    this.loadData(true);
-  }
-
-  onItem(item) {
+  onItem(index) {
     // go to radio detail page
     this.props.navigation.push(RadioDetail.NAV_NAME, {
-      data: item,
+      index: index,
     });
   }
 }
+
+const mapStateToProps = (state) => state;
+const mapDispatchToProps = {
+  setRadios,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Radio);
