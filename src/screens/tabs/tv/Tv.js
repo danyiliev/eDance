@@ -9,8 +9,10 @@ import {ApiService} from '../../../services';
 import {Video} from '../../../models/video.model';
 import {stylesApp} from '../../../styles/app.style';
 import TvDetail from './tv-detail/TvDetail';
+import {connect} from 'react-redux';
+import {setTvs} from '../../../actions/radio';
 
-export default class Tv extends React.Component {
+class Tv extends React.Component {
   static NAV_NAME = 'tv';
 
   pageCount = 20;
@@ -29,6 +31,17 @@ export default class Tv extends React.Component {
 
   componentDidMount(): void {
     this.loadData(true);
+  }
+
+  shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
+    const {channels} = this.state;
+
+    // check if tvs are updated
+    if (channels.length !== nextProps.RadioReducer.tvs.length) {
+      this.setState({channels: nextProps.RadioReducer.tvs});
+    }
+
+    return true;
   }
 
   render() {
@@ -157,7 +170,7 @@ export default class Tv extends React.Component {
         channels = [...this.state.channels, ...channels];
       }
 
-      this.setState({channels});
+      this.props.setTvs(channels);
     } catch (e) {
       console.log(e);
     }
@@ -170,8 +183,14 @@ export default class Tv extends React.Component {
   onItem(index) {
     // go to tv detail page
     this.props.navigation.push(TvDetail.NAV_NAME, {
-      videos: this.state.channels,
       index: index,
     });
   }
 }
+
+const mapStateToProps = (state) => state;
+const mapDispatchToProps = {
+  setTvs,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Tv);

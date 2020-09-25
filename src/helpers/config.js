@@ -1,7 +1,7 @@
 import {sensitive} from './sensitive';
 
 export const config = {
-  chatPageSize: 20,
+  radioPageCount: 20,
 
   ...sensitive,
 };
