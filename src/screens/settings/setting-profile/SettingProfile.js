@@ -270,7 +270,7 @@ class SettingProfile extends React.Component {
         <View style={[styles.viewForm, stylesApp.mt14]}>
           <Text style={[stylesSignup.txtItemTitle, stylesApp.mt6]}>Price</Text>
 
-          {/* phone */}
+          {/* price */}
           <View style={[styles.viewInput, stylesApp.mt12]}>
             <Input
               containerStyle={styles.ctnInput}
@@ -284,7 +284,7 @@ class SettingProfile extends React.Component {
               onChangeText={(price) => {
                 this.setState({price});
               }}
-              value={this.state.phone}
+              value={this.state.price}
               renderErrorMessage={false}
             />
             {/* right icon */}

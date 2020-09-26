@@ -1,19 +1,24 @@
 import React from 'react';
 import {Alert, FlatList, ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import {styles} from './styles';
-import {Button, Icon} from 'react-native-elements';
+import {Button, Icon, Input} from 'react-native-elements';
 import {colors as colorTheme} from '../../../styles/theme.style';
 import {stylesApp, styleUtil} from '../../../styles/app.style';
-import {styles as stylesCart} from '../../cart/styles';
+import {styles as stylesSetting} from '../../settings/setting-profile/styles';
 import Reviews from '../../reviews/Reviews';
 import AddSession from '../add-session/AddSession';
 import {UiHelper} from '../../../helpers/ui-helper';
 import moment from 'moment';
-import {Event, EventSession} from '../../../models/event.model';
+import {Event, EventSession, Price} from '../../../models/event.model';
 import {DanceHelper} from '../../../helpers/dance-helper';
 import AddPrize from '../add-prize/AddPrize';
 import Toast from 'react-native-simple-toast';
 import {connect} from 'react-redux';
+import {styles as stylesSignup} from '../../signup/styles';
+import PriceWithCurrency from '../../../components/PriceWithCurrency/PriceWithCurrency';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import ScheduleSelect from '../../schedule/ScheduleSelect';
+import TentativeSchedule from '../tentative-schedule/TentativeSchedule';
 
 class AddChampionship extends React.Component {
   static NAV_NAME = 'add-championship';
@@ -21,62 +26,164 @@ class AddChampionship extends React.Component {
 
   state = {
     // ui
-    showTimePicker: false,
+    title: '',
+    companyAddress: '',
+    phone: '',
+    email: '',
 
-    sessions: [],
+    prices: [],
   };
-
-  menus = [
-    'Tentative Schedule',
-    'Cash Prizes & Awards',
-    'Hotel & Package Prices',
-    'Entry Fees',
-    'Concellation & Refund Policy',
-    'Closed Restricted Syllabus Competition & Schedules',
-    'Open Unrestricted Syllabus Championships & Schedules',
-  ];
 
   constructor(props) {
     super(props);
 
     props.navigation.setOptions({
-      title: 'Tentative Schedule',
+      title: 'Create New Championship',
     });
+
+    this.state.prices.push(new Price());
   }
 
   render() {
     return (
-      <View style={stylesApp.viewContainer}>
-        <ScrollView bounces={false}>
-          <View style={styles.viewContainer}>
-            {this.state.sessions.map((s, i) => {
-              return this.renderSession(s, i);
-            })}
+      <KeyboardAwareScrollView style={stylesApp.viewContainer} bounces={false}>
+        <View style={styles.viewContainer}>
+          {/* title */}
+          <View style={stylesSetting.viewForm}>
+            <Text style={stylesSignup.txtItemTitle}>Title</Text>
 
-            <Text style={styles.txtSessionLabel}>
-              Session {this.state.sessions.length + 1}
-            </Text>
-            <View style={styles.viewForm}>
-              <TouchableOpacity onPress={() => this.onAddSession()}>
-                <View style={stylesApp.viewLoading}>
-                  <Icon color={colorTheme.grey} type="ionicon" name="ios-add" size={100} />
-                </View>
-              </TouchableOpacity>
+            <View style={[stylesSetting.viewInput, stylesApp.mt12]}>
+              <Input
+                containerStyle={stylesSetting.ctnInput}
+                autoCapitalize={'none'}
+                returnKeyType="next"
+                placeholder="Input Title"
+                placeholderTextColor={colorTheme.primary}
+                inputStyle={stylesSetting.input}
+                inputContainerStyle={stylesApp.input}
+                onChangeText={(title) => {
+                  this.setState({title});
+                }}
+                value={this.state.title}
+                renderErrorMessage={false}
+                blurOnSubmit={false}
+                onSubmitEditing={() => {
+                  this.inputAddress.focus();
+                }}
+              />
             </View>
           </View>
 
-          {/* time picker */}
-          {UiHelper.getInstance().renderDateTimePicker(
-            this,
-            'datetime',
-            (time) => {
-              this.onSelectTime(time);
-            },
-            'Select Time For Event',
-          )}
+          {/* contact info */}
+          <View style={[stylesSetting.viewForm, stylesApp.mt14]}>
+            <Text style={stylesSignup.txtItemTitle}>Contact Info</Text>
 
-          {/* save */}
-          <View style={[styleUtil.withShadow(), styles.viewButSave]}>
+            {/* companyAddress */}
+            <View style={[stylesSetting.viewInput, stylesApp.mt12]}>
+              <Input
+                ref={(input) => {
+                  this.inputAddress = input;
+                }}
+                containerStyle={stylesSetting.ctnInput}
+                autoCapitalize={'none'}
+                returnKeyType="next"
+                placeholder="Company Address"
+                placeholderTextColor={colorTheme.primary}
+                inputStyle={stylesSetting.input}
+                inputContainerStyle={stylesApp.input}
+                onChangeText={(companyAddress) => {
+                  this.setState({companyAddress});
+                }}
+                value={this.state.companyAddress}
+                renderErrorMessage={false}
+                blurOnSubmit={false}
+                onSubmitEditing={() => {
+                  this.inputPhone.focus();
+                }}
+              />
+            </View>
+
+            {/* phone */}
+            <View style={[stylesSetting.viewInput, stylesApp.mt8]}>
+              <Input
+                ref={(input) => {
+                  this.inputPhone = input;
+                }}
+                containerStyle={stylesSetting.ctnInput}
+                autoCapitalize={'none'}
+                keyboardType="phone-pad"
+                returnKeyType="next"
+                placeholder="Phone Number"
+                placeholderTextColor={colorTheme.primary}
+                inputStyle={stylesSetting.input}
+                inputContainerStyle={stylesApp.input}
+                onChangeText={(phone) => {
+                  this.setState({phone});
+                }}
+                value={this.state.phone}
+                renderErrorMessage={false}
+              />
+            </View>
+
+            {/* email */}
+            <View style={[stylesSetting.viewInput, stylesApp.mt8]}>
+              <Input
+                containerStyle={stylesSetting.ctnInput}
+                autoCapitalize={'none'}
+                keyboardType="email-address"
+                returnKeyType="done"
+                placeholder="Email"
+                placeholderTextColor={colorTheme.primary}
+                inputStyle={stylesSetting.input}
+                inputContainerStyle={stylesApp.input}
+                onChangeText={(email) => {
+                  this.setState({email});
+                }}
+                value={this.state.email}
+                renderErrorMessage={false}
+              />
+            </View>
+          </View>
+
+          {/* contact info */}
+          <View style={[stylesSetting.viewForm, stylesApp.mt14]}>
+            <Text style={stylesSignup.txtItemTitle}>Price</Text>
+
+            <View style={stylesApp.mt6}>
+              {this.state.prices.map((price, i) => {
+                return (
+                  <View style={styles.viewPriceItem} key={i.toString()}>
+                    <View style={[stylesSetting.viewInput, stylesApp.flex1]}>
+                      <PriceWithCurrency
+                        inputStyle={stylesSetting.input}
+                        placeholder="Input Price"
+                        onChangeText={(value) => this.onChangePrice(value, i)}
+                        onChangeCurrency={(value) => this.onChangeCurrency(value, i)}
+                      />
+                    </View>
+
+                    {i === 0 ? (
+                      <Button
+                        type="clear"
+                        icon={<Icon type="ionicon" name="md-add-circle" size={24} />}
+                        onPress={() => this.onAddPrice()}
+                      />
+                    ) : (
+                      <Button
+                        type="clear"
+                        icon={<Icon type="ionicon" name="md-remove-circle" size={24} />}
+                        onPress={() => this.onRemovePrice(i)}
+                      />
+                    )}
+
+                  </View>
+                );
+              })}
+            </View>
+          </View>
+
+          {/* next */}
+          <View style={[styleUtil.withShadow(), stylesSetting.viewButSave]}>
             <Button
               title="Next"
               buttonStyle={stylesApp.butPrimary}
@@ -84,153 +191,36 @@ class AddChampionship extends React.Component {
               onPress={() => this.onButNext()}
             />
           </View>
-        </ScrollView>
-      </View>
-    );
-  }
-
-  renderSession(session, index) {
-    return (
-      <View key={index.toString()}>
-        <Text style={styles.txtSessionLabel}>Session {index + 1}</Text>
-        <View style={styles.viewForm}>
-          {/* delete */}
-          <Button
-            type="clear"
-            icon={<Icon type="font-awesome" name="trash" size={18} color={colorTheme.primary} />}
-            containerStyle={styles.ctnButDelete}
-            onPress={() => this.onDelete(index)}
-          />
-
-          {/* time */}
-          <View style={stylesApp.flexRowCenter}>
-            <Text style={styles.txtFormLabel}>Date & Time: </Text>
-            <Text style={styles.txtFormValue}>{session.startAt}</Text>
-          </View>
-
-          {this.renderSessionTypes(index)}
         </View>
-      </View>
+      </KeyboardAwareScrollView>
     );
   }
 
-  renderSessionTypes(index) {
-    const types = this.state.sessions[index].types;
-
-    if (types.length <= 0) {
-      return (
-        <TouchableOpacity onPress={() => this.onAddSessionContent(index)}>
-          <View style={stylesApp.viewLoading}>
-            <Text style={stylesApp.txtEmptyItem}>Click here to add session items</Text>
-          </View>
-        </TouchableOpacity>
-      );
-    }
-
-    const viewTypes = types.map((t, idx) => {
-      return (
-        <View key={`session${index}-type${idx}`}>
-          <Text style={styles.txtSessionType}>{t.type}</Text>
-
-          {t.danceStyles.map((s, i) => {
-            return (
-              <Text key={`session${index}-type${i}-style${i}`} style={styles.txtSessionDanceStyle}>
-                {DanceHelper.danceStyleNameByVal(s)}
-              </Text>
-            );
-          })}
-        </View>
-      );
-    });
-
-    return <TouchableOpacity onPress={() => this.onAddSessionContent(index)}>{viewTypes}</TouchableOpacity>;
+  onChangePrice(value, i) {
+    this.state.prices[i].price = value;
   }
 
-  onAddSession() {
-    // show time picker
-    UiHelper.getInstance().timeSelected = new Date();
-
-    this.setState({
-      showTimePicker: true,
-    });
+  onChangeCurrency(value, i) {
+    this.state.prices[i].currency = value;
   }
 
-  onSelectTime(time) {
-    const sessionNew = new EventSession();
-    sessionNew.startAt = moment(time).format('YYYY-MM-DD HH:mm');
+  onAddPrice() {
+    const {prices} = this.state;
+    prices.push(new Price());
 
-    const {sessions} = this.state;
-    sessions.push(sessionNew);
-
-    this.setState({sessions});
+    this.setState({prices});
   }
 
-  onAddSessionContent(index) {
-    // go to add session page
-    this.props.navigation.push(
-      this.props.UserReducer.isLoggedIn ? AddSession.NAV_NAME : AddSession.NAV_NAME_SIGNUP,
-      {
-        session: this.state.sessions[index],
-        onSave: (types) => this.onSaveTypes(index, types),
-      },
-    );
-  }
+  onRemovePrice(index) {
+    const {prices} = this.state;
+    prices.splice(index, 1);
 
-  onSaveTypes(index, types) {
-    const {sessions} = this.state;
-    sessions[index].types = types;
-
-    this.setState({sessions});
-  }
-
-  onDelete(index) {
-    Alert.alert(
-      'Are you sure you want to remove this session?',
-      '',
-      [
-        {
-          text: 'Cancel',
-          onPress: () => console.log('Cancel Pressed'),
-          style: 'cancel',
-        },
-        {text: 'Yes', onPress: () => this.doDeleteItem(index)},
-      ],
-      {cancelable: true},
-    );
-  }
-
-  doDeleteItem(index) {
-    const {sessions} = this.state;
-    sessions.splice(index, 1);
-
-    this.setState({sessions});
+    this.setState({prices});
   }
 
   onButNext() {
-    // check sessions are added
-    if (this.state.sessions.length <= 0) {
-      Toast.show('Session should be added first');
-      return;
-    }
-
-    // check all sessions are filled
-    for (const s of this.state.sessions) {
-      if (s.types.length <= 0) {
-        Toast.show('All event sessions should be filled.');
-        return;
-      }
-    }
-
-    let event = new Event();
-    event.sessions = this.state.sessions;
-
-    // go to add prize page
-    this.props.navigation.push(
-      this.props.UserReducer.isLoggedIn ? AddPrize.NAV_NAME : AddPrize.NAV_NAME_SIGNUP,
-      {
-        event: event,
-      },
-    );
+    // go to tentative schedule page
+    this.props.navigation.push(TentativeSchedule.NAV_NAME);
   }
 }
 

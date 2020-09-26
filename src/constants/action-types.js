@@ -5,6 +5,7 @@ export const SET_PRODUCTS = 'SET_PRODUCTS';
 export const SET_MY_PRODUCTS = 'SET_MY_PRODUCTS';
 export const CLEAR_PRODUCTS = 'SET_MY_PRODUCTS';
 
+export const SET_EVENT_SELECTED = 'SET_EVENT_SELECTED';
 export const SET_EVENTS = 'SET_EVENTS';
 export const CLEAR_EVENTS = 'CLEAR_EVENTS';
 

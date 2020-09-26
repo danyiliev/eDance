@@ -82,7 +82,7 @@ export default class TabMain extends React.Component {
         route.state.routes[route.state.index].name
       : // If state doesn't exist, we need to default to `screen` param if available, or the initial screen
         // In our case, it's "Feed" as that's the first screen inside the navigator
-        route.params?.screen || Radio.NAV_NAME;
+        route.params?.screen || Pro.NAV_NAME;
 
     return routeName;
   }

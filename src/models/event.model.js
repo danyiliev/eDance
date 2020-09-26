@@ -3,6 +3,16 @@ import {Utils} from '../helpers/utils';
 import {User} from './user.model';
 import moment from 'moment';
 
+export class Price {
+  static CURRENCIES = ['USD', 'GBP', 'EUR'];
+
+  //
+  // properties
+  //
+  price = 0;
+  currency = Price.CURRENCIES[0];
+}
+
 export class SessionType {
   //
   // properties

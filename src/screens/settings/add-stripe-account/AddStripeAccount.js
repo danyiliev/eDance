@@ -35,7 +35,7 @@ class AddStripeAccount extends React.Component {
     super(props);
 
     props.navigation.setOptions({
-      title: 'Settings',
+      title: 'Stripe Account',
     });
 
     this.currentUser = props.UserReducer.user;
@@ -67,6 +67,11 @@ class AddStripeAccount extends React.Component {
       Toast.show(e.message);
     }
 
+    this.loadingHUD.hideAll();
+  }
+
+  componentWillUnmount(): void {
+    // hide loading
     this.loadingHUD.hideAll();
   }
 

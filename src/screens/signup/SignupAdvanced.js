@@ -213,6 +213,11 @@ class SignupAdvanced extends BaseSignup {
       }
 
       this.userNew.id = user.id;
+      this.userNew.gender = this.state.genderIndex;
+      this.userNew.state = this.state.state;
+      this.userNew.city = this.state.city;
+      this.userNew.zipCode = this.state.zipCode;
+
       await this.setUser(this.userNew);
     } catch (e) {
       Alert.alert('Login Failed', e.message);
