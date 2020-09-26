@@ -2,6 +2,8 @@ import {StyleSheet} from 'react-native';
 import {colors as colorTheme} from '../../../styles/theme.style';
 import {stylesApp} from '../../../styles/app.style';
 
+const fontSizeInput = 14;
+
 export const styles = StyleSheet.create({
   viewContainer: {
     paddingHorizontal: 12,
@@ -67,5 +69,29 @@ export const styles = StyleSheet.create({
   txtPlaceholder: {
     fontSize: 14,
     color: colorTheme.grey,
+  },
+
+  //
+  // edit
+  //
+  ctnInputNumber: {
+    borderBottomWidth: 1,
+    paddingHorizontal: 4,
+    width: 60,
+  },
+  inputNumber: {
+    fontSize: fontSizeInput,
+    paddingVertical: 4,
+    minHeight: 0,
+    textAlign: 'center',
+  },
+
+  viewRow: {
+    ...stylesApp.flexRow,
+  },
+  viewRowItem: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

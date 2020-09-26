@@ -175,7 +175,6 @@ class AddChampionship extends React.Component {
                         onPress={() => this.onRemovePrice(i)}
                       />
                     )}
-
                   </View>
                 );
               })}
