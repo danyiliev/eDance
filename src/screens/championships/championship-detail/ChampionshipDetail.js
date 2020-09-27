@@ -9,6 +9,7 @@ import {Button} from 'react-native-elements';
 import PrizeDetail from '../prize-detail/PrizeDetail';
 import {LoadingHUD} from 'react-native-hud-hybrid';
 import {ApiService} from '../../../services';
+import ApplyChampionship from '../apply-championship/ApplyChampionship';
 
 class ChampionshipDetail extends React.Component {
   static NAV_NAME = 'championship-detail';
@@ -95,7 +96,7 @@ class ChampionshipDetail extends React.Component {
               <Button
                 title="Apply"
                 containerStyle={[styles.ctnButAction, stylesApp.ml10]}
-                disabled={this.isApplied()}
+                // disabled={this.isApplied()}
                 disabledStyle={[stylesApp.butPrimary, stylesApp.semiTrans]}
                 buttonStyle={stylesApp.butPrimary}
                 titleStyle={stylesApp.titleButPrimary}
@@ -128,23 +129,29 @@ class ChampionshipDetail extends React.Component {
   }
 
   async onButApply() {
-    this.loadingHUD.show();
+    // go to apply page
+    this.props.navigation.push(ApplyChampionship.NAV_NAME, {
+      event: this.event,
+      session: this.state.eventSession,
+    });
 
-    try {
-      await ApiService.applyEventSession(this.event.id, this.state.eventSession.id);
-
-      const {eventSession} = this.state;
-      eventSession.entryCount++;
-      eventSession.joinedUsers.push(this.currentUser);
-
-      this.setState({eventSession});
-    } catch (e) {
-      console.log(e);
-
-      Alert.alert('Failed to Apply Championship', e.message);
-    }
-
-    this.loadingHUD.hideAll();
+    // this.loadingHUD.show();
+    //
+    // try {
+    //   await ApiService.applyEventSession(this.event.id, this.state.eventSession.id);
+    //
+    //   const {eventSession} = this.state;
+    //   eventSession.entryCount++;
+    //   eventSession.joinedUsers.push(this.currentUser);
+    //
+    //   this.setState({eventSession});
+    // } catch (e) {
+    //   console.log(e);
+    //
+    //   Alert.alert('Failed to Apply Championship', e.message);
+    // }
+    //
+    // this.loadingHUD.hideAll();
   }
 
   isApplied() {

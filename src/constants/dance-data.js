@@ -9,6 +9,7 @@ export const OCCASIONS = [
 ];
 
 export const SELECT_AGE = 'age';
+export const SELECT_DANCE_LEVEL = 'dance-level';
 export const SELECT_AMERICAN_BALLROOM = 'american-ballroom';
 export const SELECT_AMERICAN_RHYTHM = 'american-rhythm';
 export const SELECT_STANDARD = 'standard';

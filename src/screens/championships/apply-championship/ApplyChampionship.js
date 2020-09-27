@@ -7,7 +7,12 @@ import {Button, ButtonGroup, Icon, Input} from 'react-native-elements';
 import {User} from '../../../models/user.model';
 import {styles as stylesSignup} from '../../signup/styles';
 import {colors as colorTheme} from '../../../styles/theme.style';
-import {SELECT_AMERICAN_RHYTHM, SELECT_LATIN} from '../../../constants/dance-data';
+import {
+  SELECT_AGE,
+  SELECT_AMERICAN_RHYTHM,
+  SELECT_DANCE_LEVEL,
+  SELECT_LATIN,
+} from '../../../constants/dance-data';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {DanceHelper} from '../../../helpers/dance-helper';
 import CheckboxRound from '../../../components/CheckboxRound/CheckboxRound';
@@ -15,6 +20,7 @@ import AddStripeAccount from '../../settings/add-stripe-account/AddStripeAccount
 import SelectTeacher from '../select-teacher/SelectTeacher';
 import FastImage from 'react-native-fast-image';
 import {UserHelper} from '../../../helpers/user-helper';
+import SelectList from '../../settings/select-list/SelectList';
 const {width: SCREEN_WDITH} = Dimensions.get('window');
 
 class ApplyChampionship extends React.Component {
@@ -39,6 +45,9 @@ class ApplyChampionship extends React.Component {
   event = null;
   eventSession = null;
 
+  currentIndex = 0;
+  currentLevelIndex = 0;
+
   constructor(props) {
     super(props);
 
@@ -46,11 +55,17 @@ class ApplyChampionship extends React.Component {
       title: 'Apply Championship',
     });
 
-    // todo: init test data
-    for (let i = 0; i < 2; i++) {
+    // get parameter
+    if (props.route.params) {
+      this.event = props.route.params.event;
+      this.eventSession = props.route.params.session;
+    }
+
+    // init data
+    for (const st of this.eventSession.types) {
       let sessionApply = {
-        type: 'aaa',
-        danceStyle: [SELECT_AMERICAN_RHYTHM, SELECT_LATIN],
+        type: st.type,
+        danceStyle: st.danceStyles,
 
         //   ageGroup,
         //   levels: [
@@ -66,13 +81,15 @@ class ApplyChampionship extends React.Component {
 
       const applyLevel = {
         level: '',
-        dancesWithStyle: [
-          {
-            style: '',
-            dances: [],
-          },
-        ],
+        dancesWithStyle: [],
       };
+
+      for (const s of st.danceStyles) {
+        applyLevel.dancesWithStyle.push({
+          style: s,
+          dances: [],
+        });
+      }
       sessionApply.levels.push(applyLevel);
 
       this.state.sessionsApply.push(sessionApply);
@@ -139,6 +156,10 @@ class ApplyChampionship extends React.Component {
                     }}
                     value={this.state.studio}
                     renderErrorMessage={false}
+                    blurOnSubmit={false}
+                    onSubmitEditing={() => {
+                      this.inputEmail.focus();
+                    }}
                   />
                 </View>
               </View>
@@ -148,6 +169,9 @@ class ApplyChampionship extends React.Component {
                 <Text style={styles.txtFormLabel}>Email</Text>
                 <View style={styles.viewInput}>
                   <Input
+                    ref={(input) => {
+                      this.inputEmail = input;
+                    }}
                     containerStyle={styles.ctnInput}
                     autoCapitalize={'none'}
                     returnKeyType="next"
@@ -160,6 +184,10 @@ class ApplyChampionship extends React.Component {
                     }}
                     value={this.state.email}
                     renderErrorMessage={false}
+                    blurOnSubmit={false}
+                    onSubmitEditing={() => {
+                      this.inputPhone.focus();
+                    }}
                   />
                 </View>
               </View>
@@ -169,6 +197,9 @@ class ApplyChampionship extends React.Component {
                 <Text style={styles.txtFormLabel}>Telephone</Text>
                 <View style={styles.viewInput}>
                   <Input
+                    ref={(input) => {
+                      this.inputPhone = input;
+                    }}
                     containerStyle={styles.ctnInput}
                     autoCapitalize={'none'}
                     keyboardType="number-pad"
@@ -182,6 +213,10 @@ class ApplyChampionship extends React.Component {
                     }}
                     value={this.state.phone}
                     renderErrorMessage={false}
+                    blurOnSubmit={false}
+                    onSubmitEditing={() => {
+                      this.inputFax.focus();
+                    }}
                   />
                 </View>
               </View>
@@ -191,6 +226,9 @@ class ApplyChampionship extends React.Component {
                 <Text style={styles.txtFormLabel}>Fax</Text>
                 <View style={styles.viewInput}>
                   <Input
+                    ref={(input) => {
+                      this.inputFax = input;
+                    }}
                     containerStyle={styles.ctnInput}
                     autoCapitalize={'none'}
                     keyboardType="number-pad"
@@ -204,6 +242,10 @@ class ApplyChampionship extends React.Component {
                     }}
                     value={this.state.fax}
                     renderErrorMessage={false}
+                    blurOnSubmit={false}
+                    onSubmitEditing={() => {
+                      this.inputAddress.focus();
+                    }}
                   />
                 </View>
               </View>
@@ -213,6 +255,9 @@ class ApplyChampionship extends React.Component {
                 <Text style={styles.txtFormLabel}>Address</Text>
                 <View style={styles.viewInput}>
                   <Input
+                    ref={(input) => {
+                      this.inputAddress = input;
+                    }}
                     containerStyle={styles.ctnInput}
                     autoCapitalize={'none'}
                     returnKeyType="next"
@@ -225,6 +270,10 @@ class ApplyChampionship extends React.Component {
                     }}
                     value={this.state.address}
                     renderErrorMessage={false}
+                    blurOnSubmit={false}
+                    onSubmitEditing={() => {
+                      this.inputCity.focus();
+                    }}
                   />
                 </View>
               </View>
@@ -234,6 +283,9 @@ class ApplyChampionship extends React.Component {
                 <Text style={styles.txtFormLabel}>City</Text>
                 <View style={styles.viewInput}>
                   <Input
+                    ref={(input) => {
+                      this.inputCity = input;
+                    }}
                     containerStyle={styles.ctnInput}
                     autoCapitalize={'none'}
                     returnKeyType="next"
@@ -246,6 +298,10 @@ class ApplyChampionship extends React.Component {
                     }}
                     value={this.state.city}
                     renderErrorMessage={false}
+                    blurOnSubmit={false}
+                    onSubmitEditing={() => {
+                      this.inputState.focus();
+                    }}
                   />
                 </View>
               </View>
@@ -255,9 +311,12 @@ class ApplyChampionship extends React.Component {
                 <Text style={styles.txtFormLabel}>State</Text>
                 <View style={styles.viewInput}>
                   <Input
+                    ref={(input) => {
+                      this.inputState = input;
+                    }}
                     containerStyle={styles.ctnInput}
                     autoCapitalize={'none'}
-                    returnKeyType="next"
+                    returnKeyType="done"
                     placeholder="Input State"
                     placeholderTextColor={colorTheme.grey}
                     inputStyle={styles.input}
@@ -301,9 +360,9 @@ class ApplyChampionship extends React.Component {
         <View style={[styles.viewFormRow, stylesApp.mt14]}>
           <Text style={styles.txtFormLabel}>Age Group</Text>
 
-          <TouchableOpacity style={stylesApp.flex1}>
+          <TouchableOpacity style={stylesApp.flex1} onPress={() => this.onSelectAge(sessionIndex)}>
             {sessionApply.ageGroup ? (
-              <Text style={styles.input}>{sessionApply.ageGroup}</Text>
+              <Text style={styles.input}>{DanceHelper.ageGroupNameByVal(sessionApply.ageGroup)}</Text>
             ) : (
               <Text style={{...styles.input, color: colorTheme.grey}}>Select Age</Text>
             )}
@@ -311,14 +370,16 @@ class ApplyChampionship extends React.Component {
         </View>
 
         {sessionApply.levels.map((applyLevel, i) => (
-          <View style={styles.viewSubForm}>
+          <View style={styles.viewSubForm} key={`sessionApply${sessionIndex}-level${i}`}>
             {/* dance level */}
             <View style={[styles.viewFormRow, stylesApp.mb4]}>
               <Text style={styles.txtFormLabel}>Dance Level</Text>
 
-              <TouchableOpacity style={stylesApp.flex1}>
+              <TouchableOpacity style={stylesApp.flex1} onPress={() => this.onSelectLevel(sessionIndex, i)}>
                 {applyLevel.level ? (
-                  <Text style={styles.input}>{applyLevel.level}</Text>
+                  <Text style={styles.input}>
+                    {DanceHelper.danceLevelNameByVal(applyLevel.level)}
+                  </Text>
                 ) : (
                   <Text style={{...styles.input, color: colorTheme.grey}}>Select Level</Text>
                 )}
@@ -331,21 +392,21 @@ class ApplyChampionship extends React.Component {
               <Text style={styles.input}>$40</Text>
             </View>
 
-            {this.renderApplyLevel(applyLevel, sessionIndex)}
+            {this.renderApplyLevel(sessionIndex, i)}
 
             {i === 0 ? (
               <Button
                 containerStyle={styles.ctnButAdd}
                 type="clear"
                 icon={<Icon type="ionicon" name="md-add-circle" size={24} />}
-                onPress={() => this.onAddPrice()}
+                onPress={() => this.onAddApplyLevel(sessionIndex)}
               />
             ) : (
               <Button
                 containerStyle={styles.ctnButAdd}
                 type="clear"
                 icon={<Icon type="ionicon" name="md-remove-circle" size={24} />}
-                onPress={() => this.onRemovePrice(i)}
+                onPress={() => this.onRemoveApplyLevel(sessionIndex, i)}
               />
             )}
           </View>
@@ -354,8 +415,11 @@ class ApplyChampionship extends React.Component {
     );
   }
 
-  renderApplyLevel(applyLevel, sessionIndex) {
+  renderApplyLevel(sessionIndex, levelIndex) {
     const itemWidth = (SCREEN_WDITH - 14 * 6 - 30) / 4;
+
+    const {sessionsApply} = this.state;
+    const applyLevel = sessionsApply[sessionIndex].levels[levelIndex];
 
     return (
       <View>
@@ -368,7 +432,8 @@ class ApplyChampionship extends React.Component {
                 <CheckboxRound
                   key={`session${sessionIndex}-style${styleIndex}-dance${i}`}
                   label={d.value}
-                  onPress={() => this.onSelectTimeSlot(i)}
+                  checked={applyLevel.dancesWithStyle[styleIndex]?.dances.indexOf(d.value) >= 0}
+                  onPress={() => this.onSelectDance(d.value, sessionIndex, levelIndex, styleIndex)}
                   checkboxWidth={18}
                   textSize={14}
                   containerStyle={{
@@ -389,9 +454,85 @@ class ApplyChampionship extends React.Component {
       onSave: this.onSelectedTeacher.bind(this),
     });
   }
-
   onSelectedTeacher(teacher) {
     this.setState({teacher});
+  }
+
+  onSelectAge(sessionIndex) {
+    const {sessionsApply} = this.state;
+    this.currentIndex = sessionIndex;
+
+    this.props.navigation.push(SelectList.NAV_NAME, {
+      type: SELECT_AGE,
+      multipleSelect: false,
+      values: [sessionsApply[this.currentIndex].ageGroup],
+      onSave: this.onSelectedAge.bind(this),
+    });
+  }
+  onSelectedAge(type, values) {
+    const {sessionsApply} = this.state;
+
+    sessionsApply[this.currentIndex].ageGroup = values[0];
+    this.setState({sessionsApply});
+  }
+
+  onSelectLevel(sessionIndex, levelIndex) {
+    const {sessionsApply} = this.state;
+    this.currentIndex = sessionIndex;
+    this.currentLevelIndex = levelIndex;
+
+    this.props.navigation.push(SelectList.NAV_NAME, {
+      type: SELECT_DANCE_LEVEL,
+      multipleSelect: false,
+      values: [sessionsApply[this.currentIndex].levels[levelIndex].level],
+      onSave: this.onSelectedLevel.bind(this),
+    });
+  }
+  onSelectedLevel(type, values) {
+    const {sessionsApply} = this.state;
+
+    sessionsApply[this.currentIndex].levels[this.currentLevelIndex].level = values[0];
+    this.setState({sessionsApply});
+  }
+
+  onSelectDance(dance, sessionIndex, levelIndex, styleIndex) {
+    const {sessionsApply} = this.state;
+    const applyStyle = sessionsApply[sessionIndex].levels[levelIndex].dancesWithStyle[styleIndex];
+    const index = applyStyle.dances.indexOf(dance);
+
+    if (index < 0) {
+      applyStyle.dances.push(dance);
+    } else {
+      applyStyle.dances.splice(index, 1);
+    }
+
+    this.setState({sessionsApply});
+  }
+
+  onAddApplyLevel(sessionIndex) {
+    const {sessionsApply} = this.state;
+
+    const applyLevel = {
+      level: '',
+      dancesWithStyle: [],
+    };
+
+    for (const s of this.eventSession.types[sessionIndex].danceStyles) {
+      applyLevel.dancesWithStyle.push({
+        style: s,
+        dances: [],
+      });
+    }
+    sessionsApply[sessionIndex].levels.push(applyLevel);
+
+    this.setState({sessionsApply});
+  }
+
+  onRemoveApplyLevel(sessionIndex, levelIndex) {
+    const {sessionsApply} = this.state;
+    sessionsApply[sessionIndex].levels.splice(levelIndex, 1);
+
+    this.setState({sessionsApply});
   }
 }
 
