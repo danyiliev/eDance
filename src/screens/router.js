@@ -72,6 +72,7 @@ import SettingMain from './settings/setting-main/SettingMain';
 import AddStripeAccount from './settings/add-stripe-account/AddStripeAccount';
 import TentativeSchedule from './championships/tentative-schedule/TentativeSchedule';
 import ApplyChampionship from './championships/apply-championship/ApplyChampionship';
+import SelectTeacher from './championships/select-teacher/SelectTeacher';
 
 const Stack = createStackNavigator();
 
@@ -175,6 +176,7 @@ class MainNavigator extends React.Component {
               <Stack.Screen name={AddStripeAccount.NAV_NAME} component={AddStripeAccount} />
               <Stack.Screen name={TentativeSchedule.NAV_NAME} component={TentativeSchedule} />
               <Stack.Screen name={ApplyChampionship.NAV_NAME} component={ApplyChampionship} />
+              <Stack.Screen name={SelectTeacher.NAV_NAME} component={SelectTeacher} />
             </Stack.Navigator>
 
             <MenuModal

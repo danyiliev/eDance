@@ -11,6 +11,10 @@ import {SELECT_AMERICAN_RHYTHM, SELECT_LATIN} from '../../../constants/dance-dat
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {DanceHelper} from '../../../helpers/dance-helper';
 import CheckboxRound from '../../../components/CheckboxRound/CheckboxRound';
+import AddStripeAccount from '../../settings/add-stripe-account/AddStripeAccount';
+import SelectTeacher from '../select-teacher/SelectTeacher';
+import FastImage from 'react-native-fast-image';
+import {UserHelper} from '../../../helpers/user-helper';
 const {width: SCREEN_WDITH} = Dimensions.get('window');
 
 class ApplyChampionship extends React.Component {
@@ -85,10 +89,16 @@ class ApplyChampionship extends React.Component {
               <View style={styles.viewFormRow}>
                 <Text style={styles.txtFormLabel}>Teacher</Text>
 
-                <TouchableOpacity style={stylesApp.flex1}>
+                <TouchableOpacity style={stylesApp.flex1} onPress={() => this.onSelectTeacher()}>
                   <View style={styles.viewTeacher}>
                     {this.state.teacher ? (
-                      <View>
+                      <View style={stylesApp.flexRowCenter}>
+                        <FastImage
+                          style={styles.imgUser}
+                          source={UserHelper.getUserImage(this.state.teacher)}
+                          resizeMode={FastImage.resizeMode.cover}
+                        />
+                        <Text style={[stylesApp.ml10]}>{this.state.teacher?.getFullName()}</Text>
                       </View>
                     ) : (
                       <Text style={styles.txtPlaceholder}>Select Teacher</Text>
@@ -371,6 +381,17 @@ class ApplyChampionship extends React.Component {
         ))}
       </View>
     );
+  }
+
+  onSelectTeacher() {
+    // go to stripe account page
+    this.props.navigation.push(SelectTeacher.NAV_NAME, {
+      onSave: this.onSelectedTeacher.bind(this),
+    });
+  }
+
+  onSelectedTeacher(teacher) {
+    this.setState({teacher});
   }
 }
 

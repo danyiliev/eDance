@@ -32,6 +32,12 @@ export const styles = StyleSheet.create({
     height: 36,
     justifyContent: 'center',
   },
+  imgUser: {
+    width: 36,
+    height: 36,
+    backgroundColor: colorTheme.grey,
+    borderRadius: 40,
+  },
 
   ctnSegmentGender: {
     flex: 1,
