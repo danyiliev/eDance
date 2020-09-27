@@ -147,7 +147,7 @@ class AddChampionship extends React.Component {
 
           {/* contact info */}
           <View style={[stylesSetting.viewForm, stylesApp.mt14]}>
-            <Text style={stylesSignup.txtItemTitle}>Price</Text>
+            <Text style={stylesSignup.txtItemTitle}>Entry Fee</Text>
 
             <View style={stylesApp.mt6}>
               {this.state.prices.map((price, i) => {

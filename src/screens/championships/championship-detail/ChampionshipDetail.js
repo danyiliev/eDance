@@ -1,7 +1,7 @@
 import React from 'react';
 import {Alert, ScrollView, Text, View} from 'react-native';
 import {stylesApp} from '../../../styles/app.style';
-import {styles as stylesAdd} from '../add-championship/styles';
+import {styles as stylesAdd} from '../tentative-schedule/styles';
 import {DanceHelper} from '../../../helpers/dance-helper';
 import {connect} from 'react-redux';
 import {styles} from './styles';

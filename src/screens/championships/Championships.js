@@ -5,7 +5,7 @@ import {styles} from './styles';
 import {colors as colorTheme} from '../../styles/theme.style';
 import {stylesApp, styleUtil} from '../../styles/app.style';
 import {styles as stylesCart} from '../cart/styles';
-import {styles as stylesAdd} from './add-championship/styles';
+import {styles as stylesAdd} from './tentative-schedule/styles';
 import Reviews from '../reviews/Reviews';
 import AddChampionship from './add-championship/AddChampionship';
 import {setUserInfo} from '../../actions/user';

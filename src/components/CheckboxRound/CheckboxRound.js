@@ -15,6 +15,11 @@ export default class CheckboxRound extends React.Component {
     containerStyle: PropTypes.object,
     checkboxWidth: PropTypes.number,
     disabled: PropTypes.bool,
+    textSize: PropTypes.number,
+  };
+
+  static defaultProps = {
+    textSize: 12,
   };
 
   render() {
@@ -47,6 +52,7 @@ export default class CheckboxRound extends React.Component {
             ...stylesApp.ml10,
             ...styles.txtLabel,
             color: this.props.disabled ? colorTheme.grey : colorTheme.primary,
+            fontSize: this.props.textSize,
           }}>
           {this.props.label}
         </Text>

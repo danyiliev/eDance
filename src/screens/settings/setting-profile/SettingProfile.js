@@ -128,7 +128,7 @@ class SettingProfile extends React.Component {
             {/* save */}
             <View style={[styleUtil.withShadow(), styles.viewButSave]}>
               <Button
-                title={this.props.UserReducer.isLoggedIn ? 'SAVE' : 'NEXT'}
+                title="{this.props.UserReducer.isLoggedIn ? 'SAVE' : 'NEXT'}"
                 buttonStyle={stylesApp.butPrimary}
                 titleStyle={stylesApp.titleButPrimary}
                 onPress={() => this.onButSave()}

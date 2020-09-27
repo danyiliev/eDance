@@ -71,6 +71,7 @@ import Terms from './terms/Terms';
 import SettingMain from './settings/setting-main/SettingMain';
 import AddStripeAccount from './settings/add-stripe-account/AddStripeAccount';
 import TentativeSchedule from './championships/tentative-schedule/TentativeSchedule';
+import ApplyChampionship from './championships/apply-championship/ApplyChampionship';
 
 const Stack = createStackNavigator();
 
@@ -120,7 +121,7 @@ class MainNavigator extends React.Component {
         ) : this.props.UserReducer.user && this.props.UserReducer.user.id ? (
           <View style={stylesApp.viewContainer}>
             <Stack.Navigator
-              initialRouteName={TabMain.NAV_NAME}
+              initialRouteName={ApplyChampionship.NAV_NAME}
               screenOptions={{
                 headerTintColor: colorTheme.primary,
               }}>
@@ -173,6 +174,7 @@ class MainNavigator extends React.Component {
               <Stack.Screen name={SettingMain.NAV_NAME} component={SettingMain} />
               <Stack.Screen name={AddStripeAccount.NAV_NAME} component={AddStripeAccount} />
               <Stack.Screen name={TentativeSchedule.NAV_NAME} component={TentativeSchedule} />
+              <Stack.Screen name={ApplyChampionship.NAV_NAME} component={ApplyChampionship} />
             </Stack.Navigator>
 
             <MenuModal

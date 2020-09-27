@@ -75,6 +75,9 @@ export const stylesApp = StyleSheet.create({
     marginLeft: 10,
   },
 
+  mb4: {
+    marginBottom: 4,
+  },
   mb12: {
     marginBottom: 12,
   },
