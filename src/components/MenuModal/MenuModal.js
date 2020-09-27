@@ -12,7 +12,6 @@ import Home from '../../screens/home/Home';
 import ScheduleSelect from '../../screens/schedule/ScheduleSelect';
 import Messaging from '../../screens/messaging/Messaging';
 import Lessons from '../../screens/lessons/Lessons';
-import SettingProfile from '../../screens/settings/setting-profile/SettingProfile';
 import Championships from '../../screens/championships/Championships';
 import {UserHelper} from '../../helpers/user-helper';
 import FastImage from 'react-native-fast-image';
@@ -20,6 +19,7 @@ import {User} from '../../models/user.model';
 import {clearProducts} from '../../actions/product';
 import {clearEvents} from '../../actions/event';
 import SettingMain from '../../screens/settings/setting-main/SettingMain';
+import Groups from '../../screens/groups/Groups';
 
 class MenuModal extends React.Component {
   static propTypes = {
@@ -37,21 +37,12 @@ class MenuModal extends React.Component {
 
   render() {
     return (
-      <Modal
-        isVisible={this.props.visible}
-        onBackdropPress={this.props.onDismiss}>
+      <Modal isVisible={this.props.visible} onBackdropPress={this.props.onDismiss}>
         <View style={styles.viewMain}>
           {/* close */}
           <Button
             type="clear"
-            icon={
-              <Icon
-                type="ionicon"
-                name="md-close"
-                size={24}
-                color={colorTheme.primary}
-              />
-            }
+            icon={<Icon type="ionicon" name="md-close" size={24} color={colorTheme.primary} />}
             containerStyle={styles.ctnButClose}
             onPress={this.props.onDismiss}
           />
@@ -71,7 +62,7 @@ class MenuModal extends React.Component {
 
           {/* menu */}
           <View style={styles.viewMenu}>
-            {/* schedule */}
+            {/* my lessons */}
             <TouchableOpacity onPress={() => this.props.onMenuItem(Lessons.NAV_NAME)}>
               <View style={styles.viewMenuItem}>
                 {/* icon */}
@@ -83,6 +74,23 @@ class MenuModal extends React.Component {
               </View>
             </TouchableOpacity>
             <Divider style={styles.viewDivider} />
+
+            {/* my groups */}
+            {this.currentUser.type === User.TYPE_TEACHER ? (
+              <>
+                <TouchableOpacity onPress={() => this.props.onMenuItem(Groups.NAV_NAME)}>
+                  <View style={styles.viewMenuItem}>
+                    {/* icon */}
+                    <View style={styles.viewMenuIcon}>
+                      <Icon color={colorTheme.darkGrey} type="ionicon" name={'ios-contacts'} size={18} />
+                    </View>
+
+                    <Text style={styles.txtMenuItem}>Groups</Text>
+                  </View>
+                </TouchableOpacity>
+                <Divider style={styles.viewDivider} />
+              </>
+            ) : null}
 
             {/* schedule */}
             <TouchableOpacity
@@ -101,27 +109,6 @@ class MenuModal extends React.Component {
             </TouchableOpacity>
             <Divider style={styles.viewDivider} />
 
-            {/* setting */}
-            <View>
-              <TouchableOpacity
-                onPress={() =>
-                  this.props.onMenuItem(SettingMain.NAV_NAME)
-                }>
-                <View style={styles.viewMenuItem}>
-                  {/* icon */}
-                  <View style={styles.viewMenuIcon}>
-                    <ImageScale
-                      width={16}
-                      source={require('../../../assets/imgs/menu_setting.png')}
-                    />
-                  </View>
-
-                  <Text style={styles.txtMenuItem}>Settings</Text>
-                </View>
-              </TouchableOpacity>
-              <Divider style={styles.viewDivider} />
-            </View>
-
             {/* championship */}
             <TouchableOpacity
               onPress={() => this.props.onMenuItem(Championships.NAV_NAME)}>
@@ -138,6 +125,21 @@ class MenuModal extends React.Component {
               </View>
             </TouchableOpacity>
             <Divider style={styles.viewDivider} />
+
+            {/* setting */}
+            <View>
+              <TouchableOpacity onPress={() => this.props.onMenuItem(SettingMain.NAV_NAME)}>
+                <View style={styles.viewMenuItem}>
+                  {/* icon */}
+                  <View style={styles.viewMenuIcon}>
+                    <ImageScale width={16} source={require('../../../assets/imgs/menu_setting.png')} />
+                  </View>
+
+                  <Text style={styles.txtMenuItem}>Settings</Text>
+                </View>
+              </TouchableOpacity>
+              <Divider style={styles.viewDivider} />
+            </View>
 
             {/* logout */}
             <TouchableOpacity onPress={() => this.onLogout()}>

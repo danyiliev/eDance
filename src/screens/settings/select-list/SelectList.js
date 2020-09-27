@@ -65,7 +65,7 @@ export default class SelectList extends React.Component {
 
   render() {
     return (
-      <View style={styles.viewContainer}>
+      <View style={stylesApp.viewContainer}>
         <FlatList
           keyExtractor={(item, index) => index.toString()}
           data={this.getList()}
