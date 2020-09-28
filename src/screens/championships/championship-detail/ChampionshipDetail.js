@@ -10,6 +10,9 @@ import PrizeDetail from '../prize-detail/PrizeDetail';
 import {LoadingHUD} from 'react-native-hud-hybrid';
 import {ApiService} from '../../../services';
 import ApplyChampionship from '../apply-championship/ApplyChampionship';
+import {styles as stylesSetting} from '../../settings/setting-profile/styles';
+import FastImage from 'react-native-fast-image';
+import {UserHelper} from '../../../helpers/user-helper';
 
 class ChampionshipDetail extends React.Component {
   static NAV_NAME = 'championship-detail';
@@ -56,7 +59,47 @@ class ChampionshipDetail extends React.Component {
           <View style={stylesAdd.viewContainer}>
             {this.renderNotice()}
 
-            <View style={stylesAdd.viewForm}>
+            <View style={stylesSetting.viewForm}>
+              {/* title */}
+              <View style={stylesApp.flexRowCenter}>
+                <Text style={styles.txtLabel}>Event Title:</Text>
+                <Text style={styles.txtItem}>{this.event?.title}</Text>
+              </View>
+
+              {/* user */}
+              <View style={stylesApp.flexRowCenter}>
+                <Text style={styles.txtLabel}>User:</Text>
+
+                <View style={stylesApp.flexRowCenter}>
+                  <FastImage
+                    style={styles.imgUser}
+                    source={UserHelper.getUserImage(this.event?.user)}
+                    resizeMode={FastImage.resizeMode.cover}
+                  />
+                  <Text style={[stylesApp.ml10]}>{this.event?.user?.getFullName()}</Text>
+                </View>
+              </View>
+
+              {/* address */}
+              <View style={stylesApp.flexRowCenter}>
+                <Text style={styles.txtLabel}>Company Address:</Text>
+                <Text style={styles.txtItem}>{this.event?.companyAddress}</Text>
+              </View>
+
+              {/* phone */}
+              <View style={stylesApp.flexRowCenter}>
+                <Text style={styles.txtLabel}>Phone:</Text>
+                <Text style={styles.txtItem}>{this.event?.phone}</Text>
+              </View>
+
+              {/* email */}
+              <View style={stylesApp.flexRowCenter}>
+                <Text style={styles.txtLabel}>Email:</Text>
+                <Text style={styles.txtItem}>{this.event?.email}</Text>
+              </View>
+            </View>
+
+            <View style={[stylesAdd.viewForm, stylesApp.mt14]}>
               {/* time */}
               <View style={stylesApp.flexRowCenter}>
                 <Text style={stylesAdd.txtFormLabel}>Date & Time: </Text>

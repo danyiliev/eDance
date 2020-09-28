@@ -1,5 +1,6 @@
 import {StyleSheet} from 'react-native';
 import {stylesApp} from '../../../styles/app.style';
+import {colors as colorTheme} from '../../../styles/theme.style';
 
 export const styles = StyleSheet.create({
   viewFooter: {
@@ -26,5 +27,21 @@ export const styles = StyleSheet.create({
   },
   txtNotice: {
     color: '#FE4C77',
+  },
+
+  txtLabel: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    width: 146,
+  },
+  txtItem: {
+    marginVertical: 8,
+  },
+
+  imgUser: {
+    width: 36,
+    height: 36,
+    backgroundColor: colorTheme.grey,
+    borderRadius: 40,
   },
 });
