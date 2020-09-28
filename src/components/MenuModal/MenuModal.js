@@ -85,7 +85,7 @@ class MenuModal extends React.Component {
                       <Icon color={colorTheme.darkGrey} type="ionicon" name={'ios-contacts'} size={18} />
                     </View>
 
-                    <Text style={styles.txtMenuItem}>Groups</Text>
+                    <Text style={styles.txtMenuItem}>Dance Groups</Text>
                   </View>
                 </TouchableOpacity>
                 <Divider style={styles.viewDivider} />

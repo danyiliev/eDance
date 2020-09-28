@@ -6,6 +6,7 @@ import {colors as colorTheme} from '../../styles/theme.style';
 import {stylesApp, styleUtil} from '../../styles/app.style';
 import {styles as stylesCart} from '../cart/styles';
 import {styles as stylesAdd} from './tentative-schedule/styles';
+import {styles as stylesDate} from '../booking/booking-date/styles';
 import Reviews from '../reviews/Reviews';
 import AddChampionship from './add-championship/AddChampionship';
 import {setUserInfo} from '../../actions/user';
@@ -17,6 +18,9 @@ import {SELECT_AMERICAN_BALLROOM} from '../../constants/dance-data';
 import ChampionshipDetail from './championship-detail/ChampionshipDetail';
 import {ApiService} from '../../services';
 import {setEvents} from '../../actions/event';
+import {Calendar} from 'react-native-calendars';
+import moment from 'moment';
+import _ from 'lodash';
 
 class Championships extends React.Component {
   static NAV_NAME = 'championships';
@@ -24,13 +28,19 @@ class Championships extends React.Component {
   state = {
     // ui
     showLoading: false,
+    currentDate: '',
+
+    markedDates: {},
 
     // data
     events: [],
   };
 
+  periods = {};
+  selectedDate = '';
   currentUser = null;
 
+  eventsAll = [];
   pageCount = 15;
 
   constructor(props) {
@@ -44,9 +54,9 @@ class Championships extends React.Component {
   }
 
   componentDidMount(): void {
-    this.loadData();
-
     this._sub = this.props.navigation.addListener('focus', this._componentFocused);
+
+    this.loadDataByMonth(moment().format('YYYY-MM'));
   }
 
   componentWillUnmount(): void {
@@ -60,6 +70,7 @@ class Championships extends React.Component {
           contentContainerStyle={stylesCart.listCtnContainer}
           keyExtractor={(item, index) => index.toString()}
           data={this.state.events}
+          ListHeaderComponent={() => this.renderListHeader()}
           ListEmptyComponent={() => this.renderEmptyItem()}
           renderItem={({item, index}) => this.renderItem(item, index)}
           refreshing={this.state.showLoading}
@@ -89,6 +100,39 @@ class Championships extends React.Component {
           return this.renderSession(item, s, i);
         })}
       </View>
+    );
+  }
+
+  renderListHeader() {
+    return (
+      <Calendar
+        current={this.state.currentDate}
+        style={styles.calContainer}
+        onMonthChange={(month) => this.onMonthChange(month)}
+        theme={{
+          arrowColor: colorTheme.light,
+          monthTextColor: colorTheme.light,
+          textMonthFontSize: 24,
+          textMonthFontWeight: '600',
+          textDayHeaderFontSize: 10,
+          textSectionTitleColor: colorTheme.grey,
+          textDayFontSize: 16,
+          textDayFontWeight: '600',
+          dayTextColor: colorTheme.primary,
+          selectedDayBackgroundColor: colorTheme.primary,
+          'stylesheet.calendar.header': {
+            header: stylesDate.calHeader,
+          },
+          'stylesheet.calendar.main': {
+            container: stylesDate.calMain,
+            monthView: stylesDate.calMonthView,
+          },
+        }}
+        markedDates={this.state.markedDates}
+        // Date marking style [simple/period/multi-dot/custom]. Default = 'simple'
+        markingType="multi-period"
+        onDayPress={(day) => this.onDayPress(day)}
+      />
     );
   }
 
@@ -148,9 +192,14 @@ class Championships extends React.Component {
       return null;
     }
 
+    let emptyNotice = 'No championships available this month';
+    if (this.selectedDate) {
+      emptyNotice = 'No championships available this day';
+    }
+
     return (
       <View style={stylesApp.viewLoading}>
-        <Text style={stylesApp.txtEmptyItem}>No championships available yet</Text>
+        <Text style={stylesApp.txtEmptyItem}>{emptyNotice}</Text>
       </View>
     );
   }
@@ -192,6 +241,116 @@ class Championships extends React.Component {
 
     this.setState({
       showLoading: false,
+    });
+  }
+
+  async loadDataByMonth(strMonth) {
+    try {
+      // show loading mark
+      await this.setState({
+        showLoading: true,
+      });
+
+      this.eventsAll = await ApiService.getEventsByMonth(strMonth);
+
+      // set start & end dates for marking
+      const periods = {};
+      for (const e of this.eventsAll) {
+        let current = moment(e.startDate());
+        do {
+          const strCurrent = current.format('YYYY-MM-DD');
+          if (!(strCurrent in periods)) {
+            periods[strCurrent] = {
+              periods: [],
+            };
+          }
+
+          let p = null;
+          if (current.diff(moment(e.startDate()), 'days') === 0) {
+            // start date
+            p = {startingDay: true, endingDay: false, color: colorTheme.red}
+          }
+          if (current.diff(moment(e.endDate()), 'days') === 0) {
+            // start date
+            p = {startingDay: false, endingDay: true, color: colorTheme.red}
+          }
+          if (!p) {
+            p = {color: colorTheme.red};
+          }
+
+          periods[strCurrent].periods.push(p);
+
+          current = current.add(1, 'day');
+        } while ((moment(e.endDate()).diff(current), 'days') > 0);
+      }
+
+      // save to store
+      this.props.setEvents(this.eventsAll);
+      await this.setState({events: this.eventsAll});
+
+      // init ui data
+      this.periods = periods;
+      this.selectedDate = '';
+
+      this.setMarkedDates();
+
+    } catch (e) {
+      console.log(e);
+    }
+
+    this.setState({
+      showLoading: false,
+    });
+  }
+
+  onMonthChange(cal) {
+    if (!cal.month || !cal.year) {
+      return;
+    }
+
+    const strMonth = moment()
+      .set('month', cal.month - 1)
+      .set('year', cal.year)
+      .format('YYYY-MM');
+
+    this.setState({
+      currentDate: strMonth,
+    });
+
+    this.loadDataByMonth(strMonth);
+  }
+
+  onDayPress(calc) {
+    this.selectedDate = calc.dateString;
+    this.setMarkedDates();
+
+    // extract events on the date
+    const events = [];
+    for (const e of this.eventsAll) {
+      for (const session of e.sessions) {
+        if (moment(session.startAt).isSame(calc.dateString, 'day')) {
+          events.push(e);
+
+          break;
+        }
+      }
+    }
+
+    this.setState({events});
+  }
+
+  setMarkedDates() {
+    const periods = _.clone(this.periods);
+
+    if (this.selectedDate) {
+      periods[this.selectedDate] = {
+        ...periods[this.selectedDate],
+        selected: true,
+      };
+    }
+
+    this.setState({
+      markedDates: periods,
     });
   }
 }

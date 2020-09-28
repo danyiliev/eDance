@@ -1136,6 +1136,32 @@ class ApiService {
     }
   }
 
+  async getEventsByMonth(month) {
+    try {
+      const options = {
+        headers: {
+          ...this.baseHeader(),
+        },
+      };
+
+      const {data} = await Axios.get(`${this.baseUrl}/event/${month}`, options);
+      console.log(data);
+
+      const events = [];
+      for (const obj of data) {
+        const e = new Event().initFromObject(obj);
+
+        events.push(e);
+      }
+
+      return Promise.resolve(events);
+    } catch (e) {
+      console.log(e);
+
+      return Promise.reject(e.response.data);
+    }
+  }
+
   async getEventSessionById(eventId, sessionId) {
     try {
       const options = {

@@ -106,4 +106,30 @@ export class Event extends BaseModel {
 
     return this;
   }
+
+  startDate() {
+    let minDate = '9999-99-99';
+
+    for (const s of this.sessions) {
+      const date = moment(s.startAt).format('YYYY-MM-DD');
+      if (date < minDate) {
+        minDate = date;
+      }
+    }
+
+    return minDate;
+  }
+
+  endDate() {
+    let maxDate = '0000-00-00';
+
+    for (const s of this.sessions) {
+      const date = moment(s.startAt).format('YYYY-MM-DD');
+      if (date > maxDate) {
+        maxDate = date;
+      }
+    }
+
+    return maxDate;
+  }
 }

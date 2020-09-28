@@ -41,4 +41,11 @@ export const styles = StyleSheet.create({
   viewSessionFooter: {
     alignItems: 'flex-end',
   },
+
+  calContainer: {
+    borderRadius: 12,
+    borderWidth: 1,
+    overflow: 'hidden',
+    marginBottom: 12,
+  },
 });

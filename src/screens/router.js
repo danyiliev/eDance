@@ -225,13 +225,13 @@ class MainNavigator extends React.Component {
   }
 
   showMenuModal(show) {
-    this.setState({
+    return this.setState({
       showMenu: show,
     });
   }
 
-  onMenuItem(nav) {
-    this.showMenuModal(false);
+  async onMenuItem(nav) {
+    await this.showMenuModal(false);
 
     // go to page
     this.navigationRef?.current.navigate(nav);

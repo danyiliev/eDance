@@ -30,7 +30,7 @@ class Groups extends React.Component {
     super(props);
 
     props.navigation.setOptions({
-      title: 'My Groups',
+      title: 'My Dance Groups',
       headerRight: () => (
         <TouchableOpacity style={stylesApp.viewHeaderRight} onPress={() => this.onButAdd()}>
           <Icon type="ionicon" name="md-add" size={24} />
