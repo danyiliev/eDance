@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {Dimensions, ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import {Alert, Dimensions, ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import {stylesApp, styleUtil} from '../../../styles/app.style';
 import {styles} from './styles';
 import {Button, ButtonGroup, Icon, Input} from 'react-native-elements';
@@ -21,6 +21,11 @@ import SelectTeacher from '../select-teacher/SelectTeacher';
 import FastImage from 'react-native-fast-image';
 import {UserHelper} from '../../../helpers/user-helper';
 import SelectList from '../../settings/select-list/SelectList';
+import {EventEntry} from '../../../models/event-entry.model';
+import {ApiService} from '../../../services';
+import {LoadingHUD} from 'react-native-hud-hybrid';
+import stripe from 'tipsi-stripe';
+import Toast from 'react-native-simple-toast';
 const {width: SCREEN_WDITH} = Dimensions.get('window');
 
 class ApplyChampionship extends React.Component {
@@ -40,6 +45,8 @@ class ApplyChampionship extends React.Component {
     zip: '',
 
     sessionsApply: [],
+
+    totalEntryFee: 0,
   };
 
   event = null;
@@ -53,7 +60,7 @@ class ApplyChampionship extends React.Component {
     super(props);
 
     props.navigation.setOptions({
-      title: 'Apply Championship',
+      title: 'Entry Form',
     });
 
     this.currentUser = props.UserReducer.user;
@@ -88,6 +95,7 @@ class ApplyChampionship extends React.Component {
       sessionApply.levels.push(applyLevel);
 
       this.state.sessionsApply.push(sessionApply);
+      this.state.totalEntryFee += this.event.getPrice();
     }
 
     // init form data
@@ -95,6 +103,8 @@ class ApplyChampionship extends React.Component {
     this.state.genderIndex = this.currentUser?.gender;
     this.state.city = this.currentUser?.city;
     this.state.state = this.currentUser?.state;
+
+    this.loadingHUD = new LoadingHUD();
   }
 
   render() {
@@ -342,7 +352,7 @@ class ApplyChampionship extends React.Component {
             {/* save */}
             <View style={[styleUtil.withShadow(), styles.viewButSave]}>
               <Button
-                title="Apply"
+                title={`Apply    $${this.state.totalEntryFee}`}
                 buttonStyle={stylesApp.butPrimary}
                 titleStyle={stylesApp.titleButPrimary}
                 onPress={() => this.onButSave()}
@@ -511,7 +521,7 @@ class ApplyChampionship extends React.Component {
   }
 
   onAddApplyLevel(sessionIndex) {
-    const {sessionsApply} = this.state;
+    let {sessionsApply, totalEntryFee} = this.state;
 
     const applyLevel = {
       level: '',
@@ -525,21 +535,128 @@ class ApplyChampionship extends React.Component {
       });
     }
     sessionsApply[sessionIndex].levels.push(applyLevel);
+    totalEntryFee += this.event.getPrice();
 
-    this.setState({sessionsApply});
+    this.setState({sessionsApply, totalEntryFee});
   }
 
   onRemoveApplyLevel(sessionIndex, levelIndex) {
-    const {sessionsApply} = this.state;
+    let {sessionsApply, totalEntryFee} = this.state;
     sessionsApply[sessionIndex].levels.splice(levelIndex, 1);
 
-    this.setState({sessionsApply});
+    totalEntryFee -= this.event.getPrice();
+
+    this.setState({sessionsApply, totalEntryFee});
   }
 
-  onButSave() {
+  async onButSave() {
     //
     // check validity
     //
+    const {sessionsApply} = this.state;
+
+    for (const sa of sessionsApply) {
+      if (!sa.ageGroup) {
+        Alert.alert('Age Group Not Valid', 'Please select age group in all forms');
+        return;
+      }
+
+      for (const levelApply of sa.levels) {
+        if (!levelApply.level) {
+          Alert.alert('Dance Level Not Valid', 'Please select dance level in all forms');
+          return;
+        }
+
+        let danceCount = 0;
+        for (const danceStyle of levelApply.dancesWithStyle) {
+          danceCount += danceStyle.dances.length;
+        }
+
+        if (danceCount <= 0) {
+          Alert.alert('Dance Not Selected', 'Please select dance(s) to entry');
+          return;
+        }
+      }
+    }
+
+    try {
+      // payment
+      let stripeTokenInfo = await stripe.paymentRequestWithCardForm();
+      console.log(stripeTokenInfo);
+
+      // token
+      let tokenId = stripeTokenInfo.tokenId;
+
+      this.createCharge(tokenId);
+    } catch (e) {
+      console.log(e.code);
+
+      if (e.code !== 'cancelled') {
+        Alert.alert('Payment Failed', e.message);
+      }
+    }
+  }
+
+  async createCharge(token) {
+    // show loading
+    this.loadingHUD.show();
+
+    try {
+      let response = await ApiService.stripeCreateCharge(
+        token,
+        this.state.totalEntryFee,
+        `Entry form of ${this.event.title}`,
+        this.event.user?.stripeAccountId,
+      );
+
+      Toast.show('Payment is successful');
+
+      // make order
+      await this.doApply();
+    } catch (e) {
+      console.log(e);
+
+      Alert.alert('Payment Failed', e.message);
+
+      // hide loading
+      this.loadingHUD.hideAll();
+    }
+  }
+
+  async doApply() {
+    const entryNew = new EventEntry();
+
+    entryNew.setTeacher(this.state.teacher);
+    entryNew.gender = this.state.genderIndex;
+    entryNew.studio = this.state.studio;
+    entryNew.email = this.state.email;
+    entryNew.phone = this.state.phone;
+    entryNew.fax = this.state.fax;
+    entryNew.address = this.state.address;
+    entryNew.city = this.state.city;
+    entryNew.state = this.state.state;
+
+    entryNew.setUser(this.currentUser);
+
+    entryNew.applies = this.state.sessionsApply;
+
+    this.loadingHUD.show();
+
+    try {
+      await ApiService.applyEventSession(entryNew, this.event.id, this.eventSession.id);
+
+      this.eventSession.entryCount++;
+      this.eventSession.entries.push(entryNew);
+
+      // go back to prev page
+      this.props.navigation.pop();
+    } catch (e) {
+      console.log(e);
+
+      Alert.alert('Failed to Apply Championship', e.message);
+    }
+
+    this.loadingHUD.hideAll();
   }
 }
 

@@ -36,7 +36,7 @@ export class EventSession extends BaseModel {
   types = [];
 
   entryCount = 0;
-  joinedUsers = [];
+  entries = [];
 
   initFromObject(data) {
     super.initFromObject(data);
@@ -53,20 +53,8 @@ export class EventSession extends BaseModel {
       this.entryCount = data.entryCount;
     }
 
-    // joined users
-    if (data.joinedUsers) {
-      this.joinedUsers = [];
-      for (const u of data.joinedUsers) {
-        if (Utils.isObject(u)) {
-          const user = new User().initFromObject(u);
-          this.joinedUsers.push(user);
-        } else {
-          const user = new User();
-          user.id = u;
-
-          this.joinedUsers.push(user);
-        }
-      }
+    if (data.entries) {
+      this.entries = data.entries;
     }
 
     return this;

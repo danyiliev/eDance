@@ -1188,7 +1188,7 @@ class ApiService {
     }
   }
 
-  async applyEventSession(eventId, sessionId) {
+  async applyEventSession(entry, eventId, sessionId) {
     try {
       const options = {
         headers: {
@@ -1196,9 +1196,26 @@ class ApiService {
         },
       };
 
+      const body = {
+        gender: entry.gender,
+        studio: entry.studio,
+        email: entry.email,
+        phone: entry.phone,
+        fax: entry.fax,
+        address: entry.address,
+        city: entry.city,
+        state: entry.state,
+        applies: entry.applies,
+        user: entry.userId,
+      };
+
+      if (entry.teacherId) {
+        body.teacher = entry.teacherId;
+      }
+
       const {data} = await Axios.post(
         `${this.baseUrl}/event/${eventId}/session/${sessionId}/apply`,
-        {},
+        body,
         options,
       );
       console.log(data);

@@ -177,28 +177,16 @@ class ChampionshipDetail extends React.Component {
       event: this.event,
       session: this.state.eventSession,
     });
-
-    // this.loadingHUD.show();
-    //
-    // try {
-    //   await ApiService.applyEventSession(this.event.id, this.state.eventSession.id);
-    //
-    //   const {eventSession} = this.state;
-    //   eventSession.entryCount++;
-    //   eventSession.joinedUsers.push(this.currentUser);
-    //
-    //   this.setState({eventSession});
-    // } catch (e) {
-    //   console.log(e);
-    //
-    //   Alert.alert('Failed to Apply Championship', e.message);
-    // }
-    //
-    // this.loadingHUD.hideAll();
   }
 
   isApplied() {
-    return !!this.state.eventSession.joinedUsers.find((u) => this.currentUser?.equalTo(u));
+    for (const entry of this.state.eventSession.entries) {
+      if (entry.user === this.currentUser?.id) {
+        return true;
+      }
+    }
+
+    return false;
   }
 }
 
