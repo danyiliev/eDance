@@ -77,15 +77,37 @@ export class Event extends BaseModel {
   //
   // properties
   //
+  title = '';
+  companyAddress = '';
+  phone = '';
+  email = '';
+  prices = [];
+
   userId = '';
   sessions = [];
-  prizeOptions = [];
+  prizeOptions = {};
 
   // logical
   user = null;
 
   initFromObject(data) {
     super.initFromObject(data);
+
+    if (data.title) {
+      this.title = data.title;
+    }
+    if (data.companyAddress) {
+      this.companyAddress = data.companyAddress;
+    }
+    if (data.phone) {
+      this.phone = data.phone;
+    }
+    if (data.email) {
+      this.email = data.email;
+    }
+    if (data.prices) {
+      this.prices = data.prices;
+    }
 
     // user
     if (Utils.isObject(data.user)) {

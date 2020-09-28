@@ -1088,6 +1088,11 @@ class ApiService {
     };
 
     let params = {
+      title: event.title,
+      companyAddress: event.companyAddress,
+      phone: event.phone,
+      email: event.email,
+      prices: event.prices,
       sessions: event.sessions,
       prizeOptions: event.prizeOptions,
     };

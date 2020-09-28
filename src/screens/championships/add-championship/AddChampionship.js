@@ -42,6 +42,13 @@ class AddChampionship extends React.Component {
     });
 
     this.state.prices.push(new Price());
+
+    // todo: test data
+    this.state.title = 'Event title 1';
+    this.state.companyAddress = 'Event company address 1';
+    this.state.phone = '29348339';
+    this.state.email = 'contact1@email.com';
+    this.state.prices[0].price = 10;
   }
 
   render() {
@@ -218,8 +225,42 @@ class AddChampionship extends React.Component {
   }
 
   onButNext() {
+    //
+    // check validity
+    //
+    if (!this.state.title) {
+      Alert.alert('Invalid Title', 'Title cannot be empty');
+      return;
+    }
+    if (!this.state.companyAddress) {
+      Alert.alert('Invalid Company Address', 'Company address cannot be empty');
+      return;
+    }
+    if (!this.state.phone) {
+      Alert.alert('Invalid Phone', 'Phone number cannot be empty');
+      return;
+    }
+    if (!this.state.email) {
+      Alert.alert('Invalid Email', 'Email cannot be empty');
+      return;
+    }
+
+    if (this.state.prices.filter((p) => p.price > 0).length <= 0) {
+      Alert.alert('Entry Fee Not Set', 'Entry fee cannot be empty');
+      return;
+    }
+
+    let eventNew = new Event();
+    eventNew.title = this.state.title;
+    eventNew.companyAddress = this.state.companyAddress;
+    eventNew.phone = this.state.phone;
+    eventNew.email = this.state.email;
+    eventNew.prices = this.state.prices;
+
     // go to tentative schedule page
-    this.props.navigation.push(TentativeSchedule.NAV_NAME);
+    this.props.navigation.push(TentativeSchedule.NAV_NAME, {
+      event: eventNew,
+    });
   }
 }
 

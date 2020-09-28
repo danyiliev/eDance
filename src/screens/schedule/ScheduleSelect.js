@@ -45,7 +45,7 @@ export default class ScheduleSelect extends React.Component {
       this.teacher = props.route.params.user;
     }
 
-    // test
+    // todo: test data
     this.state.type = LESSON_TYPES[0].value;
     this.state.ageGroup = AGE_GROUPS[0].value;
     this.state.style = DanceHelper.danceStylesAll()[0].value;

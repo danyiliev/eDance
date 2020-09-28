@@ -51,23 +51,35 @@ class AddPrize extends BasePrize {
     this.state = {
       // ui
       showTimePicker: false,
+    };
 
-      selectedOptions: [],
+    //
+    // init parameters
+    //
+    this.state[PRIZE_OPTIONS.TOP_STUDIO_SINGLE] = {
+      selected: false,
 
-      //
-      // init parameters
-      //
-      topStudioSingle: {
+      data: {
         pointEachEntry: 1,
         pointEachCallback: 1,
         pointsRanking: [8, 7, 6, 5, 4, 3, 2, 1],
       },
-      topStudioMultiple: {
+    };
+
+    this.state[PRIZE_OPTIONS.TOP_STUDIO_MULTI] = {
+      selected: false,
+
+      data: {
         pointEachEntry: 2,
         pointEachCallback: 2,
         pointsRanking: [16, 14, 12, 10, 8, 6, 4, 2],
       },
-      topTeacherProAm: {
+    };
+
+    this.state[PRIZE_OPTIONS.TOP_TEACHER_PROAM] = {
+      selected: false,
+
+      data: {
         dateDue: '',
         levels: [
           {
@@ -92,29 +104,69 @@ class AddPrize extends BasePrize {
           },
         ],
       },
-      singleEntry: {
+    };
+
+    this.state[PRIZE_OPTIONS.SINGLE_ENTRIES] = {
+      selected: false,
+
+      data: {
         pointEachEntry: 1,
         pointEachCallback: 1,
         pointsRanking: [8, 7, 6, 5, 4, 3, 2, 1],
       },
-      multiEntry: {
+    };
+
+    this.state[PRIZE_OPTIONS.MULTI_ENTRIES] = {
+      selected: false,
+
+      data: {
         pointEachEntry: 2,
         pointEachCallback: 2,
         pointsRanking: [16, 14, 12, 10, 8, 6, 4, 2],
       },
-      preTeens: false,
-      professional: {
+    };
+
+    this.state[PRIZE_OPTIONS.PRE_TEEN] = {
+      selected: false,
+
+      data: {},
+    };
+
+    this.state[PRIZE_OPTIONS.PROFESSIONAL] = {
+      selected: false,
+
+      data: {
         rhythm: [1500, 1000, 750, 500, 300, 150],
         latin: [1500, 1000, 750, 500, 300, 150],
       },
-      proAmAmateur: {
+    };
+
+    this.state[PRIZE_OPTIONS.PROAM_AMATEUR] = {
+      selected: false,
+
+      data: {
         pointEachEntry: 1,
         pointEachCallback: 1,
         pointsRanking: [8, 7, 6, 5, 4, 3, 2, 1],
       },
-      solo: false,
-      proAmScholarClosed: [150, 100, 50],
-      proAmScholarOpen: [300, 150, 100],
+    };
+
+    this.state[PRIZE_OPTIONS.SOLO] = {
+      selected: false,
+
+      data: {},
+    };
+
+    this.state[PRIZE_OPTIONS.PROAM_SCHOLAR_CLOSED] = {
+      selected: false,
+
+      data: [150, 100, 50],
+    };
+
+    this.state[PRIZE_OPTIONS.PROAM_SCHOLAR_OPEN] = {
+      selected: false,
+
+      data: [300, 150, 100],
     };
   }
 
@@ -203,6 +255,8 @@ class AddPrize extends BasePrize {
   }
 
   renderTopStudioSingleCore() {
+    const valueData = this.state[PRIZE_OPTIONS.TOP_STUDIO_SINGLE].data;
+
     return (
       <View style={styles.viewSubForm}>
         <View style={stylesApp.flexRowCenter}>
@@ -213,10 +267,10 @@ class AddPrize extends BasePrize {
             placeholder="0"
             inputContainerStyle={stylesApp.input}
             onChangeText={(value) => {
-              this.state.topStudioSingle.pointEachEntry = Number(value);
+              valueData.pointEachEntry = Number(value);
               this.setState(this.state);
             }}
-            value={this.state.topStudioSingle.pointEachEntry.toString()}
+            value={valueData.pointEachEntry.toString()}
             renderErrorMessage={false}
           />
           <Text style={styles.txtFormItem}>point for each entry</Text>
@@ -230,17 +284,17 @@ class AddPrize extends BasePrize {
             placeholder="0"
             inputContainerStyle={stylesApp.input}
             onChangeText={(value) => {
-              this.state.topStudioSingle.pointEachCallback = Number(value);
+              valueData.pointEachCallback = Number(value);
               this.setState(this.state);
             }}
-            value={this.state.topStudioSingle.pointEachCallback.toString()}
+            value={valueData.pointEachCallback.toString()}
             renderErrorMessage={false}
           />
           <Text style={styles.txtFormItem}>point for each call back</Text>
         </View>
 
         <View style={stylesApp.mt4}>
-          {this.state.topStudioSingle.pointsRanking.map((p, i) => (
+          {valueData.pointsRanking.map((p, i) => (
             <View style={stylesApp.flexRowCenter} key={`topStudioSingle-${i}`}>
               <Text style={{...styles.txtFormItem, width: 80}}>
                 {UiHelper.numberToSequence(i + 1)} place -
@@ -252,10 +306,10 @@ class AddPrize extends BasePrize {
                 placeholder="0"
                 inputContainerStyle={stylesApp.input}
                 onChangeText={(value) => {
-                  this.state.topStudioSingle.pointsRanking[i] = Number(value);
+                  valueData.pointsRanking[i] = Number(value);
                   this.setState(this.state);
                 }}
-                value={this.state.topStudioSingle.pointsRanking[i].toString()}
+                value={valueData.pointsRanking[i].toString()}
                 renderErrorMessage={false}
               />
               <Text style={{...styles.txtFormItem, marginRight: 14}}>points</Text>
@@ -264,13 +318,13 @@ class AddPrize extends BasePrize {
                 <Button
                   type="clear"
                   icon={<Icon type="ionicon" name="md-add-circle" size={18} />}
-                  onPress={() => this.onAddValue(this.state.topStudioSingle.pointsRanking)}
+                  onPress={() => this.onAddValue(valueData.pointsRanking)}
                 />
               ) : (
                 <Button
                   type="clear"
                   icon={<Icon type="ionicon" name="md-remove-circle" size={18} />}
-                  onPress={() => this.onRemoveValue(this.state.topStudioSingle.pointsRanking, i)}
+                  onPress={() => this.onRemoveValue(valueData.pointsRanking, i)}
                 />
               )}
             </View>
@@ -281,6 +335,8 @@ class AddPrize extends BasePrize {
   }
 
   renderTopStudioMultiCore() {
+    const valueData = this.state[PRIZE_OPTIONS.TOP_STUDIO_MULTI].data;
+
     return (
       <View style={styles.viewSubForm}>
         <View style={stylesApp.flexRowCenter}>
@@ -291,10 +347,10 @@ class AddPrize extends BasePrize {
             placeholder="0"
             inputContainerStyle={stylesApp.input}
             onChangeText={(value) => {
-              this.state.topStudioMultiple.pointEachEntry = Number(value);
+              valueData.pointEachEntry = Number(value);
               this.setState(this.state);
             }}
-            value={this.state.topStudioMultiple.pointEachEntry.toString()}
+            value={valueData.pointEachEntry.toString()}
             renderErrorMessage={false}
           />
           <Text style={styles.txtFormItem}>point for each entry</Text>
@@ -308,17 +364,17 @@ class AddPrize extends BasePrize {
             placeholder="0"
             inputContainerStyle={stylesApp.input}
             onChangeText={(value) => {
-              this.state.topStudioMultiple.pointEachCallback = Number(value);
+              valueData.pointEachCallback = Number(value);
               this.setState(this.state);
             }}
-            value={this.state.topStudioMultiple.pointEachCallback.toString()}
+            value={valueData.pointEachCallback.toString()}
             renderErrorMessage={false}
           />
           <Text style={styles.txtFormItem}>point for each call back</Text>
         </View>
 
         <View style={stylesApp.mt4}>
-          {this.state.topStudioMultiple.pointsRanking.map((p, i) => (
+          {valueData.pointsRanking.map((p, i) => (
             <View style={stylesApp.flexRowCenter} key={`topStudioMulti-${i}`}>
               <Text style={{...styles.txtFormItem, width: 80}}>
                 {UiHelper.numberToSequence(i + 1)} place -
@@ -330,10 +386,10 @@ class AddPrize extends BasePrize {
                 placeholder="0"
                 inputContainerStyle={stylesApp.input}
                 onChangeText={(value) => {
-                  this.state.topStudioMultiple.pointsRanking[i] = Number(value);
+                  valueData.pointsRanking[i] = Number(value);
                   this.setState(this.state);
                 }}
-                value={this.state.topStudioMultiple.pointsRanking[i].toString()}
+                value={valueData.pointsRanking[i].toString()}
                 renderErrorMessage={false}
               />
               <Text style={{...styles.txtFormItem, marginRight: 14}}>points</Text>
@@ -343,13 +399,13 @@ class AddPrize extends BasePrize {
                 <Button
                   type="clear"
                   icon={<Icon type="ionicon" name="md-add-circle" size={18} />}
-                  onPress={() => this.onAddValue(this.state.topStudioMultiple.pointsRanking)}
+                  onPress={() => this.onAddValue(valueData.pointsRanking)}
                 />
               ) : (
                 <Button
                   type="clear"
                   icon={<Icon type="ionicon" name="md-remove-circle" size={18} />}
-                  onPress={() => this.onRemoveValue(this.state.topStudioMultiple.pointsRanking, i)}
+                  onPress={() => this.onRemoveValue(valueData.pointsRanking, i)}
                 />
               )}
             </View>
@@ -360,6 +416,8 @@ class AddPrize extends BasePrize {
   }
 
   renderTopTeacherCore() {
+    const valueData = this.state[PRIZE_OPTIONS.TOP_TEACHER_PROAM].data;
+
     return (
       <>
         <View style={{...styles.viewRow, paddingRight: 36}}>
@@ -375,7 +433,7 @@ class AddPrize extends BasePrize {
           </View>
         </View>
 
-        {this.state.topTeacherProAm.levels.map((level, i) => (
+        {valueData.levels.map((level, i) => (
           <View style={styles.viewRow} key={`topTeacherProAm-${i}`}>
             <View style={{...styles.viewRowItem, flex: 1}}>
               <Text style={styles.txtFormItem}>{i + 1}</Text>
@@ -442,13 +500,13 @@ class AddPrize extends BasePrize {
               <Button
                 type="clear"
                 icon={<Icon type="ionicon" name="md-add-circle" size={18} />}
-                onPress={() => this.onAddValue(this.state.topTeacherProAm.levels, {})}
+                onPress={() => this.onAddValue(valueData.levels, {})}
               />
             ) : (
               <Button
                 type="clear"
                 icon={<Icon type="ionicon" name="md-remove-circle" size={18} />}
-                onPress={() => this.onRemoveValue(this.state.topTeacherProAm.levels, i)}
+                onPress={() => this.onRemoveValue(valueData.levels, i)}
               />
             )}
           </View>
@@ -458,6 +516,8 @@ class AddPrize extends BasePrize {
   }
 
   renderSingleEntriesCore() {
+    const valueData = this.state[PRIZE_OPTIONS.SINGLE_ENTRIES].data;
+
     return (
       <View style={styles.viewForm}>
         <View style={stylesApp.flexRowCenter}>
@@ -468,10 +528,10 @@ class AddPrize extends BasePrize {
             placeholder="0"
             inputContainerStyle={stylesApp.input}
             onChangeText={(value) => {
-              this.state.singleEntry.pointEachEntry = Number(value);
+              valueData.pointEachEntry = Number(value);
               this.setState(this.state);
             }}
-            value={this.state.singleEntry.pointEachEntry.toString()}
+            value={valueData.pointEachEntry.toString()}
             renderErrorMessage={false}
           />
           <Text style={styles.txtFormItem}>point for each entry</Text>
@@ -485,17 +545,17 @@ class AddPrize extends BasePrize {
             placeholder="0"
             inputContainerStyle={stylesApp.input}
             onChangeText={(value) => {
-              this.state.singleEntry.pointEachCallback = Number(value);
+              valueData.pointEachCallback = Number(value);
               this.setState(this.state);
             }}
-            value={this.state.singleEntry.pointEachCallback.toString()}
+            value={valueData.pointEachCallback.toString()}
             renderErrorMessage={false}
           />
           <Text style={styles.txtFormItem}>point for each call back</Text>
         </View>
 
         <View style={stylesApp.mt4}>
-          {this.state.singleEntry.pointsRanking.map((p, i) => (
+          {valueData.pointsRanking.map((p, i) => (
             <View style={stylesApp.flexRowCenter} key={`topStudioSingle-${i}`}>
               <Text style={{...styles.txtFormItem, width: 80}}>
                 {UiHelper.numberToSequence(i + 1)} place -
@@ -507,10 +567,10 @@ class AddPrize extends BasePrize {
                 placeholder="0"
                 inputContainerStyle={stylesApp.input}
                 onChangeText={(value) => {
-                  this.state.singleEntry.pointsRanking[i] = Number(value);
+                  valueData.pointsRanking[i] = Number(value);
                   this.setState(this.state);
                 }}
-                value={this.state.singleEntry.pointsRanking[i].toString()}
+                value={valueData.pointsRanking[i].toString()}
                 renderErrorMessage={false}
               />
               <Text style={{...styles.txtFormItem, marginRight: 14}}>points</Text>
@@ -519,13 +579,13 @@ class AddPrize extends BasePrize {
                 <Button
                   type="clear"
                   icon={<Icon type="ionicon" name="md-add-circle" size={18} />}
-                  onPress={() => this.onAddValue(this.state.singleEntry.pointsRanking)}
+                  onPress={() => this.onAddValue(valueData.pointsRanking)}
                 />
               ) : (
                 <Button
                   type="clear"
                   icon={<Icon type="ionicon" name="md-remove-circle" size={18} />}
-                  onPress={() => this.onRemoveValue(this.state.singleEntry.pointsRanking, i)}
+                  onPress={() => this.onRemoveValue(valueData.pointsRanking, i)}
                 />
               )}
             </View>
@@ -536,6 +596,8 @@ class AddPrize extends BasePrize {
   }
 
   renderMultiEntriesCore() {
+    const valueData = this.state[PRIZE_OPTIONS.MULTI_ENTRIES].data;
+
     return (
       <View style={styles.viewForm}>
         <View style={stylesApp.flexRowCenter}>
@@ -546,10 +608,10 @@ class AddPrize extends BasePrize {
             placeholder="0"
             inputContainerStyle={stylesApp.input}
             onChangeText={(value) => {
-              this.state.multiEntry.pointEachEntry = Number(value);
+              valueData.pointEachEntry = Number(value);
               this.setState(this.state);
             }}
-            value={this.state.multiEntry.pointEachEntry.toString()}
+            value={valueData.pointEachEntry.toString()}
             renderErrorMessage={false}
           />
           <Text style={styles.txtFormItem}>point for each entry</Text>
@@ -563,17 +625,17 @@ class AddPrize extends BasePrize {
             placeholder="0"
             inputContainerStyle={stylesApp.input}
             onChangeText={(value) => {
-              this.state.multiEntry.pointEachCallback = Number(value);
+              valueData.pointEachCallback = Number(value);
               this.setState(this.state);
             }}
-            value={this.state.multiEntry.pointEachCallback.toString()}
+            value={valueData.pointEachCallback.toString()}
             renderErrorMessage={false}
           />
           <Text style={styles.txtFormItem}>point for each call back</Text>
         </View>
 
         <View style={stylesApp.mt4}>
-          {this.state.multiEntry.pointsRanking.map((p, i) => (
+          {valueData.pointsRanking.map((p, i) => (
             <View style={stylesApp.flexRowCenter} key={`topStudioSingle-${i}`}>
               <Text style={{...styles.txtFormItem, width: 80}}>
                 {UiHelper.numberToSequence(i + 1)} place -
@@ -585,10 +647,10 @@ class AddPrize extends BasePrize {
                 placeholder="0"
                 inputContainerStyle={stylesApp.input}
                 onChangeText={(value) => {
-                  this.state.multiEntry.pointsRanking[i] = Number(value);
+                  valueData.pointsRanking[i] = Number(value);
                   this.setState(this.state);
                 }}
-                value={this.state.multiEntry.pointsRanking[i].toString()}
+                value={valueData.pointsRanking[i].toString()}
                 renderErrorMessage={false}
               />
               <Text style={{...styles.txtFormItem, marginRight: 14}}>points</Text>
@@ -597,13 +659,13 @@ class AddPrize extends BasePrize {
                 <Button
                   type="clear"
                   icon={<Icon type="ionicon" name="md-add-circle" size={18} />}
-                  onPress={() => this.onAddValue(this.state.multiEntry.pointsRanking)}
+                  onPress={() => this.onAddValue(valueData.pointsRanking)}
                 />
               ) : (
                 <Button
                   type="clear"
                   icon={<Icon type="ionicon" name="md-remove-circle" size={18} />}
-                  onPress={() => this.onRemoveValue(this.state.multiEntry.pointsRanking, i)}
+                  onPress={() => this.onRemoveValue(valueData.pointsRanking, i)}
                 />
               )}
             </View>
@@ -614,11 +676,13 @@ class AddPrize extends BasePrize {
   }
 
   renderProfessionalCore() {
+    const valueData = this.state[PRIZE_OPTIONS.PROFESSIONAL].data;
+
     return (
       <>
         <Text style={styles.txtSubTitle}>Rhythm & Smooth</Text>
         <View style={stylesApp.mt4}>
-          {this.state.professional.rhythm.map((p, i) => (
+          {valueData.rhythm.map((p, i) => (
             <View style={stylesApp.flexRowCenter} key={`Professional-Rhytm-${i}`}>
               <Text style={{...styles.txtFormItem, width: 80}}>
                 {UiHelper.numberToSequence(i + 1)} place -
@@ -631,10 +695,10 @@ class AddPrize extends BasePrize {
                 placeholder="0"
                 inputContainerStyle={stylesApp.input}
                 onChangeText={(value) => {
-                  this.state.professional.rhythm[i] = Number(value);
+                  valueData.rhythm[i] = Number(value);
                   this.setState(this.state);
                 }}
-                value={this.state.professional.rhythm[i].toString()}
+                value={valueData.rhythm[i].toString()}
                 renderErrorMessage={false}
               />
 
@@ -642,13 +706,13 @@ class AddPrize extends BasePrize {
                 <Button
                   type="clear"
                   icon={<Icon type="ionicon" name="md-add-circle" size={18} />}
-                  onPress={() => this.onAddValue(this.state.professional.rhythm)}
+                  onPress={() => this.onAddValue(valueData.rhythm)}
                 />
               ) : (
                 <Button
                   type="clear"
                   icon={<Icon type="ionicon" name="md-remove-circle" size={18} />}
-                  onPress={() => this.onRemoveValue(this.state.professional.rhythm, i)}
+                  onPress={() => this.onRemoveValue(valueData.rhythm, i)}
                 />
               )}
             </View>
@@ -657,7 +721,7 @@ class AddPrize extends BasePrize {
 
         <Text style={[styles.txtSubTitle, stylesApp.mt8]}>Latin & Standard</Text>
         <View style={stylesApp.mt4}>
-          {this.state.professional.latin.map((p, i) => (
+          {valueData.latin.map((p, i) => (
             <View style={stylesApp.flexRowCenter} key={`Professional-Latin-${i}`}>
               <Text style={{...styles.txtFormItem, width: 80}}>
                 {UiHelper.numberToSequence(i + 1)} place -
@@ -670,10 +734,10 @@ class AddPrize extends BasePrize {
                 placeholder="0"
                 inputContainerStyle={stylesApp.input}
                 onChangeText={(value) => {
-                  this.state.professional.latin[i] = Number(value);
+                  valueData.latin[i] = Number(value);
                   this.setState(this.state);
                 }}
-                value={this.state.professional.latin[i].toString()}
+                value={valueData.latin[i].toString()}
                 renderErrorMessage={false}
               />
 
@@ -681,13 +745,13 @@ class AddPrize extends BasePrize {
                 <Button
                   type="clear"
                   icon={<Icon type="ionicon" name="md-add-circle" size={18} />}
-                  onPress={() => this.onAddValue(this.state.professional.latin)}
+                  onPress={() => this.onAddValue(valueData.latin)}
                 />
               ) : (
                 <Button
                   type="clear"
                   icon={<Icon type="ionicon" name="md-remove-circle" size={18} />}
-                  onPress={() => this.onRemoveValue(this.state.professional.latin, i)}
+                  onPress={() => this.onRemoveValue(valueData.latin, i)}
                 />
               )}
             </View>
@@ -698,6 +762,8 @@ class AddPrize extends BasePrize {
   }
 
   renderProAmAmateurCore() {
+    const valueData = this.state[PRIZE_OPTIONS.PROAM_AMATEUR].data;
+
     return (
       <>
         <View style={stylesApp.flexRowCenter}>
@@ -708,10 +774,10 @@ class AddPrize extends BasePrize {
             placeholder="0"
             inputContainerStyle={stylesApp.input}
             onChangeText={(value) => {
-              this.state.proAmAmateur.pointEachEntry = Number(value);
+              valueData.pointEachEntry = Number(value);
               this.setState(this.state);
             }}
-            value={this.state.proAmAmateur.pointEachEntry.toString()}
+            value={valueData.pointEachEntry.toString()}
             renderErrorMessage={false}
           />
           <Text style={styles.txtFormItem}>point for each entry</Text>
@@ -725,17 +791,17 @@ class AddPrize extends BasePrize {
             placeholder="0"
             inputContainerStyle={stylesApp.input}
             onChangeText={(value) => {
-              this.state.proAmAmateur.pointEachCallback = Number(value);
+              valueData.pointEachCallback = Number(value);
               this.setState(this.state);
             }}
-            value={this.state.proAmAmateur.pointEachCallback.toString()}
+            value={valueData.pointEachCallback.toString()}
             renderErrorMessage={false}
           />
           <Text style={styles.txtFormItem}>point for each call back</Text>
         </View>
 
         <View style={stylesApp.mt4}>
-          {this.state.proAmAmateur.pointsRanking.map((p, i) => (
+          {valueData.pointsRanking.map((p, i) => (
             <View style={stylesApp.flexRowCenter} key={`proAmAmateur-${i}`}>
               <Text style={{...styles.txtFormItem, width: 80}}>
                 {UiHelper.numberToSequence(i + 1)} place -
@@ -747,10 +813,10 @@ class AddPrize extends BasePrize {
                 placeholder="0"
                 inputContainerStyle={stylesApp.input}
                 onChangeText={(value) => {
-                  this.state.proAmAmateur.pointsRanking[i] = Number(value);
+                  valueData.pointsRanking[i] = Number(value);
                   this.setState(this.state);
                 }}
-                value={this.state.proAmAmateur.pointsRanking[i].toString()}
+                value={valueData.pointsRanking[i].toString()}
                 renderErrorMessage={false}
               />
               <Text style={{...styles.txtFormItem, marginRight: 14}}>points</Text>
@@ -759,13 +825,13 @@ class AddPrize extends BasePrize {
                 <Button
                   type="clear"
                   icon={<Icon type="ionicon" name="md-add-circle" size={18} />}
-                  onPress={() => this.onAddValue(this.state.proAmAmateur.pointsRanking)}
+                  onPress={() => this.onAddValue(valueData.pointsRanking)}
                 />
               ) : (
                 <Button
                   type="clear"
                   icon={<Icon type="ionicon" name="md-remove-circle" size={18} />}
-                  onPress={() => this.onRemoveValue(this.state.proAmAmateur.pointsRanking, i)}
+                  onPress={() => this.onRemoveValue(valueData.pointsRanking, i)}
                 />
               )}
             </View>
@@ -776,9 +842,11 @@ class AddPrize extends BasePrize {
   }
 
   renderProAmScholarClosedCore() {
+    const valueData = this.state[PRIZE_OPTIONS.PROAM_SCHOLAR_CLOSED].data;
+
     return (
       <View style={stylesApp.mt4}>
-        {this.state.proAmScholarClosed.map((p, i) => (
+        {valueData.map((p, i) => (
           <View style={stylesApp.flexRowCenter} key={`proAmScholarClosed-${i}`}>
             <Text style={{...styles.txtFormItem, width: 80}}>
               {UiHelper.numberToSequence(i + 1)} place -
@@ -791,10 +859,10 @@ class AddPrize extends BasePrize {
               placeholder="0"
               inputContainerStyle={stylesApp.input}
               onChangeText={(value) => {
-                this.state.proAmScholarClosed[i] = Number(value);
+                valueData[i] = Number(value);
                 this.setState(this.state);
               }}
-              value={this.state.proAmScholarClosed[i].toString()}
+              value={valueData[i].toString()}
               renderErrorMessage={false}
             />
 
@@ -802,13 +870,13 @@ class AddPrize extends BasePrize {
               <Button
                 type="clear"
                 icon={<Icon type="ionicon" name="md-add-circle" size={18} />}
-                onPress={() => this.onAddValue(this.state.proAmScholarClosed)}
+                onPress={() => this.onAddValue(valueData)}
               />
             ) : (
               <Button
                 type="clear"
                 icon={<Icon type="ionicon" name="md-remove-circle" size={18} />}
-                onPress={() => this.onRemoveValue(this.state.proAmScholarClosed, i)}
+                onPress={() => this.onRemoveValue(valueData, i)}
               />
             )}
           </View>
@@ -818,9 +886,11 @@ class AddPrize extends BasePrize {
   }
 
   renderProAmScholarOpenCore() {
+    const valueData = this.state[PRIZE_OPTIONS.PROAM_SCHOLAR_OPEN].data;
+
     return (
       <View style={stylesApp.mt4}>
-        {this.state.proAmScholarOpen.map((p, i) => (
+        {valueData.map((p, i) => (
           <View style={stylesApp.flexRowCenter} key={`proAmScholarClosed-${i}`}>
             <Text style={{...styles.txtFormItem, width: 80}}>
               {UiHelper.numberToSequence(i + 1)} place -
@@ -833,24 +903,24 @@ class AddPrize extends BasePrize {
               placeholder="0"
               inputContainerStyle={stylesApp.input}
               onChangeText={(value) => {
-                this.state.proAmScholarOpen[i] = Number(value);
+                valueData[i] = Number(value);
                 this.setState(this.state);
               }}
-              value={this.state.proAmScholarOpen[i].toString()}
+              value={valueData[i].toString()}
               renderErrorMessage={false}
             />
 
             {i === 0 ? (
               <Button
                 type="clear"
-                icon={<Icon type="ionicon" name="md-add-circle" size={18} />}
-                onPress={() => this.onAddValue(this.state.proAmScholarOpen)}
+                icon={<Icon type="ionicon" name="md-add-circle" size={18}/>}
+                onPress={() => this.onAddValue(valueData)}
               />
             ) : (
               <Button
                 type="clear"
                 icon={<Icon type="ionicon" name="md-remove-circle" size={18} />}
-                onPress={() => this.onRemoveValue(this.state.proAmScholarOpen, i)}
+                onPress={() => this.onRemoveValue(valueData, i)}
               />
             )}
           </View>
@@ -871,20 +941,13 @@ class AddPrize extends BasePrize {
   }
 
   doSelectOption(option) {
-    const {selectedOptions} = this.state;
+    this.state[option].selected = !this.state[option].selected;
 
-    const index = selectedOptions.indexOf(option);
-    if (index < 0) {
-      selectedOptions.push(option);
-    } else {
-      selectedOptions.splice(index, 1);
-    }
-
-    this.setState({selectedOptions});
+    this.setState(this.state);
   }
 
   isOptionSelected(option) {
-    return this.state.selectedOptions.indexOf(option) >= 0;
+    return this.state[option].selected;
   }
 
   onSelectDate() {
@@ -903,17 +966,54 @@ class AddPrize extends BasePrize {
       return;
     }
 
+    //
+    // set prize options data
+    //
+    if (this.state[PRIZE_OPTIONS.TOP_STUDIO_SINGLE].selected) {
+      this.event.prizeOptions[PRIZE_OPTIONS.TOP_STUDIO_SINGLE] = this.state[PRIZE_OPTIONS.TOP_STUDIO_SINGLE].data;
+    }
+    if (this.state[PRIZE_OPTIONS.TOP_STUDIO_MULTI].selected) {
+      this.event.prizeOptions[PRIZE_OPTIONS.TOP_STUDIO_MULTI] = this.state[PRIZE_OPTIONS.TOP_STUDIO_MULTI].data;
+    }
+    if (this.state[PRIZE_OPTIONS.TOP_TEACHER_PROAM].selected) {
+      this.event.prizeOptions[PRIZE_OPTIONS.TOP_TEACHER_PROAM] = this.state[PRIZE_OPTIONS.TOP_TEACHER_PROAM].data;
+    }
+    if (this.state[PRIZE_OPTIONS.SINGLE_ENTRIES].selected) {
+      this.event.prizeOptions[PRIZE_OPTIONS.SINGLE_ENTRIES] = this.state[PRIZE_OPTIONS.SINGLE_ENTRIES].data;
+    }
+    if (this.state[PRIZE_OPTIONS.MULTI_ENTRIES].selected) {
+      this.event.prizeOptions[PRIZE_OPTIONS.MULTI_ENTRIES] = this.state[PRIZE_OPTIONS.MULTI_ENTRIES].data;
+    }
+    if (this.state[PRIZE_OPTIONS.PRE_TEEN].selected) {
+      this.event.prizeOptions[PRIZE_OPTIONS.PRE_TEEN] = this.state[PRIZE_OPTIONS.PRE_TEEN].data;
+    }
+    if (this.state[PRIZE_OPTIONS.PROFESSIONAL].selected) {
+      this.event.prizeOptions[PRIZE_OPTIONS.PROFESSIONAL] = this.state[PRIZE_OPTIONS.PROFESSIONAL].data;
+    }
+    if (this.state[PRIZE_OPTIONS.PROAM_AMATEUR].selected) {
+      this.event.prizeOptions[PRIZE_OPTIONS.PROAM_AMATEUR] = this.state[PRIZE_OPTIONS.PROAM_AMATEUR].data;
+    }
+    if (this.state[PRIZE_OPTIONS.SOLO].selected) {
+      this.event.prizeOptions[PRIZE_OPTIONS.SOLO] = this.state[PRIZE_OPTIONS.SOLO].data;
+    }
+    if (this.state[PRIZE_OPTIONS.PROAM_SCHOLAR_CLOSED].selected) {
+      this.event.prizeOptions[PRIZE_OPTIONS.PROAM_SCHOLAR_CLOSED] = this.state[PRIZE_OPTIONS.PROAM_SCHOLAR_CLOSED].data;
+    }
+    if (this.state[PRIZE_OPTIONS.PROAM_SCHOLAR_OPEN].selected) {
+      this.event.prizeOptions[PRIZE_OPTIONS.PROAM_SCHOLAR_OPEN] = this.state[PRIZE_OPTIONS.PROAM_SCHOLAR_OPEN].data;
+    }
+
     if (this.currentUser && this.currentUser.id) {
       // show loading
       this.loadingHUD.show();
 
-      this.event.prizeOptions = this.state.selectedOptions;
+      // this.event.prizeOptions = this.state.selectedOptions;
       this.event.user = this.currentUser;
 
       // create event
       try {
         const result = await ApiService.addEvent(this.event);
-        this.event.id = result.id;
+        this.event.id = result._id;
 
         // add to reducers
         let {events} = this.props.EventReducer;

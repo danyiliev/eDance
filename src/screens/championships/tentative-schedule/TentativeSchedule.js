@@ -24,15 +24,7 @@ class TentativeSchedule extends React.Component {
     sessions: [],
   };
 
-  menus = [
-    'Tentative Schedule',
-    'Cash Prizes & Awards',
-    'Hotel & Package Prices',
-    'Entry Fees',
-    'Concellation & Refund Policy',
-    'Closed Restricted Syllabus Competition & Schedules',
-    'Open Unrestricted Syllabus Championships & Schedules',
-  ];
+  event = null;
 
   constructor(props) {
     super(props);
@@ -40,6 +32,11 @@ class TentativeSchedule extends React.Component {
     props.navigation.setOptions({
       title: 'Tentative Schedule',
     });
+
+    // get parameter
+    if (props.route.params) {
+      this.event = props.route.params.event;
+    }
   }
 
   render() {
@@ -219,14 +216,13 @@ class TentativeSchedule extends React.Component {
       }
     }
 
-    let event = new Event();
-    event.sessions = this.state.sessions;
+    this.event.sessions = this.state.sessions;
 
     // go to add prize page
     this.props.navigation.push(
       this.props.UserReducer.isLoggedIn ? AddPrize.NAV_NAME : AddPrize.NAV_NAME_SIGNUP,
       {
-        event: event,
+        event: this.event,
       },
     );
   }

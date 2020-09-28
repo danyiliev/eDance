@@ -534,6 +534,12 @@ class ApplyChampionship extends React.Component {
 
     this.setState({sessionsApply});
   }
+
+  onButSave() {
+    //
+    // check validity
+    //
+  }
 }
 
 const mapStateToProps = (state) => state;

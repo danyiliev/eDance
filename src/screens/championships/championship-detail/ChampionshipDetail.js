@@ -96,7 +96,7 @@ class ChampionshipDetail extends React.Component {
               <Button
                 title="Apply"
                 containerStyle={[styles.ctnButAction, stylesApp.ml10]}
-                // disabled={this.isApplied()}
+                disabled={this.isApplied()}
                 disabledStyle={[stylesApp.butPrimary, stylesApp.semiTrans]}
                 buttonStyle={stylesApp.butPrimary}
                 titleStyle={stylesApp.titleButPrimary}
