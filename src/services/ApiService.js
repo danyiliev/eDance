@@ -13,6 +13,7 @@ import {Product} from '../models/product.model';
 import {Order} from '../models/order.model';
 import {Event, EventSession} from '../models/event.model';
 import qs from 'qs';
+import {Group} from '../models/group.model';
 
 class ApiService {
   // error codes
@@ -1171,6 +1172,86 @@ class ApiService {
       console.log(data);
 
       return Promise.resolve(data);
+    } catch (e) {
+      console.log(e);
+
+      return Promise.reject(e.response.data);
+    }
+  }
+
+  async addGroup(group) {
+    const httpOptions = {
+      headers: {
+        ...this.baseHeader(),
+      },
+    };
+
+    let params = {
+      name: group.name,
+      danceLevels: group.danceLevels,
+      styleBallroom: group.styleBallroom,
+      styleRythm: group.styleRythm,
+      styleStandard: group.styleStandard,
+      styleLatin: group.styleLatin,
+    };
+
+    try {
+      const url = group.id ? `${this.baseUrl}/lesson/group/${group.id}` : `${this.baseUrl}/lesson/group`;
+      const {data} = await Axios.post(url, params, httpOptions);
+      console.log(data);
+
+      return Promise.resolve(data);
+    } catch (e) {
+      console.log(e);
+
+      return Promise.reject(e.response.data);
+    }
+  }
+
+  async getGroups(from, count) {
+    let params = {
+      from: from,
+      count: count,
+    };
+
+    try {
+      const options = {
+        params: params,
+        headers: {
+          ...this.baseHeader(),
+        },
+      };
+
+      const {data} = await Axios.get(`${this.baseUrl}/lesson/group`, options);
+      console.log(data);
+
+      const groups = [];
+      for (const obj of data) {
+        const g = new Group().initFromObject(obj);
+
+        groups.push(g);
+      }
+
+      return Promise.resolve(groups);
+    } catch (e) {
+      console.log(e);
+
+      return Promise.reject(e.response.data);
+    }
+  }
+
+  async deleteGroup(groupId) {
+    try {
+      const options = {
+        headers: {
+          ...this.baseHeader(),
+        },
+      };
+
+      const {data} = await Axios.delete(`${this.baseUrl}/lesson/group/${groupId}`, options);
+      console.log(data);
+
+      return Promise.resolve(data.result);
     } catch (e) {
       console.log(e);
 

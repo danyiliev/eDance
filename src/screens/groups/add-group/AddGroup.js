@@ -10,6 +10,10 @@ import {Button, Input} from 'react-native-elements';
 import {colors as colorTheme} from '../../../styles/theme.style';
 import BaseSettingProfile from '../../base-setting-profile';
 import {Utils} from '../../../helpers/utils';
+import {User} from '../../../models/user.model';
+import {Group} from '../../../models/group.model';
+import {ApiService} from '../../../services';
+import {setMyGroups} from '../../../actions/lesson';
 
 class AddGroup extends BaseSettingProfile {
   static NAV_NAME = 'add-group';
@@ -29,6 +33,13 @@ class AddGroup extends BaseSettingProfile {
     // get parameter
     if (props.route.params) {
       this.group = props.route.params.group;
+
+      this.state.name = this.group.name;
+      this.state.danceLevels = this.group.danceLevels;
+      this.state.styleBallroom = this.group.styleBallroom;
+      this.state.styleRythm = this.group.styleRythm;
+      this.state.styleStandard = this.group.styleStandard;
+      this.state.styleLatin = this.group.styleLatin;
     }
 
     props.navigation.setOptions({
@@ -117,8 +128,48 @@ class AddGroup extends BaseSettingProfile {
       Alert.alert('Dance Styles Not Selected', 'Dance styles and dances cannot be empty');
       return;
     }
+
+    // show loading
+    this.loadingHUD.show();
+
+    let isNew = false;
+    let group = this.group;
+    if (!group) {
+      isNew = true;
+      group = new Group();
+    }
+
+    group.name = this.state.name;
+    group.danceLevels = this.state.danceLevels;
+    group.styleBallroom = this.state.styleBallroom;
+    group.styleRythm = this.state.styleRythm;
+    group.styleStandard = this.state.styleStandard;
+    group.styleLatin = this.state.styleLatin;
+
+    try {
+      const result = await ApiService.addGroup(group);
+
+      if (isNew) {
+        group.id = result.id;
+        const {myGroups} = this.props.LessonReducer;
+        myGroups.unshift(group);
+      }
+
+      // go back to prev page
+      this.props.navigation.pop();
+    } catch (e) {
+      console.log(e);
+
+      Alert.alert('Failed to Save Group', e.message);
+    }
+
+    this.loadingHUD.hideAll();
   }
 }
 
 const mapStateToProps = (state) => state;
-export default connect(mapStateToProps, null)(AddGroup);
+const mapDispatchToProps = {
+  setMyGroups,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddGroup);

@@ -14,4 +14,24 @@ export const styles = StyleSheet.create({
     marginBottom: 14,
     padding: 16,
   },
+
+  txtName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    paddingRight: 40,
+  },
+
+  viewRow: {
+    ...stylesApp.flexRow,
+  },
+  txtLabel: {
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
+
+  ctnButAction: {
+    position: 'absolute',
+    top: 4,
+    right: 8,
+  },
 });

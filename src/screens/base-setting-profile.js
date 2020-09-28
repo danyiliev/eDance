@@ -15,6 +15,7 @@ import {Icon} from 'react-native-elements';
 import {colors as colorTheme} from '../styles/theme.style';
 import TagItem from '../components/TagItem/TagItem';
 import SelectList from './settings/select-list/SelectList';
+import {LoadingHUD} from 'react-native-hud-hybrid';
 
 export default class BaseSettingProfile extends React.Component {
   currentUser = null;
@@ -30,6 +31,8 @@ export default class BaseSettingProfile extends React.Component {
       styleStandard: [],
       styleLatin: [],
     };
+
+    this.loadingHUD = new LoadingHUD();
   }
 
   renderDanceStyles() {

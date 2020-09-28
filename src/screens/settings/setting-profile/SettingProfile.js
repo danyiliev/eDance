@@ -104,8 +104,6 @@ class SettingProfile extends BaseSettingProfile {
       this.state.timeEnd = this.currentUser.timeEnd;
     }
 
-    this.loadingHUD = new LoadingHUD();
-
     props.navigation.setOptions({
       title: this.props.UserReducer.isLoggedIn ? 'Lesson Options' : 'Create a Dance Teacher Profile',
     });

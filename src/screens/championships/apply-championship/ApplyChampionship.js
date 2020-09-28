@@ -424,13 +424,13 @@ class ApplyChampionship extends React.Component {
     return (
       <View>
         {this.state.sessionsApply[sessionIndex].danceStyle.map((style, styleIndex) => (
-          <View>
+          <View key={`sessionApply${sessionIndex}-level${levelIndex}-style${styleIndex}`}>
             <Text style={styles.txtSubTitle}>{DanceHelper.danceStyleNameByVal(style)}</Text>
 
             <View style={{...styles.viewColumns, marginTop: 6, marginBottom: 14}}>
               {DanceHelper.dancesByStyle(style).map((d, i) => (
                 <CheckboxRound
-                  key={`session${sessionIndex}-style${styleIndex}-dance${i}`}
+                  key={`sessionApply${sessionIndex}-level${levelIndex}-style${styleIndex}-dance${i}`}
                   label={d.value}
                   checked={applyLevel.dancesWithStyle[styleIndex]?.dances.indexOf(d.value) >= 0}
                   onPress={() => this.onSelectDance(d.value, sessionIndex, levelIndex, styleIndex)}
