@@ -258,9 +258,12 @@ class AddChampionship extends React.Component {
     eventNew.prices = this.state.prices;
 
     // go to tentative schedule page
-    this.props.navigation.push(TentativeSchedule.NAV_NAME, {
-      event: eventNew,
-    });
+    this.props.navigation.push(
+      this.props.UserReducer.isLoggedIn ? TentativeSchedule.NAV_NAME : TentativeSchedule.NAV_NAME_SIGNUP,
+      {
+        event: eventNew,
+      },
+    );
   }
 }
 

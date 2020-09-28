@@ -75,7 +75,7 @@ export const styles = StyleSheet.create({
   },
 
   ctnSegmentGender: {
-    marginTop: 20,
+    marginVertical: 20,
     borderRadius: 100,
     borderColor: colorTheme.primary,
   },

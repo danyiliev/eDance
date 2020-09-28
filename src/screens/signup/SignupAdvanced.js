@@ -18,7 +18,8 @@ import {BaseAuth} from '../base-auth';
 import {BaseSignup} from './base-signup';
 import {ApiService, AuthService} from '../../services';
 import {UserHelper} from '../../helpers/user-helper';
-import {DURATIONS_LESSON, DURATIONS_REST} from '../../constants/dance-data';
+import {DURATIONS_LESSON, DURATIONS_REST, LESSON_TYPES} from '../../constants/dance-data';
+import ComboSchedule from '../../components/ComboSchedule/ComboSchedule';
 
 class SignupAdvanced extends BaseSignup {
   static NAV_NAME = 'signup-advanced';
@@ -37,6 +38,19 @@ class SignupAdvanced extends BaseSignup {
   };
 
   userNew: User = null;
+
+  DANCE_REASONS = [
+    {value: 'social', name: 'SOCIAL DANCING'},
+    {value: 'wedding', name: 'WEDDING PREPARATION'},
+    {value: 'championship', name: 'CHAMPIONSHIPS DANCING'},
+    {value: 'health', name: 'MENTAL AND PHYSICAL HEALTH'},
+  ];
+
+  DANCE_LEVELS = [
+    {value: 'beginner', name: 'BEGINNER'},
+    {value: 'intermediate', name: 'INTERMIDIATE'},
+    {value: 'advance', name: 'ADVANCE'},
+  ];
 
   constructor(props) {
     super(props);
@@ -63,8 +77,6 @@ class SignupAdvanced extends BaseSignup {
             <View style={styles.viewTop}>
               {/* gender */}
               <View style={styles.viewForm}>
-                <Text style={styles.txtItemTitle}>Gender</Text>
-
                 <ButtonGroup
                   containerStyle={styles.ctnSegmentGender}
                   buttons={User.GENDERS}
@@ -75,93 +87,116 @@ class SignupAdvanced extends BaseSignup {
                   selectedIndex={this.state.genderIndex}
                   onPress={(index) => this.setState({genderIndex: index})}
                 />
-              </View>
-            </View>
 
-            {/* form info */}
-            <View style={styles.viewForm}>
-              {/* state select */}
-              <View style={[styles.viewInputSelect, stylesLogin.inputCtn]}>
-                <TouchableOpacity
-                  onPress={() => this.setState({showStatePicker: true})}>
-                  <View style={styles.viewInputSelectContainer}>
-                    {/* text */}
-                    <Text style={stylesLogin.input}>
-                      {this.state.state ? this.state.state : 'State'}
-                    </Text>
+                {/* state select */}
+                <View style={[styles.viewInputSelect, stylesLogin.inputCtn]}>
+                  <TouchableOpacity
+                    onPress={() => this.setState({showStatePicker: true})}>
+                    <View style={styles.viewInputSelectContainer}>
+                      {/* text */}
+                      <Text style={stylesLogin.input}>
+                        {this.state.state ? this.state.state : 'State'}
+                      </Text>
 
-                    {/* icon */}
+                      {/* icon */}
+                      <ImageScale
+                        width={14}
+                        source={require('../../../assets/imgs/ic_input_state.png')}
+                      />
+                    </View>
+                  </TouchableOpacity>
+                </View>
+
+                {/* city */}
+                <Input
+                  containerStyle={[stylesLogin.ctnInput, stylesApp.mt4]}
+                  returnKeyType="next"
+                  placeholder="City"
+                  placeholderTextColor={colorTheme.primary}
+                  inputStyle={stylesLogin.input}
+                  inputContainerStyle={stylesLogin.inputCtn}
+                  blurOnSubmit={false}
+                  value={this.state.email}
+                  onChangeText={(city) => {
+                    this.setState({city});
+                  }}
+                  onSubmitEditing={() => {
+                    this.inputZipCode.focus();
+                  }}
+                  renderErrorMessage={false}
+                  rightIcon={
                     <ImageScale
                       width={14}
-                      source={require('../../../assets/imgs/ic_input_state.png')}
+                      source={require('../../../assets/imgs/ic_input_city.png')}
                     />
-                  </View>
-                </TouchableOpacity>
+                  }
+                />
+
+                {/* zip code */}
+                <Input
+                  ref={(input) => {
+                    this.inputZipCode = input;
+                  }}
+                  containerStyle={stylesLogin.ctnInput}
+                  keyboardType={'number-pad'}
+                  returnKeyType="go"
+                  placeholder="ZIP Code"
+                  placeholderTextColor={colorTheme.primary}
+                  inputStyle={stylesLogin.input}
+                  inputContainerStyle={stylesLogin.inputCtn}
+                  blurOnSubmit={false}
+                  value={this.state.firstName}
+                  onChangeText={(zipCode) => {
+                    this.setState({zipCode});
+                  }}
+                  renderErrorMessage={false}
+                  rightIcon={
+                    <ImageScale
+                      width={14}
+                      source={require('../../../assets/imgs/ic_input_zipcode.png')}
+                    />
+                  }
+                />
               </View>
 
-              {/* city */}
-              <Input
-                containerStyle={[stylesLogin.ctnInput, stylesApp.mt4]}
-                returnKeyType="next"
-                placeholder="City"
-                placeholderTextColor={colorTheme.primary}
-                inputStyle={stylesLogin.input}
-                inputContainerStyle={stylesLogin.inputCtn}
-                blurOnSubmit={false}
-                value={this.state.email}
-                onChangeText={(city) => {
-                  this.setState({city});
-                }}
-                onSubmitEditing={() => {
-                  this.inputZipCode.focus();
-                }}
-                renderErrorMessage={false}
-                rightIcon={
-                  <ImageScale
-                    width={14}
-                    source={require('../../../assets/imgs/ic_input_city.png')}
+              {this.userType === User.TYPE_STUDENT ? (
+                <View style={[styles.viewForm, stylesApp.mt14]}>
+                  <Text style={styles.txtItemTitle}>
+                    LET US KNOW WHY DO YOU WANT TO LEARN TO DANCE?
+                  </Text>
+
+                  <ComboSchedule
+                    style={stylesApp.mt4}
+                    placeholder={'Please select'}
+                    items={this.DANCE_REASONS}
+                    onChange={(type) => this.setState({type})}
                   />
-                }
-              />
 
-              {/* zip code */}
-              <Input
-                ref={(input) => {
-                  this.inputZipCode = input;
-                }}
-                containerStyle={stylesLogin.ctnInput}
-                keyboardType={'number-pad'}
-                returnKeyType="go"
-                placeholder="ZIP Code"
-                placeholderTextColor={colorTheme.primary}
-                inputStyle={stylesLogin.input}
-                inputContainerStyle={stylesLogin.inputCtn}
-                blurOnSubmit={false}
-                value={this.state.firstName}
-                onChangeText={(zipCode) => {
-                  this.setState({zipCode});
-                }}
-                renderErrorMessage={false}
-                rightIcon={
-                  <ImageScale
-                    width={14}
-                    source={require('../../../assets/imgs/ic_input_zipcode.png')}
+                  <Text style={[styles.txtItemTitle, stylesApp.mt14]}>
+                    LET US KNOW YOUR DANCE LEVEL
+                  </Text>
+
+                  <ComboSchedule
+                    style={stylesApp.mt4}
+                    placeholder={'Please select'}
+                    items={this.DANCE_LEVELS}
+                    onChange={(type) => this.setState({type})}
                   />
-                }
-              />
-            </View>
+                </View>
+              ) : null}
 
-            {/* next */}
-            <View style={[styleUtil.withShadow(), styles.viewButNext]}>
-              <Button
-                title="REGISTER"
-                buttonStyle={stylesApp.butPrimary}
-                titleStyle={stylesApp.titleButPrimary}
-                onPress={() => this.onButSignup()}
-              />
-            </View>
+              {/* next */}
+              <View style={[styleUtil.withShadow(), styles.viewButNext]}>
+                <Button
+                  title="REGISTER"
+                  buttonStyle={stylesApp.butPrimary}
+                  titleStyle={stylesApp.titleButPrimary}
+                  onPress={() => this.onButSignup()}
+                />
+              </View>
 
-            {UserHelper.getInstance().renderSelectStatePicker(this)}
+              {UserHelper.getInstance().renderSelectStatePicker(this)}
+            </View>
           </View>
         </ContentWithBackground>
       </DismissKeyboard>

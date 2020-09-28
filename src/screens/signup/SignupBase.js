@@ -216,6 +216,11 @@ class SignupBase extends BaseSignup {
   }
 
   async onButNext() {
+    if (!this.photoFile) {
+      Alert.alert('Profile Photo is Empty', 'Upload profile photo to proceed signup');
+      return;
+    }
+
     if (!(this.state.firstName && this.state.lastName && this.state.email && this.state.password)) {
       return;
     }
