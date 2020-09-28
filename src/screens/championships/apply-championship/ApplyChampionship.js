@@ -47,6 +47,7 @@ class ApplyChampionship extends React.Component {
 
   currentIndex = 0;
   currentLevelIndex = 0;
+  currentUser = null;
 
   constructor(props) {
     super(props);
@@ -54,6 +55,8 @@ class ApplyChampionship extends React.Component {
     props.navigation.setOptions({
       title: 'Apply Championship',
     });
+
+    this.currentUser = props.UserReducer.user;
 
     // get parameter
     if (props.route.params) {
@@ -67,14 +70,6 @@ class ApplyChampionship extends React.Component {
         type: st.type,
         danceStyle: st.danceStyles,
 
-        //   ageGroup,
-        //   levels: [
-        //     level,
-        //     dances: {
-        //       style,
-        //       dances: []
-        //     }
-        //   ]
         ageGroup: '',
         levels: [],
       };
@@ -94,6 +89,12 @@ class ApplyChampionship extends React.Component {
 
       this.state.sessionsApply.push(sessionApply);
     }
+
+    // init form data
+    this.state.email = this.currentUser?.email;
+    this.state.genderIndex = this.currentUser?.gender;
+    this.state.city = this.currentUser?.city;
+    this.state.state = this.currentUser?.state;
   }
 
   render() {
@@ -389,7 +390,7 @@ class ApplyChampionship extends React.Component {
             {/* entry fee */}
             <View style={styles.viewFormRow}>
               <Text style={styles.txtFormLabel}>Entry Fee</Text>
-              <Text style={styles.input}>$40</Text>
+              <Text style={styles.input}>${this.event.getPrice()}</Text>
             </View>
 
             {this.renderApplyLevel(sessionIndex, i)}

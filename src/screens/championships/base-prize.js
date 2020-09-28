@@ -102,25 +102,6 @@ export default class BasePrize extends React.Component {
     );
   }
 
-  renderTopStudioSingleCore() {
-    return (
-      <View style={styles.viewSubForm}>
-        <View style={styles.viewColumns}>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>1st place - 8 points</Text>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>2nd place - 7 points</Text>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>3rd place - 6 points</Text>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>4th place - 5 points</Text>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>5th place - 4 points</Text>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>6th place - 3 points</Text>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>7th place - 2 points</Text>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>8th place - 1 points</Text>
-        </View>
-        <Text style={styles.txtFormItem}>1 point for each entry</Text>
-        <Text style={styles.txtFormItem}>1 point for each call back</Text>
-      </View>
-    );
-  }
-
   renderTopStudioMulti(selectable = false, selected = true) {
     return (
       <View style={styles.viewSubItem}>
@@ -140,25 +121,6 @@ export default class BasePrize extends React.Component {
         </View>
 
         {this.renderTopStudioMultiCore()}
-      </View>
-    );
-  }
-
-  renderTopStudioMultiCore() {
-    return (
-      <View style={styles.viewSubForm}>
-        <View style={styles.viewColumns}>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>1st place - 16 points</Text>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>2nd place - 14 points</Text>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>3rd place - 12 points</Text>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>4th place - 10 points</Text>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>5th place - 8 points</Text>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>6th place - 6 points</Text>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>7th place - 4 points</Text>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>8th place - 2 points</Text>
-        </View>
-        <Text style={styles.txtFormItem}>2 point for each entry</Text>
-        <Text style={styles.txtFormItem}>2 point for each call back</Text>
       </View>
     );
   }
@@ -201,84 +163,6 @@ export default class BasePrize extends React.Component {
     );
   }
 
-  renderTopTeacherCore() {
-    return (
-      <>
-        <View style={styles.viewRow}>
-          {/* header */}
-          <View style={styles.viewRowItem}>
-            <Text style={styles.txtTableHeader}>Level</Text>
-          </View>
-          <View style={styles.viewRowItem}>
-            <Text style={styles.txtTableHeader}>Top Teacher Pro/Am Required Entries</Text>
-          </View>
-          <View style={styles.viewRowItem}>
-            <Text style={styles.txtTableHeader}>1st</Text>
-          </View>
-        </View>
-
-        {/* items */}
-        <View style={{...styles.viewTableItem, width: widthSubItem3}}>
-          <Text style={styles.txtFormItem}>1 (VIP Pro-Am)</Text>
-        </View>
-        <View style={{...styles.viewTableItem, width: widthSubItem3}}>
-          <Text style={styles.txtFormItem}>430 and up</Text>
-        </View>
-        <View style={{...styles.viewTableItem, width: widthSubItem3}}>
-          <Text style={styles.txtFormItem}>$10,000</Text>
-        </View>
-
-        <View style={{...styles.viewTableItem, width: widthSubItem3}}>
-          <Text style={styles.txtFormItem}>2</Text>
-        </View>
-        <View style={{...styles.viewTableItem, width: widthSubItem3}}>
-          <Text style={styles.txtFormItem}>286 to 429</Text>
-        </View>
-        <View style={{...styles.viewTableItem, width: widthSubItem3}}>
-          <Text style={styles.txtFormItem}>$5,000</Text>
-        </View>
-
-        <View style={{...styles.viewTableItem, width: widthSubItem3}}>
-          <Text style={styles.txtFormItem}>3</Text>
-        </View>
-        <View style={{...styles.viewTableItem, width: widthSubItem3}}>
-          <Text style={styles.txtFormItem}>143 to 285</Text>
-        </View>
-        <View style={{...styles.viewTableItem, width: widthSubItem3}}>
-          <Text style={styles.txtFormItem}>$2,500</Text>
-        </View>
-
-        <View style={{...styles.viewTableItem, width: widthSubItem3}}>
-          <Text style={styles.txtFormItem}>4</Text>
-        </View>
-        <View style={{...styles.viewTableItem, width: widthSubItem3}}>
-          <Text style={styles.txtFormItem}>72 to 142</Text>
-        </View>
-        <View style={{...styles.viewTableItem, width: widthSubItem3}}>
-          <Text style={styles.txtFormItem}>$750</Text>
-        </View>
-
-        <View style={{...styles.viewTableItem, width: widthSubItem3}}>
-        </View>
-        <View style={{...styles.viewTableItem, width: widthSubItem3}}>
-          <Text style={{...styles.txtFormItem, textAlign: 'center'}}>TOP STUDIO REQUIRED ENTRIES</Text>
-        </View>
-        <View style={{...styles.viewTableItem, width: widthSubItem3}}>
-        </View>
-
-        <View style={{...styles.viewTableItem, width: widthSubItem3}}>
-          <Text style={styles.txtFormItem}>PRO-AM</Text>
-        </View>
-        <View style={{...styles.viewTableItem, width: widthSubItem3}}>
-          <Text style={styles.txtFormItem}>1,000</Text>
-        </View>
-        <View style={{...styles.viewTableItem, width: widthSubItem3}}>
-          <Text style={styles.txtFormItem}>$10,000USD</Text>
-        </View>
-      </>
-    );
-  }
-
   renderSingleEntries(selectable = false, selected = false) {
     return (
       <View style={styles.viewItem}>
@@ -292,25 +176,6 @@ export default class BasePrize extends React.Component {
     );
   }
 
-  renderSingleEntriesCore() {
-    return (
-      <View style={styles.viewForm}>
-        <View style={styles.viewColumns}>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>1st place - 8 points</Text>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>2nd place - 7 points</Text>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>3rd place - 6 points</Text>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>4th place - 5 points</Text>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>5th place - 4 points</Text>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>6th place - 3 points</Text>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>7th place - 2 points</Text>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>8th place - 1 points</Text>
-        </View>
-        <Text style={styles.txtFormItem}>1 point for each entry</Text>
-        <Text style={styles.txtFormItem}>1 point for each call back</Text>
-      </View>
-    );
-  }
-
   renderMultiEntries(selectable = false, selected = false) {
     return (
       <View style={styles.viewItem}>
@@ -320,29 +185,6 @@ export default class BasePrize extends React.Component {
         </View>
 
         {this.renderMultiEntriesCore()}
-      </View>
-    );
-  }
-
-  renderMultiEntriesCore() {
-    return (
-      <View style={styles.viewForm}>
-        <View style={styles.viewColumns}>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>1st place - 16 points</Text>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>2nd place - 14 points</Text>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>3rd place - 12 points</Text>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>4th place - 10 points</Text>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>5th place - 8 points</Text>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>6th place - 6 points</Text>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>7th place - 4 points</Text>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>8th place - 2 points</Text>
-        </View>
-        <Text style={styles.txtFormItem}>2 point for each entry</Text>
-        <Text style={styles.txtFormItem}>2 point for each call back</Text>
-
-        <Text style={[styles.txtFormLabel, stylesApp.mt8]}>
-          * If a placement is in an uncontested division, the point(s) for each entry will be eliminated. All points will then be added together resulting in the placement.
-        </Text>
       </View>
     );
   }
@@ -383,32 +225,6 @@ export default class BasePrize extends React.Component {
     );
   }
 
-  renderProfessionalCore() {
-    return (
-      <>
-        <Text style={styles.txtSubTitle}>Rhythm & Smooth</Text>
-        <View style={styles.viewColumns}>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>1st place - $1500</Text>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>2nd place - $1000</Text>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>3rd place - $750</Text>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>4th place - $500</Text>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>5th place - $300</Text>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>6th place - $150</Text>
-        </View>
-
-        <Text style={[styles.txtSubTitle, stylesApp.mt8]}>Latin & Standard</Text>
-        <View style={styles.viewColumns}>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>1st place - 1500</Text>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>2nd place - 1000</Text>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>3rd place - 750</Text>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>4th place - 500</Text>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>5th place - 300</Text>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>6th place - 150</Text>
-        </View>
-      </>
-    );
-  }
-
   renderProAmAmateur(selectable = false, selected = false) {
     return (
       <View style={styles.viewItem}>
@@ -430,25 +246,6 @@ export default class BasePrize extends React.Component {
           </Text>
         </View>
       </View>
-    );
-  }
-
-  renderProAmAmateurCore() {
-    return (
-      <>
-        <View style={styles.viewColumns}>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>1st place - 8 points</Text>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>2nd place - 7 points</Text>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>3rd place - 6 points</Text>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>4th place - 5 points</Text>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>5th place - 4 points</Text>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>6th place - 3 points</Text>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>7th place - 2 points</Text>
-          <Text style={{...styles.txtFormItem, width: widthSubItem2}}>8th place - 1 points</Text>
-        </View>
-        <Text style={styles.txtFormItem}>1 point for each entry</Text>
-        <Text style={styles.txtFormItem}>1 point for each call back</Text>
-      </>
     );
   }
 
@@ -490,16 +287,6 @@ export default class BasePrize extends React.Component {
     );
   }
 
-  renderProAmScholarClosedCore() {
-    return (
-      <View style={styles.viewColumns}>
-        <Text style={{...styles.txtFormItem, width: widthSubItem3}}>1st place $150</Text>
-        <Text style={{...styles.txtFormItem, width: widthSubItem3}}>2nd place $100</Text>
-        <Text style={{...styles.txtFormItem, width: widthSubItem3}}>3rd place $50</Text>
-      </View>
-    );
-  }
-
   renderProAmScholarOpen(selectable = false, selected = false) {
     return (
       <View style={styles.viewItem}>
@@ -517,16 +304,6 @@ export default class BasePrize extends React.Component {
             Equal prize money will be awarded in American Rhythm and Ballroom, International Latin and Standard for each of the 3 age divisions only.
           </Text>
         </View>
-      </View>
-    );
-  }
-
-  renderProAmScholarOpenCore() {
-    return (
-      <View style={styles.viewColumns}>
-        <Text style={{...styles.txtFormItem, width: widthSubItem3}}>1st place $300</Text>
-        <Text style={{...styles.txtFormItem, width: widthSubItem3}}>2nd place $150</Text>
-        <Text style={{...styles.txtFormItem, width: widthSubItem3}}>3rd place $100</Text>
       </View>
     );
   }

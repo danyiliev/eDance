@@ -154,4 +154,14 @@ export class Event extends BaseModel {
 
     return maxDate;
   }
+
+  getPrice() {
+    // default to usd
+    const pricesUSD = this.prices.filter((p) => p.currency === Price.CURRENCIES[0]);
+    if (pricesUSD.length >= 0) {
+      return pricesUSD[0].price;
+    }
+
+    return this.prices[0].price;
+  }
 }
