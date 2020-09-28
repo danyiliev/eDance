@@ -2,6 +2,7 @@ import React from 'react';
 import {stylesApp, styleUtil} from '../../styles/app.style';
 import {Alert, ScrollView, Text, TouchableOpacity, View} from 'react-native';
 import {styles} from './styles';
+import {styles as stylesCombo} from '../../components/ComboSchedule/styles';
 import ComboSchedule from '../../components/ComboSchedule/ComboSchedule';
 import SelectPicker from '../../components/SelectPicker/SelectPicker';
 import {STATES} from '../../constants/constant-data';
@@ -14,6 +15,8 @@ import {DanceHelper} from '../../helpers/dance-helper';
 import {Lesson} from '../../models/lesson.model';
 import Pro from '../tabs/pro/Pro';
 import BookingDate from '../booking/booking-date/BookingDate';
+import SelectTeacher from '../championships/select-teacher/SelectTeacher';
+import SelectGroup from './select-group/SelectGroup';
 
 export default class ScheduleSelect extends React.Component {
   static NAV_NAME = 'schedule-select';
@@ -21,6 +24,7 @@ export default class ScheduleSelect extends React.Component {
   state = {
     // data
     type: '',
+    group: null,
     ageGroup: '',
     style: '',
     dance: '',
@@ -64,6 +68,30 @@ export default class ScheduleSelect extends React.Component {
               items={LESSON_TYPES}
               onChange={(type) => this.setState({type})}
             />
+
+            {/* group */}
+            {this.state.type === LESSON_TYPES[1].value ? (
+              <TouchableOpacity onPress={() => this.onSelectGroup()}>
+                <View style={{...stylesCombo.viewSelectItem, ...this.props.style}}>
+                  <Text
+                    style={{
+                      ...stylesCombo.txtItem,
+                      ...(this.state.group ? {} : {color: colorTheme.grey}),
+                    }}>
+                    {this.state.group ? this.state.group?.name : 'Select a Group'}
+                  </Text>
+
+                  {/* right arrow */}
+                  <Icon
+                    type="ionicon"
+                    name="ios-arrow-forward"
+                    style={styles.iconRight}
+                    size={20}
+                    color={colorTheme.primary}
+                  />
+                </View>
+              </TouchableOpacity>
+            ) : null}
           </View>
 
           {/* age category */}
@@ -150,6 +178,10 @@ export default class ScheduleSelect extends React.Component {
       Alert.alert('Lesson Type is Empty', 'Please select lesson type');
       return;
     }
+    if (this.state.type === LESSON_TYPES[1].value && !this.state.group) {
+      Alert.alert('Lesson Group is Not Selected', 'Please select group if you schedule group lesson type');
+      return;
+    }
     if (!this.state.ageGroup) {
       Alert.alert('Age Group is Empty', 'Please select age group');
       return;
@@ -175,8 +207,9 @@ export default class ScheduleSelect extends React.Component {
     lessonNew.dance = this.state.dance;
     lessonNew.danceLevel = this.state.level;
     lessonNew.setTeacher(this.teacher);
+    lessonNew.setGroup(this.state.group);
 
-    if (this.teacher) {
+    if (lessonNew.teacher) {
       // go to date page
       this.props.navigation.push(BookingDate.NAV_NAME, {
         lesson: lessonNew,
@@ -187,5 +220,16 @@ export default class ScheduleSelect extends React.Component {
         lesson: lessonNew,
       });
     }
+  }
+
+  onSelectGroup() {
+    // go to select group page
+    this.props.navigation.push(SelectGroup.NAV_NAME, {
+      onSave: this.onSelectedGroup.bind(this),
+      group: this.state.group,
+    });
+  }
+  onSelectedGroup(group) {
+    this.setState({group});
   }
 }

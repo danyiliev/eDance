@@ -5,12 +5,15 @@ import {
   SELECT_LATIN,
   SELECT_STANDARD,
 } from '../constants/dance-data';
+import {Utils} from '../helpers/utils';
+import {User} from './user.model';
 
 export class Group extends BaseModel {
   //
   // properties
   //
   name = '';
+  userId = '';
 
   // dance styles
   styleBallroom = [];
@@ -20,10 +23,21 @@ export class Group extends BaseModel {
 
   danceLevels = [];
 
+  // logical
+  user = null;
+
   initFromObject(data) {
     super.initFromObject(data);
 
     this.name = data.name;
+
+    // user
+    if (Utils.isObject(data.user)) {
+      this.user = new User().initFromObject(data.user);
+      this.userId = this.user.id;
+    } else {
+      this.userId = data.user;
+    }
 
     // dance styles
     if (data.styleBallroom) {

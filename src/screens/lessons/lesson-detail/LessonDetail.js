@@ -62,6 +62,13 @@ class LessonDetail extends React.Component {
                 </Text>
               </View>
 
+              {this.lesson?.group ? (
+                <View style={styles.viewItem}>
+                  <Text style={styles.txtItemLabel}>Group:</Text>
+                  <Text style={styles.txtItemValue}>{this.lesson?.group?.name}</Text>
+                </View>
+              ) : null}
+
               {/* age group */}
               <View style={styles.viewItem}>
                 <Text style={styles.txtItemLabel}>Age Group:</Text>
@@ -124,7 +131,7 @@ class LessonDetail extends React.Component {
               {/* price */}
               <View style={styles.viewItem}>
                 <Text style={styles.txtItemLabel}>Price:</Text>
-                <Text style={styles.txtItemValue}>$35</Text>
+                <Text style={styles.txtItemValue}>${this.lesson?.price}</Text>
               </View>
             </View>
           </View>

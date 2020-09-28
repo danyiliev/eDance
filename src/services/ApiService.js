@@ -575,6 +575,7 @@ class ApiService {
       dance: lesson.dance,
       danceLevel: lesson.danceLevel,
       teacherId: lesson.teacherId,
+      groupId: lesson.groupId,
       date: lesson.date,
       timeSlots: timeSlots,
       price: lesson.price,
@@ -1223,6 +1224,38 @@ class ApiService {
       };
 
       const {data} = await Axios.get(`${this.baseUrl}/lesson/group`, options);
+      console.log(data);
+
+      const groups = [];
+      for (const obj of data) {
+        const g = new Group().initFromObject(obj);
+
+        groups.push(g);
+      }
+
+      return Promise.resolve(groups);
+    } catch (e) {
+      console.log(e);
+
+      return Promise.reject(e.response.data);
+    }
+  }
+
+  async getGroupsAll(from, count) {
+    let params = {
+      from: from,
+      count: count,
+    };
+
+    try {
+      const options = {
+        params: params,
+        headers: {
+          ...this.baseHeader(),
+        },
+      };
+
+      const {data} = await Axios.get(`${this.baseUrl}/lesson/group/all`, options);
       console.log(data);
 
       const groups = [];

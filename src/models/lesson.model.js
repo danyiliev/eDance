@@ -3,6 +3,7 @@ import {Utils} from '../helpers/utils';
 import {User} from './user.model';
 import {DanceHelper} from '../helpers/dance-helper';
 import moment from 'moment';
+import {Group} from './group.model';
 
 export class TimeSlot {
   start = '';
@@ -46,6 +47,7 @@ export class Lesson extends BaseModel {
 
   userId = '';
   teacherId = '';
+  groupId = '';
 
   date = '';
   timeSlots = [];
@@ -57,6 +59,7 @@ export class Lesson extends BaseModel {
   // logical
   user = null;
   teacher = null;
+  group = null;
 
   // data
   lessons = [];
@@ -70,6 +73,14 @@ export class Lesson extends BaseModel {
       this.userId = this.user.id;
     } else {
       this.userId = data.user;
+    }
+
+    // group
+    if (Utils.isObject(data.group)) {
+      this.group = new Group().initFromObject(data.group);
+      this.groupId = this.group.id;
+    } else {
+      this.groupId = data.group;
     }
 
     // teacher
@@ -127,6 +138,17 @@ export class Lesson extends BaseModel {
 
     this.teacher = user;
     this.teacherId = user.id;
+  }
+
+  setGroup(group) {
+    if (!group) {
+      return;
+    }
+
+    this.group = group;
+    this.groupId = group.id;
+
+    this.setTeacher(group.user);
   }
 
   timeToString() {

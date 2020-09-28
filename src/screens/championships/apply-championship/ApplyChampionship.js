@@ -449,7 +449,7 @@ class ApplyChampionship extends React.Component {
   }
 
   onSelectTeacher() {
-    // go to stripe account page
+    // go to select teacher page
     this.props.navigation.push(SelectTeacher.NAV_NAME, {
       onSave: this.onSelectedTeacher.bind(this),
     });

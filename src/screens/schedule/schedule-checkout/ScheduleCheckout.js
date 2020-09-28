@@ -46,8 +46,15 @@ class ScheduleCheckout extends React.Component {
       <View style={[stylesMain.viewContainer, stylesApp.justifyBetween]}>
         <View style={styles.viewContent}>
           <View style={styles.viewInfo}>
+            {this.lesson?.group ? (
+              <View style={styles.viewItem}>
+                <Text style={styles.txtItemName}>Dance Group:</Text>
+                <Text style={styles.txtItemValue}>{this.lesson?.group?.name}</Text>
+              </View>
+            ) : null}
+
             <View style={styles.viewItem}>
-              <Text style={styles.txtItemName}>Dance style:</Text>
+              <Text style={styles.txtItemName}>Dance Style:</Text>
               <Text style={styles.txtItemValue}>
                 {DanceHelper.danceStyleNameByVal(this.lesson?.danceStyle)}
               </Text>

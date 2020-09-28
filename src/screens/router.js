@@ -75,6 +75,8 @@ import ApplyChampionship from './championships/apply-championship/ApplyChampions
 import SelectTeacher from './championships/select-teacher/SelectTeacher';
 import Groups from './groups/Groups';
 import AddGroup from './groups/add-group/AddGroup';
+import SelectGroup from './schedule/select-group/SelectGroup';
+import GroupDetail from './groups/group-detail/GroupDetail';
 
 const Stack = createStackNavigator();
 
@@ -181,6 +183,8 @@ class MainNavigator extends React.Component {
               <Stack.Screen name={SelectTeacher.NAV_NAME} component={SelectTeacher} />
               <Stack.Screen name={Groups.NAV_NAME} component={Groups} />
               <Stack.Screen name={AddGroup.NAV_NAME} component={AddGroup} />
+              <Stack.Screen name={SelectGroup.NAV_NAME} component={SelectGroup} />
+              <Stack.Screen name={GroupDetail.NAV_NAME} component={GroupDetail} />
             </Stack.Navigator>
 
             <MenuModal
