@@ -14,6 +14,7 @@ export default class ComboSchedule extends React.Component {
     placeholder: PropTypes.string,
     items: PropTypes.array,
     onChange: PropTypes.func,
+    title: PropTypes.string,
   };
 
   state = {
@@ -57,6 +58,7 @@ export default class ComboSchedule extends React.Component {
   renderPicker() {
     return (
       <SelectPicker
+        title={this.props.title}
         isVisible={this.state.showPicker}
         onDismiss={(done) => this.dismissPicker(done)}>
         <Picker

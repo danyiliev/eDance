@@ -104,7 +104,7 @@ class MenuModal extends React.Component {
                   />
                 </View>
 
-                <Text style={styles.txtMenuItem}>Shedule</Text>
+                <Text style={styles.txtMenuItem}>Schedule</Text>
               </View>
             </TouchableOpacity>
             <Divider style={styles.viewDivider} />

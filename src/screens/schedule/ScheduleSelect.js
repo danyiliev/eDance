@@ -115,6 +115,7 @@ export default class ScheduleSelect extends React.Component {
             <ComboSchedule
               style={styles.styleCombo}
               placeholder={'Please select dance style'}
+              title="Select Dance Style"
               items={DanceHelper.danceStylesAll()}
               onChange={(style) => this.setState({style})}
             />
@@ -128,6 +129,7 @@ export default class ScheduleSelect extends React.Component {
 
               <ComboSchedule
                 style={styles.styleCombo}
+                title="Select Dance"
                 placeholder={'Please select dance'}
                 items={DanceHelper.dancesByStyle(this.state.style)}
                 onChange={(dance) => this.setState({dance})}
@@ -142,6 +144,7 @@ export default class ScheduleSelect extends React.Component {
 
             <ComboSchedule
               style={styles.styleCombo}
+              title="Select Dance Level"
               placeholder={'Please select dance level'}
               items={DanceHelper.danceLevelsAll()}
               onChange={(level) => this.setState({level})}
