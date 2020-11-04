@@ -9,6 +9,7 @@ import {User} from '../../../models/user.model';
 import {UserHelper} from '../../../helpers/user-helper';
 import SelectTeacher from '../../championships/select-teacher/SelectTeacher';
 import GroupDetail from '../../groups/group-detail/GroupDetail';
+import BookingDate from '../../booking/booking-date/BookingDate';
 
 export default class SelectGroup extends React.Component {
   static NAV_NAME = 'select-group';
@@ -23,21 +24,23 @@ export default class SelectGroup extends React.Component {
   };
 
   pageCount = 20;
-  onSave = null;
 
   group = null;
 
   constructor(props) {
     super(props);
 
-    this.onSave = props.route.params.onSave;
+    // get parameter
+    if (props.route.params) {
+      this.lesson = props.route.params.lesson;
+    }
 
     props.navigation.setOptions({
       title: 'Select Group',
       headerRight: () => (
         <Button
           type="clear"
-          title="Done"
+          title="Next"
           titleStyle={stylesApp.butTitleNavRight}
           onPress={() => this.onButSave()}
         />
@@ -159,9 +162,11 @@ export default class SelectGroup extends React.Component {
       return;
     }
 
-    this.onSave(this.state.groups[this.state.selectedIndex]);
+    this.lesson.setGroup(this.state.groups[this.state.selectedIndex]);
 
-    // back to prev page
-    this.props.navigation.pop();
+    // go to date page
+    this.props.navigation.push(BookingDate.NAV_NAME, {
+      lesson: this.lesson,
+    });
   }
 }

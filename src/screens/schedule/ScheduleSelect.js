@@ -24,7 +24,6 @@ export default class ScheduleSelect extends React.Component {
   state = {
     // data
     type: '',
-    group: null,
     ageGroup: '',
     style: '',
     dance: '',
@@ -46,7 +45,7 @@ export default class ScheduleSelect extends React.Component {
     }
 
     // todo: test data
-    this.state.type = LESSON_TYPES[0].value;
+    this.state.type = LESSON_TYPES[1].value;
     this.state.ageGroup = AGE_GROUPS[0].value;
     this.state.style = DanceHelper.danceStylesAll()[0].value;
     this.state.dance = DanceHelper.dancesByStyle(this.state.style)[0].value;
@@ -68,30 +67,6 @@ export default class ScheduleSelect extends React.Component {
               items={LESSON_TYPES}
               onChange={(type) => this.setState({type})}
             />
-
-            {/* group */}
-            {this.state.type === LESSON_TYPES[1].value ? (
-              <TouchableOpacity onPress={() => this.onSelectGroup()}>
-                <View style={{...stylesCombo.viewSelectItem, ...this.props.style}}>
-                  <Text
-                    style={{
-                      ...stylesCombo.txtItem,
-                      ...(this.state.group ? {} : {color: colorTheme.grey}),
-                    }}>
-                    {this.state.group ? this.state.group?.name : 'Select a Group'}
-                  </Text>
-
-                  {/* right arrow */}
-                  <Icon
-                    type="ionicon"
-                    name="ios-arrow-forward"
-                    style={styles.iconRight}
-                    size={20}
-                    color={colorTheme.primary}
-                  />
-                </View>
-              </TouchableOpacity>
-            ) : null}
           </View>
 
           {/* age category */}
@@ -181,10 +156,6 @@ export default class ScheduleSelect extends React.Component {
       Alert.alert('Lesson Type is Empty', 'Please select lesson type');
       return;
     }
-    if (this.state.type === LESSON_TYPES[1].value && !this.state.group) {
-      Alert.alert('Lesson Group is Not Selected', 'Please select group if you schedule group lesson type');
-      return;
-    }
     if (!this.state.ageGroup) {
       Alert.alert('Age Group is Empty', 'Please select age group');
       return;
@@ -212,27 +183,25 @@ export default class ScheduleSelect extends React.Component {
     lessonNew.setTeacher(this.teacher);
     lessonNew.setGroup(this.state.group);
 
-    if (lessonNew.teacher) {
-      // go to date page
-      this.props.navigation.push(BookingDate.NAV_NAME, {
+    if (this.state.type === LESSON_TYPES[1].value) {
+      // group lesson
+
+      // go to group select page
+      this.props.navigation.push(SelectGroup.NAV_NAME, {
         lesson: lessonNew,
       });
     } else {
-      // go to select teacher page
-      this.props.navigation.push(Pro.NAV_NAME, {
-        lesson: lessonNew,
-      });
+      if (lessonNew.teacher) {
+        // go to date page
+        this.props.navigation.push(BookingDate.NAV_NAME, {
+          lesson: lessonNew,
+        });
+      } else {
+        // go to select teacher page
+        this.props.navigation.push(Pro.NAV_NAME, {
+          lesson: lessonNew,
+        });
+      }
     }
-  }
-
-  onSelectGroup() {
-    // go to select group page
-    this.props.navigation.push(SelectGroup.NAV_NAME, {
-      onSave: this.onSelectedGroup.bind(this),
-      group: this.state.group,
-    });
-  }
-  onSelectedGroup(group) {
-    this.setState({group});
   }
 }
