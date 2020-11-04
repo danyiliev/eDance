@@ -6,6 +6,7 @@ import {styles} from '../../championships/add-championship/styles';
 import {Alert, Text, View} from 'react-native';
 import {styles as stylesSetting} from '../../settings/setting-profile/styles';
 import {styles as stylesSignup} from '../../signup/styles';
+import {styles as stylesSchedule} from '../../schedule/styles';
 import {Button, Input} from 'react-native-elements';
 import {colors as colorTheme} from '../../../styles/theme.style';
 import BaseSettingProfile from '../../base-setting-profile';
@@ -14,6 +15,8 @@ import {User} from '../../../models/user.model';
 import {Group} from '../../../models/group.model';
 import {ApiService} from '../../../services';
 import {setMyGroups} from '../../../actions/lesson';
+import ComboSchedule from '../../../components/ComboSchedule/ComboSchedule';
+import {DanceHelper} from '../../../helpers/dance-helper';
 
 class AddGroup extends BaseSettingProfile {
   static NAV_NAME = 'add-group';
@@ -28,6 +31,8 @@ class AddGroup extends BaseSettingProfile {
 
       // ui
       name: '',
+      style: '',
+      dance: '',
     };
 
     // get parameter
@@ -36,10 +41,8 @@ class AddGroup extends BaseSettingProfile {
 
       this.state.name = this.group.name;
       this.state.danceLevels = this.group.danceLevels;
-      this.state.styleBallroom = this.group.styleBallroom;
-      this.state.styleRythm = this.group.styleRythm;
-      this.state.styleStandard = this.group.styleStandard;
-      this.state.styleLatin = this.group.styleLatin;
+      this.state.style = this.group.styles[0];
+      this.state.dance = this.group.dances[0];
     }
 
     props.navigation.setOptions({
@@ -84,7 +87,37 @@ class AddGroup extends BaseSettingProfile {
             {this.renderLevels()}
           </View>
 
-          {this.renderDanceStyles()}
+          {/* dance style */}
+          <View style={[stylesSetting.viewForm, stylesApp.mt14]}>
+            {/* title */}
+            <Text style={stylesSchedule.txtTitle}>Dance Styles</Text>
+
+            <ComboSchedule
+              style={stylesSchedule.styleCombo}
+              placeholder={'Please select dance style'}
+              title="Select Dance Style"
+              items={DanceHelper.danceStylesAll()}
+              value={this.state.style}
+              onChange={(style) => this.setState({style, dance: ''}, () => this.updateName())}
+            />
+          </View>
+
+          {/* dance */}
+          {this.state.style ? (
+            <View style={[stylesSetting.viewForm, stylesApp.mt14]}>
+              {/* title */}
+              <Text style={stylesSchedule.txtTitle}>Dance</Text>
+
+              <ComboSchedule
+                style={stylesSchedule.styleCombo}
+                title="Select Dance"
+                placeholder={'Please select dance'}
+                items={DanceHelper.dancesByStyle(this.state.style)}
+                value={this.state.dance}
+                onChange={(dance) => this.setState({dance}, () => this.updateName())}
+              />
+            </View>
+          ) : null}
 
           {/* save */}
           <View style={[styleUtil.withShadow(), stylesSetting.viewButSave]}>
@@ -99,6 +132,33 @@ class AddGroup extends BaseSettingProfile {
 
       </KeyboardAwareScrollView>
     );
+  }
+
+  onSelectLevel(level) {
+    let {danceLevels} = this.state;
+    danceLevels = [level];
+
+    this.setState({danceLevels}, () => this.updateName());
+  }
+
+  /**
+   * update group name based on level, style and dance
+   */
+  updateName() {
+    const names = [];
+    if (this.state.danceLevels.length > 0) {
+      names.push(this.state.danceLevels[0]);
+    }
+    if (this.state.style) {
+      names.push(this.state.style);
+    }
+    if (this.state.dance) {
+      names.push(this.state.dance);
+    }
+
+    this.setState({
+      name: names.join('-'),
+    });
   }
 
   async onButSave() {
@@ -119,13 +179,12 @@ class AddGroup extends BaseSettingProfile {
       return;
     }
 
-    if (
-      this.state.styleBallroom.length <= 0 &&
-      this.state.styleRythm.length <= 0 &&
-      this.state.styleRythm.length <= 0 &&
-      this.state.styleLatin.length <= 0
-    ) {
+    if (!this.state.style) {
       Alert.alert('Dance Styles Not Selected', 'Dance styles and dances cannot be empty');
+      return;
+    }
+    if (!this.state.dance) {
+      Alert.alert('Dance Not Selected', 'Dance styles and dances cannot be empty');
       return;
     }
 
@@ -141,10 +200,10 @@ class AddGroup extends BaseSettingProfile {
 
     group.name = this.state.name;
     group.danceLevels = this.state.danceLevels;
-    group.styleBallroom = this.state.styleBallroom;
-    group.styleRythm = this.state.styleRythm;
-    group.styleStandard = this.state.styleStandard;
-    group.styleLatin = this.state.styleLatin;
+
+    // styles & dances
+    group.styles = [this.state.style];
+    group.dances = [this.state.dance];
 
     try {
       const result = await ApiService.addGroup(group);

@@ -15,13 +15,14 @@ export default class ComboSchedule extends React.Component {
     items: PropTypes.array,
     onChange: PropTypes.func,
     title: PropTypes.string,
+    value: PropTypes.string,
   };
 
   state = {
     // ui
     showPicker: false,
-    valueSelected: '',
-    value: '',
+    valueSelected: this.props.value,
+    value: this.props.value,
   };
 
   render() {

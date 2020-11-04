@@ -1238,10 +1238,8 @@ class ApiService {
     let params = {
       name: group.name,
       danceLevels: group.danceLevels,
-      styleBallroom: group.styleBallroom,
-      styleRythm: group.styleRythm,
-      styleStandard: group.styleStandard,
-      styleLatin: group.styleLatin,
+      styles: group.styles,
+      dances: group.dances,
     };
 
     try {

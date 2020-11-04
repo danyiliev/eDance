@@ -16,9 +16,16 @@ export class Group extends BaseModel {
   userId = '';
 
   // dance styles
+  styles = [];
+  dances = [];
+
+  // deprecated
   styleBallroom = [];
+  // deprecated
   styleRythm = [];
+  // deprecated
   styleStandard = [];
+  // deprecated
   styleLatin = [];
 
   danceLevels = [];
@@ -39,18 +46,12 @@ export class Group extends BaseModel {
       this.userId = data.user;
     }
 
-    // dance styles
-    if (data.styleBallroom) {
-      this.styleBallroom = data.styleBallroom;
+    // styles & dances
+    if (data.styles) {
+      this.styles = data.styles;
     }
-    if (data.styleRythm) {
-      this.styleRythm = data.styleRythm;
-    }
-    if (data.styleStandard) {
-      this.styleStandard = data.styleStandard;
-    }
-    if (data.styleLatin) {
-      this.styleLatin = data.styleLatin;
+    if (data.dances) {
+      this.dances = data.dances;
     }
 
     if (data.danceLevels) {
@@ -58,24 +59,5 @@ export class Group extends BaseModel {
     }
 
     return this;
-  }
-
-  danceStyles() {
-    const styles = [];
-
-    if (this.styleBallroom.length >= 0) {
-      styles.push(SELECT_AMERICAN_BALLROOM);
-    }
-    if (this.styleRythm.length >= 0) {
-      styles.push(SELECT_AMERICAN_RHYTHM);
-    }
-    if (this.styleStandard.length >= 0) {
-      styles.push(SELECT_STANDARD);
-    }
-    if (this.styleLatin.length >= 0) {
-      styles.push(SELECT_LATIN);
-    }
-
-    return styles;
   }
 }

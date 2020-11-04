@@ -96,8 +96,7 @@ class Groups extends React.Component {
           <View style={[styles.viewRow, stylesApp.mt4]}>
             <Text style={styles.txtLabel}>Dance Styles: </Text>
             <Text style={stylesApp.flex1}>
-              {item
-                ?.danceStyles()
+              {item?.styles
                 .map((l, i) => {
                   return DanceHelper.danceStyleNameByVal(l);
                 })
