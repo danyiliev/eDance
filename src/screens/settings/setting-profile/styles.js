@@ -38,6 +38,7 @@ export const styles = StyleSheet.create({
     ...stylesApp.flexRowCenter,
     borderBottomWidth: 1,
     borderColor: colorTheme.lightGrey,
+    flex: 1,
   },
 
   viewLevels: {
@@ -72,6 +73,12 @@ export const styles = StyleSheet.create({
   txtLabel: {
     color: colorTheme.grey,
     marginBottom: 12,
+  },
+  txtInputLabel: {
+    fontSize: 12,
+    color: colorTheme.grey,
+    marginRight: 6,
+    minWidth: 112,
   },
 
   viewForm: {

@@ -31,6 +31,7 @@ export class User extends BaseModel {
 
   // teacher settings
   price = 25;
+  priceGroup = 25;
   ageGroups = [];
 
   // dance styles
@@ -94,7 +95,10 @@ export class User extends BaseModel {
 
     // teacher settings
     if (data.price) {
-      this.price = 0;
+      this.price = data.price;
+    }
+    if (data.priceGroup) {
+      this.priceGroup = data.priceGroup;
     }
 
     if (data.ageGroups) {

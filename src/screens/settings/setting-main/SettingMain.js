@@ -57,16 +57,14 @@ class SettingMain extends React.Component {
           </View>
         </TouchableOpacity>
 
-        {false ?? (
-          <TouchableOpacity style={stylesApp.mb12} onPress={() => this.onPaymentMethod()}>
-            <View style={stylesSetting.viewListItem}>
-              <Text style={stylesSetting.txtItem}>Payment Methods</Text>
+        <TouchableOpacity style={stylesApp.mb12} onPress={() => this.onPaymentMethod()}>
+          <View style={stylesSetting.viewListItem}>
+            <Text style={stylesSetting.txtItem}>Payment Methods</Text>
 
-              {/* chevron */}
-              <Icon type="ionicon" name="ios-arrow-forward" size={18} color={colorTheme.primary} />
-            </View>
-          </TouchableOpacity>
-        )}
+            {/* chevron */}
+            <Icon type="ionicon" name="ios-arrow-forward" size={18} color={colorTheme.primary} />
+          </View>
+        </TouchableOpacity>
       </View>
     );
   }

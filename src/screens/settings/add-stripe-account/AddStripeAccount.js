@@ -51,8 +51,7 @@ class AddStripeAccount extends React.Component {
     try {
       // check account Id
       if (this.state.accountId) {
-        const resp = await ApiService.stripeGetAccountDetail(this.state.accountId);
-        await this.setAccount(resp);
+        await this.doGetAccount();
       } else {
         const resp = await ApiService.stripeCreateAccount(this.currentUser?.email);
         await this.setAccount(resp);
@@ -153,12 +152,17 @@ class AddStripeAccount extends React.Component {
         onNavigationStateChange={(navState) => {
           console.log(navState.url);
 
-          if (!navState.url.startsWith(config.stripeRedirectUrl)) {
+          if (!navState.url.startsWith(config.stripeReturnUrl)) {
             return;
           }
 
+          // hide webview
+          this.setState({
+            showWebView: false,
+          });
+
           // parse params
-          this.doGetAccount(navState.url);
+          this.doGetAccount();
         }}
         onLoadStart={(syntheticEvent) => {
           this.loadingHUD.show();
@@ -221,6 +225,13 @@ class AddStripeAccount extends React.Component {
 
       Toast.show(e.message);
     }
+
+    this.loadingHUD.hideAll();
+  }
+
+  async doGetAccount() {
+    const resp = await ApiService.stripeGetAccountDetail(this.state.accountId);
+    await this.setAccount(resp);
 
     this.loadingHUD.hideAll();
   }

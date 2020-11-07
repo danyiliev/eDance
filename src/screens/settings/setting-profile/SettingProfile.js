@@ -73,6 +73,7 @@ class SettingProfile extends BaseSettingProfile {
       // data
       ageGroups: [],
       price: '',
+      priceGroup: '',
 
       durationLessonIndex: 0,
       durationRestIndex: 0,
@@ -92,6 +93,7 @@ class SettingProfile extends BaseSettingProfile {
       this.state.styleLatin = this.currentUser.styleLatin;
       this.state.danceLevels = this.currentUser.danceLevels;
       this.state.price = this.currentUser.price?.toString();
+      this.state.priceGroup = this.currentUser.priceGroup?.toString();
 
       this.state.durationLessonIndex = DURATIONS_LESSON.findIndex(
         (d) => d === this.currentUser.durationLesson,
@@ -171,26 +173,51 @@ class SettingProfile extends BaseSettingProfile {
         {/* price */}
         <View style={[styles.viewForm, stylesApp.mt14]}>
           <Text style={[stylesSignup.txtItemTitle, stylesApp.mt6]}>Price</Text>
+          <View style={[stylesApp.flexRowCenter, stylesApp.mt12]}>
+            <Text style={styles.txtInputLabel}>Private Lesson: </Text>
+            <View style={styles.viewInput}>
+              <Input
+                containerStyle={styles.ctnInput}
+                autoCapitalize={'none'}
+                keyboardType="numeric"
+                returnKeyType="done"
+                placeholder="Input Price"
+                placeholderTextColor={colorTheme.primary}
+                inputStyle={styles.input}
+                inputContainerStyle={stylesApp.input}
+                onChangeText={(price) => {
+                  this.setState({price});
+                }}
+                value={this.state.price}
+                renderErrorMessage={false}
+              />
+              {/* right icon */}
+              <Icon color={'#cecece'} type="font-awesome" name="usd" size={16} />
+            </View>
+          </View>
 
-          {/* price */}
-          <View style={[styles.viewInput, stylesApp.mt12]}>
-            <Input
-              containerStyle={styles.ctnInput}
-              autoCapitalize={'none'}
-              keyboardType="numeric"
-              returnKeyType="done"
-              placeholder="Input Price"
-              placeholderTextColor={colorTheme.primary}
-              inputStyle={styles.input}
-              inputContainerStyle={stylesApp.input}
-              onChangeText={(price) => {
-                this.setState({price});
-              }}
-              value={this.state.price}
-              renderErrorMessage={false}
-            />
-            {/* right icon */}
-            <Icon color={'#cecece'} type="font-awesome" name="usd" size={16} />
+          {/* price group */}
+          <View style={[stylesApp.flexRowCenter, stylesApp.mt4]}>
+            <Text style={styles.txtInputLabel}>Group Lesson: </Text>
+            <View style={styles.viewInput}>
+              <Input
+                containerStyle={styles.ctnInput}
+                autoCapitalize={'none'}
+                keyboardType="numeric"
+                returnKeyType="done"
+                placeholder="Input Price"
+                placeholderTextColor={colorTheme.primary}
+                inputStyle={styles.input}
+                inputContainerStyle={stylesApp.input}
+                onChangeText={(priceGroup) => {
+                  this.setState({priceGroup});
+                }}
+                value={this.state.priceGroup}
+                renderErrorMessage={false}
+              />
+              {/* right icon */}
+              <Icon color={'#cecece'} type="font-awesome" name="usd" size={16} />
+            </View>
           </View>
         </View>
 
@@ -480,6 +507,7 @@ class SettingProfile extends BaseSettingProfile {
           this.state.styleStandard,
           this.state.styleLatin,
           Number(this.state.price) ?? 0,
+          Number(this.state.priceGroup) ?? 0,
           this.state.availableDays,
           DURATIONS_LESSON[this.state.durationLessonIndex],
           DURATIONS_REST[this.state.durationRestIndex],
@@ -501,6 +529,7 @@ class SettingProfile extends BaseSettingProfile {
       user.styleStandard = this.state.styleStandard;
       user.styleLatin = this.state.styleLatin;
       user.price = Number(this.state.price);
+      user.priceGroup = Number(this.state.priceGroup);
 
       user.availableDays = this.state.availableDays;
       user.durationLesson = DURATIONS_LESSON[this.state.durationLessonIndex];
