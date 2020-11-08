@@ -1,10 +1,7 @@
 import React from 'react';
 import Radio from './radio/Radio';
-import {
-  createBottomTabNavigator,
-  BottomTabBar,
-} from '@react-navigation/bottom-tabs';
-import {Image, View} from 'react-native';
+import {createBottomTabNavigator, BottomTabBar} from '@react-navigation/bottom-tabs';
+import {Image, View, NativeModules} from 'react-native';
 import ImageScale from 'react-native-scalable-image';
 import {styles as stylesTab, styles} from './styles';
 import {colors as colorTheme} from '../../styles/theme.style';
@@ -23,8 +20,10 @@ import Orders from '../orders/Orders';
 import Products from '../products/Products';
 import stripe from 'tipsi-stripe';
 import {config} from '../../helpers/config';
+import {connect} from 'react-redux';
 
 const Tab = createBottomTabNavigator();
+const StripeManager = NativeModules.StripeManager;
 
 export function renderMenuButton(onPress) {
   return (
@@ -42,11 +41,15 @@ export function renderMenuButton(onPress) {
   );
 }
 
-export default class TabMain extends React.Component {
+class TabMain extends React.Component {
   static NAV_NAME = 'tabs';
+
+  currentUser = null;
 
   constructor(props) {
     super(props);
+
+    this.currentUser = props.UserReducer.user;
 
     props.navigation.setOptions({
       title: this.getHeaderTitle(),
@@ -54,13 +57,23 @@ export default class TabMain extends React.Component {
     });
   }
 
-  componentDidMount(): void {
+  async componentDidMount(): void {
     SplashScreen.hide();
 
+    //
     // init stripe
+    //
     stripe.setOptions({
       publishableKey: config.stripeKey,
     });
+
+    if (this.currentUser?.stripeCustomerId) {
+      try {
+        await StripeManager.initCustomer(this.currentUser?.stripeCustomerId);
+      } catch (e) {
+        console.log(e);
+      }
+    }
   }
 
   componentDidUpdate(
@@ -267,3 +280,6 @@ export default class TabMain extends React.Component {
     }
   }
 }
+
+const mapStateToProps = (state) => state;
+export default connect(mapStateToProps, null)(TabMain);

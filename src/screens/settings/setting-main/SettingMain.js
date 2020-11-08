@@ -1,6 +1,6 @@
 import React from 'react';
 import {stylesApp} from '../../../styles/app.style';
-import {Text, TouchableOpacity, View} from 'react-native';
+import {NativeModules, Text, TouchableOpacity, View, NativeEventEmitter} from 'react-native';
 import {styles as stylesSetting} from '../setting-profile/styles';
 import {styles} from './styles';
 import {Icon} from 'react-native-elements';
@@ -10,11 +10,20 @@ import {User} from '../../../models/user.model';
 import SettingProfile from '../setting-profile/SettingProfile';
 import AddStripeAccount from '../add-stripe-account/AddStripeAccount';
 import stripe from 'tipsi-stripe';
+import {ApiService} from '../../../services';
+import {UserHelper} from '../../../helpers/user-helper';
+
+const StripeManager = NativeModules.StripeManager;
+const StripeEventHandler = new NativeEventEmitter(NativeModules.StripeEventHandler);
 
 class SettingMain extends React.Component {
   static NAV_NAME = 'setting-main';
 
   currentUser = null;
+
+  state = {
+    paymentMethod: '',
+  };
 
   constructor(props) {
     super(props);
@@ -24,6 +33,24 @@ class SettingMain extends React.Component {
     });
 
     this.currentUser = props.UserReducer.user;
+
+    // init
+    this.state.paymentMethod = this.currentUser?.stripePaymentMethodLabel;
+  }
+
+  componentDidMount(): void {
+    //
+    // listen for stripe events
+    //
+    this.didChangePaymentMethod = StripeEventHandler.addListener('didChangePaymentMethod', (res) => {
+      console.log('didChangePaymentMethod', res);
+
+      this.onUpdatePaymentMethod(res.label);
+    });
+  }
+
+  componentWillUnmount(): void {
+    this.didChangePaymentMethod.remove();
   }
 
   render() {
@@ -59,7 +86,14 @@ class SettingMain extends React.Component {
 
         <TouchableOpacity style={stylesApp.mb12} onPress={() => this.onPaymentMethod()}>
           <View style={stylesSetting.viewListItem}>
-            <Text style={stylesSetting.txtItem}>Payment Methods</Text>
+            <View style={styles.viewListItemContent}>
+              <Text style={stylesSetting.txtItem}>Payment Methods</Text>
+              <Text style={styles.txtItemDesc}>
+                {this.currentUser?.stripePaymentMethodLabel
+                  ? this.currentUser?.stripePaymentMethodLabel
+                  : 'Uninitialized'}
+              </Text>
+            </View>
 
             {/* chevron */}
             <Icon type="ionicon" name="ios-arrow-forward" size={18} color={colorTheme.primary} />
@@ -80,6 +114,26 @@ class SettingMain extends React.Component {
   }
 
   async onPaymentMethod() {
+    try {
+      await StripeManager.presentPaymentMethod();
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  onUpdatePaymentMethod(label) {
+    if (!label) {
+      return;
+    }
+
+    ApiService.updateUserFields({stripePaymentMethodLabel: label});
+    this.currentUser.stripePaymentMethodLabel = label;
+
+    UserHelper.saveUserToLocalStorage(this.currentUser);
+
+    this.setState({
+      paymentMethod: label,
+    });
   }
 }
 

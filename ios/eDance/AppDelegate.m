@@ -5,6 +5,9 @@
 #import <React/RCTRootView.h>
 
 #import "RNSplashScreen.h"
+#import <Stripe/Stripe.h>
+#import "Config.h"
+#import "MainViewController.h"
 
 #if DEBUG
 #import <FlipperKit/FlipperClient.h>
@@ -41,10 +44,15 @@ static void InitializeFlipper(UIApplication *application) {
   rootView.backgroundColor = [[UIColor alloc] initWithRed:1.0f green:1.0f blue:1.0f alpha:1];
 
   self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
-  UIViewController *rootViewController = [UIViewController new];
+  
+  MainViewController *rootViewController = [MainViewController new];
   rootViewController.view = rootView;
-  self.window.rootViewController = rootViewController;
+  
+  UINavigationController *navControl = [[UINavigationController alloc] initWithRootViewController: rootViewController];
+  self.window.rootViewController = navControl;
   [self.window makeKeyAndVisible];
+  
+  [Stripe setDefaultPublishableKey:KEY_STRIPE_PUBLISH];
   
   // splash screen
   [RNSplashScreen show];

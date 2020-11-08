@@ -4,7 +4,7 @@ import {UserHelper} from '../helpers/user-helper';
 import {ApiService} from '../services';
 
 export class BaseAuth extends React.Component {
-  currentUser: User;
+  currentUser = null;
 
   userType = User.TYPE_STUDENT;
 
@@ -21,6 +21,21 @@ export class BaseAuth extends React.Component {
 
   async setUser(user, pageTo) {
     // fetch user from server to update latest
+
+    // create stripe customer if not exist
+    if (!user.stripeCustomerId) {
+      try {
+        const resp = await ApiService.stripeCreateCustomer(
+          this.currentUser?.email,
+          this.currentUser?.getFullName(),
+        );
+
+        await ApiService.updateUserFields({stripeCustomerId: resp.id});
+        user.stripeCustomerId = resp.id;
+      } catch (e) {
+        console.log(e);
+      }
+    }
 
     UserHelper.saveUserToLocalStorage(user, this.props);
   }

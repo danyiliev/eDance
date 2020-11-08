@@ -55,7 +55,9 @@ export class User extends BaseModel {
   carts = [];
   deliveryAddresses = [];
 
+  stripeCustomerId = '';
   stripeAccountId = '';
+  stripePaymentMethodLabel = '';
 
   // logical
   lessonsTeach = null;

@@ -17,6 +17,11 @@
 		2D02E4BF1E0B4AB3006451C7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2D1999E3B1C31D105B7A5779 /* libPods-eDance-eDanceTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4255E5FF965A74C4C0219464 /* libPods-eDance-eDanceTests.a */; };
 		2DCD954D1E0B4F2C00145EB5 /* eDanceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* eDanceTests.m */; };
+		5E294A7D255735C800B5E189 /* MyAPIClient.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E294A7C255735C800B5E189 /* MyAPIClient.m */; };
+		5E294A802557B87300B5E189 /* StripeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E294A7F2557B87300B5E189 /* StripeManager.m */; };
+		5E294A842557CCDB00B5E189 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E294A832557CCDB00B5E189 /* MainViewController.m */; };
+		5E294A872557E43700B5E189 /* StripeEventHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 5E294A862557E43700B5E189 /* StripeEventHandler.m */; };
+		5EBBE488255729570038ADDB /* Config.m in Sources */ = {isa = PBXBuildFile; fileRef = 5EBBE487255729570038ADDB /* Config.m */; };
 		71D706A155A835658AFEE1D9 /* libPods-eDance.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 50C64F2448FA0A4D3E00ED00 /* libPods-eDance.a */; };
 		9F2A5B6B13B37367C0896171 /* libPods-eDance-tvOSTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 609598237DB87CC977B8CA96 /* libPods-eDance-tvOSTests.a */; };
 		AC99E69A121D25F1EE74F9F6 /* libPods-eDance-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E57084F05BB353F5EC5CF02E /* libPods-eDance-tvOS.a */; };
@@ -57,6 +62,16 @@
 		4255E5FF965A74C4C0219464 /* libPods-eDance-eDanceTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-eDance-eDanceTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		462F844CF5BD2EB2E59D0560 /* Pods-eDance-eDanceTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-eDance-eDanceTests.debug.xcconfig"; path = "Target Support Files/Pods-eDance-eDanceTests/Pods-eDance-eDanceTests.debug.xcconfig"; sourceTree = "<group>"; };
 		50C64F2448FA0A4D3E00ED00 /* libPods-eDance.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-eDance.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		5E294A7B255735C800B5E189 /* MyAPIClient.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MyAPIClient.h; sourceTree = "<group>"; };
+		5E294A7C255735C800B5E189 /* MyAPIClient.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MyAPIClient.m; sourceTree = "<group>"; };
+		5E294A7E2557B87300B5E189 /* StripeManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StripeManager.h; sourceTree = "<group>"; };
+		5E294A7F2557B87300B5E189 /* StripeManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StripeManager.m; sourceTree = "<group>"; };
+		5E294A822557CCDB00B5E189 /* MainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
+		5E294A832557CCDB00B5E189 /* MainViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
+		5E294A852557E43700B5E189 /* StripeEventHandler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = StripeEventHandler.h; sourceTree = "<group>"; };
+		5E294A862557E43700B5E189 /* StripeEventHandler.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = StripeEventHandler.m; sourceTree = "<group>"; };
+		5EBBE486255729490038ADDB /* Config.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Config.h; sourceTree = "<group>"; };
+		5EBBE487255729570038ADDB /* Config.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Config.m; sourceTree = "<group>"; };
 		609598237DB87CC977B8CA96 /* libPods-eDance-tvOSTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-eDance-tvOSTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		A092EBB486B2D93B96CBB57A /* Pods-eDance.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-eDance.debug.xcconfig"; path = "Target Support Files/Pods-eDance/Pods-eDance.debug.xcconfig"; sourceTree = "<group>"; };
 		AA7C9F85C9B75671595D1FBC /* Pods-eDance-eDanceTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-eDance-eDanceTests.release.xcconfig"; path = "Target Support Files/Pods-eDance-eDanceTests/Pods-eDance-eDanceTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -125,6 +140,9 @@
 		13B07FAE1A68108700A75B9A /* eDance */ = {
 			isa = PBXGroup;
 			children = (
+				5E294A812557CCCB00B5E189 /* ViewController */,
+				5E294A7A2557359D00B5E189 /* Stripe */,
+				5EBBE482255729010038ADDB /* Config */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -147,6 +165,37 @@
 				609598237DB87CC977B8CA96 /* libPods-eDance-tvOSTests.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		5E294A7A2557359D00B5E189 /* Stripe */ = {
+			isa = PBXGroup;
+			children = (
+				5E294A7B255735C800B5E189 /* MyAPIClient.h */,
+				5E294A7C255735C800B5E189 /* MyAPIClient.m */,
+				5E294A7E2557B87300B5E189 /* StripeManager.h */,
+				5E294A7F2557B87300B5E189 /* StripeManager.m */,
+				5E294A852557E43700B5E189 /* StripeEventHandler.h */,
+				5E294A862557E43700B5E189 /* StripeEventHandler.m */,
+			);
+			path = Stripe;
+			sourceTree = "<group>";
+		};
+		5E294A812557CCCB00B5E189 /* ViewController */ = {
+			isa = PBXGroup;
+			children = (
+				5E294A822557CCDB00B5E189 /* MainViewController.h */,
+				5E294A832557CCDB00B5E189 /* MainViewController.m */,
+			);
+			path = ViewController;
+			sourceTree = "<group>";
+		};
+		5EBBE482255729010038ADDB /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				5EBBE486255729490038ADDB /* Config.h */,
+				5EBBE487255729570038ADDB /* Config.m */,
+			);
+			path = Config;
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -637,7 +686,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */,
+				5E294A842557CCDB00B5E189 /* MainViewController.m in Sources */,
+				5EBBE488255729570038ADDB /* Config.m in Sources */,
 				13B07FC11A68108700A75B9A /* main.m in Sources */,
+				5E294A7D255735C800B5E189 /* MyAPIClient.m in Sources */,
+				5E294A802557B87300B5E189 /* StripeManager.m in Sources */,
+				5E294A872557E43700B5E189 /* StripeEventHandler.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

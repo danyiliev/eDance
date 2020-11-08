@@ -52,9 +52,11 @@ export class UserHelper {
     }
   }
 
-  static saveUserToLocalStorage(user, props) {
-    // save user to reduce
-    props.setUserInfo(user);
+  static saveUserToLocalStorage(user, props = null) {
+    if (props) {
+      // save user to reduce
+      props.setUserInfo(user);
+    }
 
     // save user to local storage
     AsyncStorage.setItem(CURRENT_USER, user.toJsonString());

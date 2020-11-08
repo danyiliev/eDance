@@ -375,20 +375,7 @@ class ApiService {
       timeEnd: timeEnd,
     };
 
-    try {
-      const {data} = await Axios.post(
-        `${this.baseUrl}/users/update/teacher`,
-        params,
-        httpOptions,
-      );
-      console.log(data);
-
-      return Promise.resolve(true);
-    } catch (e) {
-      console.log(e);
-
-      return Promise.reject(e.response ? e.response.data : e);
-    }
+    return this.updateUserFields(params);
   }
 
   async addUserReview(userId, lessonId, rating, review) {
@@ -1343,6 +1330,26 @@ class ApiService {
   //
   // Stripe
   //
+  async stripeCreateCustomer(email, name) {
+    let resp = await Axios.post(
+      this.baseStripUrl + '/customers',
+      qs.stringify({
+        email: email,
+        name: name,
+      }),
+      {
+        headers: {
+          Authorization: 'Bearer ' + config.stripeSecretKey,
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      },
+    );
+
+    console.log(resp.data);
+
+    return Promise.resolve(resp.data);
+  }
+
   async stripeCreateAccount(email) {
     let resp = await Axios.post(
       this.baseStripUrl + '/accounts',
