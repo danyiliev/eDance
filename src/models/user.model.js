@@ -57,7 +57,7 @@ export class User extends BaseModel {
 
   stripeCustomerId = '';
   stripeAccountId = '';
-  stripePaymentMethodLabel = '';
+  paymentMethod = null;
 
   // logical
   lessonsTeach = null;
@@ -188,6 +188,12 @@ export class User extends BaseModel {
     // stripe
     if (data.stripeAccountId) {
       this.stripeAccountId = data.stripeAccountId;
+    }
+    if (data.stripeCustomerId) {
+      this.stripeCustomerId = data.stripeCustomerId;
+    }
+    if (data.paymentMethod) {
+      this.paymentMethod = data.paymentMethod;
     }
 
     return this;

@@ -49,9 +49,16 @@
 
 - (void)paymentContextDidChange:(nonnull STPPaymentContext *)paymentContext {
   NSString *label = paymentContext.selectedPaymentMethod.label;
+  NSLog(@"--------------- paymentContextDidChange: %@", label);
  
-  if (label != nil) {
-    NSDictionary *dict = @{@"label": label};
+  if ([paymentContext.selectedPaymentMethod isKindOfClass:[STPCard class]]) {
+    STPCard *card = (STPCard *)paymentContext.selectedPaymentMethod;
+    
+    NSDictionary *dict = @{
+      @"id": card.stripeID,
+      @"brand": [STPCard stringFromBrand:card.brand] ,
+      @"last4": card.last4,
+    };
     
     [[StripeEventHandler shared] sendEventWithName:@"didChangePaymentMethod" body:dict];
   }

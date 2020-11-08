@@ -45,7 +45,7 @@ class SettingMain extends React.Component {
     this.didChangePaymentMethod = StripeEventHandler.addListener('didChangePaymentMethod', (res) => {
       console.log('didChangePaymentMethod', res);
 
-      this.onUpdatePaymentMethod(res.label);
+      this.onUpdatePaymentMethod(res);
     });
   }
 
@@ -89,8 +89,8 @@ class SettingMain extends React.Component {
             <View style={styles.viewListItemContent}>
               <Text style={stylesSetting.txtItem}>Payment Methods</Text>
               <Text style={styles.txtItemDesc}>
-                {this.currentUser?.stripePaymentMethodLabel
-                  ? this.currentUser?.stripePaymentMethodLabel
+                {this.currentUser?.paymentMethod
+                  ? `${this.currentUser?.paymentMethod.brand} **** ${this.currentUser?.paymentMethod.last4}`
                   : 'Uninitialized'}
               </Text>
             </View>
@@ -121,18 +121,14 @@ class SettingMain extends React.Component {
     }
   }
 
-  onUpdatePaymentMethod(label) {
-    if (!label) {
-      return;
-    }
-
-    ApiService.updateUserFields({stripePaymentMethodLabel: label});
-    this.currentUser.stripePaymentMethodLabel = label;
+  onUpdatePaymentMethod(data) {
+    ApiService.updateUserFields({paymentMethod: data});
+    this.currentUser.paymentMethod = data;
 
     UserHelper.saveUserToLocalStorage(this.currentUser);
 
     this.setState({
-      paymentMethod: label,
+      paymentMethod: data,
     });
   }
 }
