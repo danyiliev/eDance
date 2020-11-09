@@ -218,7 +218,7 @@ export default class Pro extends React.Component {
       loadingData: true,
     });
 
-    await Utils.sleep(1000);
+    await Utils.sleep(500);
 
     this.setState({
       loadingData: false,

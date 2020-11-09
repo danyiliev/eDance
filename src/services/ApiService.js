@@ -1410,13 +1410,13 @@ class ApiService {
 
     let params = {
       source: tokenId,
-      amount: amount * 100,
+      amount: parseInt(amount * 100),
       currency: 'usd',
       description: desc,
     };
 
     if (fee) {
-      params.application_fee_amount = fee * 100;
+      params.application_fee_amount = parseInt(fee * 100);
     }
 
     let resp = await Axios.post(`${this.baseStripUrl}/charges`, qs.stringify(params), {

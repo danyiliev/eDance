@@ -72,70 +72,28 @@ export default class GroupDetail extends React.Component {
               </View>
             </View>
 
+            {/* styles */}
             <View style={[stylesSetting.viewForm, stylesApp.mt14]}>
               {/* title */}
-              <Text style={[stylesSignup.txtItemTitle, stylesApp.mt6]}>Dance Styles & Dances</Text>
+              <Text style={[stylesSignup.txtItemTitle, stylesApp.mt6]}>Dance Styles</Text>
 
-              {this.group?.styleBallroom.length > 0 ? (
-                <>
-                  <Text style={styles.txtSubTitle}>
-                    {DanceHelper.danceStyleNameByVal(SELECT_AMERICAN_BALLROOM)}
-                  </Text>
-                  <View style={styles.viewFormContent}>
-                    {this.group?.styleBallroom.map((dance, i) => (
-                      <Text style={styles.txtItem} key={`${SELECT_AMERICAN_BALLROOM}-${i}`}>
-                        {DanceHelper.danceNameByVal(dance, SELECT_AMERICAN_BALLROOM)}
-                      </Text>
-                    ))}
-                  </View>
-                </>
-              ) : null}
+              <View style={styles.viewFormContent}>
+                {this.group.styles.map((s, i) => (
+                  <Text key={`style-${i}`} style={styles.txtItem}>{DanceHelper.danceStyleNameByVal(s)}</Text>
+                ))}
+              </View>
+            </View>
 
-              {this.group?.styleRythm.length > 0 ? (
-                <>
-                  <Text style={styles.txtSubTitle}>
-                    {DanceHelper.danceStyleNameByVal(SELECT_AMERICAN_RHYTHM)}
-                  </Text>
-                  <View style={styles.viewFormContent}>
-                    {this.group?.styleRythm.map((dance, i) => (
-                      <Text style={styles.txtItem} key={`${SELECT_AMERICAN_RHYTHM}-${i}`}>
-                        {DanceHelper.danceNameByVal(dance, SELECT_AMERICAN_RHYTHM)}
-                      </Text>
-                    ))}
-                  </View>
-                </>
-              ) : null}
+            {/* dances */}
+            <View style={[stylesSetting.viewForm, stylesApp.mt14]}>
+              {/* title */}
+              <Text style={[stylesSignup.txtItemTitle, stylesApp.mt6]}>Dances</Text>
 
-              {this.group?.styleStandard.length > 0 ? (
-                <>
-                  <Text style={styles.txtSubTitle}>
-                    {DanceHelper.danceStyleNameByVal(SELECT_STANDARD)}
-                  </Text>
-                  <View style={styles.viewFormContent}>
-                    {this.group?.styleStandard.map((dance, i) => (
-                      <Text style={styles.txtItem} key={`${SELECT_STANDARD}-${i}`}>
-                        {DanceHelper.danceNameByVal(dance, SELECT_STANDARD)}
-                      </Text>
-                    ))}
-                  </View>
-                </>
-              ) : null}
-
-              {this.group?.styleLatin.length > 0 ? (
-                <>
-                  <Text style={styles.txtSubTitle}>
-                    {DanceHelper.danceStyleNameByVal(SELECT_LATIN)}
-                  </Text>
-                  <View style={styles.viewFormContent}>
-                    {this.group?.styleLatin.map((dance, i) => (
-                      <Text style={styles.txtItem} key={`${SELECT_LATIN}-${i}`}>
-                        {DanceHelper.danceNameByVal(dance, SELECT_LATIN)}
-                      </Text>
-                    ))}
-                  </View>
-                </>
-              ) : null}
-
+              <View style={styles.viewFormContent}>
+                {this.group.dances.map((d, i) => (
+                  <Text key={`dance-${i}`} style={styles.txtItem}>{DanceHelper.danceNameByVal(d, this.group.styles[0])}</Text>
+                ))}
+              </View>
             </View>
 
           </View>

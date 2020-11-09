@@ -19,6 +19,7 @@ import {ApiService} from '../../../services';
 import stripe from 'tipsi-stripe';
 import Championships from '../../championships/Championships';
 import SettingMain from '../../settings/setting-main/SettingMain';
+import {Lesson} from '../../../models/lesson.model';
 
 class ScheduleCheckout extends React.Component {
   static NAV_NAME = 'schedule-checkout';
@@ -100,7 +101,7 @@ class ScheduleCheckout extends React.Component {
 
             <View style={styles.viewTextTotal}>
               <Text style={styles.txtTotal}>Total :</Text>
-              <Text style={styles.txtTotal}>${this.lesson?.teacher.price}</Text>
+              <Text style={styles.txtTotal}>${this.lesson?.price}</Text>
             </View>
           </View>
         </View>
@@ -177,8 +178,8 @@ class ScheduleCheckout extends React.Component {
       );
 
       let response = await ApiService.stripeCreateCharge(
-        this.lesson?.teacher.price,
-        this.lesson?.teacher.price / 10.0,
+        this.lesson?.price,
+        this.lesson?.price / 10.0,
         `Dance Lesson of ${this.lesson?.teacher.getFullName()}`,
         stripeTokenInfo.id,
         this.lesson?.teacher?.stripeAccountId,
@@ -205,7 +206,6 @@ class ScheduleCheckout extends React.Component {
     // create lesson
     try {
       this.lesson.userId = this.currentUser.id;
-      this.lesson.price = this.teacher?.price;
 
       const result = await ApiService.addLesson(this.lesson);
       this.lesson.id = result.id;

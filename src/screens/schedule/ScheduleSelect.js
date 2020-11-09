@@ -181,9 +181,8 @@ export default class ScheduleSelect extends React.Component {
     lessonNew.dance = this.state.dance;
     lessonNew.danceLevel = this.state.level;
     lessonNew.setTeacher(this.teacher);
-    lessonNew.setGroup(this.state.group);
 
-    if (this.state.type === LESSON_TYPES[1].value) {
+    if (this.state.type === Lesson.TYPE_GROUP) {
       // group lesson
 
       // go to group select page

@@ -4,6 +4,7 @@ import {User} from './user.model';
 import {DanceHelper} from '../helpers/dance-helper';
 import moment from 'moment';
 import {Group} from './group.model';
+import {LESSON_TYPES} from '../constants/dance-data';
 
 export class TimeSlot {
   start = '';
@@ -33,6 +34,9 @@ export class Lesson extends BaseModel {
   static STATUS_INIT = 'init';
   static STATUS_LIVE = 'live';
   static STATUS_DONE = 'done';
+
+  static TYPE_PRIVATE = LESSON_TYPES[0].value;
+  static TYPE_GROUP = LESSON_TYPES[1].value;
 
   static PRICE_RECORDED = 35;
 
@@ -138,6 +142,8 @@ export class Lesson extends BaseModel {
 
     this.teacher = user;
     this.teacherId = user.id;
+
+    this.setPrice();
   }
 
   setGroup(group) {
@@ -230,4 +236,7 @@ export class Lesson extends BaseModel {
     return start.diff(now, 'minutes');
   }
 
+  setPrice() {
+    this.price = this.lessonType === Lesson.TYPE_PRIVATE ? this.teacher?.price : this.teacher?.priceGroup;
+  }
 }
