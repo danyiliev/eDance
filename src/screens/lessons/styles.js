@@ -80,4 +80,10 @@ export const styles = StyleSheet.create({
     marginBottom: 12,
     marginHorizontal: 60,
   },
+
+  txtType: {
+    marginTop: 2,
+    fontSize: 12,
+    color: colorTheme.darkGrey,
+  },
 });

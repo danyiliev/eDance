@@ -4,12 +4,15 @@ import {styles} from './styles';
 import {stylesApp} from '../../../styles/app.style';
 import FastImage from 'react-native-fast-image';
 import {UserHelper} from '../../../helpers/user-helper';
-import {Button} from 'react-native-elements';
+import {Button, Icon} from 'react-native-elements';
 import {DanceHelper} from '../../../helpers/dance-helper';
 import {connect} from 'react-redux';
 import {LessonHelper} from '../../../helpers/lesson-helper';
 import Broadcast from '../broadcast/Broadcast';
 import Playback from '../playback/Playback';
+import {colors as colorTheme} from '../../../styles/theme.style';
+import SignupBase from '../../signup/SignupBase';
+import Chat from '../../chat/Chat';
 
 class LessonDetail extends React.Component {
   static NAV_NAME = 'lesson-detail';
@@ -106,13 +109,21 @@ class LessonDetail extends React.Component {
               {/* teacher */}
               <View style={styles.viewItem}>
                 <Text style={styles.txtItemLabel}>{this.isTeacher ? 'Student:' : 'Teacher:'}</Text>
-                <View style={stylesApp.flexRowCenter}>
+                <View style={[stylesApp.flexRowCenter, stylesApp.flex1]}>
                   <FastImage
                     style={styles.imgUser}
                     source={UserHelper.getUserImage(targetUser)}
                     resizeMode={FastImage.resizeMode.cover}
                   />
-                  <Text style={[styles.txtItemValue, stylesApp.ml10]}>{targetUser?.getFullName()}</Text>
+                  <Text style={[styles.txtItemValue, stylesApp.ml10, stylesApp.flex1]}>
+                    {targetUser?.getFullName()}
+                  </Text>
+
+                  <Button
+                    type="clear"
+                    icon={<Icon type="font-awesome" name="comments-o" size={20} color={colorTheme.primary} />}
+                    onPress={() => this.onButMessage(targetUser)}
+                  />
                 </View>
               </View>
 
@@ -197,6 +208,11 @@ class LessonDetail extends React.Component {
         lesson: this.lesson,
       });
     }
+  }
+
+  onButMessage(user) {
+    // go to chat page
+    this.props.navigation.push(Chat.NAV_NAME, {userTo: user});
   }
 }
 

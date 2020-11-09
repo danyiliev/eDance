@@ -156,4 +156,11 @@ export const stylesApp = StyleSheet.create({
     fontSize: 16,
     color: colorTheme.primary,
   },
+
+  //
+  // text
+  //
+  txtBold: {
+    fontWeight: 'bold',
+  },
 });

@@ -31,7 +31,7 @@ export const styles = StyleSheet.create({
   txtItemLabel: {
     fontSize: 12,
     color: colorTheme.darkGrey,
-    width: 100,
+    width: 86,
   },
   txtItemValue: {
     fontSize: 16,

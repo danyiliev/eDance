@@ -16,6 +16,7 @@ import {LessonHelper} from '../../helpers/lesson-helper';
 import {UserHelper} from '../../helpers/user-helper';
 import LessonDetail from './lesson-detail/LessonDetail';
 import {styles as stylesSignup} from '../signup/styles';
+import {DanceHelper} from '../../helpers/dance-helper';
 
 class Lessons extends React.Component {
   static NAV_NAME = 'lessons';
@@ -113,6 +114,14 @@ class Lessons extends React.Component {
 
               {this.renderLessonStatus(item)}
             </View>
+
+            {/* type */}
+            <Text style={styles.txtType}>
+              {LessonHelper.typeDesc(item)}
+              {item.lessonType === Lesson.TYPE_GROUP ? (
+                <Text style={stylesApp.txtBold}>: {item.group?.name}</Text>
+              ) : null}
+            </Text>
 
             {/* text */}
             <Text style={styles.txtMessage}>{item.simpleDescription()}</Text>
