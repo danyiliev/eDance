@@ -77,10 +77,11 @@ import Groups from './groups/Groups';
 import AddGroup from './groups/add-group/AddGroup';
 import SelectGroup from './schedule/select-group/SelectGroup';
 import GroupDetail from './groups/group-detail/GroupDetail';
+import {BaseAuth} from './base-auth';
 
 const Stack = createStackNavigator();
 
-class MainNavigator extends React.Component {
+class MainNavigator extends BaseAuth {
   navigationRef = React.createRef();
 
   state = {
@@ -95,6 +96,7 @@ class MainNavigator extends React.Component {
       if (u) {
         let userObj = JSON.parse(u);
         let user = new User().deserialize(userObj);
+        await this.initUser(user);
 
         // set api token
         ApiService.setHeaderToken(user.apiToken);

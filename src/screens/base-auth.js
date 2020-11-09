@@ -1,7 +1,7 @@
 import React from 'react';
 import {User} from '../models/user.model';
 import {UserHelper} from '../helpers/user-helper';
-import {ApiService} from '../services';
+import {ApiService, SbService} from '../services';
 
 export class BaseAuth extends React.Component {
   currentUser = null;
@@ -14,7 +14,7 @@ export class BaseAuth extends React.Component {
     this.currentUser = props.UserReducer.user;
 
     // get parameter
-    if (props.route.params) {
+    if (props.route && props.route.params) {
       this.userType = props.route.params.userType;
     }
   }
@@ -38,5 +38,15 @@ export class BaseAuth extends React.Component {
     }
 
     UserHelper.saveUserToLocalStorage(user, this.props);
+
+    await this.initUser(user);
+  }
+
+  async initUser(user) {
+    // login to sendbird
+    await SbService.sbConnect(user.id);
+
+    // update sendbird nickname
+    SbService.sbUpdateProfile(user);
   }
 }

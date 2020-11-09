@@ -126,6 +126,24 @@ class MenuModal extends React.Component {
             </TouchableOpacity>
             <Divider style={styles.viewDivider} />
 
+            {/* Messaging */}
+            <TouchableOpacity
+              onPress={() => this.props.onMenuItem(Messaging.NAV_NAME)}>
+              <View style={styles.viewMenuItem}>
+                {/* icon */}
+                <View style={styles.viewMenuIcon}>
+                  <ImageScale
+                    width={14}
+                    source={require('../../../assets/imgs/menu_message.png')}
+                  />
+                </View>
+
+                <Text style={styles.txtMenuItem}>Messaging</Text>
+              </View>
+            </TouchableOpacity>
+            <Divider style={styles.viewDivider} />
+
+
             {/* setting */}
             <View>
               <TouchableOpacity onPress={() => this.props.onMenuItem(SettingMain.NAV_NAME)}>
