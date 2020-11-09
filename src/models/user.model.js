@@ -223,7 +223,7 @@ export class User extends BaseModel {
   }
 
   getFullName() {
-    if (!this.firstName || !this.lastName) {
+    if (!this.firstName && !this.lastName) {
       return 'Unnamed';
     }
 

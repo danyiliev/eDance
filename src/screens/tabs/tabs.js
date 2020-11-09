@@ -74,6 +74,8 @@ class TabMain extends React.Component {
         console.log(e);
       }
     }
+
+    // TODO: init push notification for Sendbird
   }
 
   componentDidUpdate(

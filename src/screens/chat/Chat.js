@@ -8,6 +8,7 @@ import {
   View,
   NativeModules,
   Platform,
+  ActivityIndicator,
 } from 'react-native';
 import {stylesApp} from '../../styles/app.style';
 import {styles} from './styles';
@@ -18,14 +19,19 @@ import {config} from '../../helpers/config';
 import MessageItem from '../../components/MessageItem/MessageItem';
 import {Input, Button} from 'react-native-elements';
 import {colors as colorTheme} from '../../styles/theme.style';
+import Toast from 'react-native-simple-toast';
+import {connect} from 'react-redux';
+import {SbService} from '../../services';
+import {SendbirdService} from '../../services/SendbirdService';
 
 const {StatusBarManager} = NativeModules;
 
-export default class Chat extends React.Component {
+class Chat extends React.Component {
   static NAV_NAME = 'chat';
 
   state = {
     // ui
+    showLoading: true,
     statusBarHeight: 0,
 
     // data
@@ -33,41 +39,62 @@ export default class Chat extends React.Component {
     messages: [], // current chat & call history
   };
 
+  currentUser = null;
+  channel = null;
+  userTo = null;
+
+  loadingHistory = false;
+
   constructor(props) {
     super(props);
 
-    props.navigation.setOptions({
-      title: 'Anna',
-    });
+    this.currentUser = props.UserReducer.user;
 
-    // init messages
-    const msgs = [];
-    for (let i = 0; i < 4; i++) {
-      const msg = new Message();
-      msg.text = 'If you could have any kind of pet, what would you choose?';
-
-      if (i % 2) {
-        msg.senderId = 'userid';
-      }
-
-      msgs.push(msg);
+    // get params
+    if (props.route.params) {
+      this.userTo = props.route.params.user;
+      this.channel = props.route.params.channel;
     }
 
-    this.state.messages = msgs;
+    props.navigation.setOptions({
+      title: this.userTo?.getFullName(),
+    });
   }
 
-  componentDidMount(): void {
+  async componentDidMount(): void {
     if (Platform.OS === 'ios') {
       StatusBarManager.getHeight((statusBarFrameData) => {
         this.setState({statusBarHeight: statusBarFrameData.height});
       });
-      this.statusBarListener = StatusBarIOS.addListener(
-        'statusBarFrameWillChange',
-        (statusBarData) => {
-          this.setState({statusBarHeight: statusBarData.frame.height});
-        },
-      );
+      this.statusBarListener = StatusBarIOS.addListener('statusBarFrameWillChange', (statusBarData) => {
+        this.setState({statusBarHeight: statusBarData.frame.height});
+      });
     }
+
+    //
+    // init for sendbird
+    //
+    try {
+      if (!this.channel) {
+        this.channel = await SbService.sbCreateGroupChannel([this.currentUser.id, this.userTo?.id]);
+
+        console.log(this.channel);
+      }
+
+      // add channel event handler
+      SbService.registerReceiveMessage(this.onMessageReceived);
+    } catch (e) {
+      console.log(e);
+
+      Toast.show(e.message);
+    }
+
+    this.loadData();
+  }
+
+  componentWillUnmount(): void {
+    // remove channel event handler
+    SbService.removeChannelHandler(SendbirdService.RECEIVE_HANDLER_ID);
   }
 
   render() {
@@ -99,9 +126,13 @@ export default class Chat extends React.Component {
                   onMomentumScrollEnd={() => {
                     console.log('onMomentumScrollEnd');
 
+                    if (this.endReached && !this.loadingHistory) {
+                      this.loadData(true);
+                    }
                     this.endReached = false;
                   }}
                   onEndReachedThreshold={0.01}
+                  ListFooterComponent={() => this.renderEmptyItem()}
                 />
               </View>
             </View>
@@ -139,11 +170,21 @@ export default class Chat extends React.Component {
   }
 
   renderEmptyItem() {
-    return (
-      <View style={stylesApp.viewLoading}>
-        <Text style={stylesApp.txtEmptyItem}>No messages yet</Text>
-      </View>
-    );
+    if (this.state.showLoading) {
+      return (
+        <View style={stylesApp.viewLoading}>
+          <ActivityIndicator />
+        </View>
+      );
+    } else if (this.state.messages.length <= 0) {
+      return (
+        <View style={stylesApp.viewLoading}>
+          <Text style={stylesApp.txtEmptyItem}>No messages yet</Text>
+        </View>
+      );
+    }
+
+    return null;
   }
 
   renderItem(item, index) {
@@ -165,12 +206,17 @@ export default class Chat extends React.Component {
     let strText = this.state.text;
 
     let msgNew = new Message();
-    msgNew.senderId = 'asdf';
+    msgNew.senderId = this.currentUser.id;
     msgNew.type = msgType;
 
     if (!strText) {
       return;
     }
+
+    // send message
+    SbService.sbSendTextMessage(this.channel, strText, (message, error) => {
+      msgNew.id = message.messageId.toString();
+    });
 
     msgNew.text = strText;
 
@@ -193,4 +239,104 @@ export default class Chat extends React.Component {
       viewOffset: 0,
     });
   }
+
+  async loadData(continued = false) {
+    // channel has not been inited
+    if (!this.channel) {
+      return;
+    }
+
+    // show loading
+    await this.setState({
+      showLoading: true,
+    });
+    if (this.state.messages.length > 0 && !continued) {
+      // this.loadingHUD.show();
+    }
+
+    try {
+      await this.loadHistory(continued);
+    } catch (e) {
+      console.log(e);
+    }
+
+    // mark as read
+    this.channel.markAsRead();
+
+    //
+    // hide loading
+    //
+    this.setState({
+      showLoading: false,
+    });
+  }
+
+  async loadHistory(continued = false) {
+    this.loadingHistory = true;
+
+    //
+    // fetch latest 20 histories for chat
+    //
+    let msgs = await SbService.getPreviousMessages(this.channel, continued);
+    let {messages} = this.state;
+
+    const newData = [];
+    for (const m of msgs) {
+      // check if existing
+      let bExisting = false;
+      for (const tmp of messages) {
+        if (m.equalTo(tmp)) {
+          bExisting = true;
+          break;
+        }
+      }
+      if (bExisting) {
+        continue;
+      }
+
+      newData.push(m);
+    }
+
+    let msgsNew = [...messages, ...newData];
+    msgsNew.sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
+
+    // add prev messages to main message list
+    this.setState({
+      messages: msgsNew,
+    });
+
+    this.loadingHistory = false;
+  }
+
+  // received message
+  onMessageReceived = (channel, message) => {
+    if (!channel.isEqual(this.channel)) {
+      return;
+    }
+
+    console.log(message);
+
+    this.receiveMessageCore(message);
+
+    // mark as read
+    this.channel.markAsRead();
+  };
+
+  receiveMessageCore(message) {
+    const {messages} = this.state;
+    const msg = new Message().initFromSbMsg(message);
+
+    messages.unshift(msg);
+
+    this.setState({
+      messages: messages,
+    });
+
+    // scroll to end
+    this.scrollToEnd();
+  }
 }
+
+const mapStateToProps = (state) => state;
+
+export default connect(mapStateToProps, null)(Chat);

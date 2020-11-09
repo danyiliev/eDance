@@ -212,7 +212,7 @@ class LessonDetail extends React.Component {
 
   onButMessage(user) {
     // go to chat page
-    this.props.navigation.push(Chat.NAV_NAME, {userTo: user});
+    this.props.navigation.push(Chat.NAV_NAME, {user});
   }
 }
 

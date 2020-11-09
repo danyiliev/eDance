@@ -8,8 +8,12 @@ import {colors as colorTheme} from '../../styles/theme.style';
 import {Icon} from 'react-native-elements';
 import Chat from '../chat/Chat';
 import {SbService} from '../../services';
+import {connect} from 'react-redux';
+import moment from 'moment';
+import {User} from '../../models/user.model';
+import {SendbirdService} from '../../services/SendbirdService';
 
-export default class Messaging extends React.Component {
+class Messaging extends React.Component {
   static NAV_NAME = 'messaging';
 
   static PAGE_SIZE = 20;
@@ -22,16 +26,28 @@ export default class Messaging extends React.Component {
     channels: [],
   };
 
+  currentUser = null;
+
   constructor(props) {
     super(props);
 
     props.navigation.setOptions({
       title: 'Messages',
     });
+
+    this.currentUser = props.UserReducer.user;
   }
 
   componentDidMount(): void {
     this.loadData();
+
+    // add channel event handler
+    SbService.registerChannelChange(SendbirdService.GROUP_HANDLER_ID, this.onChannelChanged);
+  }
+
+  componentWillUnmount(): void {
+    // remove channel event handler
+    SbService.removeChannelHandler(SendbirdService.GROUP_HANDLER_ID);
   }
 
   render() {
@@ -40,7 +56,7 @@ export default class Messaging extends React.Component {
         <FlatList
           contentContainerStyle={styles.listCtnContainer}
           keyExtractor={(item, index) => index.toString()}
-          data={this.channels}
+          data={this.state.channels}
           renderItem={({item, index}) => this.renderItem(item, index)}
           refreshing={this.state.showLoading}
           onRefresh={() => this.onRefresh()}
@@ -69,25 +85,32 @@ export default class Messaging extends React.Component {
   }
 
   renderItem(item, index) {
+    // get user
+    let userTo = this.getTargetUser(item);
+
     return (
-      <TouchableOpacity onPress={() => this.onItem(index)}>
+      <TouchableOpacity onPress={() => this.onItem(item, index)}>
         <View style={styles.viewItem}>
           {/* photo */}
           <FastImage
             style={styles.imgUser}
-            source={require('../../../assets/imgs/user_default.png')}
+            source={
+              userTo?.profileUrl ? {uri: userTo?.profileUrl} : require('../../../assets/imgs/user_default.png')
+            }
             resizeMode={FastImage.resizeMode.cover}
           />
 
           <View style={styles.viewItemBody}>
             {/* name */}
-            <Text style={styles.txtName}>Ricardo Edwards</Text>
+            <Text style={styles.txtName}>{userTo?.nickname}</Text>
 
             {/* text */}
-            <Text style={styles.txtMessage}>Samba teacher</Text>
+            <Text style={styles.txtMessage}>{item.lastMessage.message}</Text>
 
             {/* date */}
-            <Text style={styles.txtDate}>Mar 13, 2018 10:14 AM</Text>
+            <Text style={styles.txtDate}>
+              {moment(item.lastMessage.createdAt).format('MMM DD, YYYY hh:mm A')}
+            </Text>
           </View>
 
           {/* chevron */}
@@ -172,8 +195,55 @@ export default class Messaging extends React.Component {
     this.loadData();
   }
 
-  onItem(index) {
+  onItem(item, index) {
+    const user = this.getTargetUser(item);
+    const userNew = new User();
+    userNew.id = user.userId;
+    userNew.firstName = user.nickname;
+
     // go to chat page
-    this.props.navigation.push(Chat.NAV_NAME);
+    this.props.navigation.push(Chat.NAV_NAME, {
+      user: userNew,
+      channel: item,
+    });
   }
+
+  getTargetUser(channel) {
+    let userTo = null;
+
+    for (const m of channel.members) {
+      if (m.userId !== this.currentUser?.id) {
+        userTo = m;
+        break;
+      }
+    }
+
+    return userTo;
+  }
+
+  onChannelChanged = async (channel) => {
+    console.log('onChannelChanged: ', channel);
+
+    let isExisting = false;
+
+    const {channels} = this.state;
+    for (let c of channels) {
+      if (c.url === channel.url) {
+        c = channel;
+        isExisting = true;
+
+        break;
+      }
+    }
+
+    if (!isExisting) {
+      channels.unshift(channel);
+    }
+
+    this.setState({channels});
+  };
 }
+
+const mapStateToProps = (state) => state;
+
+export default connect(mapStateToProps, null)(Messaging);

@@ -4,6 +4,7 @@ import {Message} from '../models/message.model';
 import {Platform} from 'react-native';
 
 export class SendbirdService {
+  static GROUP_HANDLER_ID = 'GROUP_CHANNEL_LIST_HANDLER';
   static RECEIVE_HANDLER_ID = 'RECEIVE_HANDLER';
 
   urlChatApi = `https://api-${config.sendbirdAppId}.sendbird.com/v3`;
