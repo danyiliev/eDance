@@ -26,6 +26,7 @@ import {ApiService} from '../../../services';
 import {LoadingHUD} from 'react-native-hud-hybrid';
 import stripe from 'tipsi-stripe';
 import Toast from 'react-native-simple-toast';
+import SettingMain from '../../settings/setting-main/SettingMain';
 const {width: SCREEN_WDITH} = Dimensions.get('window');
 
 class ApplyChampionship extends React.Component {
@@ -579,22 +580,27 @@ class ApplyChampionship extends React.Component {
       }
     }
 
-    try {
-      // payment
-      let stripeTokenInfo = await stripe.paymentRequestWithCardForm();
-      console.log(stripeTokenInfo);
+    // check payment method
+    if (!this.currentUser?.paymentMethod) {
+      Alert.alert('Payment Method Not Set', 'Please add payment method before proceed', [
+        {
+          text: 'OK',
+          onPress: () => {
+            // go to setting page
+            this.props.navigation.navigate(SettingMain.NAV_NAME);
+          },
+        },
+      ]);
 
-      // token
-      let tokenId = stripeTokenInfo.tokenId;
-
-      this.createCharge(tokenId);
-    } catch (e) {
-      console.log(e.code);
-
-      if (e.code !== 'cancelled') {
-        Alert.alert('Payment Failed', e.message);
-      }
+      return;
     }
+
+    if (!this.event.user?.stripeAccountId) {
+      Alert.alert('Payment Method Not Set', 'Teacher has not set up payment account yet');
+      return;
+    }
+
+    this.createCharge();
   }
 
   async createCharge(token) {
@@ -602,10 +608,17 @@ class ApplyChampionship extends React.Component {
     this.loadingHUD.show();
 
     try {
+      // payment
+      let stripeTokenInfo = await ApiService.stripeCreateToken(
+        this.currentUser?.stripeCustomerId,
+        this.event.user?.stripeAccountId,
+      );
+
       let response = await ApiService.stripeCreateCharge(
-        token,
         this.state.totalEntryFee,
+        this.state.totalEntryFee / 10.0,
         `Entry form of ${this.event.title}`,
+        stripeTokenInfo.id,
         this.event.user?.stripeAccountId,
       );
 
@@ -614,9 +627,9 @@ class ApplyChampionship extends React.Component {
       // make order
       await this.doApply();
     } catch (e) {
-      console.log(e);
+      console.log(e.response);
 
-      Alert.alert('Payment Failed', e.message);
+      Alert.alert('Payment Failed', ApiService.getErrorMessage(e));
 
       // hide loading
       this.loadingHUD.hideAll();

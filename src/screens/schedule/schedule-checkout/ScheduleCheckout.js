@@ -17,6 +17,8 @@ import {setUserInfo} from '../../../actions/user';
 import {connect} from 'react-redux';
 import {ApiService} from '../../../services';
 import stripe from 'tipsi-stripe';
+import Championships from '../../championships/Championships';
+import SettingMain from '../../settings/setting-main/SettingMain';
 
 class ScheduleCheckout extends React.Component {
   static NAV_NAME = 'schedule-checkout';
@@ -140,33 +142,45 @@ class ScheduleCheckout extends React.Component {
   }
 
   async doPayment() {
-    try {
-      // payment
-      let stripeTokenInfo = await stripe.paymentRequestWithCardForm();
-      console.log(stripeTokenInfo);
+    // check payment method
+    if (!this.currentUser?.paymentMethod) {
+      Alert.alert('Payment Method Not Set', 'Please add payment method before proceed', [
+        {
+          text: 'OK',
+          onPress: () => {
+            // go to setting page
+            this.props.navigation.navigate(SettingMain.NAV_NAME);
+          },
+        },
+      ]);
 
-      // token
-      let tokenId = stripeTokenInfo.tokenId;
-
-      this.createCharge(tokenId);
-    } catch (e) {
-      console.log(e.code);
-
-      if (e.code !== 'cancelled') {
-        Alert.alert('Payment Failed', e.message);
-      }
+      return;
     }
+
+    if (!this.lesson?.teacher?.stripeAccountId) {
+      Alert.alert('Payment Method Not Set', 'Teacher has not set up payment account yet');
+      return;
+    }
+
+    this.createCharge();
   }
 
-  async createCharge(token) {
+  async createCharge() {
     // show loading
     this.loadingHUD.show();
 
     try {
+      // payment
+      let stripeTokenInfo = await ApiService.stripeCreateToken(
+        this.currentUser?.stripeCustomerId,
+        this.lesson?.teacher?.stripeAccountId,
+      );
+
       let response = await ApiService.stripeCreateCharge(
-        token,
         this.lesson?.teacher.price,
+        this.lesson?.teacher.price / 10.0,
         `Dance Lesson of ${this.lesson?.teacher.getFullName()}`,
+        stripeTokenInfo.id,
         this.lesson?.teacher?.stripeAccountId,
       );
 
@@ -175,9 +189,9 @@ class ScheduleCheckout extends React.Component {
       // make order
       await this.makeOrder();
     } catch (e) {
-      console.log(e);
+      console.log(e.response);
 
-      Alert.alert('Payment Failed', e.message);
+      Alert.alert('Payment Failed', ApiService.getErrorMessage(e));
     }
 
     // hide loading

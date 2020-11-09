@@ -110,11 +110,7 @@ class ApiService {
     };
 
     try {
-      const {data} = await Axios.post(
-        `${this.baseUrl}/users/checkEmailExisting`,
-        params,
-        {},
-      );
+      const {data} = await Axios.post(`${this.baseUrl}/users/checkEmailExisting`, params, {});
 
       return Promise.resolve(data.result);
     } catch (e) {
@@ -124,18 +120,7 @@ class ApiService {
     }
   }
 
-  async signUp(
-    firstName,
-    lastName,
-    email,
-    password,
-    type,
-    gender,
-    state,
-    city,
-    zipCode,
-    photo,
-  ) {
+  async signUp(firstName, lastName, email, password, type, gender, state, city, zipCode, photo) {
     const formData = new FormData();
     formData.append('firstName', firstName);
     formData.append('lastName', lastName);
@@ -258,9 +243,7 @@ class ApiService {
       };
 
       const {data} = await Axios.get(
-        type === Video.TYPE_TV
-          ? `${this.baseUrl}/video/tvs`
-          : `${this.baseUrl}/video/radios`,
+        type === Video.TYPE_TV ? `${this.baseUrl}/video/tvs` : `${this.baseUrl}/video/radios`,
         options,
       );
       console.log(data);
@@ -301,11 +284,7 @@ class ApiService {
         },
       };
 
-      const {data} = await Axios.post(
-        `${this.baseUrl}/users`,
-        formData,
-        options,
-      );
+      const {data} = await Axios.post(`${this.baseUrl}/users`, formData, options);
       console.log(data);
 
       const user = new User().initFromObject(data);
@@ -476,11 +455,7 @@ class ApiService {
     };
 
     try {
-      const {data} = await Axios.post(
-        `${this.baseUrl}/post`,
-        params,
-        httpOptions,
-      );
+      const {data} = await Axios.post(`${this.baseUrl}/post`, params, httpOptions);
       console.log(data);
 
       return Promise.resolve(data);
@@ -926,11 +901,7 @@ class ApiService {
     };
 
     try {
-      const {data} = await Axios.post(
-        `${this.baseUrl}/users/cart`,
-        params,
-        options
-      );
+      const {data} = await Axios.post(`${this.baseUrl}/users/cart`, params, options);
       console.log(data);
 
       return Promise.resolve();
@@ -1403,7 +1374,7 @@ class ApiService {
     return Promise.resolve(resp.data);
   }
 
-  async stripeCreateCharge(token, amount, desc = '', toAccount = null) {
+  async stripeCreateToken(customerId, toAccount = null) {
     const headers = {
       Authorization: 'Bearer ' + config.stripeSecretKey,
       'Content-Type': 'application/x-www-form-urlencoded',
@@ -1414,12 +1385,9 @@ class ApiService {
     }
 
     let resp = await Axios.post(
-      `${this.baseStripUrl}/charges`,
+      `${this.baseStripUrl}/tokens`,
       qs.stringify({
-        source: token,
-        amount: amount * 100,
-        currency: 'usd',
-        description: desc,
+        customer: customerId,
       }),
       {
         headers: headers,
@@ -1428,6 +1396,43 @@ class ApiService {
     console.log(resp.data);
 
     return Promise.resolve(resp.data);
+  }
+
+  async stripeCreateCharge(amount, fee, desc = '', tokenId, toAccount = null) {
+    const headers = {
+      Authorization: 'Bearer ' + config.stripeSecretKey,
+      'Content-Type': 'application/x-www-form-urlencoded',
+    };
+
+    if (toAccount) {
+      headers['Stripe-Account'] = toAccount;
+    }
+
+    let params = {
+      source: tokenId,
+      amount: amount * 100,
+      currency: 'usd',
+      description: desc,
+    };
+
+    if (fee) {
+      params.application_fee_amount = fee * 100;
+    }
+
+    let resp = await Axios.post(`${this.baseStripUrl}/charges`, qs.stringify(params), {
+      headers: headers,
+    });
+    console.log(resp.data);
+
+    return Promise.resolve(resp.data);
+  }
+
+  getErrorMessage(e) {
+    if (e.response.data) {
+      return e.response.data.error.message;
+    }
+
+    return e.message;
   }
 }
 

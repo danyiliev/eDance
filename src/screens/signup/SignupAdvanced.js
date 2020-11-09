@@ -239,6 +239,7 @@ class SignupAdvanced extends BaseSignup {
           this.userNew.styleStandard,
           this.userNew.styleLatin,
           Number(this.userNew.price) ?? 0,
+          Number(this.userNew.priceGroup) ?? 0,
           this.userNew.availableDays,
           this.userNew.durationLesson,
           this.userNew.durationRest,

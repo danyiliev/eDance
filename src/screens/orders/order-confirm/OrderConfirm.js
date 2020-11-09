@@ -16,6 +16,7 @@ import Orders from '../Orders';
 import {UserHelper} from '../../../helpers/user-helper';
 import stripe from 'tipsi-stripe';
 import Toast from 'react-native-simple-toast';
+import SettingMain from '../../settings/setting-main/SettingMain';
 
 class OrderConfirm extends React.Component {
   static NAV_NAME = 'order-confirm';
@@ -134,33 +135,39 @@ class OrderConfirm extends React.Component {
   }
 
   async onButProceed() {
-    try {
-      // payment
-      let stripeTokenInfo = await stripe.paymentRequestWithCardForm();
-      console.log(stripeTokenInfo);
+    // check payment method
+    if (!this.currentUser?.paymentMethod) {
+      Alert.alert('Payment Method Not Set', 'Please add payment method before proceed', [
+        {
+          text: 'OK',
+          onPress: () => {
+            // go to setting page
+            this.props.navigation.navigate(SettingMain.NAV_NAME);
+          },
+        },
+      ]);
 
-      // token
-      let tokenId = stripeTokenInfo.tokenId;
-
-      this.createCharge(tokenId);
-    } catch (e) {
-      console.log(e.code);
-
-      if (e.code !== 'cancelled') {
-        Alert.alert('Payment Failed', e.message);
-      }
+      return;
     }
+
+    this.createCharge();
   }
 
-  async createCharge(token) {
+  async createCharge() {
     // show loading
     this.loadingHUD.show();
 
     try {
+      // payment
+      let stripeTokenInfo = await ApiService.stripeCreateToken(
+        this.currentUser?.stripeCustomerId
+      );
+
       let response = await ApiService.stripeCreateCharge(
-        token,
         this.currentUser?.getTotalPrice(),
+        0,
         'Purchase store items',
+        stripeTokenInfo.id,
       );
 
       Toast.show('Payment is successful');
@@ -170,7 +177,7 @@ class OrderConfirm extends React.Component {
     } catch (e) {
       console.log(e);
 
-      Alert.alert('Payment Failed', e.message);
+      Alert.alert('Payment Failed', ApiService.getErrorMessage(e));
     }
 
     // hide loading

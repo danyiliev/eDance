@@ -19,6 +19,7 @@ import LessonPlayback from '../../lessons/lesson-playback/LessonPlayback';
 import BaseLessonList from '../base-lesson-list';
 import stripe from 'tipsi-stripe';
 import {Lesson} from '../../../models/lesson.model';
+import SettingMain from '../../settings/setting-main/SettingMain';
 
 class Student extends BaseLessonList {
   static NAV_NAME = 'student';
@@ -123,22 +124,27 @@ class Student extends BaseLessonList {
   }
 
   async onPurchase(lesson) {
-    try {
-      // payment
-      let stripeTokenInfo = await stripe.paymentRequestWithCardForm();
-      console.log(stripeTokenInfo);
+    // check payment method
+    if (!this.currentUser?.paymentMethod) {
+      Alert.alert('Payment Method Not Set', 'Please add payment method before proceed', [
+        {
+          text: 'OK',
+          onPress: () => {
+            // go to setting page
+            this.props.navigation.navigate(SettingMain.NAV_NAME);
+          },
+        },
+      ]);
 
-      // token
-      let tokenId = stripeTokenInfo.tokenId;
-
-      this.createCharge(tokenId, lesson);
-    } catch (e) {
-      console.log(e.code);
-
-      if (e.code !== 'cancelled') {
-        Alert.alert('Payment Failed', e.message);
-      }
+      return;
     }
+
+    if (!this.lesson?.teacher?.stripeAccountId) {
+      Alert.alert('Payment Method Not Set', 'Teacher has not set up payment account yet');
+      return;
+    }
+
+    this.createCharge();
   }
 
   async createCharge(token, lesson) {
@@ -146,10 +152,17 @@ class Student extends BaseLessonList {
     this.loadingHUD.show();
 
     try {
+      // payment
+      let stripeTokenInfo = await ApiService.stripeCreateToken(
+        this.currentUser?.stripeCustomerId,
+        this.lesson?.teacher?.stripeAccountId,
+      );
+
       let response = await ApiService.stripeCreateCharge(
-        token,
         Lesson.PRICE_RECORDED,
-        `Recorded Dance Lesson of ${lesson.teacher.getFullName()}`,
+        Lesson.PRICE_RECORDED / 10.0,
+        `Dance Lesson of ${this.lesson?.teacher.getFullName()}`,
+        stripeTokenInfo.id,
         this.lesson?.teacher?.stripeAccountId,
       );
 
@@ -160,7 +173,7 @@ class Student extends BaseLessonList {
     } catch (e) {
       console.log(e);
 
-      Alert.alert('Payment Failed', e.message);
+      Alert.alert('Payment Failed', ApiService.getErrorMessage(e));
     }
 
     // hide loading
