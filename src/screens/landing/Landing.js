@@ -52,15 +52,6 @@ export default class Landing extends React.Component {
             />
           </View>
 
-          <View style={{...styleUtil.withShadow(), ...styles.viewButStudent}}>
-            <Button
-              title="CREATE DANCESPORT CHAMPIONSHIPS"
-              buttonStyle={stylesApp.butLightOutline}
-              titleStyle={stylesApp.titleButLight}
-              onPress={() => this.onButEvent()}
-            />
-          </View>
-
           <Button
             type="clear"
             title="Log In"
@@ -109,10 +100,5 @@ export default class Landing extends React.Component {
   onButTerms() {
     // go to terms page
     this.props.navigation.push(Terms.NAV_NAME);
-  }
-
-  onButEvent() {
-    // go to create event page
-    this.props.navigation.push(AddChampionship.NAV_NAME_SIGNUP);
   }
 }

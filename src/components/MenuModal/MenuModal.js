@@ -109,23 +109,6 @@ class MenuModal extends React.Component {
             </TouchableOpacity>
             <Divider style={styles.viewDivider} />
 
-            {/* championship */}
-            <TouchableOpacity
-              onPress={() => this.props.onMenuItem(Championships.NAV_NAME)}>
-              <View style={styles.viewMenuItem}>
-                {/* icon */}
-                <View style={styles.viewMenuIcon}>
-                  <ImageScale
-                    width={15}
-                    source={require('../../../assets/imgs/menu_champion.png')}
-                  />
-                </View>
-
-                <Text style={styles.txtMenuItem}>World ChampionShips</Text>
-              </View>
-            </TouchableOpacity>
-            <Divider style={styles.viewDivider} />
-
             {/* Messaging */}
             <TouchableOpacity
               onPress={() => this.props.onMenuItem(Messaging.NAV_NAME)}>
