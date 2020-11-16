@@ -1,5 +1,6 @@
 import {BaseModel} from './base.model';
 import {
+  DURATIONS_LESSON,
   SELECT_AMERICAN_BALLROOM,
   SELECT_AMERICAN_RHYTHM,
   SELECT_LATIN,
@@ -30,6 +31,10 @@ export class Group extends BaseModel {
 
   danceLevels = [];
 
+  availableDays = [];
+  timeStart = '';
+  durationLesson = DURATIONS_LESSON[0];
+
   // logical
   user = null;
 
@@ -56,6 +61,17 @@ export class Group extends BaseModel {
 
     if (data.danceLevels) {
       this.danceLevels = data.danceLevels;
+    }
+
+    // schedule
+    if (data.availableDays && data.availableDays.length > 0) {
+      this.availableDays = data.availableDays;
+    }
+    if (data.durationLesson) {
+      this.durationLesson = data.durationLesson;
+    }
+    if (data.timeStart) {
+      this.timeStart = data.timeStart;
     }
 
     return this;

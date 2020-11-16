@@ -46,19 +46,11 @@ import {LoadingHUD} from 'react-native-hud-hybrid';
 import SignupBase from '../../signup/SignupBase';
 import BaseSettingProfile from '../../base-setting-profile';
 
-const {width: SCREEN_WIDTH} = Dimensions.get('window');
-const HEIGHT_TIMER = 140;
-
 class SettingProfile extends BaseSettingProfile {
   static NAV_NAME = 'setting-profile';
   static NAV_NAME_SIGNUP = 'setting-profile-signup';
 
-  lessonDurations = ['30 Minutes', '45 Minutes', 'An hour'];
   restDurations = ['5 Minutes', '10 Minutes', '15 Minutes'];
-  dayOfWeeks = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-
-  timeSelected = new Date();
-  strTimeSelected = '';
 
   constructor(props) {
     super(props);
@@ -66,23 +58,13 @@ class SettingProfile extends BaseSettingProfile {
     this.state = {
       ...this.state,
 
-      // ui
-      showTimePickerStart: false,
-      showTimePickerEnd: false,
-
       // data
       ageGroups: [],
       price: '',
       priceGroup: '',
 
-      durationLessonIndex: 0,
       durationRestIndex: 0,
-      availableDays: [],
-      timeStart: '',
-      timeEnd: '',
     };
-
-    this.currentUser = props.UserReducer.user;
 
     // init data
     if (this.currentUser) {
@@ -311,166 +293,10 @@ class SettingProfile extends BaseSettingProfile {
     );
   }
 
-  renderDayOfWeeks() {
-    const spacing = 14;
-    const padding = 14;
-    const itemWidth = (SCREEN_WIDTH - padding * 2 - spacing * 4) / 3;
-
-    return (
-      <View style={styles.viewTapContainer}>
-        {this.dayOfWeeks.map((d, i) => {
-          return (
-            <CheckboxRound
-              key={i.toString()}
-              label={d}
-              checked={this.isDayOfWeekSelected(i)}
-              containerStyle={{
-                width: itemWidth,
-                marginLeft: i % 3 !== 0 ? spacing / 2 : 0,
-                marginRight: i % 3 !== 2 ? spacing / 2 : 0,
-              }}
-              onPress={() => this.onSelectDayOfWeek(i)}
-            />
-          );
-        })}
-      </View>
-    );
-  }
-
-  renderTimePicker() {
-    if (Platform.OS === 'ios') {
-      return (
-        <SelectPicker
-          isVisible={
-            this.state.showTimePickerStart || this.state.showTimePickerEnd
-          }
-          contentStyle={stylesSignup.picker}
-          onDismiss={(done) => this.dismissTime(done)}>
-          {this.renderTimePickerCore()}
-        </SelectPicker>
-      );
-    } else {
-      if (!this.state.showTimePickerStart && !this.state.showTimePickerEnd) {
-        return null;
-      }
-
-      return this.renderTimePickerCore();
-    }
-  }
-
-  renderTimePickerCore() {
-    return (
-      <DateTimePicker
-        value={this.timeSelected}
-        mode="time"
-        display="default"
-        onChange={(event, selectedDate) =>
-          this.onChangeTime(event, selectedDate)
-        }
-      />
-    );
-  }
-
   onSelectType(index) {
     this.setState({
       typeIndex: index,
     });
-  }
-
-  onSelectDayOfWeek(day) {
-    const {availableDays} = this.state;
-    const index = availableDays.findIndex((data) => data === day);
-
-    if (index >= 0) {
-      // remove if exist
-      availableDays.splice(index, 1);
-    } else {
-      // add if not exist
-      availableDays.push(day);
-    }
-
-    this.setState({availableDays});
-  }
-
-  isDayOfWeekSelected(day) {
-    return this.state.availableDays.findIndex((data) => data === day) >= 0;
-  }
-
-  onChangeTime(event, selectedDate) {
-    const strTime = moment(selectedDate).format('HH:mm');
-
-    if (Platform.OS === 'ios') {
-      if (selectedDate) {
-        this.strTimeSelected = strTime;
-      }
-    } else {
-      this.setState({
-        showTimePickerStart: false,
-        showTimePickerEnd: false,
-      });
-
-      // null if cancelled
-      if (selectedDate) {
-        if (this.state.showTimePickerStart) {
-          this.setState({
-            timeStart: strTime,
-          });
-        } else {
-          this.setState({
-            timeEnd: strTime,
-          });
-        }
-      }
-    }
-  }
-
-  dismissTime(done) {
-    this.setState({
-      showTimePickerStart: false,
-      showTimePickerEnd: false,
-    });
-    this.keyboardView.moveMainView(0);
-
-    // update date value based on done/canceled
-    if (this.state.showTimePickerStart) {
-      if (done) {
-        this.setState({
-          timeStart: this.strTimeSelected,
-        });
-      } else {
-        this.strTimeSelected = this.state.timeStart;
-      }
-    } else {
-      if (done) {
-        this.setState({
-          timeEnd: this.strTimeSelected,
-        });
-      } else {
-        this.strTimeSelected = this.state.timeEnd;
-      }
-    }
-  }
-
-  onTimeStart() {
-    if (this.state.timeStart) {
-      this.timeSelected = moment(this.state.timeStart, 'HH:mm').toDate();
-    }
-
-    this.setState({
-      showTimePickerStart: true,
-    });
-    this.keyboardView.moveMainView(HEIGHT_TIMER);
-  }
-
-  onTimeEnd() {
-    if (this.state.timeEnd) {
-      this.timeSelected = moment(this.state.timeEnd, 'HH:mm').toDate();
-    }
-
-    this.setState({
-      showTimePickerEnd: true,
-    });
-    this.keyboardView.moveMainView(HEIGHT_TIMER);
   }
 
   onButNext() {}

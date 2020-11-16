@@ -1200,6 +1200,9 @@ class ApiService {
       danceLevels: group.danceLevels,
       styles: group.styles,
       dances: group.dances,
+      availableDays: group.availableDays,
+      timeStart: group.timeStart,
+      durationLesson: group.durationLesson,
     };
 
     try {

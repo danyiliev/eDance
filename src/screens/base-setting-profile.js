@@ -1,9 +1,10 @@
 import React from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
+import {Dimensions, Platform, Text, TouchableOpacity, View} from 'react-native';
 import {styles} from './settings/setting-profile/styles';
 import CheckboxRound from '../components/CheckboxRound/CheckboxRound';
 import {
-  DANCE_LEVELS, SELECT_AGE,
+  DANCE_LEVELS,
+  SELECT_AGE,
   SELECT_AMERICAN_BALLROOM,
   SELECT_AMERICAN_RHYTHM,
   SELECT_LATIN,
@@ -16,23 +17,46 @@ import {colors as colorTheme} from '../styles/theme.style';
 import TagItem from '../components/TagItem/TagItem';
 import SelectList from './settings/select-list/SelectList';
 import {LoadingHUD} from 'react-native-hud-hybrid';
+import SelectPicker from '../components/SelectPicker/SelectPicker';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import moment from 'moment';
+
+const {width: SCREEN_WIDTH} = Dimensions.get('window');
+const HEIGHT_TIMER = 140;
 
 export default class BaseSettingProfile extends React.Component {
   currentUser = null;
+
+  lessonDurations = ['30 Minutes', '45 Minutes', 'An hour'];
+  dayOfWeeks = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+
+  timeSelected = new Date();
+  strTimeSelected = '';
 
   constructor(props) {
     super(props);
 
     this.state = {
+      // ui
+      showTimePickerStart: false,
+      showTimePickerEnd: false,
+
       danceLevels: [],
 
       styleBallroom: [],
       styleRythm: [],
       styleStandard: [],
       styleLatin: [],
+
+      durationLessonIndex: 0,
+      availableDays: [],
+      timeStart: '',
+      timeEnd: '',
     };
 
     this.loadingHUD = new LoadingHUD();
+
+    this.currentUser = props.UserReducer.user;
   }
 
   renderDanceStyles() {
@@ -262,6 +286,66 @@ export default class BaseSettingProfile extends React.Component {
     );
   }
 
+  renderDayOfWeeks() {
+    const spacing = 14;
+    const padding = 14;
+    const itemWidth = (SCREEN_WIDTH - padding * 2 - spacing * 4) / 3;
+
+    return (
+      <View style={styles.viewTapContainer}>
+        {this.dayOfWeeks.map((d, i) => {
+          return (
+            <CheckboxRound
+              key={i.toString()}
+              label={d}
+              checked={this.isDayOfWeekSelected(i)}
+              containerStyle={{
+                width: itemWidth,
+                marginLeft: i % 3 !== 0 ? spacing / 2 : 0,
+                marginRight: i % 3 !== 2 ? spacing / 2 : 0,
+              }}
+              onPress={() => this.onSelectDayOfWeek(i)}
+            />
+          );
+        })}
+      </View>
+    );
+  }
+
+  renderTimePicker() {
+    if (Platform.OS === 'ios') {
+      return (
+        <SelectPicker
+          isVisible={
+            this.state.showTimePickerStart || this.state.showTimePickerEnd
+          }
+          contentStyle={stylesSignup.picker}
+          onDismiss={(done) => this.dismissTime(done)}>
+          {this.renderTimePickerCore()}
+        </SelectPicker>
+      );
+    } else {
+      if (!this.state.showTimePickerStart && !this.state.showTimePickerEnd) {
+        return null;
+      }
+
+      return this.renderTimePickerCore();
+    }
+  }
+
+  renderTimePickerCore() {
+    return (
+      <DateTimePicker
+        value={this.timeSelected}
+        mode="time"
+        display="default"
+        onChange={(event, selectedDate) =>
+          this.onChangeTime(event, selectedDate)
+        }
+      />
+    );
+  }
+
   isLevelSelected(level) {
     return this.state.danceLevels.findIndex((data) => data === level) >= 0;
   }
@@ -299,6 +383,111 @@ export default class BaseSettingProfile extends React.Component {
       values: values,
       onSave: this.onSaveItems.bind(this),
     });
+  }
+
+  onTimeStart(moveView = true) {
+    if (this.state.timeStart) {
+      this.timeSelected = moment(this.state.timeStart, 'HH:mm').toDate();
+      this.strTimeSelected = this.state.timeStart;
+    } else {
+      this.strTimeSelected = moment().format('HH:mm');
+    }
+
+    this.setState({
+      showTimePickerStart: true,
+    });
+
+    if (moveView) {
+      this.keyboardView.moveMainView(HEIGHT_TIMER);
+    }
+  }
+
+  onTimeEnd() {
+    if (this.state.timeEnd) {
+      this.timeSelected = moment(this.state.timeEnd, 'HH:mm').toDate();
+      this.strTimeSelected = this.state.timeEnd;
+    } else {
+      this.strTimeSelected = moment().format('HH:mm');
+    }
+
+    this.setState({
+      showTimePickerEnd: true,
+    });
+    this.keyboardView.moveMainView(HEIGHT_TIMER);
+  }
+
+  isDayOfWeekSelected(day) {
+    return this.state.availableDays.findIndex((data) => data === day) >= 0;
+  }
+
+  onChangeTime(event, selectedDate) {
+    const strTime = moment(selectedDate).format('HH:mm');
+
+    if (Platform.OS === 'ios') {
+      if (selectedDate) {
+        this.strTimeSelected = strTime;
+      }
+    } else {
+      this.setState({
+        showTimePickerStart: false,
+        showTimePickerEnd: false,
+      });
+
+      // null if cancelled
+      if (selectedDate) {
+        if (this.state.showTimePickerStart) {
+          this.setState({
+            timeStart: strTime,
+          });
+        } else {
+          this.setState({
+            timeEnd: strTime,
+          });
+        }
+      }
+    }
+  }
+
+  onSelectDayOfWeek(day) {
+    const {availableDays} = this.state;
+    const index = availableDays.findIndex((data) => data === day);
+
+    if (index >= 0) {
+      // remove if exist
+      availableDays.splice(index, 1);
+    } else {
+      // add if not exist
+      availableDays.push(day);
+    }
+
+    this.setState({availableDays});
+  }
+
+  dismissTime(done) {
+    this.setState({
+      showTimePickerStart: false,
+      showTimePickerEnd: false,
+    });
+    this.keyboardView.moveMainView(0);
+
+    // update date value based on done/canceled
+    if (this.state.showTimePickerStart) {
+      if (done) {
+        this.setState({
+          timeStart: this.strTimeSelected,
+        });
+      } else {
+        this.strTimeSelected = this.state.timeStart;
+      }
+    } else {
+      if (done) {
+        this.setState({
+          timeEnd: this.strTimeSelected,
+        });
+      } else {
+        this.strTimeSelected = this.state.timeEnd;
+      }
+    }
   }
 
   onSaveItems(type, values) {
