@@ -28,15 +28,15 @@ export default class BookingDate extends React.Component {
   constructor(props) {
     super(props);
 
-    props.navigation.setOptions({
-      title: 'Book Lesson',
-    });
-
     // get parameter
     if (props.route.params) {
       this.lesson = props.route.params.lesson;
     }
     this.renderRightButton();
+
+    props.navigation.setOptions({
+      title: `Book ${this.lesson.group ? 'Group' : 'Private'} Lesson`,
+    });
 
     // select today as default
     this.state.selectedDate = moment().format('YYYY-MM-DD');

@@ -18,6 +18,7 @@ import {
 export default class GroupDetail extends React.Component {
   static NAV_NAME = 'group-detail';
 
+  dayOfWeeks = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   group = null;
 
   constructor(props) {
@@ -91,8 +92,37 @@ export default class GroupDetail extends React.Component {
 
               <View style={styles.viewFormContent}>
                 {this.group.dances.map((d, i) => (
-                  <Text key={`dance-${i}`} style={styles.txtItem}>{DanceHelper.danceNameByVal(d, this.group.styles[0])}</Text>
+                  <Text key={`dance-${i}`} style={styles.txtItem}>
+                    {DanceHelper.danceNameByVal(d, this.group.styles[0])}
+                  </Text>
                 ))}
+              </View>
+            </View>
+
+            {/* schedule */}
+            <View style={[stylesSetting.viewForm, stylesApp.mt14]}>
+              <Text style={[stylesSignup.txtItemTitle, stylesApp.mt6]}>Available Time</Text>
+
+              <View style={styles.viewFormContent}>
+                {/* time */}
+                <View style={styles.viewItem}>
+                  <Text style={styles.txtItemLabel}>Start At:</Text>
+                  <Text style={styles.txtItem}>{this.group.timeStart}</Text>
+                </View>
+
+                {/* duration */}
+                <View style={styles.viewItem}>
+                  <Text style={styles.txtItemLabel}>Duration:</Text>
+                  <Text style={styles.txtItem}>{this.group.durationLesson} minutes</Text>
+                </View>
+
+                {/* days of week */}
+                <View style={styles.viewItem}>
+                  <Text style={styles.txtItemLabel}>Days of Week:</Text>
+                  <Text style={styles.txtItem}>
+                    {this.dayOfWeeks.filter((d, i) => this.group.availableDays.includes(i)).join(', ')}
+                  </Text>
+                </View>
               </View>
             </View>
 
