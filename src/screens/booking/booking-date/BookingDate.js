@@ -22,9 +22,7 @@ export default class BookingDate extends React.Component {
     // ui
     showLoading: true,
 
-    selectedDate: '',
     timeSlots: [],
-
     markedDates: {},
   };
 
@@ -49,8 +47,8 @@ export default class BookingDate extends React.Component {
     this.selectedDate = moment().format('YYYY-MM-DD');
   }
 
-  componentDidMount(): void {
-    this.markDatesByMonth(moment().format('YYYY-MM'));
+  async componentDidMount(): void {
+    await this.markDatesByMonth(moment().format('YYYY-MM'));
     this.onDayPress(moment().format('YYYY-MM-DD'));
   }
 
@@ -83,6 +81,7 @@ export default class BookingDate extends React.Component {
                   monthView: styles.calMonthView,
                 },
               }}
+              onMonthChange={(month) => this.onMonthChange(month)}
               onDayPress={(day) => this.onDayPress(day.dateString)}
               markedDates={this.state.markedDates}
               markingType={'multi-dot'}
@@ -153,7 +152,7 @@ export default class BookingDate extends React.Component {
     );
   }
 
-  markDatesByMonth(strMonth) {
+  async markDatesByMonth(strMonth) {
     const start = moment(`${strMonth}-01`);
     const end = moment(`${strMonth}-${start.daysInMonth()}`);
 
@@ -170,7 +169,11 @@ export default class BookingDate extends React.Component {
 
     do {
       const weekday = date.isoWeekday() - 1;
-      if (this.lesson.teacher?.availableDays.includes(weekday)) {
+
+      const availableDays = this.lesson.group
+        ? this.lesson.group.availableDays
+        : this.lesson.teacher?.availableDays;
+      if (availableDays.includes(weekday)) {
         this.periods[date.format('YYYY-MM-DD')] = {
           dots: [dotAvailable],
         };
@@ -179,10 +182,10 @@ export default class BookingDate extends React.Component {
       date.add(1, 'days');
     } while (date.isSameOrBefore(end));
 
-    this.setState({markedDates: this.periods});
+    await this.setState({markedDates: this.periods});
   }
 
-  setMarkedDates() {
+  async setMarkedDates() {
     const periods = _.clone(this.periods);
 
     if (this.selectedDate) {
@@ -192,7 +195,7 @@ export default class BookingDate extends React.Component {
       };
     }
 
-    this.setState({
+    await this.setState({
       markedDates: periods,
     });
   }
@@ -204,69 +207,66 @@ export default class BookingDate extends React.Component {
       showLoading: true,
     });
 
-    if (!(this.selectedDate in this.state.markedDates)) {
-      // no time slots
-      this.setState({
-        showLoading: false,
-      });
+    const timeSlots = [];
 
-      return;
-    }
+    if (this.selectedDate in this.state.markedDates && 'dots' in this.state.markedDates[this.selectedDate]) {
+      // load lessons of selected day
+      let lessons = [];
+      try {
+        lessons = await ApiService.getLessonsByTeacher(this.lesson.teacher?.id, this.selectedDate);
+        console.log(lessons);
+      } catch (e) {
+        console.log(e);
+      }
 
-    // load lessons of selected day
-    let lessons = [];
-    try {
-      lessons = await ApiService.getLessonsByTeacher(this.lesson.teacher?.id, this.selectedDate);
-      // lessons = await ApiService.getLessonsByTeacher(this.lesson.teacher?.id, '2020-11-09');
-      console.log(lessons);
-    } catch (e) {
-      console.log(e);
+      let startTime = moment(this.lesson.teacher?.timeStart, 'HH:mm');
+      let endTime = moment(this.lesson.teacher?.timeEnd, 'HH:mm');
+      let durationLesson = this.lesson.teacher?.durationLesson;
+      let durationRest = this.lesson.teacher?.durationRest;
+
+      // group lesson
+      if (this.lesson.group) {
+        startTime = moment(this.lesson.group.timeStart ? this.lesson.group.timeStart : '23:59', 'HH:mm');
+        endTime = moment(this.lesson.group.timeEnd ? this.lesson.group.timeEnd : '23:59', 'HH:mm');
+        durationLesson = this.lesson.group.durationLesson;
+      }
+
+      do {
+        let isTaken = false;
+
+        const start = startTime.clone();
+        const end = startTime.add(durationLesson, 'm');
+
+        // check if time slot is already taken
+        for (const l of lessons) {
+          const lessonStart = moment(l.getMinTime(), 'HH:mm');
+          const lessonEnd = moment(l.getMaxTime(), 'HH:mm');
+
+          if (start.isBetween(lessonStart, lessonEnd) || end.isBetween(lessonStart, lessonEnd)) {
+            isTaken = true;
+            break;
+          }
+          if (lessonStart.isBetween(start, end) || lessonEnd.isBetween(start, end)) {
+            isTaken = true;
+            break;
+          }
+        }
+
+        if (!isTaken) {
+          const slot = new TimeSlot();
+          slot.start = start.format('HH:mm');
+          slot.end = end.format('HH:mm');
+
+          timeSlots.push(slot);
+        }
+      } while (!startTime.add(durationRest, 'm').isAfter(endTime));
     }
 
     // hide loading
     this.setState({
       showLoading: false,
+      timeSlots,
     });
-
-    let startTime = moment(this.lesson.teacher?.timeStart, 'HH:mm');
-    const endTime = moment(this.lesson.teacher?.timeEnd, 'HH:mm');
-    const durationLesson = this.lesson.teacher?.durationLesson;
-    const durationRest = this.lesson.teacher?.durationRest;
-
-    const timeSlots = [];
-
-    do {
-      let isTaken = false;
-
-      const start = startTime.clone();
-      const end = startTime.add(durationLesson, 'm');
-
-      // check if time slot is already taken
-      for (const l of lessons) {
-        const lessonStart = moment(l.getMinTime(), 'HH:mm');
-        const lessonEnd = moment(l.getMaxTime(), 'HH:mm');
-
-        if (start.isBetween(lessonStart, lessonEnd) || end.isBetween(lessonStart, lessonEnd)) {
-          isTaken = true;
-          break;
-        }
-        if (lessonStart.isBetween(start, end) || lessonEnd.isBetween(start, end)) {
-          isTaken = true;
-          break;
-        }
-      }
-
-      if (!isTaken) {
-        const slot = new TimeSlot();
-        slot.start = start.format('HH:mm');
-        slot.end = end.format('HH:mm');
-
-        timeSlots.push(slot);
-      }
-    } while (!startTime.add(durationRest, 'm').isAfter(endTime));
-
-    // update UI
-    this.setState({timeSlots});
   }
 
   onSelectTimeSlot(index) {
@@ -282,9 +282,28 @@ export default class BookingDate extends React.Component {
     return this.state.timeSlots.findIndex((t) => t.selected) >= 0;
   }
 
-  onDayPress(date) {
+  onMonthChange(cal) {
+    if (!cal.month || !cal.year) {
+      return;
+    }
+
+    const strMonth = moment()
+      .set('month', cal.month - 1)
+      .set('year', cal.year)
+      .format('YYYY-MM');
+
+    // clear data
+    this.selectedDate = '';
+    this.setState({
+      timeSlots: [],
+    });
+
+    this.markDatesByMonth(strMonth);
+  }
+
+  async onDayPress(date) {
     this.selectedDate = date;
-    this.setMarkedDates();
+    await this.setMarkedDates();
 
     this.getTimeSlots();
   }
