@@ -1,16 +1,19 @@
 import React from 'react';
 import {styles} from './styles';
-import {ActivityIndicator, Dimensions, ScrollView, View} from 'react-native';
+import {ActivityIndicator, Dimensions, ScrollView, Text, View} from 'react-native';
 import {Calendar} from 'react-native-calendars';
 import {colors as colorTheme} from '../../../styles/theme.style';
 import {Button} from 'react-native-elements';
 import {stylesApp} from '../../../styles/app.style';
 import {TimeSlot} from '../../../models/lesson.model';
 import CheckboxRound from '../../../components/CheckboxRound/CheckboxRound';
-const {width: SCREEN_WDITH} = Dimensions.get('window');
 import moment from 'moment';
 import {Utils} from '../../../helpers/utils';
 import ScheduleCheckout from '../../schedule/schedule-checkout/ScheduleCheckout';
+import _ from 'lodash';
+import {ApiService} from '../../../services';
+
+const {width: SCREEN_WDITH} = Dimensions.get('window');
 
 export default class BookingDate extends React.Component {
   static NAV_NAME = 'booking-date';
@@ -21,8 +24,12 @@ export default class BookingDate extends React.Component {
 
     selectedDate: '',
     timeSlots: [],
+
+    markedDates: {},
   };
 
+  selectedDate = '';
+  periods = {};
   lesson = null;
 
   constructor(props) {
@@ -39,11 +46,12 @@ export default class BookingDate extends React.Component {
     });
 
     // select today as default
-    this.state.selectedDate = moment().format('YYYY-MM-DD');
+    this.selectedDate = moment().format('YYYY-MM-DD');
   }
 
   componentDidMount(): void {
-    this.getTimeSlots();
+    this.markDatesByMonth(moment().format('YYYY-MM'));
+    this.onDayPress(moment().format('YYYY-MM-DD'));
   }
 
   render() {
@@ -75,12 +83,9 @@ export default class BookingDate extends React.Component {
                   monthView: styles.calMonthView,
                 },
               }}
-              onDayPress={this.onDayPress}
-              markedDates={{
-                [this.state.selectedDate]: {
-                  selected: true,
-                },
-              }}
+              onDayPress={(day) => this.onDayPress(day.dateString)}
+              markedDates={this.state.markedDates}
+              markingType={'multi-dot'}
             />
           </View>
 
@@ -114,6 +119,15 @@ export default class BookingDate extends React.Component {
       );
     }
 
+    // no result
+    if (this.state.timeSlots.length <= 0) {
+      return (
+        <View style={stylesApp.viewLoading}>
+          <Text style={stylesApp.txtEmptyItem}>No available time slots</Text>
+        </View>
+      );
+    }
+
     const spacing = 14;
     const padding = 14;
     const itemWidth = (SCREEN_WDITH - padding * 2) / 2;
@@ -139,11 +153,75 @@ export default class BookingDate extends React.Component {
     );
   }
 
+  markDatesByMonth(strMonth) {
+    const start = moment(`${strMonth}-01`);
+    const end = moment(`${strMonth}-${start.daysInMonth()}`);
+
+    // get today without time
+    const now = moment().startOf('day');
+
+    this.periods = {};
+
+    //
+    // get available dates based on day of week
+    //
+    let date = start.isBefore(now) ? now : start;
+    const dotAvailable = {key: 'available', color: colorTheme.primary, selectedDotColor: colorTheme.light};
+
+    do {
+      const weekday = date.isoWeekday() - 1;
+      if (this.lesson.teacher?.availableDays.includes(weekday)) {
+        this.periods[date.format('YYYY-MM-DD')] = {
+          dots: [dotAvailable],
+        };
+      }
+
+      date.add(1, 'days');
+    } while (date.isSameOrBefore(end));
+
+    this.setState({markedDates: this.periods});
+  }
+
+  setMarkedDates() {
+    const periods = _.clone(this.periods);
+
+    if (this.selectedDate) {
+      periods[this.selectedDate] = {
+        ...periods[this.selectedDate],
+        selected: true,
+      };
+    }
+
+    this.setState({
+      markedDates: periods,
+    });
+  }
+
   async getTimeSlots() {
     // show loading
     this.setState({
+      timeSlots: [],
       showLoading: true,
     });
+
+    if (!(this.selectedDate in this.state.markedDates)) {
+      // no time slots
+      this.setState({
+        showLoading: false,
+      });
+
+      return;
+    }
+
+    // load lessons of selected day
+    let lessons = [];
+    try {
+      lessons = await ApiService.getLessonsByTeacher(this.lesson.teacher?.id, this.selectedDate);
+      // lessons = await ApiService.getLessonsByTeacher(this.lesson.teacher?.id, '2020-11-09');
+      console.log(lessons);
+    } catch (e) {
+      console.log(e);
+    }
 
     // hide loading
     this.setState({
@@ -158,11 +236,33 @@ export default class BookingDate extends React.Component {
     const timeSlots = [];
 
     do {
-      const slot = new TimeSlot();
-      slot.start = startTime.format('HH:mm');
-      slot.end = startTime.add(durationLesson, 'm').format('HH:mm');
+      let isTaken = false;
 
-      timeSlots.push(slot);
+      const start = startTime.clone();
+      const end = startTime.add(durationLesson, 'm');
+
+      // check if time slot is already taken
+      for (const l of lessons) {
+        const lessonStart = moment(l.getMinTime(), 'HH:mm');
+        const lessonEnd = moment(l.getMaxTime(), 'HH:mm');
+
+        if (start.isBetween(lessonStart, lessonEnd) || end.isBetween(lessonStart, lessonEnd)) {
+          isTaken = true;
+          break;
+        }
+        if (lessonStart.isBetween(start, end) || lessonEnd.isBetween(start, end)) {
+          isTaken = true;
+          break;
+        }
+      }
+
+      if (!isTaken) {
+        const slot = new TimeSlot();
+        slot.start = start.format('HH:mm');
+        slot.end = end.format('HH:mm');
+
+        timeSlots.push(slot);
+      }
     } while (!startTime.add(durationRest, 'm').isAfter(endTime));
 
     // update UI
@@ -182,17 +282,12 @@ export default class BookingDate extends React.Component {
     return this.state.timeSlots.findIndex((t) => t.selected) >= 0;
   }
 
-  onDayPress = (day) => {
-    this.setState({
-        selectedDate: day.dateString,
-        timeSlots: [],
-      },
-      () => {
-        this.renderRightButton();
-        this.getTimeSlots();
-      },
-    );
-  };
+  onDayPress(date) {
+    this.selectedDate = date;
+    this.setMarkedDates();
+
+    this.getTimeSlots();
+  }
 
   onButNext() {
     this.lesson.date = this.state.selectedDate;

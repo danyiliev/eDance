@@ -591,6 +591,35 @@ class ApiService {
     }
   }
 
+  async getLessonsByTeacher(teacherId, date) {
+    let params = {date};
+
+    try {
+      const options = {
+        params: params,
+        headers: {
+          ...this.baseHeader(),
+        },
+      };
+
+      const {data} = await Axios.get(`${this.baseUrl}/lesson/teacher/${teacherId}`, options);
+      console.log(data);
+
+      const lessons = [];
+      for (const obj of data) {
+        const p = new Lesson().initFromObject(obj);
+
+        lessons.push(p);
+      }
+
+      return Promise.resolve(lessons);
+    } catch (e) {
+      console.log(e);
+
+      return Promise.reject(e.response.data);
+    }
+  }
+
   async getLessonsAll(from, count) {
     let params = {
       from: from,
