@@ -21,6 +21,8 @@ import Products from '../products/Products';
 import stripe from 'tipsi-stripe';
 import {config} from '../../helpers/config';
 import {connect} from 'react-redux';
+import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
+import Subscription from '../subscription/Subscription';
 
 const Tab = createBottomTabNavigator();
 const StripeManager = NativeModules.StripeManager;
@@ -91,13 +93,7 @@ class TabMain extends React.Component {
 
   getRouteName() {
     const route = this.props.route;
-    // Access the tab navigator's state using `route.state`
-    const routeName = route.state
-      ? // Get the currently active route name in the tab navigator
-        route.state.routes[route.state.index].name
-      : // If state doesn't exist, we need to default to `screen` param if available, or the initial screen
-        // In our case, it's "Feed" as that's the first screen inside the navigator
-        route.params?.screen || Pro.NAV_NAME;
+    const routeName = getFocusedRouteNameFromRoute(route) ?? Pro.NAV_NAME;
 
     return routeName;
   }
@@ -147,6 +143,11 @@ class TabMain extends React.Component {
                 />
               ),
             }}
+            listeners={({navigation}) => ({
+              tabPress: (e) => {
+                this.onTabPress(Radio.NAV_NAME, navigation, e);
+              },
+            })}
           />
           <Tab.Screen
             name={Tv.NAV_NAME}
@@ -163,6 +164,11 @@ class TabMain extends React.Component {
                 />
               ),
             }}
+            listeners={({navigation}) => ({
+              tabPress: (e) => {
+                this.onTabPress(Tv.NAV_NAME, navigation, e);
+              },
+            })}
           />
           <Tab.Screen
             name={Pro.NAV_NAME}
@@ -265,6 +271,16 @@ class TabMain extends React.Component {
           }}
         />
       );
+    }
+  }
+
+  onTabPress(name, navigation, e) {
+    if (!this.currentUser?.subscription) {
+      // Prevent default action
+      e.preventDefault();
+
+      // open subscription page
+      navigation.navigate(Subscription.NAV_NAME);
     }
   }
 

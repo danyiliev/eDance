@@ -17,6 +17,7 @@ import Pro from '../tabs/pro/Pro';
 import BookingDate from '../booking/booking-date/BookingDate';
 import SelectTeacher from '../championships/select-teacher/SelectTeacher';
 import SelectGroup from './select-group/SelectGroup';
+import Subscription from '../subscription/Subscription';
 
 export default class ScheduleSelect extends React.Component {
   static NAV_NAME = 'schedule-select';
@@ -151,6 +152,13 @@ export default class ScheduleSelect extends React.Component {
   }
 
   onButNext() {
+    // check subscriptions
+    if (!this.currentUser?.subscription) {
+      // open subscription page
+      this.props.navigation.navigate(Subscription.NAV_NAME);
+      return;
+    }
+
     // check validity
     if (!this.state.type) {
       Alert.alert('Lesson Type is Empty', 'Please select lesson type');

@@ -67,7 +67,7 @@ export default class Subscription extends React.Component {
               <Button
                 type="clear"
                 containerStyle={stylesApp.mt6}
-                title="Terms and Policies"
+                title="Restore Purchases"
                 titleStyle={styles.titleButRestore}
                 onPress={() => this.onButRestore()}
               />

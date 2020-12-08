@@ -13,6 +13,8 @@ export class User extends BaseModel {
 
   static GENDERS = ['Male', 'Female'];
 
+  static SUBSCRIPTION_STARTER = 'starter';
+
   //
   // properties
   //
@@ -63,6 +65,8 @@ export class User extends BaseModel {
   lessonsTeach = null;
   lessonsAttend = null;
   lessonsLikedObj = null;
+
+  subscription = '';
 
   initFromObject(data) {
     super.initFromObject(data);

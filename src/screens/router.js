@@ -81,6 +81,7 @@ import {BaseAuth} from './base-auth';
 import Subscription from './subscription/Subscription';
 
 const Stack = createStackNavigator();
+const RootStack = createStackNavigator();
 
 class MainNavigator extends BaseAuth {
   navigationRef = React.createRef();
@@ -128,68 +129,15 @@ class MainNavigator extends BaseAuth {
           <Splash />
         ) : this.props.UserReducer.user && this.props.UserReducer.user.id ? (
           <View style={stylesApp.viewContainer}>
-            <Stack.Navigator
-              initialRouteName={Subscription.NAV_NAME}
+            <RootStack.Navigator
+              mode="modal"
               screenOptions={{
+                headerBackTitleVisible: false,
                 headerTintColor: colorTheme.primary,
               }}>
-              <Stack.Screen
-                name={TabMain.NAV_NAME}
-                component={TabMain}
-                options={{
-                  headerLeft: () => renderMenuButton(this.onClickMenu.bind(this)),
-                }}
-              />
-              <Stack.Screen name={Intro.NAV_NAME} component={Intro} />
-              <Stack.Screen name={Home.NAV_NAME} component={Home} />
-              <Stack.Screen name={Reviews.NAV_NAME} component={Reviews} />
-              <Stack.Screen name={ScheduleSelect.NAV_NAME} component={ScheduleSelect} />
-              <Stack.Screen name={ScheduleCheckout.NAV_NAME} component={ScheduleCheckout} />
-              <Stack.Screen name={BookingMenu.NAV_NAME} component={BookingMenu} />
-              <Stack.Screen name={BookingDate.NAV_NAME} component={BookingDate} />
-              <Stack.Screen name={Messaging.NAV_NAME} component={Messaging} />
-              <Stack.Screen name={Chat.NAV_NAME} component={Chat} />
-              <Stack.Screen name={SettingProfile.NAV_NAME} component={SettingProfile} />
-              <Stack.Screen name={Championships.NAV_NAME} component={Championships} />
-              <Stack.Screen name={Profile.NAV_NAME} component={Profile} />
-              <Stack.Screen name={EditProfile.NAV_NAME} component={EditProfile} />
-              <Stack.Screen name={AddPost.NAV_NAME} component={AddPost} />
-              <Stack.Screen name={RadioDetail.NAV_NAME} component={RadioDetail} />
-              <Stack.Screen name={TvDetail.NAV_NAME} component={TvDetail} />
-              <Stack.Screen name={PostDetail.NAV_NAME} component={PostDetail} />
-              <Stack.Screen name={SelectList.NAV_NAME} component={SelectList} />
-              <Stack.Screen name={Pro.NAV_NAME} component={Pro} />
-              <Stack.Screen name={BookingConfirm.NAV_NAME} component={BookingConfirm} />
-              <Stack.Screen name={Lessons.NAV_NAME} component={Lessons} />
-              <Stack.Screen name={LessonDetail.NAV_NAME} component={LessonDetail} />
-              <Stack.Screen name={Broadcast.NAV_NAME} component={Broadcast} />
-              <Stack.Screen name={Playback.NAV_NAME} component={Playback} />
-              <Stack.Screen name={ProductDetail.NAV_NAME} component={ProductDetail} />
-              <Stack.Screen name={Cart.NAV_NAME} component={Cart} />
-              <Stack.Screen name={Orders.NAV_NAME} component={Orders} />
-              <Stack.Screen name={Products.NAV_NAME} component={Products} />
-              <Stack.Screen name={AddProduct.NAV_NAME} component={AddProduct} />
-              <Stack.Screen name={WriteReview.NAV_NAME} component={WriteReview} />
-              <Stack.Screen name={LessonPlayback.NAV_NAME} component={LessonPlayback} />
-              <Stack.Screen name={Address.NAV_NAME} component={Address} />
-              <Stack.Screen name={AddressDetail.NAV_NAME} component={AddressDetail} />
-              <Stack.Screen name={OrderConfirm.NAV_NAME} component={OrderConfirm} />
-              <Stack.Screen name={AddChampionship.NAV_NAME} component={AddChampionship} />
-              <Stack.Screen name={AddSession.NAV_NAME} component={AddSession} />
-              <Stack.Screen name={AddPrize.NAV_NAME} component={AddPrize} />
-              <Stack.Screen name={ChampionshipDetail.NAV_NAME} component={ChampionshipDetail} />
-              <Stack.Screen name={PrizeDetail.NAV_NAME} component={PrizeDetail} />
-              <Stack.Screen name={SettingMain.NAV_NAME} component={SettingMain} />
-              <Stack.Screen name={AddStripeAccount.NAV_NAME} component={AddStripeAccount} />
-              <Stack.Screen name={TentativeSchedule.NAV_NAME} component={TentativeSchedule} />
-              <Stack.Screen name={ApplyChampionship.NAV_NAME} component={ApplyChampionship} />
-              <Stack.Screen name={SelectTeacher.NAV_NAME} component={SelectTeacher} />
-              <Stack.Screen name={Groups.NAV_NAME} component={Groups} />
-              <Stack.Screen name={AddGroup.NAV_NAME} component={AddGroup} />
-              <Stack.Screen name={SelectGroup.NAV_NAME} component={SelectGroup} />
-              <Stack.Screen name={GroupDetail.NAV_NAME} component={GroupDetail} />
-              <Stack.Screen name={Subscription.NAV_NAME} component={Subscription} />
-            </Stack.Navigator>
+              <RootStack.Screen name="Main" component={this.mainStackScreen} options={{headerShown: false}} />
+              <RootStack.Screen name={Subscription.NAV_NAME} component={Subscription} />
+            </RootStack.Navigator>
 
             <MenuModal
               visible={this.state.showMenu}
@@ -222,6 +170,73 @@ class MainNavigator extends BaseAuth {
           </Stack.Navigator>
         )}
       </NavigationContainer>
+    );
+  }
+
+  mainStackScreen = (props) => {
+    return (
+      <Stack.Navigator
+        {...props}
+        initialRouteName={TabMain.NAV_NAME}
+        screenOptions={{
+          headerTintColor: colorTheme.primary,
+        }}>
+        <Stack.Screen
+          name={TabMain.NAV_NAME}
+          component={TabMain}
+          options={{
+            headerLeft: () => renderMenuButton(this.onClickMenu.bind(this)),
+          }}
+        />
+        <Stack.Screen name={Intro.NAV_NAME} component={Intro} />
+        <Stack.Screen name={Home.NAV_NAME} component={Home} />
+        <Stack.Screen name={Reviews.NAV_NAME} component={Reviews} />
+        <Stack.Screen name={ScheduleSelect.NAV_NAME} component={ScheduleSelect} />
+        <Stack.Screen name={ScheduleCheckout.NAV_NAME} component={ScheduleCheckout} />
+        <Stack.Screen name={BookingMenu.NAV_NAME} component={BookingMenu} />
+        <Stack.Screen name={BookingDate.NAV_NAME} component={BookingDate} />
+        <Stack.Screen name={Messaging.NAV_NAME} component={Messaging} />
+        <Stack.Screen name={Chat.NAV_NAME} component={Chat} />
+        <Stack.Screen name={SettingProfile.NAV_NAME} component={SettingProfile} />
+        <Stack.Screen name={Championships.NAV_NAME} component={Championships} />
+        <Stack.Screen name={Profile.NAV_NAME} component={Profile} />
+        <Stack.Screen name={EditProfile.NAV_NAME} component={EditProfile} />
+        <Stack.Screen name={AddPost.NAV_NAME} component={AddPost} />
+        <Stack.Screen name={RadioDetail.NAV_NAME} component={RadioDetail} />
+        <Stack.Screen name={TvDetail.NAV_NAME} component={TvDetail} />
+        <Stack.Screen name={PostDetail.NAV_NAME} component={PostDetail} />
+        <Stack.Screen name={SelectList.NAV_NAME} component={SelectList} />
+        <Stack.Screen name={Pro.NAV_NAME} component={Pro} />
+        <Stack.Screen name={BookingConfirm.NAV_NAME} component={BookingConfirm} />
+        <Stack.Screen name={Lessons.NAV_NAME} component={Lessons} />
+        <Stack.Screen name={LessonDetail.NAV_NAME} component={LessonDetail} />
+        <Stack.Screen name={Broadcast.NAV_NAME} component={Broadcast} />
+        <Stack.Screen name={Playback.NAV_NAME} component={Playback} />
+        <Stack.Screen name={ProductDetail.NAV_NAME} component={ProductDetail} />
+        <Stack.Screen name={Cart.NAV_NAME} component={Cart} />
+        <Stack.Screen name={Orders.NAV_NAME} component={Orders} />
+        <Stack.Screen name={Products.NAV_NAME} component={Products} />
+        <Stack.Screen name={AddProduct.NAV_NAME} component={AddProduct} />
+        <Stack.Screen name={WriteReview.NAV_NAME} component={WriteReview} />
+        <Stack.Screen name={LessonPlayback.NAV_NAME} component={LessonPlayback} />
+        <Stack.Screen name={Address.NAV_NAME} component={Address} />
+        <Stack.Screen name={AddressDetail.NAV_NAME} component={AddressDetail} />
+        <Stack.Screen name={OrderConfirm.NAV_NAME} component={OrderConfirm} />
+        <Stack.Screen name={AddChampionship.NAV_NAME} component={AddChampionship} />
+        <Stack.Screen name={AddSession.NAV_NAME} component={AddSession} />
+        <Stack.Screen name={AddPrize.NAV_NAME} component={AddPrize} />
+        <Stack.Screen name={ChampionshipDetail.NAV_NAME} component={ChampionshipDetail} />
+        <Stack.Screen name={PrizeDetail.NAV_NAME} component={PrizeDetail} />
+        <Stack.Screen name={SettingMain.NAV_NAME} component={SettingMain} />
+        <Stack.Screen name={AddStripeAccount.NAV_NAME} component={AddStripeAccount} />
+        <Stack.Screen name={TentativeSchedule.NAV_NAME} component={TentativeSchedule} />
+        <Stack.Screen name={ApplyChampionship.NAV_NAME} component={ApplyChampionship} />
+        <Stack.Screen name={SelectTeacher.NAV_NAME} component={SelectTeacher} />
+        <Stack.Screen name={Groups.NAV_NAME} component={Groups} />
+        <Stack.Screen name={AddGroup.NAV_NAME} component={AddGroup} />
+        <Stack.Screen name={SelectGroup.NAV_NAME} component={SelectGroup} />
+        <Stack.Screen name={GroupDetail.NAV_NAME} component={GroupDetail} />
+      </Stack.Navigator>
     );
   }
 

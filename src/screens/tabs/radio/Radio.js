@@ -13,10 +13,12 @@ import RadioDetail from './radio-detail/RadioDetail';
 import Pro from '../pro/Pro';
 import {setRadios} from '../../../actions/radio';
 import {connect} from 'react-redux';
+import Subscription from '../../subscription/Subscription';
 
 class Radio extends React.Component {
   static NAV_NAME = 'radio';
 
+  currentUser = null;
   pageCount = 20;
 
   state = {
@@ -29,6 +31,8 @@ class Radio extends React.Component {
 
   constructor(props) {
     super(props);
+
+    this.currentUser = props.UserReducer.user;
   }
 
   componentDidMount(): void {
