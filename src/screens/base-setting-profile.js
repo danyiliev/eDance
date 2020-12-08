@@ -338,7 +338,7 @@ export default class BaseSettingProfile extends React.Component {
       <DateTimePicker
         value={this.timeSelected}
         mode="time"
-        display="default"
+        display="spinner"
         onChange={(event, selectedDate) =>
           this.onChangeTime(event, selectedDate)
         }
