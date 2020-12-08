@@ -1279,6 +1279,36 @@ class ApiService {
     }
   }
 
+  async getGroupsByTeacher(teacherId) {
+    if (!teacherId) {
+      return Promise.resolve([]);
+    }
+
+    try {
+      const options = {
+        headers: {
+          ...this.baseHeader(),
+        },
+      };
+
+      const {data} = await Axios.get(`${this.baseUrl}/lesson/group/teacher/${teacherId}`, options);
+      console.log(data);
+
+      const groups = [];
+      for (const obj of data) {
+        const g = new Group().initFromObject(obj);
+
+        groups.push(g);
+      }
+
+      return Promise.resolve(groups);
+    } catch (e) {
+      console.log(e);
+
+      return Promise.reject(e.response.data);
+    }
+  }
+
   async getGroupsAll(from, count) {
     let params = {
       from: from,

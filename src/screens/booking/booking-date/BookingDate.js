@@ -30,6 +30,9 @@ export default class BookingDate extends React.Component {
   periods = {};
   lesson = null;
 
+  // groups of the teacher
+  groups = [];
+
   constructor(props) {
     super(props);
 
@@ -48,6 +51,12 @@ export default class BookingDate extends React.Component {
   }
 
   async componentDidMount(): void {
+    try {
+      this.groups = await ApiService.getGroupsByTeacher(this.lesson?.teacherId);
+    } catch (e) {
+      console.log(e);
+    }
+
     await this.markDatesByMonth(moment().format('YYYY-MM'));
     this.onDayPress(moment().format('YYYY-MM-DD'));
   }
@@ -210,56 +219,92 @@ export default class BookingDate extends React.Component {
     const timeSlots = [];
 
     if (this.selectedDate in this.state.markedDates && 'dots' in this.state.markedDates[this.selectedDate]) {
-      // load lessons of selected day
-      let lessons = [];
-      try {
-        lessons = await ApiService.getLessonsByTeacher(this.lesson.teacher?.id, this.selectedDate);
-        console.log(lessons);
-      } catch (e) {
-        console.log(e);
-      }
-
-      let startTime = moment(this.lesson.teacher?.timeStart, 'HH:mm');
-      let endTime = moment(this.lesson.teacher?.timeEnd, 'HH:mm');
-      let durationLesson = this.lesson.teacher?.durationLesson;
-      let durationRest = this.lesson.teacher?.durationRest;
-
-      // group lesson
       if (this.lesson.group) {
-        startTime = moment(this.lesson.group.timeStart ? this.lesson.group.timeStart : '23:59', 'HH:mm');
-        endTime = moment(this.lesson.group.timeEnd ? this.lesson.group.timeEnd : '23:59', 'HH:mm');
-        durationLesson = this.lesson.group.durationLesson;
-      }
+        //
+        // group lesson
+        //
+        if (this.lesson.group.timeStart) {
+          const startTime = moment(this.lesson.group.timeStart, 'HH:mm');
+          const start = startTime.clone();
+          const end = startTime.add(this.lesson.group.durationLesson, 'm');
 
-      do {
-        let isTaken = false;
-
-        const start = startTime.clone();
-        const end = startTime.add(durationLesson, 'm');
-
-        // check if time slot is already taken
-        for (const l of lessons) {
-          const lessonStart = moment(l.getMinTime(), 'HH:mm');
-          const lessonEnd = moment(l.getMaxTime(), 'HH:mm');
-
-          if (start.isBetween(lessonStart, lessonEnd) || end.isBetween(lessonStart, lessonEnd)) {
-            isTaken = true;
-            break;
-          }
-          if (lessonStart.isBetween(start, end) || lessonEnd.isBetween(start, end)) {
-            isTaken = true;
-            break;
-          }
-        }
-
-        if (!isTaken) {
           const slot = new TimeSlot();
           slot.start = start.format('HH:mm');
           slot.end = end.format('HH:mm');
 
           timeSlots.push(slot);
         }
-      } while (!startTime.add(durationRest, 'm').isAfter(endTime));
+      } else {
+        //
+        // private lesson
+        //
+
+        // load lessons of selected day
+        let lessons = [];
+        try {
+          lessons = await ApiService.getLessonsByTeacher(this.lesson.teacher?.id, this.selectedDate);
+          console.log(lessons);
+        } catch (e) {
+          console.log(e);
+        }
+
+        let startTime = moment(this.lesson.teacher?.timeStart, 'HH:mm');
+        let endTime = moment(this.lesson.teacher?.timeEnd, 'HH:mm');
+        let durationLesson = this.lesson.teacher?.durationLesson;
+        let durationRest = this.lesson.teacher?.durationRest;
+
+        do {
+          let isTaken = false;
+
+          const start = startTime.clone();
+          const end = startTime.add(durationLesson, 'm');
+
+          // check if time slot is already taken
+          for (const l of lessons) {
+            const lessonStart = moment(l.getMinTime(), 'HH:mm');
+            const lessonEnd = moment(l.getMaxTime(), 'HH:mm');
+
+            if (start.isBetween(lessonStart, lessonEnd) || end.isBetween(lessonStart, lessonEnd)) {
+              isTaken = true;
+              break;
+            }
+            if (lessonStart.isBetween(start, end) || lessonEnd.isBetween(start, end)) {
+              isTaken = true;
+              break;
+            }
+          }
+
+          // check if time slot intersects with group time
+          if (!isTaken) {
+            const weekday = moment(this.selectedDate).isoWeekday() - 1;
+
+            for (const g of this.groups) {
+              if (g.availableDays.includes(weekday)) {
+                const groupStartTemp = moment(g.timeStart, 'HH:mm');
+                const groupStart = groupStartTemp.clone();
+                const groupEnd = groupStartTemp.add(g.durationLesson, 'm');
+
+                if (start.isBetween(groupStart, groupEnd) || end.isBetween(groupStart, groupEnd)) {
+                  isTaken = true;
+                  break;
+                }
+                if (groupStart.isBetween(start, end) || groupEnd.isBetween(start, end)) {
+                  isTaken = true;
+                  break;
+                }
+              }
+            }
+          }
+
+          if (!isTaken) {
+            const slot = new TimeSlot();
+            slot.start = start.format('HH:mm');
+            slot.end = end.format('HH:mm');
+
+            timeSlots.push(slot);
+          }
+        } while (!startTime.add(durationRest, 'm').isAfter(endTime));
+      }
     }
 
     // hide loading
@@ -306,10 +351,12 @@ export default class BookingDate extends React.Component {
     await this.setMarkedDates();
 
     this.getTimeSlots();
+
+    this.renderRightButton();
   }
 
   onButNext() {
-    this.lesson.date = this.state.selectedDate;
+    this.lesson.date = this.selectedDate;
     this.lesson.timeSlots = this.state.timeSlots.filter((t) => t.selected);
 
     // go to confirm page

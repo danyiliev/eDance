@@ -2,15 +2,7 @@ import React from 'react';
 import DismissKeyboard from '../../../components/DismissKeyboard/DismissKeyboard';
 import {styles} from './styles';
 import {styles as stylesSignup} from '../../signup/styles';
-import {
-  Dimensions,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View,
-  Platform,
-  Alert,
-} from 'react-native';
+import {Dimensions, ScrollView, Text, TouchableOpacity, View, Platform, Alert} from 'react-native';
 import {stylesApp, styleUtil} from '../../../styles/app.style';
 import {Button, ButtonGroup, Icon, Input} from 'react-native-elements';
 import {styles as stylesLogin} from '../../login/styles';
