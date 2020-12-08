@@ -18,6 +18,7 @@ import {LoadingHUD} from 'react-native-hud-hybrid';
 import {ApiService} from '../../services';
 import {setUserInfo} from '../../actions/user';
 import {connect} from 'react-redux';
+import {UserHelper} from '../../helpers/user-helper';
 
 class Subscription extends React.Component {
   static NAV_NAME = 'subscription';
@@ -195,6 +196,8 @@ class Subscription extends React.Component {
       Toast.show('Upgraded to Starter successfully');
 
       this.currentUser.subscription = User.SUBSCRIPTION_STARTER;
+      UserHelper.saveUserToLocalStorage(this.currentUser, this.props);
+
       this.props.navigation.goBack();
     } catch (e) {
       console.log(e);

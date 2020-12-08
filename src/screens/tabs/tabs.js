@@ -1,7 +1,7 @@
 import React from 'react';
 import Radio from './radio/Radio';
 import {createBottomTabNavigator, BottomTabBar} from '@react-navigation/bottom-tabs';
-import {Image, View, NativeModules} from 'react-native';
+import {Image, View, NativeModules, Platform} from 'react-native';
 import ImageScale from 'react-native-scalable-image';
 import {styles as stylesTab, styles} from './styles';
 import {colors as colorTheme} from '../../styles/theme.style';
@@ -23,6 +23,8 @@ import {config} from '../../helpers/config';
 import {connect} from 'react-redux';
 import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
 import Subscription from '../subscription/Subscription';
+import RNIap from 'react-native-iap';
+import {User} from '../../models/user.model';
 
 const Tab = createBottomTabNavigator();
 const StripeManager = NativeModules.StripeManager;
@@ -78,6 +80,56 @@ class TabMain extends React.Component {
     }
 
     // TODO: init push notification for Sendbird
+
+    //
+    // check subscription validation
+    //
+    try {
+      if (Platform.OS === 'ios') {
+        if (this.currentUser?.iapReceipt) {
+          const receiptBody = {
+            'receipt-data': this.currentUser?.iapReceipt,
+            password: config.iapSharedSecret,
+          };
+
+          const result = await RNIap.validateReceiptIos(receiptBody, true);
+
+          // receipt:
+          //   adam_id: 0
+          //   app_item_id: 0
+          //   application_version: "2"
+          //   bundle_id: "com.hj.edance"
+          //   download_id: 0
+          //   in_app: Array(1)
+          //   0: {quantity: "1", product_id: "com.dancesport.monthly.starter", transaction_id: "1000000751847094", original_transaction_id: "1000000751847094", purchase_date: "2020-12-08 19:20:43 Etc/GMT", …}
+          //   length: 1
+          //   __proto__: Array(0)
+          //   original_application_version: "1.0"
+          //   original_purchase_date: "2013-08-01 07:00:00 Etc/GMT"
+          //   original_purchase_date_ms: "1375340400000"
+          //   original_purchase_date_pst: "2013-08-01 00:00:00 America/Los_Angeles"
+          //   receipt_creation_date: "2020-12-08 19:20:44 Etc/GMT"
+          //   receipt_creation_date_ms: "1607455244000"
+          //   receipt_creation_date_pst: "2020-12-08 11:20:44 America/Los_Angeles"
+          //   receipt_type: "ProductionSandbox"
+          //   request_date: "2020-12-08 19:51:58 Etc/GMT"
+          //   request_date_ms: "1607457118461"
+          //   request_date_pst: "2020-12-08 11:51:58 America/Los_Angeles"
+          //   version_external_identifier: 0
+          console.log(result);
+
+          if (result?.receipt?.in_app && result?.receipt?.in_app.length > 0) {
+            const productId = result?.receipt?.in_app[0].product_id;
+
+            if (productId === config.iapStarter) {
+              this.currentUser.subscription = User.SUBSCRIPTION_STARTER;
+            }
+          }
+        }
+      }
+    } catch (e) {
+      console.log(e);
+    }
   }
 
   componentDidUpdate(

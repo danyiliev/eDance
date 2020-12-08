@@ -201,6 +201,11 @@ export class User extends BaseModel {
       this.paymentMethod = data.paymentMethod;
     }
 
+    // in app purchase
+    if (data.iapReceipt) {
+      this.iapReceipt = data.iapReceipt;
+    }
+
     return this;
   }
 
