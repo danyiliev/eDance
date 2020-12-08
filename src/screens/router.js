@@ -78,6 +78,7 @@ import AddGroup from './groups/add-group/AddGroup';
 import SelectGroup from './schedule/select-group/SelectGroup';
 import GroupDetail from './groups/group-detail/GroupDetail';
 import {BaseAuth} from './base-auth';
+import Subscription from './subscription/Subscription';
 
 const Stack = createStackNavigator();
 
@@ -128,7 +129,7 @@ class MainNavigator extends BaseAuth {
         ) : this.props.UserReducer.user && this.props.UserReducer.user.id ? (
           <View style={stylesApp.viewContainer}>
             <Stack.Navigator
-              initialRouteName={TabMain.NAV_NAME}
+              initialRouteName={Subscription.NAV_NAME}
               screenOptions={{
                 headerTintColor: colorTheme.primary,
               }}>
@@ -187,6 +188,7 @@ class MainNavigator extends BaseAuth {
               <Stack.Screen name={AddGroup.NAV_NAME} component={AddGroup} />
               <Stack.Screen name={SelectGroup.NAV_NAME} component={SelectGroup} />
               <Stack.Screen name={GroupDetail.NAV_NAME} component={GroupDetail} />
+              <Stack.Screen name={Subscription.NAV_NAME} component={Subscription} />
             </Stack.Navigator>
 
             <MenuModal
