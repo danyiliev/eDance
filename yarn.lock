@@ -2626,6 +2626,11 @@ domexception@^2.0.1:
   dependencies:
     webidl-conversions "^5.0.0"
 
+dooboolab-welcome@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/dooboolab-welcome/-/dooboolab-welcome-1.2.0.tgz#295818ce85a8e97dc90c0ec0510b4008e2d722dc"
+  integrity sha512-XgEbjJHAsKLge/e8jtuHsv84Ovg1Gx0GvnOTOmOlVGV1643nduTAkT3fyo/mxKbzvyXBr47RHaJAY4R2toI0UA==
+
 ecc-jsbn@~0.1.1:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/ecc-jsbn/-/ecc-jsbn-0.1.2.tgz#3a83a904e54353287874c564b7549386849a98c9"
@@ -6142,6 +6147,13 @@ react-native-hud-hybrid@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/react-native-hud-hybrid/-/react-native-hud-hybrid-1.0.1.tgz#b6bebb9053052a583deb00c755319b53025bdf4e"
   integrity sha512-rQs9NOeEIMMtL0kq6uZpeeYZzYCNCrml6bbbJH5rxTR34yErfstkhSMSnmMdaGg7v0mLQJVpZajfjaxSumWd0Q==
+
+react-native-iap@^5.2.0:
+  version "5.2.0"
+  resolved "https://registry.yarnpkg.com/react-native-iap/-/react-native-iap-5.2.0.tgz#c629565f03440b9950a7b348a9e5a5983e34840d"
+  integrity sha512-OSABKsp+SuEY1iX1L0y3XZdUskfkJ/7vgo44sPQibJoOu7sBcUUoWWxDRaDYJoNf2Lz9Fn5hnVCcxEgzY+zcDw==
+  dependencies:
+    dooboolab-welcome "^1.2.0"
 
 react-native-image-picker@^2.3.1:
   version "2.3.4"

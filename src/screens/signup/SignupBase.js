@@ -212,7 +212,7 @@ class SignupBase extends BaseSignup {
   }
 
   onPasswordFocus() {
-    this.keyboardView.moveMainView(30);
+    this.keyboardView.moveMainView(60);
   }
 
   async onButNext() {

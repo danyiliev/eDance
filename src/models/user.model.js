@@ -67,6 +67,7 @@ export class User extends BaseModel {
   lessonsLikedObj = null;
 
   subscription = '';
+  iapReceipt = '';
 
   initFromObject(data) {
     super.initFromObject(data);

@@ -4,8 +4,8 @@ import {stylesApp} from '../../styles/app.style';
 
 export const styles = StyleSheet.create({
   imgLogo: {
-    marginTop: 160,
-    marginBottom: 100,
+    marginTop: 120,
+    marginBottom: 80,
     alignSelf: 'center',
   },
 
