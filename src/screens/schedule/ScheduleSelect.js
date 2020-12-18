@@ -18,8 +18,9 @@ import BookingDate from '../booking/booking-date/BookingDate';
 import SelectTeacher from '../championships/select-teacher/SelectTeacher';
 import SelectGroup from './select-group/SelectGroup';
 import Subscription from '../subscription/Subscription';
+import {connect} from 'react-redux';
 
-export default class ScheduleSelect extends React.Component {
+class ScheduleSelect extends React.Component {
   static NAV_NAME = 'schedule-select';
 
   state = {
@@ -39,6 +40,8 @@ export default class ScheduleSelect extends React.Component {
     props.navigation.setOptions({
       title: 'Schedule',
     });
+
+    this.currentUser = props.UserReducer.user;
 
     // get parameter
     if (props.route.params) {
@@ -212,3 +215,7 @@ export default class ScheduleSelect extends React.Component {
     }
   }
 }
+
+const mapStateToProps = (state) => state;
+
+export default connect(mapStateToProps, null)(ScheduleSelect);
