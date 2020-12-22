@@ -119,6 +119,7 @@ class RadioDetail extends React.Component {
           ref="audioElement"
           playInBackground={true}
           playWhenInactive={true}
+          ignoreSilentSwitch={'ignore'}
           paused={this.state.paused} // Pauses playback entirely.
           resizeMode="cover" // Fill the whole screen at aspect ratio.
           onLoad={this.setDuration.bind(this)} // Callback when video loads
