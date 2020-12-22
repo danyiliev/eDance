@@ -158,7 +158,7 @@ class ScheduleSelect extends React.Component {
     // check subscriptions
     if (!this.currentUser?.subscription) {
       // open subscription page
-      this.props.navigation.navigate(Subscription.NAV_NAME);
+      this.props.navigation.navigate(Subscription.NAV_NAME_MAIN);
       return;
     }
 

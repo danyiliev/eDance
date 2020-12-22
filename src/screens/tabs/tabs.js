@@ -332,7 +332,7 @@ class TabMain extends React.Component {
       e.preventDefault();
 
       // open subscription page
-      navigation.navigate(Subscription.NAV_NAME);
+      navigation.navigate(Subscription.NAV_NAME_MAIN);
     }
   }
 

@@ -19,8 +19,10 @@ import {ApiService} from '../../services';
 import {setUserInfo} from '../../actions/user';
 import {connect} from 'react-redux';
 import {UserHelper} from '../../helpers/user-helper';
+import Terms from '../terms/Terms';
 
 class Subscription extends React.Component {
+  static NAV_NAME_MAIN = 'subscription-main';
   static NAV_NAME = 'subscription';
 
   state = {
@@ -125,7 +127,7 @@ class Subscription extends React.Component {
               type="clear"
               title="Terms and Policies"
               titleStyle={styles.titleButTerm}
-              onPress={() => this.onButLogin()}
+              onPress={() => this.onButTerm()}
             />
             <Text style={styles.txtTerm}>
               The subscription will automatically renew unless auto-renew is turned off at least 24 hours before the end of the current period. You can go to your iTunes Account settings to manage your subscription and turn off auto-renew. Your iTunes Account will be charged when the purchase is confirmed.
@@ -230,6 +232,11 @@ class Subscription extends React.Component {
     } catch (err) {
       console.warn(err.code, err.message);
     }
+  }
+
+  onButTerm() {
+    // go to terms page
+    this.props.navigation.push(Terms.NAV_NAME);
   }
 
   onButRestore() {

@@ -136,7 +136,7 @@ class MainNavigator extends BaseAuth {
                 headerTintColor: colorTheme.primary,
               }}>
               <RootStack.Screen name="Main" component={this.mainStackScreen} options={{headerShown: false}} />
-              <RootStack.Screen name={Subscription.NAV_NAME} component={Subscription} />
+              <RootStack.Screen name={Subscription.NAV_NAME_MAIN} component={this.subscriptionStackScreen} options={{headerShown: false}} />
             </RootStack.Navigator>
 
             <MenuModal
@@ -238,7 +238,20 @@ class MainNavigator extends BaseAuth {
         <Stack.Screen name={GroupDetail.NAV_NAME} component={GroupDetail} />
       </Stack.Navigator>
     );
-  }
+  };
+
+  subscriptionStackScreen = (props) => {
+    return (
+      <Stack.Navigator
+        {...props}
+        screenOptions={{
+          headerTintColor: colorTheme.primary,
+        }}>
+        <Stack.Screen name={Subscription.NAV_NAME} component={Subscription} />
+        <Stack.Screen name={Terms.NAV_NAME} component={Terms} />
+      </Stack.Navigator>
+    );
+  };
 
   onClickMenu() {
     this.showMenuModal(true);
