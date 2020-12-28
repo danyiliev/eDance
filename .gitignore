@@ -67,3 +67,4 @@ android/app/src/main/assets/index.android.bundle
 
 # sensitive
 src/helpers/sensitive.js
+android/app/src/main/java/com/edancesport/edance/Config.java

@@ -196,6 +196,10 @@ dependencies {
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
 
+    // Stripe Android SDK
+    implementation 'com.stripe:stripe-android:16.1.1'
+    implementation "com.squareup.okhttp3:okhttp:4.9.0"
+
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
       exclude group:'com.facebook.fbjni'
     }
