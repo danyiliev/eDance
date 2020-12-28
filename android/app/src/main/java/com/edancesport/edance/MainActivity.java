@@ -1,4 +1,4 @@
-package com.edance;
+package com.edancesport.edance;
 
 import com.facebook.react.ReactActivity;
 

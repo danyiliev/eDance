@@ -43,7 +43,7 @@ export default class Landing extends React.Component {
           </View>
 
           {/* student */}
-          <View style={{...styleUtil.withShadow(), ...styles.viewButStudent}}>
+          <View style={{...styleUtil.withShadow(), ...styles.viewButStudent, ...stylesApp.viewButLightWrapper}}>
             <Button
               title="BECOME A DANCE STUDENT"
               buttonStyle={stylesApp.butLight}

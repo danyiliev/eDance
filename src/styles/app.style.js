@@ -11,6 +11,9 @@ export const styleUtil = {
         height: 0,
       },
       shadowOpacity: opacity,
+
+      // for android
+      elevation: 12,
     };
   },
 };
@@ -97,6 +100,10 @@ export const stylesApp = StyleSheet.create({
     color: colorTheme.light,
   },
 
+  viewButLightWrapper: {
+    borderRadius: 100,
+    backgroundColor: colorTheme.light,
+  },
   butLight: {
     paddingVertical: 14,
     paddingHorizontal: 20,

@@ -42,6 +42,9 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',
+
+    // for android
+    elevation: 13,
   },
 
   viewForm: {
