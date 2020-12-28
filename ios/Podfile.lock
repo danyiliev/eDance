@@ -356,9 +356,6 @@ PODS:
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.7)
   - Stripe (14.0.1)
-  - tipsi-stripe (7.5.3):
-    - React
-    - Stripe (~> 14.0.1)
   - Toast (4.0.0)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
@@ -430,7 +427,6 @@ DEPENDENCIES:
   - RNScreens (from `../node_modules/react-native-screens`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - Stripe
-  - tipsi-stripe (from `../node_modules/tipsi-stripe`)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -539,8 +535,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-screens"
   RNVectorIcons:
     :path: "../node_modules/react-native-vector-icons"
-  tipsi-stripe:
-    :path: "../node_modules/tipsi-stripe"
   Yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -603,7 +597,6 @@ SPEC CHECKSUMS:
   SDWebImage: 9169792e9eec3e45bba2a0c02f74bf8bd922d1ee
   SDWebImageWebPCoder: d0dac55073088d24b2ac1b191a71a8f8d0adac21
   Stripe: 4305b646743612854819fb5d5cf67aaeb93577c0
-  tipsi-stripe: fb5b32e890a4528322c491e1827133a3cb919e0a
   Toast: 91b396c56ee72a5790816f40d3a94dd357abc196
   Yoga: 3ebccbdd559724312790e7742142d062476b698e
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a

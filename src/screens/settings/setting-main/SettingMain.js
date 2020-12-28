@@ -9,7 +9,6 @@ import {connect} from 'react-redux';
 import {User} from '../../../models/user.model';
 import SettingProfile from '../setting-profile/SettingProfile';
 import AddStripeAccount from '../add-stripe-account/AddStripeAccount';
-import stripe from 'tipsi-stripe';
 import {ApiService} from '../../../services';
 import {UserHelper} from '../../../helpers/user-helper';
 

@@ -14,7 +14,6 @@ import ProductDetail from '../../product-detail/ProductDetail';
 import {ApiService} from '../../../services';
 import Orders from '../Orders';
 import {UserHelper} from '../../../helpers/user-helper';
-import stripe from 'tipsi-stripe';
 import Toast from 'react-native-simple-toast';
 import SettingMain from '../../settings/setting-main/SettingMain';
 

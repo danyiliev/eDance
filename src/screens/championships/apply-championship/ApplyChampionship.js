@@ -24,7 +24,6 @@ import SelectList from '../../settings/select-list/SelectList';
 import {EventEntry} from '../../../models/event-entry.model';
 import {ApiService} from '../../../services';
 import {LoadingHUD} from 'react-native-hud-hybrid';
-import stripe from 'tipsi-stripe';
 import Toast from 'react-native-simple-toast';
 import SettingMain from '../../settings/setting-main/SettingMain';
 const {width: SCREEN_WDITH} = Dimensions.get('window');

@@ -16,7 +16,6 @@ import Toast from 'react-native-simple-toast';
 import {setUserInfo} from '../../../actions/user';
 import {connect} from 'react-redux';
 import {ApiService} from '../../../services';
-import stripe from 'tipsi-stripe';
 import Championships from '../../championships/Championships';
 import SettingMain from '../../settings/setting-main/SettingMain';
 import {Lesson} from '../../../models/lesson.model';

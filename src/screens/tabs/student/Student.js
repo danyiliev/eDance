@@ -17,7 +17,6 @@ import {connect} from 'react-redux';
 import {LoadingHUD} from 'react-native-hud-hybrid';
 import LessonPlayback from '../../lessons/lesson-playback/LessonPlayback';
 import BaseLessonList from '../base-lesson-list';
-import stripe from 'tipsi-stripe';
 import {Lesson} from '../../../models/lesson.model';
 import SettingMain from '../../settings/setting-main/SettingMain';
 

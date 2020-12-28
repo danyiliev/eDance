@@ -18,7 +18,6 @@ import Profile from '../profile/Profile';
 import ActionSheet from 'react-native-actionsheet';
 import Orders from '../orders/Orders';
 import Products from '../products/Products';
-import stripe from 'tipsi-stripe';
 import {config} from '../../helpers/config';
 import {connect} from 'react-redux';
 import {getFocusedRouteNameFromRoute} from '@react-navigation/native';
@@ -63,13 +62,6 @@ class TabMain extends React.Component {
 
   async componentDidMount(): void {
     SplashScreen.hide();
-
-    //
-    // init stripe
-    //
-    stripe.setOptions({
-      publishableKey: config.stripeKey,
-    });
 
     if (this.currentUser?.stripeCustomerId) {
       try {
