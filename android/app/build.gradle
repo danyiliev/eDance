@@ -132,7 +132,7 @@ android {
         applicationId "com.edancesport.edance"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 10000
+        versionCode 1000000
         versionName "1.0"
 
         multiDexEnabled true
@@ -186,6 +186,10 @@ android {
             }
 
         }
+    }
+
+    dexOptions {
+        javaMaxHeapSize "3g"
     }
 }
 
