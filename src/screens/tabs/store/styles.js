@@ -43,12 +43,13 @@ export const styles = StyleSheet.create({
 
   viewFloating: {
     position: 'absolute',
+    backgroundColor: colorTheme.light,
+    borderRadius: 100,
     bottom: 16,
     right: 16,
   },
   butFloating: {
-    borderRadius: 100,
-    backgroundColor: colorTheme.light,
+    backgroundColor: 'transparent',
     width: 56,
     height: 56,
   },

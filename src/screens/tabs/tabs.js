@@ -118,6 +118,11 @@ class TabMain extends React.Component {
             }
           }
         }
+      } else {
+        // todo: need to be improved
+        if (this.currentUser?.iapReceipt) {
+          this.currentUser.subscription = User.SUBSCRIPTION_STARTER;
+        }
       }
     } catch (e) {
       console.log(e);
